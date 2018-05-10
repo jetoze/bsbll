@@ -20,7 +20,7 @@ public final class PlayByPlayFileTest {
                 .filter(line -> line.startsWith("play"))
                 .map(PlayByPlayFileTest::getPlayField)
                 .filter(Objects::nonNull)
-                .forEach(EventParser::parse);
+                .forEach(EventTypeParser::parse);
         }
     }
 

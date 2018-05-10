@@ -32,5 +32,9 @@ public enum EventType {
     OTHER_ADVANCE,
     DEFENSIVE_INDIFFERENCE,
     NO_PLAY,
-    OUT
+    OUT;
+    
+    public boolean isError() {
+        return this == EventType.REACHED_ON_ERROR || this == ERROR_ON_FOUL_FLY;
+    }
 }
