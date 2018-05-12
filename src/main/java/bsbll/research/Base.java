@@ -16,6 +16,8 @@ public enum Base {
             return THIRD;
         case 'H':
             return HOME;
+        case 'B': // for batter
+            return HOME;
         default:
             throw new IllegalArgumentException("Invalid base code: " + c);
         }

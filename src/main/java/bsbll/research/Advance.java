@@ -4,6 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 public final class Advance {
@@ -19,6 +21,10 @@ public final class Advance {
         if (from != Base.HOME) {
             checkArgument(to.compareTo(from) > 0, "Cannot advance backwords from %s to %s", from, to);
         }
+    }
+    
+    Advance(Map.Entry<Base, Base> e) {
+        this(e.getKey(), e.getValue());
     }
 
     public Base from() {

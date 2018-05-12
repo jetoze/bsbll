@@ -1,5 +1,6 @@
 package bsbll.research;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static tzeth.preconds.MorePreconditions.checkNotBlank;
 
 /**
@@ -17,13 +18,28 @@ public final class EventParser {
      */
     public static PlayOutcome parse(String field) {
         checkNotBlank(field);
-        if (field.startsWith("S")) {
-            return PlayOutcome.builder()
-                    .withType(EventType.SINGLE)
-                    .withAdvance(new Advance(Base.HOME, Base.FIRST))
-                    .build();
+        EventType eventType = EventTypeParser.parse(field);
+        AdvanceFieldParser.Result advanceFieldResult = parseAdvance(field, eventType);
+        int numberOfErrors = 0; // TODO: Implement me.
+        return new PlayOutcome(
+                eventType, 
+                advanceFieldResult.getAdvances(), 
+                advanceFieldResult.getOuts(), 
+                numberOfErrors);
+    }
+    
+    private static AdvanceFieldParser.Result parseAdvance(String field, EventType eventType) {
+        String advanceField = getAdvanceField(field);
+        return AdvanceFieldParser.parse(advanceField, eventType);
+    }
+    
+    private static String getAdvanceField(String field) {
+        int index = field.indexOf('.');
+        if (index == -1) {
+            return "";
         }
-        throw new IllegalArgumentException("Invalid event field: " + field);
+        checkArgument(index < field.length() - 3, "Invalid event field: " + field);
+        return field.substring(index + 1);
     }
     
     
