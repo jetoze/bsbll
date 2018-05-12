@@ -3,6 +3,8 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkArgument;
 import static tzeth.preconds.MorePreconditions.checkNotBlank;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding PlayOutcome.
  */
@@ -21,10 +23,13 @@ public final class EventParser {
         EventType eventType = EventTypeParser.parse(field);
         AdvanceFieldParser.Result advanceFieldResult = parseAdvance(field, eventType);
         int numberOfErrors = 0; // TODO: Implement me.
+        ImmutableSet<Base> outs = advanceFieldResult.getOuts();
+        // TODO: Augment outs with outs that are not encoded in the advance field.
+        // For example, the batter is out on a strikeout.
         return new PlayOutcome(
                 eventType, 
                 advanceFieldResult.getAdvances(), 
-                advanceFieldResult.getOuts(), 
+                outs, 
                 numberOfErrors);
     }
     

@@ -19,6 +19,20 @@ public class BaseSituation {
         return new BaseSituation(ImmutableMap.of());
     }
     
+    public BaseSituation(@Nullable Player onFirst, @Nullable Player onSecond, @Nullable Player onThird) {
+        ImmutableMap.Builder<Base, Player> builder = ImmutableMap.builder();
+        if (onFirst != null) {
+            builder.put(Base.FIRST, onFirst);
+        }
+        if (onSecond != null) {
+            builder.put(Base.SECOND, onSecond);
+        }
+        if (onThird != null) {
+            builder.put(Base.THIRD, onThird);
+        }
+        this.bases = builder.build();
+    }
+    
     public BaseSituation(Map<Base, Player> bases) {
         checkArgument(!bases.containsKey(Base.HOME));
         this.bases = ImmutableMap.copyOf(bases);

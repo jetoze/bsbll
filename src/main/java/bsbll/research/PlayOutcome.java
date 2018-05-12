@@ -39,6 +39,10 @@ public final class PlayOutcome {
         return this.outs.size();
     }
     
+    public ImmutableSet<Base> getOuts() {
+        return outs;
+    }
+    
     public int getNumberOfRuns() {
         return this.advances.getNumberOfRuns();
     }
