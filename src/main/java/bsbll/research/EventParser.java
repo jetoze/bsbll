@@ -1,13 +1,12 @@
 package bsbll.research;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding PlayOutcome.
  */
 public final class EventParser {
     public static PlayOutcome parse(String s) {
-        return parse(EventField.fromString(s));
+        EventField field = EventField.fromString(s);
+        return parse(field);
     }
     
     /**
@@ -20,19 +19,15 @@ public final class EventParser {
      *             if the field is not a valid event field
      */
     public static PlayOutcome parse(EventField field) {
-        System.out.println(field);
         try {
             EventType eventType = EventTypeParser.parse(field);
-            AdvanceFieldParser.Result advanceFieldResult = AdvanceFieldParser.parse(
-                    field.getAdvanceField(), eventType);
+            Advances advances = AdvanceFieldParser.parse(field.getAdvanceField(), eventType);
             int numberOfErrors = 0; // TODO: Implement me.
-            ImmutableSet<Base> outs = advanceFieldResult.getOuts();
             // TODO: Augment outs with outs that are not encoded in the advance field.
             // For example, the batter is out on a strikeout.
             return new PlayOutcome(
                     eventType, 
-                    advanceFieldResult.getAdvances(), 
-                    outs, 
+                    advances, 
                     numberOfErrors);
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(String.format("Invalid field: %s. Reported error: %s", 

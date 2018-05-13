@@ -1,9 +1,16 @@
 package bsbll.research;
 
-public final class Player {
+import static java.util.Objects.requireNonNull;
 
-    public Player() {
-        // TODO Auto-generated constructor stub
+public final class Player {
+    private final String name;
+    
+    public Player(String name) {
+        this.name = requireNonNull(name);
     }
 
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

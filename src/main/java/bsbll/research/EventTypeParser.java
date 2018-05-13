@@ -146,7 +146,7 @@ public final class EventTypeParser {
             return false;
         }
         char next = input.charAt(match.length());
-        return suffixCondition.test(next);
+        return suffixCondition.test(next) || next == '?';
     }
     
     private static boolean isValidFielder(char c) {

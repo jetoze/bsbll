@@ -89,6 +89,10 @@ public class BaseSituation {
                 .map(e -> getPlayerOnBase(batter, e.getKey()))
                 .collect(Collectors.toList());
     }
+    
+    public Map<Base, Player> toMap() {
+        return new HashMap<>(this.bases);
+    }
 
     @Override
     public int hashCode() {

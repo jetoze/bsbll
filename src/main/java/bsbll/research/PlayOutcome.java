@@ -6,7 +6,6 @@ import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 import javax.annotation.Nullable;
 
@@ -15,15 +14,12 @@ import com.google.common.collect.ImmutableSet;
 public final class PlayOutcome {
     private final EventType type;    
     private final Advances advances;
-    private final ImmutableSet<Base> outs;
     private final int numberOfErrors;
     
     public PlayOutcome(EventType type, 
                        Advances advances,
-                       Set<Base> outs,
                        int numberOfErrors) {
         this.type = requireNonNull(type);
-        this.outs = ImmutableSet.copyOf(outs);
         this.advances = requireNonNull(advances);
         this.numberOfErrors = checkNotNegative(numberOfErrors);
     }
@@ -37,10 +33,10 @@ public final class PlayOutcome {
     }
     
     public int getNumberOfOuts() {
-        return this.outs.size();
-    }
-    
-    public ImmutableSet<Base> getOuts() {
+        int outs = this.advances.getNumberOfOuts();
+        if (this.type.isBatterOut() && !this.advances.isBatterIncluded()) {
+            ++outs;
+        }
         return outs;
     }
     
@@ -48,8 +44,8 @@ public final class PlayOutcome {
         return this.advances.getNumberOfRuns();
     }
     
-    public BaseSituation advanceRunners(Player batter, BaseSituation baseSituation) {
-        return this.advances.advanceRunners(batter, baseSituation);
+    public BaseSituation applyTo(Player batter, BaseSituation baseSituation) {
+        return this.advances.applyTo(batter, baseSituation);
     }
     
     public List<Player> getScoringPlayers(Player batter, BaseSituation baseSituation) {
@@ -62,7 +58,7 @@ public final class PlayOutcome {
     
     @Override
     public int hashCode() {
-        return Objects.hash(this.type, this.numberOfErrors, this.advances, this.outs);
+        return Objects.hash(this.type, this.numberOfErrors, this.advances);
     }
 
     @Override
@@ -74,7 +70,6 @@ public final class PlayOutcome {
             PlayOutcome that = (PlayOutcome) obj;
             return (this.type == that.type) &&
                     (this.numberOfErrors == that.numberOfErrors) &&
-                    this.outs.equals(that.outs) &&
                     this.advances.equals(that.advances);
         }
         return false;
@@ -82,8 +77,8 @@ public final class PlayOutcome {
     
     @Override
     public String toString() {
-        return String.format("%s - Advances: %s Outs: %s Errors: %d", 
-                this.type, this.advances, this.outs, this.numberOfErrors);
+        return String.format("%s - Advances: %s Errors: %d", 
+                this.type, this.advances, this.numberOfErrors);
     }
     
     public static Builder builder(EventType type) {
@@ -93,7 +88,6 @@ public final class PlayOutcome {
     
     public static final class Builder {
         private final EventType type;
-        private final ImmutableSet.Builder<Base> outs = ImmutableSet.builder();
         private final ImmutableSet.Builder<Advance> advances = ImmutableSet.builder();
         private int errors;
         
@@ -104,18 +98,17 @@ public final class PlayOutcome {
             }
         }
         
-        public Builder withOut(Base base) {
-            this.outs.add(base);
-            return this;
-        }
-        
-        public Builder withAdvance(Base from, Base to) {
-            return withAdvance(new Advance(from, to));
+        public Builder withSafeAdvance(Base from, Base to) {
+            return withAdvance(Advance.safe(from, to));
         }
         
         public Builder withAdvance(Advance adv) {
             this.advances.add(adv);
             return this;
+        }
+        
+        public Builder withOut(Base from, Base to) {
+            return withAdvance(Advance.out(from, to));
         }
         
         public Builder withErrors(int errors) {
@@ -125,7 +118,7 @@ public final class PlayOutcome {
         }
         
         public PlayOutcome build() {
-            return new PlayOutcome(this.type, new Advances(this.advances.build()), this.outs.build(), this.errors);
+            return new PlayOutcome(this.type, new Advances(this.advances.build()), this.errors);
         }
     }
     

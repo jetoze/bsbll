@@ -6,6 +6,20 @@ public enum Base {
     THIRD,
     HOME;
     
+    public boolean isHome() {
+        return this == HOME;
+    }
+    
+    public boolean isOccupiable() {
+        return this != HOME;
+    }
+
+    public int intValueWhenOrigin() {
+        return isHome()
+                ? 0
+                : ordinal() + 1;
+    }
+    
     public static Base fromChar(char c) {
         switch (c) {
         case '1':
@@ -21,9 +35,5 @@ public enum Base {
         default:
             throw new IllegalArgumentException("Invalid base code: " + c);
         }
-    }
-    
-    public boolean isHome() {
-        return this == HOME;
     }
 }
