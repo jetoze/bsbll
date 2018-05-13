@@ -20,7 +20,7 @@ public final class PlayByPlayFileTest {
                 .filter(line -> line.startsWith("play"))
                 .map(PlayByPlayFileTest::getPlayField)
                 .filter(Objects::nonNull)
-                .filter(f -> f.startsWith("CS") && f.contains("E"))
+                //.filter(f -> f.startsWith("CS") && f.contains("E"))
                 .forEach(EventParser::parse);
                 //.forEach(System.out::println);
         }

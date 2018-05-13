@@ -76,5 +76,19 @@ public final class EventParserTest {
         assertEquals(1, after.getNumberOfRunners());
         assertSame(RUNNER_A, after.getRunner(Base.THIRD));
     }
+    
+    @Test
+    public void testErrorOnDoubleWithErrorNotationInTheAdvanceSection() {
+        PlayOutcome outcome = EventParser.parse("D7.1-H;B-3(E5/THH)");
+        assertSame(EventType.DOUBLE, outcome.getType());
+        assertEquals(0, outcome.getNumberOfOuts());
+        assertEquals(1, outcome.getNumberOfRuns());
+        assertEquals(1, outcome.getNumberOfErrors());
+        BaseSituation before = new BaseSituation(RUNNER_A, null, null);
+        BaseSituation after = outcome.advanceRunners(BATTER, before);
+        assertSame(RUNNER_A, outcome.getScoringPlayers(BATTER, before));
+        assertEquals(1, after.getNumberOfRunners());
+        assertSame(BATTER, after.getRunner(Base.THIRD));
+    }
 
 }

@@ -1,16 +1,20 @@
 package bsbll.research;
 
 import static bsbll.research.EventType.*;
-import static tzeth.preconds.MorePreconditions.checkNotBlank;
 
 import java.util.function.Predicate;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding event type.
  */
 public final class EventTypeParser {
+    public static EventType parse(String s) {
+        return parse(EventField.fromString(s));
+    }
+    
     /**
      * Parses the event field and returns the corresponding event type.
      * 
@@ -20,9 +24,8 @@ public final class EventTypeParser {
      * @throws IllegalArgumentException
      *             if the field is not a valid event field
      */
-    public static EventType parse(String field) {
-        checkNotBlank(field);
-        String basic = getBasicPlay(field.trim());
+    public static EventType parse(EventField field) {
+        String basic = field.getBasicPlay();
         char first = basic.charAt(0);
         switch (first) {
         case 'S':
@@ -76,16 +79,15 @@ public final class EventTypeParser {
         case 'E':
             return REACHED_ON_ERROR;
         case 'C':
-            if (field.length() > 1) {
-                if (field.charAt(1) == '/') {
-                    return INTERFERENCE;
-                }
-                if (basic.length() >= 3) {
-                    char second = basic.charAt(1);
-                    char third = basic.charAt(2);
-                    if (second == 'S' && isStealableBase(third)) {
-                        return CAUGHT_STEALING;
-                    }
+            ImmutableList<String> modifiers = field.getModifiers();
+            if (!modifiers.isEmpty() && modifiers.get(0).startsWith("E")) {
+                return INTERFERENCE;
+            }
+            if (basic.length() >= 3) {
+                char second = basic.charAt(1);
+                char third = basic.charAt(2);
+                if (second == 'S' && isStealableBase(third)) {
+                    return CAUGHT_STEALING;
                 }
             }
             break;
@@ -108,7 +110,7 @@ public final class EventTypeParser {
         }
         if (Character.isDigit(first)) {
             // This indicates an out of some sort. First check for some special cases.
-            if (field.contains("/FO")) {
+            if (field.hasModifier(m -> m.startsWith("FO"))) {
                 return FIELDERS_CHOICE;
             }
             return OUT;
