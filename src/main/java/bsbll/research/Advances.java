@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toMap;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -76,6 +77,17 @@ public final class Advances {
         return this.advances.containsKey(Base.HOME);
     }
     
+    public boolean contains(Base base) {
+        requireNonNull(base);
+        return this.advances.containsKey(base);
+    }
+
+    public boolean didRunnerAdvanceSafely(Base base) {
+        requireNonNull(base);
+        Advance a = this.advances.get(base);
+        return (a != null) && a.isAdvancement();
+    }
+    
     public BaseSituation applyTo(Player batter, BaseSituation situation) {
         requireNonNull(batter);
         requireNonNull(situation);
@@ -120,6 +132,13 @@ public final class Advances {
         return this.advances.containsKey(base);
     }
 
+    public Advances concat(Advance a) {
+        requireNonNull(a);
+        List<Advance> list = new ArrayList<>(this.advances.values());
+        list.add(a);
+        return new Advances(list);
+    }
+    
     @Override
     public int hashCode() {
         return this.advances.hashCode();

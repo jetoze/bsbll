@@ -20,10 +20,13 @@ public final class PlayByPlayFileTest {
                 .filter(line -> line.startsWith("play"))
                 .map(PlayByPlayFileTest::getPlayField)
                 .filter(Objects::nonNull)
-                //.filter(f -> f.startsWith("CS") && f.contains("E"))
+                //.map(EventField::fromString)
+                //.map(EventField::getBasicPlay)
+                //.filter(s -> s.equals("CS"))
+                .filter(f -> f.startsWith("CS") && f.contains("E"))
                 //.filter(f -> f.contains("1-1") || f.contains("2-2") || f.contains("3-3"))
-                .forEach(EventParser::parse);
-                //.forEach(System.out::println);
+                //.forEach(EventParser::parse);
+                .forEach(System.out::println);
         }
     }
 

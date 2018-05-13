@@ -14,6 +14,17 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
                 .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void testSingleWithEmptyBasesAndBatterAdvancementGivenExplicitly() {
+        PlayOutcome outcome = EventParser.parse("S.B-1");
+        PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
         assertEquals(expected, outcome);
     }
     
@@ -25,6 +36,7 @@ public final class EventParserTest {
                 .withSafeAdvance(Base.FIRST, Base.SECOND)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
                 .build();
+        
         assertEquals(expected, outcome);
     }
     
@@ -34,16 +46,41 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
                 .withOut(Base.FIRST, Base.SECOND)
                 .build();
+        
         assertEquals(expected, outcome);
     }
     
     @Test
-    public void testErrorOnCaughtStealing() {
+    public void testErrorOnCaughtStealingWithExplicitAdvancement() {
         PlayOutcome outcome = EventParser.parse("CS2(2E4).1-3");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
                 .withErrors(1)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void testErrorOnCaughtStealingWithoutExplicitAdvancement() {
+        PlayOutcome outcome = EventParser.parse("CS2(2E4)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withErrors(1)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void caughtStealingHomeNegatedByObstruction() {
+        PlayOutcome outcome = EventParser.parse("CSH(E2)/OBS.3-H(UR);1-2");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withErrors(1)
+                .withSafeAdvance(Base.THIRD, Base.HOME)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .build();
+        
         assertEquals(expected, outcome);
     }
     
@@ -56,6 +93,37 @@ public final class EventParserTest {
                 .withSafeAdvance(Base.HOME, Base.THIRD)
                 .build();
         assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void strikeoutIsOneOut() {
+        PlayOutcome outcome = EventParser.parse("K");
+        
+        assertEquals(1, outcome.getNumberOfOuts());
+    }
+    
+    @Test
+    public void strikeoutPlusCaughtStealing() {
+        PlayOutcome outcome = EventParser.parse("K+CS2");
+        PlayOutcome expected = PlayOutcome.builder(EventType.STRIKEOUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void strikeoutPlusCaughtStealingResultsInTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("K+CS2");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+    
+    @Test
+    public void testFlyOutIsOneOut() {
+        PlayOutcome outcome = EventParser.parse("8");
+        
+        assertEquals(1, outcome.getNumberOfOuts());
     }
 
 }

@@ -20,6 +20,12 @@ public enum Base {
                 : ordinal() + 1;
     }
     
+    public Base preceding() {
+        return (this == FIRST)
+                ? HOME
+                : values()[ordinal() - 1];
+    }
+    
     public static Base fromChar(char c) {
         switch (c) {
         case '1':
