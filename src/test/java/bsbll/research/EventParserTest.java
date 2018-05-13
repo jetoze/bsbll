@@ -17,6 +17,11 @@ public final class EventParserTest {
     private static final Player RUNNER_B = new Player();
     private static final Player RUNNER_C = new Player();
     
+    // TODO: Split up these tests, perhaps into individual test classes for each event type.
+    // The problem here is that we have too many asserts in each test. Alternatively,
+    // implements PlayOutcome.equals, and update each test to build the expected
+    // outcome and compare them.
+    
     @Test
     public void testSingleWithEmptyBases() {
         PlayOutcome outcome = EventParser.parse("S");

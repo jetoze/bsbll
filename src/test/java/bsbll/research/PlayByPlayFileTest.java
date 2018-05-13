@@ -15,12 +15,14 @@ public final class PlayByPlayFileTest {
             return name.endsWith(".EVA") || name.endsWith("EVN") || name.endsWith(".EDN");
         };
         for (File inputFile : rootDir.listFiles(filter)) {
-            System.out.println(inputFile.getAbsolutePath());
+            //System.out.println(inputFile.getAbsolutePath());
             Files.lines(inputFile.toPath())
                 .filter(line -> line.startsWith("play"))
                 .map(PlayByPlayFileTest::getPlayField)
                 .filter(Objects::nonNull)
+                .filter(f -> f.startsWith("CS") && f.contains("E"))
                 .forEach(EventParser::parse);
+                //.forEach(System.out::println);
         }
     }
 

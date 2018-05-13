@@ -1,5 +1,6 @@
 package bsbll.research;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
@@ -41,12 +42,12 @@ public final class Advances {
         Set<Base> tos = new HashSet<Base>();
         for (Base to : advances.values()) {
             if (!tos.add(to)) {
-                if (to == Base.HOME) {
-                    // This is OK - more than one runner can reach home on a play
-                } else {
-                    throw new IllegalArgumentException("More than one runner cannot advance to " + to);
-                }
+                checkArgument(to == Base.HOME, "More than one runner cannot advance to " + to);
             }
+        }
+        for (Map.Entry<Base, Base> e : advances.entrySet()) {
+            checkArgument(e.getValue().compareTo(e.getKey()) > 0 || e.getKey() == Base.HOME,
+                    "%s -> %s is not a valid advance", e.getKey(), e.getValue());
         }
     }
     

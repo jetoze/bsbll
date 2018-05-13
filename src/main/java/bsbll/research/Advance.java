@@ -15,6 +15,9 @@ public final class Advance {
     public Advance(Base from, Base to) {
         this.from = requireNonNull(from);
         this.to = requireNonNull(to);
+        if (this.from == this.to) {
+            System.out.println();
+        }
         // If from == Base.HOME it represents the Batter reaching base.
         // Any base is allowed as destination, including HOME (== homerun).
         // Otherwise we make sure that from and to actually represent an advancement.

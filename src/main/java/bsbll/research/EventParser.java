@@ -20,6 +20,7 @@ public final class EventParser {
      */
     public static PlayOutcome parse(String field) {
         checkNotBlank(field);
+        System.out.println(field);
         EventType eventType = EventTypeParser.parse(field);
         AdvanceFieldParser.Result advanceFieldResult = parseAdvance(field, eventType);
         int numberOfErrors = 0; // TODO: Implement me.
@@ -34,8 +35,13 @@ public final class EventParser {
     }
     
     private static AdvanceFieldParser.Result parseAdvance(String field, EventType eventType) {
-        String advanceField = getAdvanceField(field);
-        return AdvanceFieldParser.parse(advanceField, eventType);
+        try {
+            String advanceField = getAdvanceField(field);
+            return AdvanceFieldParser.parse(advanceField, eventType);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException(String.format("Invalid field: %s. Reported error: %s", 
+                    field, e.getMessage()), e);
+        }
     }
     
     private static String getAdvanceField(String field) {

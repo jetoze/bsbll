@@ -43,7 +43,9 @@ public final class AdvanceFieldParser {
             switch (core.charAt(1)) {
             case '-':
                 Base to = Base.fromChar(core.charAt(2));
-                advances.put(from, to);
+                if (from != to || from == Base.HOME) {
+                    advances.put(from, to);
+                }
                 break;
             case 'X':
                 outs.add(from);
