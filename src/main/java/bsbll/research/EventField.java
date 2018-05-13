@@ -35,10 +35,14 @@ public final class EventField {
             String s = (input.endsWith("#") || input.endsWith("?"))
                     ? input.substring(0, input.length() - 1)
                     : input;
-            int indexOfFirstModSep = s.indexOf('/');
             int indexOfAdvSep = s.indexOf('.');
+            int indexOfFirstModSep = s.indexOf('/');
             if (indexOfFirstModSep == -1 && indexOfAdvSep == -1) {
                 return new EventField(s, ImmutableList.of(), "");
+            }
+            if ((indexOfAdvSep > 0) && (indexOfFirstModSep > indexOfAdvSep)) {
+                // There are no main modifiers, but the advance field contains a modifier with a slash.
+                indexOfFirstModSep = -1;
             }
             String basic = (indexOfFirstModSep == -1)
                     ? s.substring(0, indexOfAdvSep)
