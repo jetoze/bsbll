@@ -2,6 +2,7 @@ package bsbll.research;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
+import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.List;
 import java.util.Objects;
@@ -77,6 +78,55 @@ public final class PlayOutcome {
                     this.advances.equals(that.advances);
         }
         return false;
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("%s - Advances: %s Outs: %s Errors: %d", 
+                this.type, this.advances, this.outs, this.numberOfErrors);
+    }
+    
+    public static Builder builder(EventType type) {
+        return new Builder(type);
+    }
+    
+    
+    public static final class Builder {
+        private final EventType type;
+        private final ImmutableSet.Builder<Base> outs = ImmutableSet.builder();
+        private final ImmutableSet.Builder<Advance> advances = ImmutableSet.builder();
+        private int errors;
+        
+        public Builder(EventType type) {
+            this.type = requireNonNull(type);
+            if (type.isError()) {
+                this.errors = 1;
+            }
+        }
+        
+        public Builder withOut(Base base) {
+            this.outs.add(base);
+            return this;
+        }
+        
+        public Builder withAdvance(Base from, Base to) {
+            return withAdvance(new Advance(from, to));
+        }
+        
+        public Builder withAdvance(Advance adv) {
+            this.advances.add(adv);
+            return this;
+        }
+        
+        public Builder withErrors(int errors) {
+            checkPositive(errors);
+            this.errors += errors;
+            return this;
+        }
+        
+        public PlayOutcome build() {
+            return new PlayOutcome(this.type, new Advances(this.advances.build()), this.outs.build(), this.errors);
+        }
     }
     
 }
