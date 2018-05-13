@@ -9,7 +9,7 @@ import javax.annotation.Nullable;
 
 public final class PlayByPlayFileTest {
     public static void main(String[] args) throws Exception {
-        File rootDir = new File("/Users/torgil/coding/data/bsbll/play-by-play-files/1969/");
+        File rootDir = new File("/Users/torgil/coding/data/bsbll/play-by-play-files/1925/");
         FileFilter filter = f -> {
             String name = f.getName();
             return name.endsWith(".EVA") || name.endsWith("EVN") || name.endsWith(".EDN");
@@ -23,7 +23,7 @@ public final class PlayByPlayFileTest {
                 //.map(EventField::fromString)
                 //.map(EventField::getBasicPlay)
                 //.filter(s -> s.equals("CS"))
-                .filter(f -> f.startsWith("CS") && f.contains("E"))
+                .filter(f -> f.startsWith("PO"))
                 //.filter(f -> f.contains("1-1") || f.contains("2-2") || f.contains("3-3"))
                 //.forEach(EventParser::parse);
                 .forEach(System.out::println);

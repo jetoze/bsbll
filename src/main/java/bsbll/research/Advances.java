@@ -81,6 +81,11 @@ public final class Advances {
         requireNonNull(base);
         return this.advances.containsKey(base);
     }
+    
+    public Advance getAdvanceFrom(Base base) {
+        checkArgument(contains(base));
+        return this.advances.get(base);
+    }
 
     public boolean didRunnerAdvanceSafely(Base base) {
         requireNonNull(base);
