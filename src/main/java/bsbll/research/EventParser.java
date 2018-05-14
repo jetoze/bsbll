@@ -61,6 +61,7 @@ public final class EventParser {
             break;
         case PICKED_OFF:
             handlePickoff();
+            break;
         case STRIKEOUT:
             handleAdditionalEvent();
             break;
@@ -133,9 +134,17 @@ public final class EventParser {
     
     private void handlePickoff(String marker) {
         assert marker.startsWith("PO");
-        Base pickedOffAt = Base.fromChar(marker.charAt(2));
-        if (!advances.contains(pickedOffAt)) {
-            addAdvance(Advance.out(pickedOffAt, pickedOffAt));
+        Base from;
+        Base to;
+        if (marker.startsWith("POCS")) {
+            to = Base.fromChar(marker.charAt(4));
+            from = to.preceding();
+        } else {
+            from = Base.fromChar(marker.charAt(2));
+            to = from;
+        }
+        if (!advances.contains(from)) {
+            addAdvance(Advance.out(from, to));
         }
     }
     

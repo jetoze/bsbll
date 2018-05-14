@@ -163,6 +163,16 @@ public final class EventParserTest {
     }
     
     @Test
+    public void pickedOffCaughtStealing() {
+        PlayOutcome outcome = EventParser.parse("POCSH");
+        PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
+                .withOut(Base.THIRD, Base.HOME)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void pickoff() {
         PlayOutcome outcome = EventParser.parse("PO1(23)");
         PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
