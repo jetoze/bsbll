@@ -14,15 +14,23 @@ public final class EventFieldTest {
     
     @Test
     public void testBasicOnly() {
-        EventField field = EventField.fromString("S7");
+        EventField field = EventField.fromString2("S7");
         assertEquals("S7", field.getBasicPlay());
         assertNoModifiers(field);
         assertEquals("", field.getAdvanceField());
     }
     
     @Test
-    public void testBasicWithModifiers() {
-        EventField field = EventField.fromString("54(B)/BG25/SH");
+    public void testBasicWithOneModifier() {
+        EventField field = EventField.fromString2("54(B)/BG25");
+        assertEquals("54(B)", field.getBasicPlay());
+        assertEquals(Arrays.asList("BG25"), field.getModifiers());
+        assertEquals("", field.getAdvanceField());
+    }
+    
+    @Test
+    public void testBasicWithTwoModifiers() {
+        EventField field = EventField.fromString2("54(B)/BG25/SH");
         assertEquals("54(B)", field.getBasicPlay());
         assertEquals(Arrays.asList("BG25", "SH"), field.getModifiers());
         assertEquals("", field.getAdvanceField());
@@ -42,7 +50,7 @@ public final class EventFieldTest {
     
     @Test
     public void testFullForm() {
-        EventField field = EventField.fromString("54(B)/BG25/SH.1-2");
+        EventField field = EventField.fromString2("54(B)/BG25/SH.1-2");
         assertEquals("54(B)", field.getBasicPlay());
         assertEquals(Arrays.asList("BG25", "SH"), field.getModifiers());
         assertEquals("1-2", field.getAdvanceField());
@@ -50,7 +58,7 @@ public final class EventFieldTest {
     
     @Test
     public void testErrorNotationInAdvanceSection() {
-        EventField field = EventField.fromString("D7.1-H;B-3(E5/THH)");
+        EventField field = EventField.fromString2("D7.1-H;B-3(E5/THH)");
         assertEquals("D7", field.getBasicPlay());
         assertNoModifiers(field);
         assertEquals("1-H;B-3(E5/THH)", field.getAdvanceField());
