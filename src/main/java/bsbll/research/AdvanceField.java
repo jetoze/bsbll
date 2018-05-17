@@ -31,6 +31,10 @@ final class AdvanceField {
         return this.parts.values();
     }
     
+    public boolean isError(Base from) {
+        return countErrors(from) > 0;
+    }
+    
     public int countErrors(Base from) {
         requireNonNull(from);
         String s = this.parts.get(from);

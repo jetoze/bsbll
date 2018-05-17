@@ -85,18 +85,22 @@ public final class EventParser {
                 Base stolen = Base.fromChar(p.charAt(2));
                 Base from = stolen.preceding();
                 if (this.advances.contains(from)) {
-                    Advance a = this.advances.getAdvanceFrom(from);
-                    if (a.to().compareTo(stolen) > 0) {
-                        // Indicates an error was made, allowing the runner to take additional bases.
-                        // Increase the error count, unless the error is already given explicitly
-                        // in the advance field itself (they are counted separately)
-                        if (field.getAdvanceField().countErrors(from) == 0) {
-                            ++numberOfErrors;
-                        }
-                    }
+                    lookForErrorOnStolenBase(stolen, from);
                 } else {
                     addAdvance(Advance.safe(from, stolen));
                 }
+            }
+        }
+    }
+
+    public void lookForErrorOnStolenBase(Base stolen, Base from) {
+        Advance a = this.advances.getAdvanceFrom(from);
+        if (a.to().compareTo(stolen) > 0) {
+            // Indicates an error was made, allowing the runner to take additional bases.
+            // Increase the error count, unless the error is already given explicitly
+            // in the advance field itself (they are counted separately)
+            if (!field.getAdvanceField().isError(from)) {
+                ++numberOfErrors;
             }
         }
     }
@@ -115,10 +119,6 @@ public final class EventParser {
                 ++numberOfErrors;
             }
         } else {
-            // TODO: Look for the presence of a marker like (2E6) in the basic
-            // part of the field. This indicates an error, which negates the CS,
-            // while the advancement is NOT given explicitly in the advancement field
-            // (which is covered above).
             Outcome outcome = Outcome.OUT;
             if (isErrorOnCaughtStealing(marker)) {
                 outcome = Outcome.SAFE;
