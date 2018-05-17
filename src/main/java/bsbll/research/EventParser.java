@@ -33,12 +33,6 @@ public final class EventParser {
         }
     }
     
-    private static boolean isErrorOnCaughtStealing(EventField field) {
-        String basicPlay = field.getBasicPlay();
-        assert basicPlay.startsWith("CS");
-        return basicPlay.matches("CS[23H].*\\(\\dE\\d\\).*");
-    }
-    
     private final EventField field;
     private Advances advances;
     private int numberOfErrors;
@@ -120,7 +114,7 @@ public final class EventParser {
             // while the advancement is NOT given explicitly in the advancement field
             // (which is covered above).
             Outcome outcome = Outcome.OUT;
-            if (isErrorOnCaughtStealing(field)) {
+            if (isErrorOnCaughtStealing(marker)) {
                 outcome = Outcome.SAFE;
                 ++numberOfErrors;
             }
@@ -128,6 +122,11 @@ public final class EventParser {
         }
     }
     
+    private static boolean isErrorOnCaughtStealing(String basicPlay) {
+        assert basicPlay.startsWith("CS");
+        return basicPlay.matches("CS[23H].*\\(\\dE\\d\\).*");
+    }
+
     private void handlePickoff() {
         handlePickoff(this.field.getBasicPlay());
     }

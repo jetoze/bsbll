@@ -58,7 +58,7 @@ public final class EventField {
         String modifiersPart = matcher.group(2);
         ImmutableList<String> modifiers = Strings.isNullOrEmpty(modifiersPart)
                 ? ImmutableList.of()
-                : ImmutableList.copyOf(modifiersPart.substring(1).split("/"));
+                : ImmutableList.copyOf(modifiersPart.substring(1).split("/")); // Remove the first "/", to avoid an empty element
         String advance = Strings.nullToEmpty(matcher.group(4));
         return new EventField(basicPlay, modifiers, advance);
     }
