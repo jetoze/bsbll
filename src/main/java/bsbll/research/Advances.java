@@ -37,7 +37,7 @@ public final class Advances {
         checkLegal(individualAdvances);
         Map<Base, Advance> map = individualAdvances.stream()
                 .collect(toMap(Advance::from, a -> a));
-        Comparator<Base> order = Comparator.comparing(Base::intValueWhenOrigin).reversed();
+        Comparator<Base> order = Base.comparingOrigin();
         this.advances = ImmutableSortedMap.<Base, Advance>orderedBy(order).putAll(map).build();
     }
     

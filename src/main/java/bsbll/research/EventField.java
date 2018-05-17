@@ -43,12 +43,12 @@ public final class EventField {
     
     private final String basicPlay;
     private final ImmutableList<String> modifiers;
-    private final String advanceField;
+    private final AdvanceField advanceField;
 
     public EventField(String basicPlay, Collection<String> modifiers, String advanceField) {
         this.basicPlay = checkNotEmpty(basicPlay);
         this.modifiers = ImmutableList.copyOf(modifiers);
-        this.advanceField = Strings.nullToEmpty(advanceField);
+        this.advanceField = AdvanceField.fromString(Strings.nullToEmpty(advanceField));
     }
     
     public static EventField fromString2(String input) {
@@ -111,7 +111,7 @@ public final class EventField {
         return modifiers.stream().anyMatch(condition);
     }
 
-    public String getAdvanceField() {
+    public AdvanceField getAdvanceField() {
         return advanceField;
     }
     

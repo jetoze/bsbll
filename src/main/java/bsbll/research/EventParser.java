@@ -66,6 +66,8 @@ public final class EventParser {
             // no additional processing needed
         }
         
+        numberOfErrors += field.getAdvanceField().countAllErrors();
+        
         return new PlayOutcome(
                 eventType, 
                 advances, 
@@ -85,8 +87,12 @@ public final class EventParser {
                 if (this.advances.contains(from)) {
                     Advance a = this.advances.getAdvanceFrom(from);
                     if (a.to().compareTo(stolen) > 0) {
-                        // Indicates an error was made, allowing the runner to take additional bases
-                        ++numberOfErrors;
+                        // Indicates an error was made, allowing the runner to take additional bases.
+                        // Increase the error count, unless the error is already given explicitly
+                        // in the advance field itself (they are counted separately)
+                        if (field.getAdvanceField().countErrors(from) == 0) {
+                            ++numberOfErrors;
+                        }
                     }
                 } else {
                     addAdvance(Advance.safe(from, stolen));

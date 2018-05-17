@@ -1,5 +1,7 @@
 package bsbll.research;
 
+import java.util.Comparator;
+
 public enum Base {
     FIRST,
     SECOND,
@@ -14,7 +16,7 @@ public enum Base {
         return this != HOME;
     }
 
-    public int intValueWhenOrigin() {
+    private int intValueWhenOrigin() {
         return isHome()
                 ? 0
                 : ordinal() + 1;
@@ -41,5 +43,9 @@ public enum Base {
         default:
             throw new IllegalArgumentException("Invalid base code: " + c);
         }
+    }
+    
+    public static Comparator<Base> comparingOrigin() {
+        return Comparator.comparing(Base::intValueWhenOrigin).reversed();
     }
 }

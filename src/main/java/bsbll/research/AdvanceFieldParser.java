@@ -1,7 +1,5 @@
 package bsbll.research;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,8 +11,7 @@ import bsbll.research.Advance.Outcome;
 public final class AdvanceFieldParser {
     /**
      * @param field
-     *            the field, or an empty string if the play field does not
-     *            contain an advance part.
+     *            the field
      * @param eventType
      *            implies the the base awarded to the batter, if not specified
      *            explicitly by the advance part, with the latter taking
@@ -22,16 +19,10 @@ public final class AdvanceFieldParser {
      *            to the batter is FIRST, but the batter may end up advancing
      *            further e.g. due to errors on the play.
      */
-    public static Advances parse(String field, EventType eventType) {
+    public static Advances parse(AdvanceField field, EventType eventType) {
         Map<Base, Advance> advances = new HashMap<>();
-        String[] parts = field.split(";");
-        for (String part : parts) {
-            String trimmedPart = part.trim();
-            if (trimmedPart.isEmpty()) {
-                continue;
-            }
-            checkArgument(trimmedPart.length() >= 3, "Invalid advance field: %s", field);
-            Advance a = fromString(trimmedPart);
+        for (String part : field.getParts()) {
+            Advance a = fromString(part);
             advances.put(a.from(), a);
         }
         if (!advances.containsKey(Base.HOME)) {
