@@ -1,16 +1,24 @@
 package bsbll.card;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
+
+import tzeth.collections.ImCollectors;
 
 /**
  * Represents the probability of an event, such as a batter hitting a homerun.
  */
-public final class Probability {
+public final class Probability implements Comparable<Probability> {
     private static final int DENOMINATOR = 10_000;
     
     public static final Probability ZERO = new Probability(0);
@@ -66,6 +74,12 @@ public final class Probability {
         checkArgument(canAdd(other));
         return new Probability(this.value + other.value);
     }
+    
+    public Probability subtract(Probability other) {
+        int newValue = this.value - other.value;
+        checkArgument(newValue >= 0);
+        return new Probability(newValue);
+    }
 
     public static Probability complementOf(Probability... ps) {
         return complementOf(Arrays.asList(ps));
@@ -83,6 +97,28 @@ public final class Probability {
                     ? COMPLETE
                     : new Probability(DENOMINATOR - total);
     }
+    
+    public static ImmutableList<Probability> normalize(Probability first, Probability second, 
+            Probability... rest) {
+        requireNonNull(first);
+        requireNonNull(second);
+        List<Probability> ps = new ArrayList<>();
+        ps.add(first);
+        ps.add(second);
+        Collections.addAll(ps, rest);
+        return normalize(ps);
+    }
+    
+    public static ImmutableList<Probability> normalize(Collection<Probability> ps) {
+        checkArgument(ps.size() >= 2);
+        int total = ps.stream()
+                .mapToInt(p -> p.value)
+                .sum();
+        return ps.stream()
+                .map(p -> Probability.of(p.value, total))
+                .collect(ImCollectors.toList());
+    }
+    
     
     public static Probability log5(Probability batter,
                                    Probability pitcher,
@@ -106,6 +142,11 @@ public final class Probability {
         return 1.0 * value / DENOMINATOR;
     }
 
+    @Override
+    public int compareTo(Probability o) {
+        return Integer.compare(this.value, o.value);
+    }
+    
     @Override
     public int hashCode() {
         return Integer.hashCode(value);

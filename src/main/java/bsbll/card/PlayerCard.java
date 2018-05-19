@@ -28,6 +28,7 @@ public final class PlayerCard {
         this.strikeouts = requireNonNull(strikeouts);
         this.walks = requireNonNull(walks);
         this.hitByPitches = requireNonNull(hitByPitches);
+        // TODO: Preconditions, or make the ctor private.
     }
 
     // TODO: What is a good naming strategy for the getters? I would
@@ -36,6 +37,10 @@ public final class PlayerCard {
 
     public Probability hits() {
         return hits;
+    }
+    
+    public Probability singles() {
+        return hits.subtract(doubles).subtract(triples).subtract(homeruns);
     }
     
     public Probability doubles() {
@@ -50,6 +55,10 @@ public final class PlayerCard {
         return homeruns;
     }
     
+    public Probability extraBaseHits() {
+        return doubles.add(triples).add(homeruns);
+    }
+    
     public Probability strikeouts() {
         return strikeouts;
     }
@@ -60,6 +69,24 @@ public final class PlayerCard {
     
     public Probability hitByPitches() {
         return hitByPitches;
+    }
+    
+    /**
+     * The combined probability of hit and batted out.
+     */
+    public Probability contact() {
+        return Probability.complementOf(noContact());
+    }
+    
+    /**
+     * The combined probability of strikeout, walk, and hit by pitch.
+     */
+    public Probability noContact() {
+        return strikeouts.add(walks).add(hitByPitches);
+    }
+    
+    public Probability battedOuts() {
+        return contact().subtract(hits);
     }
     
     public static Builder builder(int plateAppearances) {
@@ -117,10 +144,12 @@ public final class PlayerCard {
         }
         
         public PlayerCard build() {
-            int total = hits + doubles + triples + homeruns + strikeouts +
-                    walks + hitByPitches;
+            int total = hits + strikeouts + walks + hitByPitches;
             checkArgument(total <= plateAppearances, 
                     "Too many events, %s, for the number of plate appearances, %s", total, plateAppearances);
+            int xBaseHits = doubles + triples + homeruns;
+            checkArgument(xBaseHits <= hits, 
+                    "Too many extra base hits, %s, for the number of hits, %s", xBaseHits, hits);
             return new PlayerCard(
                     Probability.of(hits, plateAppearances), 
                     Probability.of(doubles, plateAppearances), 
