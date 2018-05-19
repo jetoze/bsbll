@@ -38,6 +38,7 @@ public final class Probability {
 
     public static Probability of(int events, int total) {
         checkArgument(events >= 0);
+        checkArgument(total > 0);
         checkArgument(events <= total);
         int value = (int) (((1.0 * events) / total) * DENOMINATOR);
         return new Probability(value);
