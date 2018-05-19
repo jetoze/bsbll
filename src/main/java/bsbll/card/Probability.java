@@ -57,6 +57,10 @@ public final class Probability implements Comparable<Probability> {
         int roll = die.roll();
         return roll <= this.value;
     }
+    
+    public int apply(int sampleSize) {
+        return (int) Math.round(asDouble() * sampleSize);
+    }
 
     public boolean isZero() {
         return this.value == 0;

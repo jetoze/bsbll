@@ -10,7 +10,7 @@ public final class PlayerCardExperiments {
         // How does 1923 Babe Ruth do against a league-average pitcher?
         PlayerCard league = americanLeague1923();
         PlayerCard batter = babeRuth1923();
-        PlayerCard pitcher = curtFullerton1923();
+        PlayerCard pitcher = curtFullerton1923(league);
         Matchup matchup = new Matchup(batter, pitcher, league);
         DieFactory dieFactory = DieFactory.random();
         
@@ -58,11 +58,11 @@ public final class PlayerCardExperiments {
                 .build();
     }
   
-    private static PlayerCard walterJohnson1923() {
+    private static PlayerCard walterJohnson1923(PlayerCard league) {
         return PlayerCard.builder(1096)
                 .hits(263)
-                .doubles(46)
-                .triples(12)
+                .doubles(league.homeruns())
+                .triples(league.triples())
                 .homeruns(9)
                 .walks(73)
                 .strikeouts(130)
@@ -70,11 +70,11 @@ public final class PlayerCardExperiments {
                 .build();
     }
     
-    private static PlayerCard curtFullerton1923() {
+    private static PlayerCard curtFullerton1923(PlayerCard league) {
         return PlayerCard.builder(657)
                 .hits(167)
-                .doubles(27)
-                .triples(7)
+                .doubles(league.doubles())
+                .triples(league.triples())
                 .homeruns(10)
                 .walks(71)
                 .strikeouts(37)

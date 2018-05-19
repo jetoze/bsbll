@@ -118,8 +118,18 @@ public final class PlayerCard {
             return this;
         }
         
+        public Builder doubles(Probability p) {
+            this.doubles = p.apply(plateAppearances);
+            return this;
+        }
+        
         public Builder triples(int n) {
             this.triples = checkNotNegative(n);
+            return this;
+        }
+        
+        public Builder triples(Probability p) {
+            this.triples = p.apply(plateAppearances);
             return this;
         }
         
