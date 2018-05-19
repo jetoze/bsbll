@@ -31,7 +31,7 @@ public final class Average implements Comparable<Average> {
         if (denominator == 0) {
             return "----";
         } else {
-            DecimalFormat fmt = new DecimalFormat(".###");
+            DecimalFormat fmt = new DecimalFormat("#.000");
             return fmt.format(asDouble());
         }
     }
