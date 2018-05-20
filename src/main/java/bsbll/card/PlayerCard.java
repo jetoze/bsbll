@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import bsbll.stats.BattingStats;
+
 public final class PlayerCard {
     private final Probability hits;
     private final Probability doubles;
@@ -91,6 +93,18 @@ public final class PlayerCard {
     
     public static Builder builder(int plateAppearances) {
         return new Builder(plateAppearances);
+    }
+    
+    public static PlayerCard of(BattingStats stats) {
+        return builder(stats.getPlateAppearances())
+                .hits(stats.getHits())
+                .doubles(stats.getDoubles())
+                .triples(stats.getTriples())
+                .homeruns(stats.getHomeruns())
+                .walks(stats.getWalks())
+                .strikeouts(stats.getStrikeouts())
+                .hitByPitches(stats.getHitByPitches())
+                .build();
     }
     
     

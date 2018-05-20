@@ -100,5 +100,18 @@ public final class BattingStats {
         int hbp = this.hitByPitches + (outcome == Outcome.HIT_BY_PITCH ? 1 : 0);
         return new BattingStats(pa, h, d, t, hr, w, so, hbp);
     }
+    
+    public BattingStats add(BattingStats o) {
+        return new BattingStats(
+                this.plateAppearances + o.plateAppearances,
+                this.hits + o.hits,
+                this.doubles + o.doubles,
+                this.triples + o.triples,
+                this.homeruns + o.homeruns,
+                this.walks + o.walks,
+                this.strikeouts + o.strikeouts,
+                this.hitByPitches + o.hitByPitches
+        );
+    }
 
 }
