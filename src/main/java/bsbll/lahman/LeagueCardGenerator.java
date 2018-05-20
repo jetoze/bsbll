@@ -11,6 +11,9 @@ import bsbll.league.LeagueId;
 import bsbll.stats.BattingStats;
 
 public class LeagueCardGenerator {
+    // The Lahman DB can be downloaded from here:
+    //    http://www.seanlahman.com/baseball-database.html
+    
     private static final String TEAMS_FILE = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/Teams.csv";
     
     private final File teamsFile;
