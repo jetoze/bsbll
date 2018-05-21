@@ -27,17 +27,19 @@ public final class BattingFileExplorer {
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
-        Stream<String[]> stream = openFile(year)
-                .filter(s -> s.startsWith(playerId.toString()))
-                .map(s -> s.split(",", -1));
-        return createCard(stream);
+        try (Stream<String> stream = openFile(year)) {
+            return createCard(stream
+                    .filter(s -> s.startsWith(playerId.toString()))
+                    .map(s -> s.split(",", -1)));
+        }
     }
     
     public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
-        Stream<String[]> stream = openFile(year)
-                .map(s -> s.split(",", -1))
-                .filter(a -> a[4].equals(leagueId.name()));
-        return createCard(stream);
+        try (Stream<String> stream = openFile(year)) {
+            return createCard(stream
+                    .map(s -> s.split(",", -1))
+                    .filter(a -> a[4].equals(leagueId.name())));
+        }
     }
     
     private Stream<String> openFile(Year year) {
