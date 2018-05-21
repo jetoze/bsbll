@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.stream.Stream;
 
 import bsbll.Year;
 import bsbll.card.PlayerCard;
@@ -13,12 +14,12 @@ import bsbll.player.PlayerId;
 import bsbll.stats.BattingStats;
 
 public final class BattingFileExplorer {
-    private static final String DEFAULT_LOCATION = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/Batting.csv";
+    private static final String DEFAULT_LOCATION = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/batting";
 
-    private final File file;
+    private final File root;
     
-    public BattingFileExplorer(File file) {
-        this.file = requireNonNull(file);
+    public BattingFileExplorer(File root) {
+        this.root = requireNonNull(root);
     }
 
     public static BattingFileExplorer defaultExplorer() {
@@ -26,14 +27,12 @@ public final class BattingFileExplorer {
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
-        String prefix = playerId + "," + year;
         try {
-            BattingStats stats = Files.lines(file.toPath())
-                    .filter(s -> s.startsWith(prefix))
-                    .map(s -> s.split(",", -1))
-                    .map(this::toStats)
-                    .reduce(new BattingStats(), BattingStats::add);
-            return PlayerCard.of(stats);
+            File file = new File(root, "batting-" + year + ".csv");
+            Stream<String[]> stream = Files.lines(file.toPath())
+                    .filter(s -> s.startsWith(playerId.toString()))
+                    .map(s -> s.split(",", -1));
+            return createCard(stream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -41,19 +40,20 @@ public final class BattingFileExplorer {
     
     public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
         try {
-            BattingStats stats = Files.lines(file.toPath())
+            File file = new File(root, "batting-" + year + ".csv");
+            Stream<String[]> stream = Files.lines(file.toPath())
                     .map(s -> s.split(",", -1))
-                    .filter(s -> leagueFilter(s, leagueId, year))
-                    .map(this::toStats)
-                    .reduce(new BattingStats(), BattingStats::add);
-            return PlayerCard.of(stats);
+                    .filter(a -> a[4].equals(leagueId.name()));
+            return createCard(stream);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     
-    private boolean leagueFilter(String[] parts, LeagueId leagueId, Year year) {
-        return parts[1].equals(year.toString()) && parts[4].equals(leagueId.name());
+    private PlayerCard createCard(Stream<String[]> stream) {
+        BattingStats stats = stream.map(this::toStats)
+                .reduce(new BattingStats(), BattingStats::add);
+        return PlayerCard.of(stats);
     }
     
     private BattingStats toStats(String[] parts) {
