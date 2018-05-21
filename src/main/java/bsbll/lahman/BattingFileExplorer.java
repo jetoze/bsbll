@@ -14,7 +14,7 @@ import bsbll.player.PlayerId;
 import bsbll.stats.BattingStats;
 
 public final class BattingFileExplorer {
-    private static final String DEFAULT_LOCATION = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/batting";
+    private static final String DEFAULT_LOCATION = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/";
 
     private final File root;
     
@@ -27,27 +27,31 @@ public final class BattingFileExplorer {
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
+        Stream<String[]> stream = openFile(year)
+                .filter(s -> s.startsWith(playerId.toString()))
+                .map(s -> s.split(",", -1));
+        return createCard(stream);
+    }
+    
+    public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
+        Stream<String[]> stream = openFile(year)
+                .map(s -> s.split(",", -1))
+                .filter(a -> a[4].equals(leagueId.name()));
+        return createCard(stream);
+    }
+    
+    private Stream<String> openFile(Year year) {
         try {
-            File file = new File(root, "batting-" + year + ".csv");
-            Stream<String[]> stream = Files.lines(file.toPath())
-                    .filter(s -> s.startsWith(playerId.toString()))
-                    .map(s -> s.split(",", -1));
-            return createCard(stream);
+            File file = getFile(year);
+            return Files.lines(file.toPath());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
     
-    public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
-        try {
-            File file = new File(root, "batting-" + year + ".csv");
-            Stream<String[]> stream = Files.lines(file.toPath())
-                    .map(s -> s.split(",", -1))
-                    .filter(a -> a[4].equals(leagueId.name()));
-            return createCard(stream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    private File getFile(Year year) {
+        File parent = new File(root, "batting");
+        return new File(parent, "batting-" + year + ".csv");
     }
     
     private PlayerCard createCard(Stream<String[]> stream) {
