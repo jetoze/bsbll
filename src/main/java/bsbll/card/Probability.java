@@ -48,7 +48,7 @@ public final class Probability implements Comparable<Probability> {
         checkArgument(events >= 0);
         checkArgument(total > 0);
         checkArgument(events <= total);
-        int value = (int) (((1.0 * events) / total) * DENOMINATOR);
+        int value = (int) Math.round((((1.0 * events) / total) * DENOMINATOR));
         return new Probability(value);
     }
 
