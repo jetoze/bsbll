@@ -5,6 +5,11 @@ import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.text.DecimalFormat;
 
+import javax.annotation.Nullable;
+
+/**
+ * Represents an average, such as a Batting Average or Slugging Average.
+ */
 public final class Average implements Comparable<Average> {
     private final int numerator;
     private final int denominator;
@@ -26,6 +31,22 @@ public final class Average implements Comparable<Average> {
         return Double.compare(this.asDouble(), o.asDouble());
     }
     
+    @Override
+    public int hashCode() {
+        return Double.hashCode(asDouble());
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof Average) {
+            return Double.valueOf(this.asDouble()).equals(((Average) obj).asDouble());
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         if (denominator == 0) {
