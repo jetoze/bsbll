@@ -11,9 +11,16 @@ public final class BattingStats {
     private final int walks;
     private final int strikeouts;
     private final int hitByPitches;
+    // TODO: Add these
+    private final int runsScored = 0;
+    private final int rbis = 0;
+    private final int sacrificeHits = 0;
+    private final int sacrificeFlies = 0;
     
-    // TODO: More stats here, such as R, RBI, SF, SH. Come up with a better
-    // data representation of it?
+    // TODO: Come up with a better data representation of this? Something like
+    // Map<StatEnum, Integer>
+    //       ^
+    //       |-- Or CountingStatEnum
     
     public BattingStats() {
         this(0, 0, 0, 0, 0, 0, 0, 0);
@@ -38,7 +45,7 @@ public final class BattingStats {
     }
 
     public int getAtBats() {
-        return plateAppearances - walks - hitByPitches;
+        return plateAppearances - walks - hitByPitches - sacrificeHits - sacrificeFlies;
     }
     
     public Average getBattingAverage() {
@@ -89,6 +96,22 @@ public final class BattingStats {
         return hitByPitches;
     }
     
+    public int getRunsScored() {
+        return runsScored;
+    }
+
+    public int getRunsBattedIn() {
+        return rbis;
+    }
+
+    public int getSacrificeHits() {
+        return sacrificeHits;
+    }
+
+    public int getSacrificeFlies() {
+        return sacrificeFlies;
+    }
+
     public BattingStats add(Outcome outcome) {
         int pa = this.plateAppearances + 1;
         int h = this.hits + (outcome.isHit() ? 1 : 0);

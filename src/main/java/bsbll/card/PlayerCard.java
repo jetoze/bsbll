@@ -6,6 +6,7 @@ import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import bsbll.stats.BattingStats;
+import bsbll.stats.PitchingStats;
 
 public final class PlayerCard {
     private final Probability hits;
@@ -100,6 +101,28 @@ public final class PlayerCard {
                 .hits(stats.getHits())
                 .doubles(stats.getDoubles())
                 .triples(stats.getTriples())
+                .homeruns(stats.getHomeruns())
+                .walks(stats.getWalks())
+                .strikeouts(stats.getStrikeouts())
+                .hitByPitches(stats.getHitByPitches())
+                .build();
+    }
+    
+    /**
+     * Creates a PlayerCard from pitching stats.
+     * 
+     * @param stats
+     *            the pitching stats
+     * @param league
+     *            the overall PlayerCard for the league. This is used to fill in
+     *            unknowns such as doubles and triples, that are not covered by
+     *            PitchingStats.
+     */
+    public static PlayerCard of(PitchingStats stats, PlayerCard league) {
+        return builder(stats.getBattersFaced())
+                .hits(stats.getHits())
+                .doubles(league.doubles())
+                .triples(league.triples())
                 .homeruns(stats.getHomeruns())
                 .walks(stats.getWalks())
                 .strikeouts(stats.getStrikeouts())

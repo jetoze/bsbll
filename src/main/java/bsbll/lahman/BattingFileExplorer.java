@@ -26,20 +26,34 @@ public final class BattingFileExplorer {
         return new BattingFileExplorer(new File(DEFAULT_LOCATION));
     }
     
-    public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
+    public BattingStats getPlayerStats(PlayerId playerId, Year year) {
         try (Stream<String> stream = openFile(year)) {
-            return createCard(stream
+            return createStats(stream
                     .filter(s -> s.startsWith(playerId.toString()))
                     .map(s -> s.split(",", -1)));
         }
     }
     
-    public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
+    private BattingStats createStats(Stream<String[]> stream) {
+        return stream.map(this::toStats).reduce(new BattingStats(), BattingStats::add);
+    }
+    
+    public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
+        BattingStats stats = getPlayerStats(playerId, year);
+        return PlayerCard.of(stats);
+    }
+    
+    public BattingStats getLeagueStats(LeagueId leagueId, Year year) {
         try (Stream<String> stream = openFile(year)) {
-            return createCard(stream
+            return createStats(stream
                     .map(s -> s.split(",", -1))
                     .filter(a -> a[4].equals(leagueId.name())));
         }
+    }
+    
+    public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
+        BattingStats stats = getLeagueStats(leagueId, year);
+        return PlayerCard.of(stats);
     }
     
     private Stream<String> openFile(Year year) {
@@ -54,12 +68,6 @@ public final class BattingFileExplorer {
     private File getFile(Year year) {
         File parent = new File(root, "batting");
         return new File(parent, "batting-" + year + ".csv");
-    }
-    
-    private PlayerCard createCard(Stream<String[]> stream) {
-        BattingStats stats = stream.map(this::toStats)
-                .reduce(new BattingStats(), BattingStats::add);
-        return PlayerCard.of(stats);
     }
     
     private BattingStats toStats(String[] parts) {
@@ -91,5 +99,4 @@ public final class BattingFileExplorer {
                 ? 0
                 : Integer.parseInt(s);
     }
-
 }

@@ -1,7 +1,12 @@
 package bsbll.card;
 
+import bsbll.Year;
+import bsbll.lahman.BattingFileExplorer;
+import bsbll.lahman.PitchingFileExplorer;
+import bsbll.league.LeagueId;
 import bsbll.matchup.Matchup;
 import bsbll.matchup.Matchup.Outcome;
+import bsbll.player.PlayerId;
 import bsbll.stats.BattingStats;
 
 public final class PlayerCardExperiments {
@@ -10,7 +15,7 @@ public final class PlayerCardExperiments {
         // How does 1923 Babe Ruth do against a league-average pitcher?
         PlayerCard league = americanLeague1923();
         PlayerCard batter = babeRuth1923();
-        PlayerCard pitcher = curtFullerton1923(league);
+        PlayerCard pitcher = walterJohnson1923(league);
         Matchup matchup = new Matchup(batter, pitcher, league);
         DieFactory dieFactory = DieFactory.random();
         
@@ -34,52 +39,24 @@ public final class PlayerCardExperiments {
     }
     
     private static PlayerCard americanLeague1923() {
-        return PlayerCard.builder(48165)
-                .hits(11870)
-                .doubles(2010)
-                .triples(554)
-                .homeruns(442)
-                .walks(4069)
-                .strikeouts(3613)
-                .hitByPitches(341)
-                .build();
+        return BattingFileExplorer.defaultExplorer()
+                .generateLeagueCard(LeagueId.AL, Year.of(1923));
         
     }
     
     private static PlayerCard babeRuth1923() {
-        return PlayerCard.builder(697)
-                .hits(205)
-                .doubles(45)
-                .triples(13)
-                .homeruns(41)
-                .walks(170)
-                .strikeouts(93)
-                .hitByPitches(4)
-                .build();
+        return BattingFileExplorer.defaultExplorer()
+                .generatePlayerCard(new PlayerId("ruthba01"), Year.of(1923));
     }
   
     private static PlayerCard walterJohnson1923(PlayerCard league) {
-        return PlayerCard.builder(1096)
-                .hits(263)
-                .doubles(league.homeruns())
-                .triples(league.triples())
-                .homeruns(9)
-                .walks(73)
-                .strikeouts(130)
-                .hitByPitches(20)
-                .build();
+        return PitchingFileExplorer.defaultExplorer()
+                .generatePlayerCard(new PlayerId("johnswa01"), Year.of(1923), league);
     }
     
     private static PlayerCard curtFullerton1923(PlayerCard league) {
-        return PlayerCard.builder(657)
-                .hits(167)
-                .doubles(league.doubles())
-                .triples(league.triples())
-                .homeruns(10)
-                .walks(71)
-                .strikeouts(37)
-                .hitByPitches(6)
-                .build();
+        return PitchingFileExplorer.defaultExplorer()
+                .generatePlayerCard(new PlayerId("fullecu01"), Year.of(1923), league);
     }
     
 }
