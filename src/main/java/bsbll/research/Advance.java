@@ -8,6 +8,8 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
+import bsbll.Base;
+
 public final class Advance {
     private final Base from;
     private final Base to;

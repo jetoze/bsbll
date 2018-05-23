@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.game;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
@@ -12,7 +12,10 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 
-public class BaseSituation {
+import bsbll.Base;
+import bsbll.player.Player;
+
+public final class BaseSituation {
     private final ImmutableMap<Base, Player> bases;
     
     public static BaseSituation empty() {

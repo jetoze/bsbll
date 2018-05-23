@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll;
 
 import java.util.Comparator;
 

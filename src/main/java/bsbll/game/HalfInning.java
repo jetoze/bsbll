@@ -44,17 +44,18 @@ public final class HalfInning {
     // TODO: Let this method return a structure containing hits, runs, and errors, instead of 
     // having getters for them.
     public void run() {
-        Stats stats = new Stats(0, 0, 0, 0);
+        Stats stats = new Stats();
+        BaseSituation baseSituation = BaseSituation.empty();
         do {
             Player batter = batting.nextBatter();
             Player pitcher = fielding.getPitcher();
             Matchup matchup = matchupFactory.createMatchup(batter, pitcher);
             Outcome outcome = matchup.run(dieFactory);
-            stats = evaluateOutcome(outcome, stats);
+            stats = evaluateOutcome(baseSituation, outcome, stats);
         } while (!isDone(stats));
     }
     
-    private Stats evaluateOutcome(Outcome outcome, Stats preStats) {
+    private Stats evaluateOutcome(BaseSituation baseSituation, Outcome outcome, Stats preStats) {
         // TODO: Implement me.
         return null;
     }
@@ -78,13 +79,19 @@ public final class HalfInning {
         private final int hits;
         private final int errors;
         private final int outs;
+        private final int leftOnBase;
         
-        // XXX: Ugly ctor, with four ints. Mostly (only?) for internal use, but still.
-        public Stats(int runs, int hits, int errors, int outs) {
+        public Stats() {
+            this(0, 0, 0, 0, 0);
+        }
+        
+        // XXX: Ugly ctor, with all these ints. Mostly (only?) for internal use, but still.
+        public Stats(int runs, int hits, int errors, int outs, int leftOnBase) {
             this.runs = checkNotNegative(runs);
             this.hits = checkNotNegative(hits);
             this.errors = checkNotNegative(errors);
             this.outs = checkNotNegative(outs);
+            this.leftOnBase = checkNotNegative(leftOnBase);
         }
 
         public int getRuns() {
@@ -102,6 +109,9 @@ public final class HalfInning {
         public int getOuts() {
             return outs;
         }
-    }
 
+        public int getLeftOnBase() {
+            return leftOnBase;
+        }
+    }
 }

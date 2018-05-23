@@ -3,6 +3,7 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
+import bsbll.Base;
 import bsbll.research.Advance.Outcome;
 
 /**

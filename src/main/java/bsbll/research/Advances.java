@@ -19,6 +19,10 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSortedMap;
 
+import bsbll.Base;
+import bsbll.game.BaseSituation;
+import bsbll.player.Player;
+
 /**
  * Represents all base advances made on a single play. 
  */

@@ -3,6 +3,7 @@ package bsbll.research;
 import java.util.HashMap;
 import java.util.Map;
 
+import bsbll.Base;
 import bsbll.research.Advance.Outcome;
 
 /**

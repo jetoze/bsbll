@@ -10,6 +10,8 @@ import java.util.Map;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableSortedMap;
 
+import bsbll.Base;
+
 final class AdvanceField {
     private final ImmutableSortedMap<Base, String> parts;
     

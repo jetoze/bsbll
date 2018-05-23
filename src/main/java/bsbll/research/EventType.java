@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import bsbll.Base;
+
 /**
  * Represents the main outcome of a pitcher-batter matchup.
  */

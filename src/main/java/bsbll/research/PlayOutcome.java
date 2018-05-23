@@ -11,6 +11,10 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableSet;
 
+import bsbll.Base;
+import bsbll.game.BaseSituation;
+import bsbll.player.Player;
+
 public final class PlayOutcome {
     private final EventType type;    
     private final Advances advances;
