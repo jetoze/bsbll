@@ -7,7 +7,7 @@ import org.junit.Test;
 import com.google.common.collect.ImmutableSet;
 
 import bsbll.game.BaseSituation.ResultOfAdvance;
-import bsbll.matchup.Matchup.Outcome;
+import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 

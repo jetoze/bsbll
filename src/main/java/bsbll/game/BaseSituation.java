@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import bsbll.Base;
-import bsbll.matchup.Matchup.Outcome;
+import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.player.Player;
 
 public final class BaseSituation {

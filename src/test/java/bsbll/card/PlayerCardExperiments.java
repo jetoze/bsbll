@@ -4,8 +4,8 @@ import bsbll.Year;
 import bsbll.lahman.BattingFileExplorer;
 import bsbll.lahman.PitchingFileExplorer;
 import bsbll.league.LeagueId;
-import bsbll.matchup.Matchup;
-import bsbll.matchup.Matchup.Outcome;
+import bsbll.matchup.Log5BasedMatchupRunner;
+import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStats;
 
@@ -16,12 +16,11 @@ public final class PlayerCardExperiments {
         PlayerCard league = americanLeague1923();
         PlayerCard batter = babeRuth1923();
         PlayerCard pitcher = walterJohnson1923(league);
-        Matchup matchup = new Matchup(batter, pitcher, league);
-        DieFactory dieFactory = DieFactory.random();
+        Log5BasedMatchupRunner matchup = new Log5BasedMatchupRunner(league, DieFactory.random());
         
         BattingStats stats = new BattingStats();
         for (int n = 0; n < 697; ++n) {
-            Outcome outcome = matchup.run(dieFactory);
+            Outcome outcome = matchup.run(batter, pitcher);
             stats = stats.add(outcome);
         }
         System.out.println("PA: " + stats.getPlateAppearances());

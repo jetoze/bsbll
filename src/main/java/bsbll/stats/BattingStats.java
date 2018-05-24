@@ -1,6 +1,6 @@
 package bsbll.stats;
 
-import bsbll.matchup.Matchup.Outcome;
+import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 
 public final class BattingStats {
     private final int plateAppearances;

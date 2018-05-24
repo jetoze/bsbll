@@ -3,17 +3,17 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
-import bsbll.card.DieFactory;
-import bsbll.matchup.Matchup;
-import bsbll.matchup.Matchup.Outcome;
+import bsbll.card.season.PlayerCardLookup;
+import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
+import bsbll.matchup.MatchupRunner;
 import bsbll.player.Player;
 import bsbll.team.Lineup;
 
 public final class HalfInning {
     private final Lineup batting;
     private final Lineup fielding;
-    private final MatchupFactory matchupFactory;
-    private final DieFactory dieFactory;
+    private final PlayerCardLookup playerCardLookup;
+    private final MatchupRunner matchupRunner;
     private final int runsNeededToWin;
 
     /**
@@ -22,6 +22,9 @@ public final class HalfInning {
      *            the batting team
      * @param fielding
      *            the fielding/pitching team
+     * @param matchupRunner
+     *            the MatchupRunner that will be asked to simulate the matchup
+     *            between the pitcher and the batters in this half inning.
      * @param runsNeededToWin
      *            if the bottom of ninth inning or later, the number of runs
      *            needed by the batting team to win the game. This half inning
@@ -31,13 +34,13 @@ public final class HalfInning {
     public HalfInning(GameContext gameContext, 
                       Lineup batting, 
                       Lineup fielding, 
-                      MatchupFactory matchupFactory,
-                      DieFactory dieFactory,
+                      MatchupRunner matchupRunner,
+                      PlayerCardLookup playerCardLookup,
                       int runsNeededToWin) {
         this.batting = requireNonNull(batting);
         this.fielding = requireNonNull(fielding);
-        this.matchupFactory = requireNonNull(matchupFactory);
-        this.dieFactory = requireNonNull(dieFactory);
+        this.playerCardLookup = requireNonNull(playerCardLookup);
+        this.matchupRunner = requireNonNull(matchupRunner);
         this.runsNeededToWin = runsNeededToWin;
     }
 
@@ -49,8 +52,9 @@ public final class HalfInning {
         do {
             Player batter = batting.nextBatter();
             Player pitcher = fielding.getPitcher();
-            Matchup matchup = matchupFactory.createMatchup(batter, pitcher);
-            Outcome outcome = matchup.run(dieFactory);
+            Outcome outcome = matchupRunner.run(
+                    playerCardLookup.getBattingCard(batter), 
+                    playerCardLookup.getPitchingCard(pitcher));
             stats = evaluateOutcome(baseSituation, outcome, stats);
         } while (!isDone(stats));
     }
