@@ -49,7 +49,7 @@ public final class Game {
         } while (!innings.isGameOver());
         return new LineScore(
                 new LineScore.Line(homeTeam, innings.bottom),
-                new LineScore.Line(visitingTeam, innings.bottom)
+                new LineScore.Line(visitingTeam, innings.top)
         );
     }
 

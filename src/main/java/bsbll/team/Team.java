@@ -25,6 +25,10 @@ public final class Team {
         return name;
     }
     
+    public String getAbbreviation() {
+        return name.getAbbreviation();
+    }
+    
     public Roster getRoster() {
         return roster;
     }
