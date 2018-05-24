@@ -7,7 +7,6 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
-import bsbll.card.season.PlayerCardLookup;
 import bsbll.game.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.matchup.MatchupRunner;
@@ -17,7 +16,6 @@ import bsbll.team.Lineup;
 public final class HalfInning {
     private final Lineup batting;
     private final Lineup fielding;
-    private final PlayerCardLookup playerCardLookup;
     private final MatchupRunner matchupRunner;
     private final int runsNeededToWin;
 
@@ -39,11 +37,9 @@ public final class HalfInning {
     public HalfInning(Lineup batting, 
                       Lineup fielding, 
                       MatchupRunner matchupRunner,
-                      PlayerCardLookup playerCardLookup,
                       int runsNeededToWin) {
         this.batting = requireNonNull(batting);
         this.fielding = requireNonNull(fielding);
-        this.playerCardLookup = requireNonNull(playerCardLookup);
         this.matchupRunner = requireNonNull(matchupRunner);
         this.runsNeededToWin = runsNeededToWin;
     }
@@ -56,9 +52,7 @@ public final class HalfInning {
         do {
             Player batter = batting.nextBatter();
             Player pitcher = fielding.getPitcher();
-            Outcome outcome = matchupRunner.run(
-                    playerCardLookup.getBattingCard(batter), 
-                    playerCardLookup.getPitchingCard(pitcher));
+            Outcome outcome = matchupRunner.run(batter, pitcher);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;

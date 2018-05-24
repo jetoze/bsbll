@@ -9,6 +9,8 @@ import com.google.common.collect.ImmutableList;
 import bsbll.card.DieFactory;
 import bsbll.card.PlayerCard;
 import bsbll.card.Probability;
+import bsbll.card.season.PlayerCardLookup;
+import bsbll.player.Player;
 
 /**
  * {@link MatchupRunner} implementation based on the log5 method.
@@ -16,21 +18,26 @@ import bsbll.card.Probability;
  * See https://sabr.org/research/matchup-probabilities-major-league-baseball#footnote2_8f5byka.
  */
 public final class Log5BasedMatchupRunner implements MatchupRunner {
-    private final PlayerCard league;
+    private final PlayerCard leagueCard;
+    private final PlayerCardLookup playerCardLookup;
     private final DieFactory dieFactory;
 
-    public Log5BasedMatchupRunner(PlayerCard league, DieFactory dieFactory) {
-        this.league = requireNonNull(league);
+    public Log5BasedMatchupRunner(PlayerCard leagueCard,
+                                  PlayerCardLookup playerCardLookup,
+                                  DieFactory dieFactory) {
+        this.leagueCard = requireNonNull(leagueCard);
+        this.playerCardLookup = requireNonNull(playerCardLookup);
         this.dieFactory = requireNonNull(dieFactory);
     }
     
     @Override
-    public Outcome run(PlayerCard batter, PlayerCard pitcher) {
-        requireNonNull(dieFactory);
-        boolean contact = evaluate(batter, pitcher, PlayerCard::contact);
+    public Outcome run(Player batter, Player pitcher) {
+        PlayerCard batterCard = playerCardLookup.getBattingCard(batter);
+        PlayerCard pitcherCard = playerCardLookup.getPitchingCard(pitcher);
+        boolean contact = evaluate(batterCard, pitcherCard, PlayerCard::contact);
         return contact
-                ? resolveContact(batter, pitcher)
-                : resolveNonContact(batter, pitcher);
+                ? resolveContact(batterCard, pitcherCard)
+                : resolveNonContact(batterCard, pitcherCard);
     }
     
     private Outcome resolveContact(PlayerCard batter, PlayerCard pitcher) {
@@ -94,7 +101,7 @@ public final class Log5BasedMatchupRunner implements MatchupRunner {
                              Function<PlayerCard, Probability> category) {
         Probability p_batter = category.apply(batter);
         Probability p_pitcher = category.apply(pitcher);
-        Probability p_league = category.apply(this.league);
+        Probability p_league = category.apply(this.leagueCard);
         Probability log5 = Probability.log5(p_batter, p_pitcher, p_league);
         return log5.test(this.dieFactory);
     }
@@ -105,7 +112,7 @@ public final class Log5BasedMatchupRunner implements MatchupRunner {
                                          Function<PlayerCard, Probability> b) {
         ImmutableList<Probability> batterPs = Probability.normalize(a.apply(batter), b.apply(batter));
         ImmutableList<Probability> pitcherPs = Probability.normalize(a.apply(pitcher), b.apply(pitcher));
-        ImmutableList<Probability> leaguePs = Probability.normalize(a.apply(this.league), b.apply(this.league));
+        ImmutableList<Probability> leaguePs = Probability.normalize(a.apply(this.leagueCard), b.apply(this.leagueCard));
         Probability p_a = Probability.log5(batterPs.get(0), pitcherPs.get(0), leaguePs.get(0));
         return p_a.test(this.dieFactory);
     }
