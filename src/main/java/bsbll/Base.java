@@ -28,6 +28,12 @@ public enum Base {
                 : values()[ordinal() - 1];
     }
     
+    public Base next() {
+        return (this == HOME)
+                ? FIRST
+                : values()[ordinal() + 1];
+    }
+    
     public static Base fromChar(char c) {
         switch (c) {
         case '1':
@@ -43,6 +49,10 @@ public enum Base {
         default:
             throw new IllegalArgumentException("Invalid base code: " + c);
         }
+    }
+    
+    public static Base[] occupiable() {
+        return new Base[] { FIRST, SECOND, THIRD };
     }
     
     public static Comparator<Base> comparingOrigin() {
