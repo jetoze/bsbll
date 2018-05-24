@@ -23,9 +23,14 @@ public final class Roster {
      */
     public Lineup getLineup() {
         Player pitcher = rotation.nextStartingPitcher();
-        List<Player> battingOrder = new ArrayList<>(batters);
-        battingOrder.add(pitcher);
-        return new Lineup(battingOrder, pitcher);
+        BattingOrder bo = createBattingOrder(pitcher);
+        return new Lineup(bo, pitcher);
+    }
+
+    private BattingOrder createBattingOrder(Player pitcher) {
+        List<Player> bo = new ArrayList<>(batters);
+        bo.add(pitcher);
+        return new BattingOrder(bo);
     }
     
 }

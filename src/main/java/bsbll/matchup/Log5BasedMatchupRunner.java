@@ -116,32 +116,5 @@ public final class Log5BasedMatchupRunner implements MatchupRunner {
         Probability p_a = Probability.log5(batterPs.get(0), pitcherPs.get(0), leaguePs.get(0));
         return p_a.test(this.dieFactory);
     }
-    
 
-    public static enum Outcome {
-        SINGLE,
-        DOUBLE,
-        TRIPLE,
-        HOMERUN,
-        STRIKEOUT,
-        WALK,
-        HIT_BY_PITCH,
-        OUT;
-        
-        public boolean isHit() {
-            switch (this) {
-            case SINGLE:
-            case DOUBLE:
-            case TRIPLE:
-            case HOMERUN:
-                return true;
-            default:
-                return false;
-            }
-        }
-        
-        public boolean isOut() {
-            return (this == STRIKEOUT) || (this == OUT);
-        }
-    }
 }

@@ -6,7 +6,7 @@ import bsbll.lahman.BattingFileExplorer;
 import bsbll.lahman.PitchingFileExplorer;
 import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
-import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
+import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStats;

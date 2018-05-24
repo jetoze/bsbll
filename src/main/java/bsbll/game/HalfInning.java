@@ -8,23 +8,23 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 
 import bsbll.game.BaseSituation.ResultOfAdvance;
-import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.matchup.MatchupRunner;
+import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
-import bsbll.team.Lineup;
+import bsbll.team.BattingOrder;
 
 public final class HalfInning {
-    private final Lineup batting;
-    private final Lineup fielding;
+    private final BattingOrder battingOrder;
+    private final Player pitcher;
     private final MatchupRunner matchupRunner;
     private final int runsNeededToWin;
 
     /**
      * 
-     * @param batting
-     *            the batting team
-     * @param fielding
-     *            the fielding/pitching team
+     * @param battingOrder
+     *            the batting order
+     * @param pitcher
+     *            the pitcher
      * @param matchupRunner
      *            the MatchupRunner that will be asked to simulate the matchup
      *            between the pitcher and the batters in this half inning.
@@ -34,12 +34,12 @@ public final class HalfInning {
      *            will come to a stop once this many runs score (or three outs
      *            are made). {@code 0} if not applicable.
      */
-    public HalfInning(Lineup batting, 
-                      Lineup fielding, 
+    public HalfInning(BattingOrder battingOrder, 
+                      Player pitcher, 
                       MatchupRunner matchupRunner,
                       int runsNeededToWin) {
-        this.batting = requireNonNull(batting);
-        this.fielding = requireNonNull(fielding);
+        this.battingOrder = requireNonNull(battingOrder);
+        this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
         this.runsNeededToWin = runsNeededToWin;
     }
@@ -50,8 +50,7 @@ public final class HalfInning {
         Stats stats = new Stats();
         BaseSituation baseSituation = BaseSituation.empty();
         do {
-            Player batter = batting.nextBatter();
-            Player pitcher = fielding.getPitcher();
+            Player batter = battingOrder.nextBatter();
             Outcome outcome = matchupRunner.run(batter, pitcher);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
@@ -107,7 +106,7 @@ public final class HalfInning {
     }
     
     
-    public final class Stats {
+    public final static class Stats {
         private final int runs;
         private final int hits;
         private final int errors;
