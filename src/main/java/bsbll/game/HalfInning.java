@@ -3,6 +3,10 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 import bsbll.card.season.PlayerCardLookup;
 import bsbll.game.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
@@ -47,7 +51,7 @@ public final class HalfInning {
 
     // TODO: Let this method return a structure containing hits, runs, and errors, instead of 
     // having getters for them.
-    public void run() {
+    public Stats run() {
         Stats stats = new Stats();
         BaseSituation baseSituation = BaseSituation.empty();
         do {
@@ -60,6 +64,8 @@ public final class HalfInning {
             stats = sam.stats;
             baseSituation = sam.baseSituation;
         } while (!isDone(stats));
+        int lob = baseSituation.getNumberOfRunners();
+        return stats.withLeftOnBase(lob);
     }
     
     private StateAfterMatchup evaluateOutcome(Player batter, BaseSituation baseSituation, Outcome outcome, Stats preStats) {
@@ -150,6 +156,34 @@ public final class HalfInning {
         
         public Stats addOut() {
             return new Stats(runs, hits, errors, outs + 1, leftOnBase);
+        }
+        
+        public Stats withLeftOnBase(int lob) {
+            return new Stats(runs, hits, errors, outs, lob);
+        }
+        
+        @Override
+        public boolean equals(@Nullable Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj instanceof Stats) {
+                Stats that = (Stats) obj;
+                return (this.runs == that.runs) && (this.hits == that.hits) &&
+                        (this.errors == that.errors) && (this.outs == that.outs) &&
+                        (this.leftOnBase == that.leftOnBase);
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(runs, hits, errors, outs, leftOnBase);
+        }
+        
+        @Override
+        public String toString() {
+            return String.format("R: %d, H: %d, E: %d, O: %d, LOB: %d", runs, hits, errors, outs, leftOnBase);
         }
     }
 }
