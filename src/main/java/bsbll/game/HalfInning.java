@@ -36,8 +36,7 @@ public final class HalfInning {
      *            will come to a stop once this many runs score (or three outs
      *            are made). {@code 0} if not applicable.
      */
-    public HalfInning(GameContext gameContext, 
-                      Lineup batting, 
+    public HalfInning(Lineup batting, 
                       Lineup fielding, 
                       MatchupRunner matchupRunner,
                       PlayerCardLookup playerCardLookup,
