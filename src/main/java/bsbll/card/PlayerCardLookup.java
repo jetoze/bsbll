@@ -1,12 +1,11 @@
 package bsbll.card;
 
-import bsbll.league.LeagueId;
 import bsbll.player.Player;
 
 /**
  * Defines a lookup of PlayerCards.
  * <p>
- * Implementation will typically, but not necessarily, be tied to a specific season.
+ * Implementation will typically, but not necessarily, be tied to a specific league and season.
  */
 public interface PlayerCardLookup {
     /**
@@ -20,8 +19,8 @@ public interface PlayerCardLookup {
     PlayerCard getPitchingCard(Player player);
     
     /**
-     * Returns the (batting) player card for a league as a whole.
+     * Returns the (batting) player card for the league as a whole.
      */
-    PlayerCard getLeagueCard(LeagueId leagueId);
+    PlayerCard getLeagueCard();
     
 }

@@ -22,11 +22,10 @@ public final class Log5BasedMatchupRunner implements MatchupRunner {
     private final PlayerCardLookup playerCardLookup;
     private final DieFactory dieFactory;
 
-    public Log5BasedMatchupRunner(PlayerCard leagueCard,
-                                  PlayerCardLookup playerCardLookup,
+    public Log5BasedMatchupRunner(PlayerCardLookup playerCardLookup,
                                   DieFactory dieFactory) {
-        this.leagueCard = requireNonNull(leagueCard);
-        this.playerCardLookup = requireNonNull(playerCardLookup);
+        this.leagueCard = playerCardLookup.getLeagueCard();
+        this.playerCardLookup = playerCardLookup;
         this.dieFactory = requireNonNull(dieFactory);
     }
     
