@@ -8,8 +8,8 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.card.DieFactory;
 import bsbll.card.PlayerCard;
+import bsbll.card.PlayerCardLookup;
 import bsbll.card.Probability;
-import bsbll.card.season.PlayerCardLookup;
 import bsbll.player.Player;
 
 /**

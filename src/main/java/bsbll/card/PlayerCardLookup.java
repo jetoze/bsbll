@@ -1,16 +1,14 @@
-package bsbll.card.season;
+package bsbll.card;
 
-import bsbll.card.PlayerCard;
 import bsbll.league.LeagueId;
 import bsbll.player.Player;
 
 /**
- * Defines a lookup of PlayerCards for a given season.
+ * Defines a lookup of PlayerCards.
+ * <p>
+ * Implementation will typically, but not necessarily, be tied to a specific season.
  */
 public interface PlayerCardLookup {
-    // TODO: Does this interface need a better name, to reflect the fact that it is tied
-    // to a specific season? It's in the season package, but is that enough?
-    
     /**
      * Returns the batting card for a player.
      */

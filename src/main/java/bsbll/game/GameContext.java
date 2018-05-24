@@ -2,7 +2,7 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 
-import bsbll.card.season.PlayerCardLookup;
+import bsbll.card.PlayerCardLookup;
 import bsbll.league.LeagueId;
 import bsbll.team.Team;
 

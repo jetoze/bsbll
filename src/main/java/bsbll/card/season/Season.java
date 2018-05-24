@@ -3,6 +3,7 @@ package bsbll.card.season;
 import static java.util.Objects.requireNonNull;
 
 import bsbll.Year;
+import bsbll.card.PlayerCardLookup;
 import bsbll.game.GameContext;
 import bsbll.league.LeagueId;
 import bsbll.team.Team;

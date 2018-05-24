@@ -1,7 +1,6 @@
 package bsbll.card;
 
 import bsbll.Year;
-import bsbll.card.season.PlayerCardLookup;
 import bsbll.lahman.BattingFileExplorer;
 import bsbll.lahman.PitchingFileExplorer;
 import bsbll.league.LeagueId;
