@@ -26,6 +26,11 @@ public final class LineScore {
     public Line getVisitingLine() {
         return visitingLine;
     }
+    
+    public boolean isNoHitter() {
+        return homeLine.getSummary().getHits() == 0 ||
+                visitingLine.getSummary().getHits() == 0;
+    }
 
     
     public static final class Line {

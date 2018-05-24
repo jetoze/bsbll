@@ -39,8 +39,13 @@ public final class BattingFileExplorer {
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
-        BattingStats stats = getPlayerStats(playerId, year);
-        return PlayerCard.of(stats);
+        try {
+            BattingStats stats = getPlayerStats(playerId, year);
+            return PlayerCard.of(stats);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to generate batting card for %s [%s]. Error: %s",
+                    playerId, year, e.getMessage()), e);
+        }
     }
     
     public BattingStats getLeagueStats(LeagueId leagueId, Year year) {
@@ -52,8 +57,13 @@ public final class BattingFileExplorer {
     }
     
     public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
-        BattingStats stats = getLeagueStats(leagueId, year);
-        return PlayerCard.of(stats);
+        try {
+            BattingStats stats = getLeagueStats(leagueId, year);
+            return PlayerCard.of(stats);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to generate league card for %s [%s]. Error: %s",
+                    leagueId, year, e.getMessage()), e);
+        }
     }
     
     private Stream<String> openFile(Year year) {

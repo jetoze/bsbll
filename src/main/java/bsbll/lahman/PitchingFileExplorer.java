@@ -37,8 +37,13 @@ public final class PitchingFileExplorer {
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year, PlayerCard leagueCard) {
-        PitchingStats stats = getPlayerStats(playerId, year);
-        return PlayerCard.of(stats, leagueCard);
+        try {
+            PitchingStats stats = getPlayerStats(playerId, year);
+            return PlayerCard.of(stats, leagueCard);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Failed to generate pitching card for %s [%s]. Error: %s",
+                    playerId, year, e.getMessage()), e);
+        }
     }
     
     private Stream<String> openFile(Year year) {

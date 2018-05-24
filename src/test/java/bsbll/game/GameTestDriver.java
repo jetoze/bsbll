@@ -9,7 +9,8 @@ import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.card.PlayerCardLookup;
-import bsbll.game.LineScore.Line;
+import bsbll.game.report.LineScoreSummaryPlainTextReport;
+import bsbll.game.report.LineScoreSummaryPlainTextReport.TeamNameMode;
 import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
@@ -18,7 +19,6 @@ import bsbll.team.Roster;
 import bsbll.team.Team;
 import bsbll.team.TeamId;
 import bsbll.team.TeamName;
-import tzeth.strings.Padding;
 
 public final class GameTestDriver {
 
@@ -32,11 +32,31 @@ public final class GameTestDriver {
         PlayerCardLookup cardLookup = new LahmanPlayerCardLookup(leagueId, year);
         Team yankees = createYankees();
         Team redSox = createRedSox();
-        
-        Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
-        LineScore score = game.run();
+
+        for (int n = 0; n < 10; ++n) {
+            Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
+            LineScore score = game.run();
+            print(score);
+        }
+    }
+
+    public static void playUntilNoHitter(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
+        LineScore score = null;
+        int games = 0;
+        while (true) {
+            Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
+            score = game.run();
+            ++games;
+            if (score.isNoHitter()) {
+                break;
+            }
+            if ((games % 100) == 0) {
+                System.out.println(games);
+            }
+        }
         
         print(score);
+        System.out.println(games);
     }
 
     private static Team createYankees() {
@@ -80,7 +100,7 @@ public final class GameTestDriver {
                 "ehmkeho01",
                 "quinnja01",
                 "fergual01",
-                "piercebi01"
+                "piercbi01"
         );
         Roster roster = new Roster(batters, pitchers);
         return new Team(id, name, roster);
@@ -93,22 +113,8 @@ public final class GameTestDriver {
     }
     
     private static void print(LineScore score) {
-        Padding namePad = Padding.of(6);
-        Padding valuePad = Padding.of(3);
-        String header = namePad.padRight("") + valuePad.padLeft("R") + valuePad.padLeft("H") + valuePad.padLeft("R");
-        String visitor = toString(score.getVisitingLine(), namePad, valuePad);
-        String home = toString(score.getHomeLine(), namePad, valuePad);
-        System.out.println(header);
-        System.out.println(visitor);
-        System.out.println(home);
+        LineScoreSummaryPlainTextReport report = new LineScoreSummaryPlainTextReport(TeamNameMode.ABBREV);
+        report.writeTo(score, System.out);
+        System.out.println();
     }
-    
-    private static String toString(Line line, Padding namePad, Padding valuePad) {
-        return namePad.padRight(line.getTeam().getAbbreviation()) +
-                valuePad.padLeft(line.getSummary().getRuns()) +
-                valuePad.padLeft(line.getSummary().getHits()) +
-                valuePad.padLeft(line.getSummary().getErrors());
-    }
-    
-    
 }
