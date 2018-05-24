@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import bsbll.card.season.PlayerCardLookup;
+import bsbll.game.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.Log5BasedMatchupRunner.Outcome;
 import bsbll.matchup.MatchupRunner;
 import bsbll.player.Player;
@@ -55,13 +56,31 @@ public final class HalfInning {
             Outcome outcome = matchupRunner.run(
                     playerCardLookup.getBattingCard(batter), 
                     playerCardLookup.getPitchingCard(pitcher));
-            stats = evaluateOutcome(baseSituation, outcome, stats);
+            StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
+            stats = sam.stats;
+            baseSituation = sam.baseSituation;
         } while (!isDone(stats));
     }
     
-    private Stats evaluateOutcome(BaseSituation baseSituation, Outcome outcome, Stats preStats) {
-        // TODO: Implement me.
-        return null;
+    private StateAfterMatchup evaluateOutcome(Player batter, BaseSituation baseSituation, Outcome outcome, Stats preStats) {
+        if (outcome.isOut()) {
+            // TODO: This is just to get things up and running. Eventually we will have to do 
+            // things like:
+            //   + Evaluate sacrifice hits / flies
+            //   + Evaluate errors
+            //   + Evaluate fielder's choice
+            //   + Evaluate runners advancing
+            //   + Etc?
+            return new StateAfterMatchup(preStats.addOut(), baseSituation);
+        }
+        ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome);
+        Stats newStats = new Stats(
+                preStats.runs + roa.getNumberOfRuns(),
+                preStats.hits + (outcome.isHit() ? 1 : 0),
+                preStats.errors,
+                preStats.outs,
+                preStats.leftOnBase);
+        return new StateAfterMatchup(newStats, roa.getNewSituation());
     }
     
     private boolean isDone(Stats stats) {
@@ -75,6 +94,17 @@ public final class HalfInning {
             return true;
         }
         return false;
+    }
+    
+    
+    private static class StateAfterMatchup {
+        public final Stats stats;
+        public final BaseSituation baseSituation;
+        
+        public StateAfterMatchup(Stats stats, BaseSituation baseSituation) {
+            this.stats = stats;
+            this.baseSituation = baseSituation;
+        }
     }
     
     
@@ -116,6 +146,10 @@ public final class HalfInning {
 
         public int getLeftOnBase() {
             return leftOnBase;
+        }
+        
+        public Stats addOut() {
+            return new Stats(runs, hits, errors, outs + 1, leftOnBase);
         }
     }
 }

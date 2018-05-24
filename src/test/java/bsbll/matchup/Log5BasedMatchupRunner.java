@@ -132,5 +132,9 @@ public final class Log5BasedMatchupRunner implements MatchupRunner {
                 return false;
             }
         }
+        
+        public boolean isOut() {
+            return (this == STRIKEOUT) || (this == OUT);
+        }
     }
 }
