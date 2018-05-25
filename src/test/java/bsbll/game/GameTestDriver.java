@@ -40,7 +40,7 @@ public final class GameTestDriver {
         Team yankees = createYankees();
         Team redSox = createRedSox();
 
-        playSeries(cardLookup, yankees, redSox, 22);
+        playSeries(cardLookup, yankees, redSox, 154);
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {

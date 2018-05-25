@@ -36,17 +36,17 @@ public final class StandingsPlainTextReport extends AbstractPlainTextReport<Stan
                 ? standings.list()
                 : standings.list(order);
                 
-        Padding wlPadding = Padding.of(4);
+        Padding wlPadding = Padding.of(5);
         Padding pctPadding = Padding.of(6);
         Padding gbPadding = Padding.of(6);
-        Padding rPadding = Padding.of(7);
+        Padding rPadding = Padding.of(6);
         Padding raPadding = Padding.of(5);
         
         ImmutableList.Builder<String> builder = ImmutableList.builder();
         String header = getNamePadding().right("") +
                 wlPadding.left("W") + wlPadding.left("L") +
                 pctPadding.left("PCT") + gbPadding.left("GB") +
-                rPadding.left("R") + raPadding.left("RA");
+                rPadding.left("RS") + raPadding.left("RA");
         builder.add(header);
         for (Entry e : entries) {
             Record record = e.getRecord();
