@@ -39,7 +39,7 @@ public final class GameTestDriver {
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
-        League league = new League(LeagueId.AL, yankees, redSox);
+        League league = new League(LeagueId.AL, Year.of(1923), yankees, redSox);
         List<LineScore> scores = new ArrayList<>();
         for (int n = 0; n < numberOfGames; ++n) {
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));

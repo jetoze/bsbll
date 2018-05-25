@@ -17,6 +17,7 @@ import javax.annotation.concurrent.NotThreadSafe;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import bsbll.Year;
 import bsbll.game.GameResult;
 import bsbll.game.LineScore;
 import bsbll.team.Record;
@@ -28,17 +29,19 @@ import tzeth.collections.ImCollectors;
 @NotThreadSafe
 public final class League {
     private final LeagueId id;
+    private final Year year;
     private final ImmutableMap<TeamId, Team> teams;
     private final Map<TeamId, Record> teamRecords;
     private final List<LineScore> lineScores = new ArrayList<>();
     private final List<GameResult> gameResults = new ArrayList<>();
     
-    public League(LeagueId id, Team... teams) {
-        this(id, Arrays.asList(teams));
+    public League(LeagueId id, Year year, Team... teams) {
+        this(id, year, Arrays.asList(teams));
     }
     
-    public League(LeagueId id, Collection<Team> teams) {
+    public League(LeagueId id, Year year, Collection<Team> teams) {
         this.id = requireNonNull(id);
+        this.year = requireNonNull(year);
         this.teams = teams.stream()
                 .collect(ImCollectors.toMap(Team::getId, t -> t));
         checkArgument(teams.size() >= 2, "Must provide at least two teams");
@@ -50,12 +53,20 @@ public final class League {
         return id;
     }
     
+    public Year getYear() {
+        return year;
+    }
+
     public ImmutableList<Team> getTeams() {
         // TODO: Store the teams in alphabetic order, so that we don't have to
         // sort them every time this method is called.
         return teams.values().stream()
                 .sorted(Comparator.comparing(t -> t.getName().getMainName()))
                 .collect(ImCollectors.toList());
+    }
+    
+    public int getNumberOfTeams() {
+        return teams.size();
     }
     
     public Team getTeam(TeamId id) {
