@@ -2,6 +2,7 @@ package bsbll.game;
 
 import static java.util.stream.Collectors.toList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
@@ -13,6 +14,7 @@ import bsbll.card.PlayerCardLookup;
 import bsbll.game.HalfInning.Stats;
 import bsbll.game.LineScore.Line;
 import bsbll.game.report.LineScorePlainTextReport;
+import bsbll.league.League;
 import bsbll.league.LeagueId;
 import bsbll.league.Standings;
 import bsbll.matchup.Log5BasedMatchupRunner;
@@ -38,18 +40,20 @@ public final class GameTestDriver {
         Team yankees = createYankees();
         Team redSox = createRedSox();
 
-        playSeries(cardLookup, yankees, redSox, 100);
+        playSeries(cardLookup, yankees, redSox, 22);
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
-        Standings standings = Standings.initialize(yankees, redSox);
+        League league = new League(LeagueId.AL, yankees, redSox);
+        List<LineScore> scores = new ArrayList<>();
         for (int n = 0; n < numberOfGames; ++n) {
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
             LineScore score = game.run();
             print(score);
-            standings = standings.addGame(score);
+            scores.add(score);
         }
-        print(standings);
+        league.addGames(scores);
+        print(league.getStandings());
     }
     
     private static void print(Standings standings) {

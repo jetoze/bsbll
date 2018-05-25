@@ -23,6 +23,11 @@ import bsbll.team.WLT;
 import tzeth.collections.ImCollectors;
 
 public final class Standings {
+    // TODO: This class is immutable. The trade-off is that we must make something
+    // else immutable. Right now it's the League class, which creates a new Standings
+    // each time new games come in.
+    // Should we make this class mutable?
+    
     private final ImmutableMap<Team, Entry> entries;
     
     public static Standings initialize(Team... teams) {

@@ -4,10 +4,13 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.List;
 
+import javax.annotation.concurrent.NotThreadSafe;
+
 import com.google.common.collect.ImmutableList;
 
 import bsbll.player.Player;
 
+@NotThreadSafe
 public final class Rotation {
     private final ImmutableList<Player> pitchers;
     private int nextStartingPitcher;
