@@ -2,7 +2,6 @@ package bsbll.team;
 
 import javax.annotation.Nullable;
 
-import bsbll.player.PlayerId;
 import tzeth.preconds.MorePreconditions;
 
 public final class TeamId {
@@ -12,8 +11,8 @@ public final class TeamId {
         this.id = MorePreconditions.checkNotEmpty(id);
     }
 
-    public static PlayerId of(String id) {
-        return new PlayerId(id);
+    public static TeamId of(String id) {
+        return new TeamId(id);
     }
 
     @Override

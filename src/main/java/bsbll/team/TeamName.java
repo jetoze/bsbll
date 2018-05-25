@@ -7,18 +7,18 @@ import java.util.function.Function;
 
 public final class TeamName {
     private final String mainName;
-    private final String nickName;
+    private final String nickname;
     private final String abbreviation;
     
     /**
      * 
      * @param mainName for example "Brooklyn", "Minnesota"
-     * @param nickName for example "Dodgers", "Twins"
+     * @param nickname for example "Dodgers", "Twins"
      * @param abbreviation for example "BKN", "MIN"
      */
-    public TeamName(String mainName, String nickName, String abbreviation) {
+    public TeamName(String mainName, String nickname, String abbreviation) {
         this.mainName = checkNotEmpty(mainName);
-        this.nickName = checkNotEmpty(nickName);
+        this.nickname = checkNotEmpty(nickname);
         checkArgument(abbreviation.length() == 3);
         this.abbreviation = abbreviation;
     }
@@ -27,8 +27,8 @@ public final class TeamName {
         return mainName;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getAbbreviation() {
@@ -36,7 +36,7 @@ public final class TeamName {
     }
 
     public String getFullName() {
-        return mainName + " " + nickName;
+        return mainName + " " + nickname;
     }
     
     @Override

@@ -1,5 +1,7 @@
 package bsbll.team;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,8 @@ public final class Roster {
     private final Rotation rotation;
 
     public Roster(List<Player> batters, List<Player> startingPitchers) {
+        checkArgument(batters.size() >= 8, "Must provide at least eight batters, got %s", batters.size());
+        checkArgument(startingPitchers.size() >= 1, "Must provide at least one starting pitcher");
         this.batters = ImmutableList.copyOf(batters);
         this.rotation = new Rotation(startingPitchers);
     }
