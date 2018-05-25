@@ -33,20 +33,24 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
                                StringBuilder homeLine) {
         ImmutableList<Stats> visitingInnings = score.getVisitingLine().getInnings();
         ImmutableList<Stats> homeInnings = score.getHomeLine().getInnings();
+        boolean previousInningWasWide = false;
         for (int n = 0; n < visitingInnings.size(); ++n) {
-            if ((n > 0) && ((n % 3) == 0)) {
-                String space = "  ";
-                header.append(space);
-                visitingLine.append(space);
-                homeLine.append(space);
-            }
-            // TODO: Formatting can be improved in the case of a double-digit inning:
-            // The following inning should appear flush next to it.
             int visitingScore = visitingInnings.get(n).getRuns();
             int homeScore = (n < homeInnings.size())
                     ? homeInnings.get(n).getRuns()
                     : -1;
-            appendInning(header, visitingLine, visitingScore, homeLine, homeScore);
+            boolean wideInning = (visitingScore >= 10) || (homeScore >= 10);
+            if ((n > 0) && ((n % 3) == 0)) {
+                String space = previousInningWasWide || wideInning
+                        ? " "
+                        : "  ";
+                header.append(space);
+                visitingLine.append(space);
+                homeLine.append(space);
+                previousInningWasWide = false;
+            }
+            appendInning(header, visitingLine, visitingScore, homeLine, homeScore, previousInningWasWide);
+            previousInningWasWide = wideInning;
         }
     }
 
@@ -54,30 +58,44 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
                               StringBuilder visitingLine,
                               int visitingScore,
                               StringBuilder homeLine,
-                              int homeScore) {
+                              int homeScore,
+                              boolean previousInningWasWide) {
         if (visitingScore >= 10 || homeScore >= 10) {
             header.append("    ");
         } else {
-            header.append("  ");
+            if (!previousInningWasWide) {
+                header.append(" ");
+            }
+            header.append(" ");
         }
-        appendInning(visitingLine, visitingScore, homeScore >= 10);
-        appendInning(homeLine, homeScore, visitingScore >= 10);
+        appendInning(visitingLine, visitingScore, homeScore >= 10, previousInningWasWide);
+        appendInning(homeLine, homeScore, visitingScore >= 10, previousInningWasWide);
     }
     
-    private void appendInning(StringBuilder line, int score, boolean otherSideScoredDoubleDigits) {
+    private void appendInning(StringBuilder line, 
+                              int score, 
+                              boolean otherSideScoredDoubleDigits,
+                              boolean previousInningWasWide) {
+        // TODO: Refactor me!
         if (score >= 10) {
             line.append("(").append(score).append(")");
         } else if (score >= 0) {
             if (otherSideScoredDoubleDigits) {
                 line.append("  ").append(score).append(" ");
             } else {
-                line.append(" ").append(score);
+                if (!previousInningWasWide) {
+                    line.append(" ");
+                }
+                line.append(score);
             }
         } else {
             if (otherSideScoredDoubleDigits) {
                 line.append("  x ");
             } else {
-                line.append(" x");
+                if (!previousInningWasWide) {
+                    line.append(" ");
+                }
+                line.append("x");
             }
         }
     }
