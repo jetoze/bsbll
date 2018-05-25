@@ -4,6 +4,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.HalfInning.Stats;
+import bsbll.report.AbstractPlainTextReport;
 import bsbll.game.LineScore;
 import bsbll.team.TeamName;
 import bsbll.team.TeamName.Mode;
@@ -19,7 +20,7 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
 
     @Override
     public ImmutableList<String> format(LineScore score) {
-        StringBuilder header = new StringBuilder(getNamePadding().padRight(""));
+        StringBuilder header = new StringBuilder(getNamePadding().right(""));
         StringBuilder visitingLine = new StringBuilder(getTeamName(score.getVisitingLine().getTeam().getName()));
         StringBuilder homeLine = new StringBuilder(getTeamName(score.getHomeLine().getTeam().getName()));
         appendInnings(score, header, visitingLine, homeLine);

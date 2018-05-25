@@ -99,7 +99,7 @@ public final class Standings {
             return record.getWinPct();
         }
 
-        public GamesBehind getGb() {
+        public GamesBehind getGamesBehind() {
             return gb;
         }
     }

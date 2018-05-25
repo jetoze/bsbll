@@ -1,4 +1,4 @@
-package bsbll.game.report;
+package bsbll.report;
 
 import java.io.IOException;
 import java.io.PrintStream;
@@ -9,6 +9,8 @@ import bsbll.team.TeamName;
 import tzeth.strings.Padding;
 
 public abstract class AbstractPlainTextReport<T> {
+    // TODO: Eventually we will generate reports that do not include team names,
+    // so the TeamName.Mode does not belong here.
     private final TeamName.Mode mode;
     private final Padding namePad;
 
@@ -37,7 +39,7 @@ public abstract class AbstractPlainTextReport<T> {
     }
     
     protected final String getTeamName(TeamName name) {
-        return namePad.padRight(mode.apply(name));
+        return namePad.right(mode.apply(name));
     }
 
     public abstract ImmutableList<String> format(T t);

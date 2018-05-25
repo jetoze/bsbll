@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import bsbll.game.LineScore;
 import bsbll.game.LineScore.Line;
 import bsbll.game.LineScore.LineSummary;
+import bsbll.report.AbstractPlainTextReport;
 import bsbll.team.TeamName;
 import tzeth.strings.Padding;
 
@@ -21,10 +22,10 @@ public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextRepo
     }
     
     private String createHeader(TeamName.Mode mode) {
-        String rhe = valuePad.padLeft("R") + valuePad.padLeft("H") + valuePad.padLeft("E");
+        String rhe = valuePad.left("R") + valuePad.left("H") + valuePad.left("E");
         return (mode == TeamName.Mode.NONE)
                 ? rhe
-                : getNamePadding().padRight("") + rhe;
+                : getNamePadding().right("") + rhe;
     }
 
     @Override
@@ -38,9 +39,9 @@ public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextRepo
     public String format(Line line) {
         String name = getTeamName(line.getTeam().getName());
         LineSummary summary = line.getSummary();
-        String statLine = valuePad.padLeft(summary.getRuns()) +
-                valuePad.padLeft(line.getSummary().getHits()) +
-                valuePad.padLeft(line.getSummary().getErrors());
+        String statLine = valuePad.left(summary.getRuns()) +
+                valuePad.left(line.getSummary().getHits()) +
+                valuePad.left(line.getSummary().getErrors());
         return name + statLine;
     }
 }

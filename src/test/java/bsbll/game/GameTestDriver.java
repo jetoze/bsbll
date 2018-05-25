@@ -17,15 +17,15 @@ import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.League;
 import bsbll.league.LeagueId;
 import bsbll.league.Standings;
+import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
-import bsbll.team.Record;
 import bsbll.team.Roster;
 import bsbll.team.Team;
 import bsbll.team.TeamId;
 import bsbll.team.TeamName;
-import tzeth.strings.Padding;
+import bsbll.team.TeamName.Mode;
 
 public final class GameTestDriver {
 
@@ -57,20 +57,8 @@ public final class GameTestDriver {
     }
     
     private static void print(Standings standings) {
-        System.out.println();
-        System.out.println("Standings:");
-        Padding namePad = Padding.of(12);
-        Padding valuePad = Padding.of(4);
-        String header = namePad.padRight("") + valuePad.padLeft("W") + valuePad.padLeft("L") +
-                "   " + valuePad.padLeft("R") + valuePad.padLeft("RA");
-        System.out.println(header);
-        for (Team team : standings.sortByWinPct()) {
-            Record record = standings.getRecord(team);
-            String line = namePad.padRight(team.getName().getMainName()) +
-                    valuePad.padLeft(record.getWins()) + valuePad.padLeft(record.getLosses()) +
-                    "   " + valuePad.padLeft(record.getRunsScored()) + valuePad.padLeft(record.getRunsAgainst());
-            System.out.println(line);
-        }
+        StandingsPlainTextReport report = new StandingsPlainTextReport(Mode.MAIN);
+        report.writeTo(standings, System.out);
     }
     
     public static void playUntilDoubleDigitInning(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
