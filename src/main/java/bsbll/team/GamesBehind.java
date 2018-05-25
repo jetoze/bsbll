@@ -29,6 +29,9 @@ public final class GamesBehind implements Comparable<GamesBehind> {
 
     @Override
     public String toString() {
+        if (halfGames == 0) {
+            return "--";
+        }
         StringBuilder sb = new StringBuilder();
         if (halfGames < 0) {
             sb.append("-");

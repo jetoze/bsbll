@@ -42,7 +42,7 @@ public final class GameTestDriver {
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
-        Standings standings = new Standings(yankees, redSox);
+        Standings standings = Standings.initialize(yankees, redSox);
         for (int n = 0; n < numberOfGames; ++n) {
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
             LineScore score = game.run();
