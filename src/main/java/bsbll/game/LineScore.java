@@ -63,6 +63,10 @@ public final class LineScore {
         public LineSummary getSummary() {
             return summary;
         }
+        
+        public int getRuns() {
+            return summary.getRuns();
+        }
     }
     
     

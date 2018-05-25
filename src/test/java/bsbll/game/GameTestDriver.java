@@ -4,13 +4,15 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Predicate;
 
 import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.card.PlayerCardLookup;
-import bsbll.game.report.LineScoreSummaryPlainTextReport;
-import bsbll.game.report.LineScoreSummaryPlainTextReport.TeamNameMode;
+import bsbll.game.HalfInning.Stats;
+import bsbll.game.LineScore.Line;
+import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
@@ -33,30 +35,61 @@ public final class GameTestDriver {
         Team yankees = createYankees();
         Team redSox = createRedSox();
 
-        for (int n = 0; n < 10; ++n) {
+        playSeries(cardLookup, yankees, redSox, 5);
+    }
+    
+    public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
+        for (int n = 0; n < numberOfGames; ++n) {
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
             LineScore score = game.run();
             print(score);
         }
     }
+    
+    public static void playUntilDoubleDigitInning(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
+        playUntil(cardLookup, yankees, redSox, GameTestDriver::hasDoubleDigitInning);
+    }
+    
+    private static boolean hasDoubleDigitInning(LineScore score) {
+        return hasDoubleDigitInning(score.getVisitingLine()) ||
+                hasDoubleDigitInning(score.getHomeLine());
+    }
+    
+    private static boolean hasDoubleDigitInning(Line line) {
+        return line.getInnings().stream()
+                .mapToInt(Stats::getRuns)
+                .anyMatch(i -> i >= 10);
+    }
 
     public static void playUntilNoHitter(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
-        LineScore score = null;
-        int games = 0;
-        while (true) {
+        playUntil(cardLookup, yankees, redSox, LineScore::isNoHitter);
+    }
+    
+    public static void playUntilTwentyInningGame(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
+        playUntil(cardLookup, yankees, redSox, sc -> sc.getVisitingLine().getInnings().size() >= 20);
+    }
+    
+    public static void playUntilTwentyRunMargin(PlayerCardLookup cardLookup, Team yankees, Team redSox) {
+        playUntil(cardLookup, yankees, redSox, sc -> 
+            Math.abs(sc.getHomeLine().getRuns() - sc.getVisitingLine().getRuns()) >= 20);
+    }
+    
+    private static void playUntil(PlayerCardLookup cardLookup, 
+                                  Team yankees, 
+                                  Team redSox, 
+                                  Predicate<LineScore> condition) {
+        for (int n = 1; n <= 100_000; ++n) {
+            if ((n % 1000) == 0) {
+                System.out.println(n);
+            }
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
-            score = game.run();
-            ++games;
-            if (score.isNoHitter()) {
+            LineScore score = game.run();
+            if (condition.test(score)) {
+                print(score);
+                System.out.println(n);
                 break;
             }
-            if ((games % 100) == 0) {
-                System.out.println(games);
-            }
         }
-        
-        print(score);
-        System.out.println(games);
     }
 
     private static Team createYankees() {
@@ -113,7 +146,7 @@ public final class GameTestDriver {
     }
     
     private static void print(LineScore score) {
-        LineScoreSummaryPlainTextReport report = new LineScoreSummaryPlainTextReport(TeamNameMode.ABBREV);
+        LineScorePlainTextReport report = new LineScorePlainTextReport(TeamName.Mode.ABBREV);
         report.writeTo(score, System.out);
         System.out.println();
     }
