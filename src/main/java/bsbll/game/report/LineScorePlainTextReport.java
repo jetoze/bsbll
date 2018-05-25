@@ -7,7 +7,6 @@ import bsbll.game.HalfInning.Stats;
 import bsbll.game.LineScore;
 import bsbll.team.TeamName;
 import bsbll.team.TeamName.Mode;
-import tzeth.strings.Padding;
 
 /**
  * Writes a line score as plain text.
@@ -34,8 +33,6 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
                                StringBuilder homeLine) {
         ImmutableList<Stats> visitingInnings = score.getVisitingLine().getInnings();
         ImmutableList<Stats> homeInnings = score.getHomeLine().getInnings();
-        Padding singleDigitPadding = Padding.of(2);
-        Padding doubleDigitPadding = Padding.of(4);
         for (int n = 0; n < visitingInnings.size(); ++n) {
             if ((n > 0) && ((n % 3) == 0)) {
                 String space = "  ";
@@ -43,29 +40,45 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
                 visitingLine.append(space);
                 homeLine.append(space);
             }
-            // FIXME: The formatting when one side has a double-digit inning
-            // is broken. In that case we want the other side's value to be
-            // centered, not left-padded.
+            // TODO: Formatting can be improved in the case of a double-digit inning:
+            // The following inning should appear flush next to it.
             int visitingScore = visitingInnings.get(n).getRuns();
             int homeScore = (n < homeInnings.size())
                     ? homeInnings.get(n).getRuns()
                     : -1;
-            Padding padding = ((visitingScore >= 10) || (homeScore >= 10))
-                    ? doubleDigitPadding
-                    : singleDigitPadding;
-            header.append(padding.padRight(""));
-            visitingLine.append(padding.padLeft(runsAsString(visitingScore)));
-            homeLine.append(padding.padLeft(runsAsString(homeScore)));
+            appendInning(header, visitingLine, visitingScore, homeLine, homeScore);
         }
     }
 
-    private static String runsAsString(int runs) {
-        if (runs >= 10) {
-            return "(" + runs + ")";
-        } else if (runs >= 0) {
-            return Integer.toString(runs);
+    private void appendInning(StringBuilder header,
+                              StringBuilder visitingLine,
+                              int visitingScore,
+                              StringBuilder homeLine,
+                              int homeScore) {
+        if (visitingScore >= 10 || homeScore >= 10) {
+            header.append("    ");
         } else {
-            return "x";
+            header.append("  ");
+        }
+        appendInning(visitingLine, visitingScore, homeScore >= 10);
+        appendInning(homeLine, homeScore, visitingScore >= 10);
+    }
+    
+    private void appendInning(StringBuilder line, int score, boolean otherSideScoredDoubleDigits) {
+        if (score >= 10) {
+            line.append("(").append(score).append(")");
+        } else if (score >= 0) {
+            if (otherSideScoredDoubleDigits) {
+                line.append("  ").append(score).append(" ");
+            } else {
+                line.append(" ").append(score);
+            }
+        } else {
+            if (otherSideScoredDoubleDigits) {
+                line.append("  x ");
+            } else {
+                line.append(" x");
+            }
         }
     }
     

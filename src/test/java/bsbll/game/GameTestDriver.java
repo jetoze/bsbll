@@ -35,7 +35,7 @@ public final class GameTestDriver {
         Team yankees = createYankees();
         Team redSox = createRedSox();
 
-        playSeries(cardLookup, yankees, redSox, 5);
+        playUntilDoubleDigitInning(cardLookup, yankees, redSox);
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
