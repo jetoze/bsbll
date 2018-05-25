@@ -83,7 +83,7 @@ public final class Game {
         public boolean isGameOver() {
             if (top.size() < 9) {
                 return false;
-            } else if (top.size() == 9) {
+            } else if (top.size() == 9 && isInMiddleOf()) {
                 return getHomeScore() > getRoadScore();
             } else {
                 // extra innings
