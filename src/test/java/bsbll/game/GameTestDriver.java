@@ -52,7 +52,7 @@ public final class GameTestDriver {
             print(score);
             scores.add(score);
         }
-        league.addGames(scores);
+        league.addLineScores(scores);
         print(league.getStandings());
     }
     

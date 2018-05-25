@@ -36,6 +36,11 @@ public final class LineScore {
         return visitingLine.getTeam();
     }
     
+    public GameResult toGameResult() {
+        return new GameResult(getHomeTeam().getId(), getHomeLine().getRuns(),
+                getVisitingTeam().getId(), getVisitingLine().getRuns());
+    }
+    
     public RunDifferential getHomeTeamRunDifferential() {
         return new RunDifferential(homeLine.getRuns(), visitingLine.getRuns());
     }
