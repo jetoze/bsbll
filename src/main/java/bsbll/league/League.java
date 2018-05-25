@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.concurrent.NotThreadSafe;
 
@@ -15,6 +17,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import bsbll.game.LineScore;
+import bsbll.team.Record;
+import bsbll.team.RunDifferential;
 import bsbll.team.Team;
 import bsbll.team.TeamId;
 import tzeth.collections.ImCollectors;
@@ -23,10 +27,7 @@ import tzeth.collections.ImCollectors;
 public final class League {
     private final LeagueId id;
     private final ImmutableMap<TeamId, Team> teams;
-    // TODO: Only store Team records, and generate a new Standings on demand?
-    // In fact, we could store only the game log, and generate Team records
-    // and standings on demand.
-    private Standings standings;
+    private final Map<Team, Record> teamRecords;
     private final List<LineScore> gameLog = new ArrayList<>();
     
     public League(LeagueId id, Team... teams) {
@@ -38,7 +39,8 @@ public final class League {
         this.teams = teams.stream()
                 .collect(ImCollectors.toMap(Team::getId, t -> t));
         checkArgument(teams.size() >= 2, "Must provide at least two teams");
-        this.standings = Standings.initialize(teams);
+        this.teamRecords = teams.stream()
+                .collect(Collectors.toMap(t -> t, t -> new Record()));
     }
 
     public LeagueId getId() {
@@ -53,8 +55,14 @@ public final class League {
                 .collect(ImCollectors.toList());
     }
     
+    public Record getRecord(Team team) {
+        Record r = teamRecords.get(requireNonNull(team));
+        checkArgument(r != null, "No such team in this league: " + team);
+        return r;
+    }
+
     public Standings getStandings() {
-        return standings;
+        return Standings.of(teamRecords);
     }
     
     public void addGame(LineScore score) {
@@ -66,8 +74,22 @@ public final class League {
     }
     
     public void addGames(Collection<LineScore> scores) {
+        scores.forEach(this::updateTeamRecords);
         this.gameLog.addAll(scores);
-        this.standings = standings.addGames(scores);
+    }
+    
+    private void updateTeamRecords(LineScore score) {
+        Team homeTeam = score.getHomeTeam();
+        Record homeRecord = teamRecords.get(homeTeam);
+        checkArgument(homeRecord != null, "No such team: " + homeTeam);
+        Team visitingTeam = score.getVisitingTeam();
+        Record visitingRecord = teamRecords.get(visitingTeam);
+        checkArgument(visitingRecord != null, "No such team: " + visitingTeam);
+        
+        RunDifferential homeTeamRunDiff = score.getHomeTeamRunDifferential();
+        teamRecords.put(homeTeam, homeRecord.addGame(homeTeamRunDiff));
+        teamRecords.put(visitingTeam, visitingRecord.addGame(homeTeamRunDiff.reverse()));
+
     }
     
     public ImmutableList<LineScore> getGameLog() {

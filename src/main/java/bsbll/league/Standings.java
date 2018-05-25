@@ -3,80 +3,25 @@ package bsbll.league;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-import bsbll.game.LineScore;
 import bsbll.stats.Average;
 import bsbll.team.GamesBehind;
 import bsbll.team.Record;
-import bsbll.team.RunDifferential;
 import bsbll.team.Team;
 import bsbll.team.WLT;
 import tzeth.collections.ImCollectors;
 
 public final class Standings {
-    // TODO: This class is immutable. The trade-off is that we must make something
-    // else immutable. Right now it's the League class, which creates a new Standings
-    // each time new games come in.
-    // Should we make this class mutable?
-    
     private final ImmutableMap<Team, Entry> entries;
     
-    public static Standings initialize(Team... teams) {
-        return new Standings(teams);
-    }
-    
-    public static Standings initialize(Collection<Team> teams) {
-        return new Standings(teams);
-    }
-    
-    private Standings(Team... teams) {
-        this(Arrays.asList(teams));
-    }
-    
-    private Standings(Collection<Team> teams) {
-        this.entries = teams.stream()
-                .collect(ImCollectors.toMap(t -> t, Entry::new));
-        checkArgument(this.entries.size() >= 2, "Must provide at least two teams");
-    }
-    private Standings(ImmutableMap<Team, Entry> teams) {
-        this.entries = requireNonNull(teams);
-    }
-    
-    public Standings addGame(LineScore score) {
-        return addGames(score);
-    }
-    
-    public Standings addGames(LineScore... scores) {
-        return addGames(Arrays.asList(scores));
-    }
-    
-    public Standings addGames(Collection<LineScore> scores) {
-        // TODO: This code is rather obtuse. Refactor it?
-        Map<Team, Record> tmp = this.entries.values().stream()
-                .collect(Collectors.toMap(Entry::getTeam, Entry::getRecord));
-        for (LineScore score : scores) {
-            Team homeTeam = score.getHomeTeam();
-            Record homeRecord = tmp.get(homeTeam);
-            checkArgument(homeRecord != null, "No such team: " + homeTeam);
-            Team visitingTeam = score.getVisitingTeam();
-            Record visitingRecord = tmp.get(visitingTeam);
-            checkArgument(visitingRecord != null, "No such team: " + visitingTeam);
-            
-            RunDifferential homeTeamRunDiff = score.getHomeTeamRunDifferential();
-            tmp.put(homeTeam, homeRecord.addGame(homeTeamRunDiff));
-            tmp.put(visitingTeam, visitingRecord.addGame(homeTeamRunDiff.reverse()));
-        }
-
-        WLT gbLeader = tmp.values().stream()
+    public static Standings of(Map<Team, Record> teamRecords) {
+        WLT gbLeader = teamRecords.values().stream()
                 .max(Comparator.comparingInt(r -> r.getWins() - r.getLosses()))
                 .map(Record::getWlt)
                 .orElseThrow(AssertionError::new);
@@ -85,12 +30,16 @@ public final class Standings {
             GamesBehind gb = e.getValue().getWlt().gamesBehind(gbLeader);
             return new Standings.Entry(e.getKey(), e.getValue(), gb);
         };
-        ImmutableMap<Team, Entry> entries = tmp.entrySet().stream()
+        ImmutableMap<Team, Entry> entries = teamRecords.entrySet().stream()
                 .map(entryFactory)
                 .collect(ImCollectors.toMap(Entry::getTeam, e -> e));
         return new Standings(entries);
     }
-    
+
+    private Standings(ImmutableMap<Team, Entry> teams) {
+        this.entries = requireNonNull(teams);
+    }
+
     /**
      * Returns the standings ordered by winning percentage.
      */
