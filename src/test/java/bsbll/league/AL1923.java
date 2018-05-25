@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.collect.ImmutableList;
-
 import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
@@ -47,7 +45,8 @@ public final class AL1923 {
     
     public Standings run() {
         List<LineScore> scores = new ArrayList<>();
-        ImmutableList<Team> teams = league.getTeams();
+        List<Team> teams = new ArrayList<>(league.getTeams());
+        Collections.shuffle(teams);
         for (int a = 0; a < teams.size(); ++a) {
             for (int b = a + 1; b < teams.size(); ++b) {
                 Team teamA = teams.get(a);
@@ -290,9 +289,13 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        AL1923 league = new AL1923();
-        Standings standings = league.run();
-        print(standings);
+        for (int n = 1; n <= 100; ++n) {
+            System.out.println("#" + n + ":");
+            AL1923 league = new AL1923();
+            Standings standings = league.run();
+            print(standings);
+            System.out.println();
+        }
     }
     
 }
