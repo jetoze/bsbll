@@ -62,10 +62,10 @@ public final class WLT {
     
     @Override
     public String toString() {
-        String winsAndLosses = wins + " - " + losses;
+        String winsAndLosses = String.format("%dW %dL", wins, ties);
         return (ties == 0)
                 ? winsAndLosses
-                : winsAndLosses + " - " + ties;
+                : winsAndLosses + " " + ties + "T";
     }
 
 }

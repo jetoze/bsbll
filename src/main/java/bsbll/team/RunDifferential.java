@@ -29,6 +29,6 @@ public final class RunDifferential {
     
     @Override
     public String toString() {
-        return runsScored + " - " + runsAgainst;
+        return String.format("%dR %dRA", runsScored, runsAgainst);
     }
 }
