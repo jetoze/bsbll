@@ -14,13 +14,16 @@ import bsbll.game.HalfInning.Stats;
 import bsbll.game.LineScore.Line;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.LeagueId;
+import bsbll.league.Standings;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
+import bsbll.team.Record;
 import bsbll.team.Roster;
 import bsbll.team.Team;
 import bsbll.team.TeamId;
 import bsbll.team.TeamName;
+import tzeth.strings.Padding;
 
 public final class GameTestDriver {
 
@@ -35,14 +38,34 @@ public final class GameTestDriver {
         Team yankees = createYankees();
         Team redSox = createRedSox();
 
-        playUntilDoubleDigitInning(cardLookup, yankees, redSox);
+        playSeries(cardLookup, yankees, redSox, 100);
     }
     
     public static void playSeries(PlayerCardLookup cardLookup, Team yankees, Team redSox, int numberOfGames) {
+        Standings standings = new Standings(yankees, redSox);
         for (int n = 0; n < numberOfGames; ++n) {
             Game game = new Game(yankees, redSox, new Log5BasedMatchupRunner(cardLookup, DieFactory.random()));
             LineScore score = game.run();
             print(score);
+            standings = standings.addGame(score);
+        }
+        print(standings);
+    }
+    
+    private static void print(Standings standings) {
+        System.out.println();
+        System.out.println("Standings:");
+        Padding namePad = Padding.of(12);
+        Padding valuePad = Padding.of(4);
+        String header = namePad.padRight("") + valuePad.padLeft("W") + valuePad.padLeft("L") +
+                "   " + valuePad.padLeft("R") + valuePad.padLeft("RA");
+        System.out.println(header);
+        for (Team team : standings.sortByWinPct()) {
+            Record record = standings.getRecord(team);
+            String line = namePad.padRight(team.getName().getMainName()) +
+                    valuePad.padLeft(record.getWins()) + valuePad.padLeft(record.getLosses()) +
+                    "   " + valuePad.padLeft(record.getRunsScored()) + valuePad.padLeft(record.getRunsAgainst());
+            System.out.println(line);
         }
     }
     

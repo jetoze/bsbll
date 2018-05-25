@@ -2,6 +2,8 @@ package bsbll.team;
 
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.Nullable;
+
 public final class Team {
     private final TeamId id;
     private final TeamName name;
@@ -36,6 +38,17 @@ public final class Team {
     @Override
     public String toString() {
         return String.format("%s [%s]", name.getFullName(), id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return (obj == this) ||
+                ((obj instanceof Team) && this.id.equals(((Team) obj).id));
     }
     
 }

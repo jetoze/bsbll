@@ -8,6 +8,10 @@ public final class Record {
     private final WLT wlt;
     private final RunDifferential runDiff;
 
+    public Record() {
+        this(new WLT(0, 0), new RunDifferential(0, 0));
+    }
+    
     public Record(WLT wlt, RunDifferential runDiff) {
         this.wlt = requireNonNull(wlt);
         this.runDiff = requireNonNull(runDiff);
@@ -55,6 +59,12 @@ public final class Record {
     
     public Record add(Record other) {
         return new Record(this.wlt.add(other.wlt), this.runDiff.add(other.runDiff));
+    }
+    
+    public Record addGame(RunDifferential gameScore) {
+        WLT newWlt = wlt.addGame(gameScore);
+        RunDifferential newRunDiff = runDiff.add(gameScore);
+        return new Record(newWlt, newRunDiff);
     }
     
     @Override

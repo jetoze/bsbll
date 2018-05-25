@@ -50,6 +50,16 @@ public final class WLT {
     public WLT addTie() {
         return new WLT(this.wins, this.losses, this.ties + 1);
     }
+    
+    public WLT addGame(RunDifferential runDiff) {
+        if (runDiff.isWin()) {
+            return addWin();
+        } else if (runDiff.isLoss()) {
+            return addLoss();
+        } else {
+            return addTie();
+        }
+    }
 
     public Average getWinPct() {
         // Ties are not included in the calculaton

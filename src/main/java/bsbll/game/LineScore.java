@@ -8,6 +8,7 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.HalfInning.Stats;
+import bsbll.team.RunDifferential;
 import bsbll.team.Team;
 
 public final class LineScore {
@@ -25,6 +26,22 @@ public final class LineScore {
 
     public Line getVisitingLine() {
         return visitingLine;
+    }
+    
+    public Team getHomeTeam() {
+        return homeLine.getTeam();
+    }
+    
+    public Team getVisitingTeam() {
+        return visitingLine.getTeam();
+    }
+    
+    public RunDifferential getHomeTeamRunDifferential() {
+        return new RunDifferential(homeLine.getRuns(), visitingLine.getRuns());
+    }
+    
+    public RunDifferential getVisitingTeamRunDifferential() {
+        return new RunDifferential(visitingLine.getRuns(), homeLine.getRuns());
     }
     
     public boolean isNoHitter() {

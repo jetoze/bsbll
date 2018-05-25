@@ -19,12 +19,42 @@ public final class RunDifferential {
         return runsAgainst;
     }
     
+    /**
+     * When representing the score of a game, does this RunDifferential 
+     * correspond to a win?
+     */
+    public boolean isWin() {
+        return runsScored > runsAgainst;
+    }
+    
+    /**
+     * When representing the score of a game, does this RunDifferential 
+     * correspond to a loss?
+     */
+    public boolean isLoss() {
+        return runsScored < runsAgainst;
+    }
+    
+    /**
+     * When representing the score of a game, does this RunDifferential 
+     * correspond to a tie?
+     */
+    public boolean isTie() {
+        return runsScored == runsAgainst;
+    }
+    
     public RunDifferential add(RunDifferential other) {
         return addScore(other.runsScored, other.runsAgainst);
     }
     
     public RunDifferential addScore(int runsScored, int runsAgainst) {
         return new RunDifferential(this.runsScored + runsScored, this.runsAgainst + runsAgainst);
+    }
+    
+    public RunDifferential reverse() {
+        return (runsScored != runsAgainst)
+                ? new RunDifferential(runsAgainst, runsScored)
+                : this;
     }
     
     @Override
