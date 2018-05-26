@@ -1,7 +1,5 @@
 package bsbll.research;
 
-import static com.google.common.base.Preconditions.checkState;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,11 +29,11 @@ public final class OutCounter implements PlayByPlayFile.Callback {
         if (this.outs != expectedOutsCount) {
             for (String s : playsInInning) {
                 PlayOutcome outcome = EventParser.parse(s);
-                System.out.println(s + ": " + outcome.getNumberOfOuts());
+                System.err.println(s + ": " + outcome.getNumberOfOuts());
             }
         }
-        checkState(this.outs == expectedOutsCount, "Expected %s outs when starting the %s, but found %s. Plays: ",
-                expectedOutsCount, inning, this.outs, this.playsInInning);
+//        checkState(this.outs == expectedOutsCount, "Expected %s outs when starting the %s, but found %s. Plays: ",
+//                expectedOutsCount, inning, this.outs, this.playsInInning);
         this.outs = 0;
         this.playsInInning = new ArrayList<>();
     }
@@ -47,7 +45,7 @@ public final class OutCounter implements PlayByPlayFile.Callback {
     }
 
     public static void main(String[] args) {
-        Year year = Year.of(1925);
+        Year year = Year.of(1928);
         File folder = PlayByPlayFileUtils.getFolder(year);
         PlayByPlayFile.parseAll(folder, new OutCounter());
     }

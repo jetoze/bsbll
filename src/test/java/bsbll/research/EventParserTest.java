@@ -393,6 +393,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void buntPoppedIntoDoublePlay() {
+        PlayOutcome outcome = EventParser.parse("5(B)6(2)/BPDP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.HOME, Base.FIRST)
+                .withOut(Base.SECOND, Base.THIRD)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void unspecifiedDoublePlay() {
         PlayOutcome outcome = EventParser.parse("5(3)3(B)/DP");
         PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
@@ -410,6 +421,61 @@ public final class EventParserTest {
         assertEquals(2, outcome.getNumberOfOuts());
     }
 
+    @Test
+    public void batterIsNotOutIfBothOutsInDoublePlayAreOnBases() {
+        PlayOutcome outcome = EventParser.parse("84(1)5(2)/FDP/F8S");
+        // TODO: Not sure what the EventType should be for this one. This is
+        // a real example from a 1925 game between Pittsburgh and St. Louis.
+        // It happened with one out in the bottom of the fourth, so ended
+        // the inning --> it didn't really matter what happened to the batter.
+        // I think a fielder's choice is reasonable.
+        PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.SECOND, Base.THIRD)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void triplePlay() {
+        PlayOutcome outcome = EventParser.parse("7(B)2(3)45(2)/TP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.SECOND, Base.THIRD)
+                .withOut(Base.THIRD, Base.HOME)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
+    public void triplePlayIsThreeOuts() {
+        PlayOutcome outcome = EventParser.parse("7(B)2(3)45(2)/TP");
+        
+        assertEquals(3, outcome.getNumberOfErrors());
+    }
+    
+    @Test
+    public void lineDriveTriplePlay() {
+        PlayOutcome outcome = EventParser.parse("7(B)743(1)32(3)/LTP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.HOME, Base.FIRST)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.THIRD, Base.HOME)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void bothOutsInDoublePlayAreOnBasesIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("84(1)5(2)/FDP/F8S");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+    
     @Test
     public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
         PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
@@ -447,5 +513,35 @@ public final class EventParserTest {
                 .build();
         
         assertEquals(expected, outcome);
+    }
+
+    @Test
+    public void batterThrownOutAtThirdTryingToStretchSingleAfterErrorIsOneOut() {
+        // This one is tricky. At the moment the AdvanceField is parsed completely independently,
+        // but in this case it needs knowledge about the play type.
+        PlayOutcome outcome = EventParser.parse("S8.BX3(E8)(845)");
+        
+        assertEquals(1, outcome.getNumberOfOuts());
+    }
+    
+    @Test
+    public void runnerOnFirstThrownOutAtHomeAfterSuccessfullyStealingSecond() {
+        // Same concept as above
+        PlayOutcome outcome = EventParser.parse("SB2.1XH(E2/TH2)(42)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.STOLEN_BASE)
+                .withOut(Base.FIRST, Base.HOME)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    
+    @Test
+    public void runnerOnFirstThrownOutAtHomeAfterSuccessfullyStealingSecondIsOneOut() {
+        // Same concept as above
+        PlayOutcome outcome = EventParser.parse("SB2.1XH(E2/TH2)(42)");
+        
+        assertEquals(1, outcome.getNumberOfRuns());
     }
 }
