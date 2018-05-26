@@ -174,20 +174,51 @@ public final class EventParser {
     
     private void handleSpecialCasesOnOut() {
         if (isDoublePlay()) {
-            for (Base runner : extractOriginatingBasesInForceOut(this.field.getBasicPlay())) {
-                if (!advances.contains(runner)) {
-                    addOut(runner, runner.next());
-                }
-            }
-            if (!advances.contains(Base.HOME)) {
-                addOut(Base.HOME, Base.FIRST);
-            }
+            handleDoublePlay();
+        } else if (isTriplePlay()) {
+            handleTriplePlay();
         }
     }
     
     private boolean isDoublePlay() {
         return this.field.getModifiers().stream()
-                .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP") || s.startsWith("LDP") || s.startsWith("DP"));
+                .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP") || 
+                        s.startsWith("LDP") || s.startsWith("DP") ||
+                        s.startsWith("BPDP"));
+    }
+
+    private void handleDoublePlay() {
+        Set<Base> indicatedOuts = extractOriginatingBasesInForceOut(this.field.getBasicPlay());
+        for (Base runner : indicatedOuts) {
+            if (!advances.contains(runner)) {
+                addOut(runner, runner.next());
+            }
+        }
+        if (!advances.contains(Base.HOME)) {
+            // The batter's fate was not given explicitly in the advance section.
+            // Let's see what happened to him.
+            if (indicatedOuts.size() == 2 && !indicatedOuts.contains(Base.HOME)) {
+                // Both outs were on the bases --> The batter is implicitly safe at first.
+                addAdvance(Advance.safe(Base.HOME, Base.FIRST));
+            } else if (indicatedOuts.size() == 1) {
+                // Only one base runner was indicated as out --> The batter is implicitly out as well.
+                addOut(Base.HOME, Base.FIRST);
+            }
+        }
+    }
+    
+    private boolean isTriplePlay() {
+        return this.field.getModifiers().stream()
+                .anyMatch(s -> s.startsWith("LTP") || s.startsWith("TP"));
+    }
+
+    private void handleTriplePlay() {
+        Set<Base> indicatedOuts = extractOriginatingBasesInForceOut(this.field.getBasicPlay());
+        for (Base runner : indicatedOuts) {
+            if (!advances.contains(runner)) {
+                addOut(runner, runner.next());
+            }
+        }
     }
     
     private void handleForceOut() {

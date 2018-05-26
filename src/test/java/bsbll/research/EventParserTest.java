@@ -424,12 +424,13 @@ public final class EventParserTest {
     @Test
     public void batterIsNotOutIfBothOutsInDoublePlayAreOnBases() {
         PlayOutcome outcome = EventParser.parse("84(1)5(2)/FDP/F8S");
-        // TODO: Not sure what the EventType should be for this one. This is
+        // Not sure what the EventType should be for this one. This is
         // a real example from a 1925 game between Pittsburgh and St. Louis.
         // It happened with one out in the bottom of the fourth, so ended
         // the inning --> it didn't really matter what happened to the batter.
-        // I think a fielder's choice is reasonable.
-        PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
+        // Stick with OUT for now, since that's what the play-by-play file
+        // indicates.
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
                 .withOut(Base.FIRST, Base.SECOND)
                 .withOut(Base.SECOND, Base.THIRD)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
@@ -439,10 +440,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void bothOutsInDoublePlayAreOnBasesIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("84(1)5(2)/FDP/F8S");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+
+    @Test
     public void triplePlay() {
         PlayOutcome outcome = EventParser.parse("7(B)2(3)45(2)/TP");
         PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
-                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.HOME, Base.FIRST)
                 .withOut(Base.SECOND, Base.THIRD)
                 .withOut(Base.THIRD, Base.HOME)
                 .build();
@@ -454,7 +462,7 @@ public final class EventParserTest {
     public void triplePlayIsThreeOuts() {
         PlayOutcome outcome = EventParser.parse("7(B)2(3)45(2)/TP");
         
-        assertEquals(3, outcome.getNumberOfErrors());
+        assertEquals(3, outcome.getNumberOfOuts());
     }
     
     @Test
@@ -467,13 +475,6 @@ public final class EventParserTest {
                 .build();
         
         assertEquals(expected, outcome);
-    }
-    
-    @Test
-    public void bothOutsInDoublePlayAreOnBasesIsTwoOuts() {
-        PlayOutcome outcome = EventParser.parse("84(1)5(2)/FDP/F8S");
-        
-        assertEquals(2, outcome.getNumberOfOuts());
     }
     
     @Test
