@@ -1,7 +1,7 @@
 package bsbll.research;
 
+import java.io.File;
 import java.text.DecimalFormat;
-import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
@@ -10,7 +10,7 @@ import bsbll.Base;
 import bsbll.Year;
 import tzeth.strings.Padding;
 
-public final class ReachedOnErrorPercentages {
+public final class ReachedOnErrorPercentages implements PlayByPlayFile.Callback {
     private final Year year;
     private int outsPlusErrors;
     private final int[] reachedBaseOnError = new int[4];
@@ -19,14 +19,39 @@ public final class ReachedOnErrorPercentages {
     private ReachedOnErrorPercentages(Year year) {
         this.year = year;
     }
-
-    public void run() throws Exception {
-        Predicate<EventType> typeFilter = t -> (t == EventType.OUT || t == EventType.REACHED_ON_ERROR);
-        PlayByPlayFileUtils.parseAllPlays(year, typeFilter, new Callback());
-        report();
+    
+    @Override
+    public Predicate<PlayOutcome> outcomeFilter() {
+        return o -> {
+            EventType type = o.getType();
+            return (type == EventType.OUT || type == EventType.REACHED_ON_ERROR);
+        };
     }
 
-    private void report() {
+    @Override
+    public void onEvent(EventField field, PlayOutcome outcome) {
+        ++outsPlusErrors;
+        if (outcome.getType() == EventType.OUT) {
+            return;
+        }
+        assert outcome.getType() == EventType.REACHED_ON_ERROR;
+        Advances advances = outcome.getAdvances();
+        if (advances.contains(Base.HOME)) {
+            Advance a = advances.getAdvanceFrom(Base.HOME);
+            if (a.isAdvancement()) {
+                reachedBaseOnError[a.to().ordinal()]++;
+            } else {
+                // An error allowed the batter to reach base, but he was thrown out
+                // on the follow-up play.
+                thrownOutOnBases++;
+            }
+        } else {
+            // If not stated explicitly, it is implied that the batter reached first.
+            reachedBaseOnError[0]++;
+        }
+    }
+
+    public void report() {
         System.out.println("Reached on Error Percentage for the Year " + year + ":");
         System.out.println();
         Padding labelPadding = Padding.of(24);
@@ -75,34 +100,11 @@ public final class ReachedOnErrorPercentages {
     }
     
     
-    private class Callback implements Consumer<PlayOutcome> {
-
-        @Override
-        public void accept(PlayOutcome outcome) {
-            ++outsPlusErrors;
-            if (outcome.getType() == EventType.OUT) {
-                return;
-            }
-            assert outcome.getType() == EventType.REACHED_ON_ERROR;
-            Advances advances = outcome.getAdvances();
-            if (advances.contains(Base.HOME)) {
-                Advance a = advances.getAdvanceFrom(Base.HOME);
-                if (a.isAdvancement()) {
-                    reachedBaseOnError[a.to().ordinal()]++;
-                } else {
-                    // An error allowed the batter to reach base, but he was thrown out
-                    // on the follow-up play.
-                    thrownOutOnBases++;
-                }
-            } else {
-                // If not stated explicitly, it is implied that the batter reached first.
-                reachedBaseOnError[0]++;
-            }
-        }
-    }
-    
     public static void main(String[] args) throws Exception {
-        ReachedOnErrorPercentages r = new ReachedOnErrorPercentages(Year.of(1926));
-        r.run();
+        Year year = Year.of(1925);
+        File folder = PlayByPlayFileUtils.getFolder(year);
+        ReachedOnErrorPercentages s = new ReachedOnErrorPercentages(year);
+        PlayByPlayFile.parseAll(folder, s);
+        s.report();
     }
 }

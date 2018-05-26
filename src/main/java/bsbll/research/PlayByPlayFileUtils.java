@@ -16,13 +16,17 @@ import bsbll.Year;
 
 final class PlayByPlayFileUtils {
     public static File[] listFiles(Year year) {
-        File rootDir = new File("/Users/torgil/coding/data/bsbll/play-by-play-files/" + year);
+        File rootDir = getFolder(year);
         checkArgument(rootDir.isDirectory(), "No such directory: " + rootDir.getAbsolutePath());
         FileFilter filter = f -> {
             String name = f.getName();
             return name.endsWith(".EVA") || name.endsWith("EVN") || name.endsWith(".EDN");
         };
         return rootDir.listFiles(filter);
+    }
+
+    public static File getFolder(Year year) {
+        return new File("/Users/torgil/coding/data/bsbll/play-by-play-files/" + year);
     }
 
     public static void parseAllPlays(Year year, Consumer<PlayOutcome> callback) throws Exception {
