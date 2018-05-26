@@ -137,6 +137,12 @@ public final class EventParser {
             }
             addAdvance(new Advance(ranFrom, caughtAt, outcome));
         }
+        // Was more than one runner caught stealing?
+        int next = marker.indexOf(";CS");
+        if (next > 0) {
+            String nextMarker = marker.substring(next + 1);
+            handleCaughtStealing(nextMarker);
+        }
     }
     
     private static boolean isErrorOnCaughtStealing(String basicPlay) {

@@ -601,4 +601,15 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+    
+    @Test
+    public void twoRunnersCaughtStealing() {
+        PlayOutcome outcome = EventParser.parse("CS2(24);CSH(42)/DP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.THIRD, Base.HOME)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 }
