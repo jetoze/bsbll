@@ -191,7 +191,9 @@ public final class EventParser {
         return this.field.getModifiers().stream()
                 .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP") || 
                         s.startsWith("LDP") || s.startsWith("DP") ||
-                        s.startsWith("BPDP"));
+                        s.startsWith("BPDP") ||
+                        // NDP -> "no double play credited for this play". Never the less, two outs were made.
+                        s.startsWith("NDP"));
     }
 
     private void handleDoublePlay() {
