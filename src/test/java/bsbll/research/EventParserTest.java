@@ -374,6 +374,25 @@ public final class EventParserTest {
     }
     
     @Test
+    public void lineDriveDoublePlay() {
+        PlayOutcome outcome = EventParser.parse("8(B)65(2)/LDP/SF.3-H: 1");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withSafeAdvance(Base.THIRD, Base.HOME)
+                .withOut(Base.SECOND, Base.THIRD)
+                .withOut(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
+    public void lineDriveDoublePlayIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("8(B)65(2)/LDP/SF.3-H: 1");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+    
+    @Test
     public void unspecifiedDoublePlay() {
         PlayOutcome outcome = EventParser.parse("5(3)3(B)/DP");
         PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
