@@ -53,6 +53,57 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+    
+    @Test
+    public void reachedOnError() {
+        PlayOutcome outcome = EventParser.parse("E1/TH/BG15.1-3");
+        PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
+                .withSafeAdvance(Base.FIRST, Base.THIRD)
+                .withSafeOnError(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void reachedOnErrorIsOneError() {
+        PlayOutcome outcome = EventParser.parse("E1/TH/BG15.1-3");
+        
+        assertEquals(1, outcome.getNumberOfErrors());
+    }
+    
+    @Test
+    public void reachedOnErrorWithExplicitBatterAdvance() {
+        PlayOutcome outcome = EventParser.parse("E3.1-2;B-1");
+        PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withSafeOnError(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void reachedOnErrorWithLongerErrorNotation() {
+        PlayOutcome outcome = EventParser.parse("654E3.2-H(UR)(NR)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
+                .withSafeAdvance(Base.SECOND, Base.HOME)
+                .withSafeOnError(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void batterThrownOutAfterReachingSafelyOnError() {
+        PlayOutcome outcome = EventParser.parse("E4.1-3;BX2(86)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
+                .withSafeAdvance(Base.FIRST, Base.THIRD)
+                .withOut(Base.HOME, Base.SECOND)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 
     @Test
     public void stolenBase() {

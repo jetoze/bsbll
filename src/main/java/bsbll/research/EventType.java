@@ -1,30 +1,32 @@
 package bsbll.research;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
 import bsbll.Base;
+import bsbll.research.Advance.Outcome;
 
 /**
  * Represents the main outcome of a pitcher-batter matchup.
  */
 public enum EventType {
-    SINGLE(Base.FIRST),
-    DOUBLE(Base.SECOND),
-    TRIPLE(Base.THIRD),
-    HOMERUN(Base.HOME),
+    SINGLE(Base.FIRST, Outcome.SAFE),
+    DOUBLE(Base.SECOND, Outcome.SAFE),
+    TRIPLE(Base.THIRD, Outcome.SAFE),
+    HOMERUN(Base.HOME, Outcome.SAFE),
     STRIKEOUT,
-    WALK(Base.FIRST),
-    HIT_BY_PITCH(Base.FIRST),
+    WALK(Base.FIRST, Outcome.SAFE),
+    HIT_BY_PITCH(Base.FIRST, Outcome.SAFE),
     /**
      * Fielder's choice, also includes force outs.
      */
-    FIELDERS_CHOICE(Base.FIRST),
-    FORCE_OUT(Base.FIRST),
+    FIELDERS_CHOICE(Base.FIRST, Outcome.SAFE),
+    FORCE_OUT(Base.FIRST, Outcome.SAFE),
     PASSED_BALL,
     WILD_PITCH,
-    REACHED_ON_ERROR(Base.FIRST), // according to the rules of the retrosheet play-by-play file
+    REACHED_ON_ERROR(Base.FIRST, Outcome.SAFE_ON_ERROR),
     BALK,
     STOLEN_BASE,
     CAUGHT_STEALING,
@@ -42,18 +44,22 @@ public enum EventType {
     OUT;
     
     @Nullable
-    private final Base impliedBaseForBatter;
+    private final Supplier<Advance> impliedAdvance;
     
     private EventType() {
-        this(null);
+        impliedAdvance = null;
     }
     
-    private EventType(@Nullable Base impliedBaseForBatter) {
-        this.impliedBaseForBatter = impliedBaseForBatter;
+    private EventType(Base impliedAdvanceTo, Outcome impliedAdvanceType) {
+        assert impliedAdvanceTo != null;
+        assert impliedAdvanceType != null;
+        this.impliedAdvance = () -> new Advance(Base.HOME, impliedAdvanceTo, impliedAdvanceType);
     }
     
-    public Optional<Base> getImpliedBaseForBatter() {
-        return Optional.ofNullable(this.impliedBaseForBatter);
+    public Optional<Advance> getImpliedAdvance() {
+        return (impliedAdvance != null)
+                ? Optional.ofNullable(impliedAdvance.get())
+                : Optional.empty();
     }
     
     public boolean isHit() {

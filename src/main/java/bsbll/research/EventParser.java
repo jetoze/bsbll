@@ -52,6 +52,9 @@ public final class EventParser {
         
         // Here starts the special cases...
         switch (eventType) {
+        case REACHED_ON_ERROR:
+            handleReachedOnError();
+            break;
         case STOLEN_BASE:
             handleStolenBase();
             break;
@@ -77,12 +80,24 @@ public final class EventParser {
             // no additional processing needed
         }
         
+        if (eventType.isError()) {
+            ++numberOfErrors;
+        }
         numberOfErrors += field.getAdvanceField().countAllErrors();
         
         return new PlayOutcome(
                 eventType, 
                 advances, 
                 numberOfErrors);
+    }
+    
+    private void handleReachedOnError() {
+        if (this.advances.contains(Base.HOME)) {
+            Advance a = this.advances.getAdvanceFrom(Base.HOME);
+            if (a.isSafe()) {
+                this.advances = this.advances.replace(Advance.safeOnError(Base.HOME, a.to()));
+            }
+        }
     }
     
     private void handleStolenBase() {

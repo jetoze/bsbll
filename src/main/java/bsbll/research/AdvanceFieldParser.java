@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toMap;
 import java.util.Map;
 
 import bsbll.Base;
-import bsbll.research.Advance.Outcome;
 import bsbll.research.AdvanceField.Part;
 
 /**
@@ -29,9 +28,7 @@ public final class AdvanceFieldParser {
         Map<Base, Advance> advances = field.getParts().stream()
                 .collect(toMap(Part::from, Part::getAdvance));
         if (!advances.containsKey(Base.HOME)) {
-            eventType.getImpliedBaseForBatter().ifPresent(to -> {
-                advances.put(Base.HOME, new Advance(Base.HOME, to, Outcome.SAFE));
-            });
+            eventType.getImpliedAdvance().ifPresent(a -> advances.put(a.from(), a));
         }
         return new Advances(advances.values());
     }

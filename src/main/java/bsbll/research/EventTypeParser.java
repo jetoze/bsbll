@@ -3,6 +3,8 @@ package bsbll.research;
 import static bsbll.research.EventType.*;
 
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
@@ -123,20 +125,13 @@ public final class EventTypeParser {
         throw new IllegalArgumentException("Invalid event field: " + field);
     }
 
+    private static final Pattern REACHED_ON_ERROR_PATTERN = Pattern.compile("\\d*E.*");
+    
     public static EventType parseOut(EventField field) {
         String basic = field.getBasicPlay();
-        if (basic.length() > 1) {
-            char second = basic.charAt(1);
-            if (second == 'E') {
-                // e.g. "4E3". Alternate form of "E3".
-                return EventType.REACHED_ON_ERROR;
-            } else if (Character.isDigit(second) && basic.length() > 2) {
-                char third = basic.charAt(2);
-                if (third == 'E') {
-                    // e.g. "34E1"
-                    return EventType.REACHED_ON_ERROR;
-                }
-            }
+        Matcher roeMatcher = REACHED_ON_ERROR_PATTERN.matcher(basic);
+        if (roeMatcher.matches()) {
+            return EventType.REACHED_ON_ERROR;
         }
         if (field.hasModifier(m -> m.startsWith("FO"))) {
             // We treat a force out as a fielder's choice.
