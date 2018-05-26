@@ -195,6 +195,14 @@ public final class EventTypeParserTest {
     }
     
     @Test
+    public void trailingSpecialCharactersAreRemoved() {
+        assertSame(HOMERUN, parse("HR/"));
+        assertSame(HOMERUN, parse("HR#"));
+        assertSame(HOMERUN, parse("HR?"));
+        assertSame(HOMERUN, parse("HR/#"));
+    }
+    
+    @Test
     public void testInvalidInput() {
         Arrays.asList(
                 "", 

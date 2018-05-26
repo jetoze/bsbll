@@ -42,7 +42,9 @@ public final class EventField {
         // "." followed by one or more characters.
         String advance = "(\\.(.+))?";
         
-        String regex = basicPlay + modifiers + advance;
+        // Lastly, the field may end with some special characters (/, #, ?) that we 
+        // can ignore.
+        String regex = "(?:" + basicPlay + modifiers + advance + ")[/#\\?]*";
         return Pattern.compile(regex);
     }
     
@@ -60,12 +62,9 @@ public final class EventField {
     
     public static EventField fromString(String input) {
         checkNotEmpty(input);
-        String s = (input.endsWith("#") || input.endsWith("?") || input.endsWith("/"))
-                ? input.substring(0, input.length() - 1)
-                : input;
         return USE_REGEX_PARSING
-                ? parseWithRegex(s)
-                : parseManually(s);
+                ? parseWithRegex(input)
+                : parseManually(input);
     }
     
     private static EventField parseWithRegex(String input) {
@@ -84,6 +83,7 @@ public final class EventField {
         // FIXME: This version does not handle a field like the following:
         //            PO1(E2/TH).2-3
         //        --> There can be slashes in the basic part.
+        // FIXME: This version also doesn't handle trailing [/,#,?].
         try {
             int indexOfAdvSep = input.indexOf('.');
             int indexOfFirstModSep = input.indexOf('/');

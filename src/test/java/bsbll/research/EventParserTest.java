@@ -46,7 +46,7 @@ public final class EventParserTest {
     public void errorOnDoubleWithErrorNotationInTheAdvanceSection() {
         PlayOutcome outcome = EventParser.parse("D7.1-H;B-3(E5/THH)");
         PlayOutcome expected = PlayOutcome.builder(EventType.DOUBLE)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeAdvance(Base.FIRST, Base.HOME)
                 .withSafeAdvance(Base.HOME, Base.THIRD)
                 .build();
@@ -60,6 +60,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .withSafeOnError(Base.HOME, Base.FIRST)
+                .withErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -78,6 +79,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
                 .withSafeAdvance(Base.FIRST, Base.SECOND)
                 .withSafeOnError(Base.HOME, Base.FIRST)
+                .withErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -89,6 +91,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
                 .withSafeAdvance(Base.SECOND, Base.HOME)
                 .withSafeOnError(Base.HOME, Base.FIRST)
+                .withErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -100,6 +103,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.REACHED_ON_ERROR)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .withOut(Base.HOME, Base.SECOND)
+                .withErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -129,7 +133,7 @@ public final class EventParserTest {
     public void stolenBaseWithError() {
         PlayOutcome outcome = EventParser.parse("SB2.1-3(E2/TH2)");
         PlayOutcome expected = PlayOutcome.builder(EventType.STOLEN_BASE)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .build();
         
@@ -151,7 +155,7 @@ public final class EventParserTest {
     public void doubleStealWithError() {
         PlayOutcome outcome = EventParser.parse("SBH;SB2.1-H(E6/THH)(UR)");
         PlayOutcome expected = PlayOutcome.builder(EventType.STOLEN_BASE)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeAdvance(Base.THIRD, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.HOME)
                 .build();
@@ -163,7 +167,7 @@ public final class EventParserTest {
     public void doubleStealWithErrors() {
         PlayOutcome outcome = EventParser.parse("SB3;SB2.1-3(E6/THH)(UR);2-H(E5)");
         PlayOutcome expected = PlayOutcome.builder(EventType.STOLEN_BASE)
-                .withErrors(2)
+                .withAdditionalErrors(2)
                 .withSafeAdvance(Base.SECOND, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .build();
@@ -196,7 +200,7 @@ public final class EventParserTest {
     public void errorOnCaughtStealingWithExplicitAdvancement() {
         PlayOutcome outcome = EventParser.parse("CS2(2E4).1-3");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeAdvance(Base.FIRST, Base.THIRD)
                 .build();
         
@@ -207,7 +211,7 @@ public final class EventParserTest {
     public void errorOnCaughtStealingWithoutExplicitAdvancement() {
         PlayOutcome outcome = EventParser.parse("CS2(2E4)");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeOnError(Base.FIRST, Base.SECOND)
                 .build();
         
@@ -220,7 +224,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
                 .withSafeOnError(Base.THIRD, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.SECOND)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -230,7 +234,7 @@ public final class EventParserTest {
     public void caughtStealingHomeNegatedByObstruction() {
         PlayOutcome outcome = EventParser.parse("CSH(E2)/OBS.3-H(UR);1-2");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .withSafeAdvance(Base.THIRD, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.SECOND)
                 .build();
@@ -243,7 +247,7 @@ public final class EventParserTest {
         PlayOutcome outcome = EventParser.parse("CS2(E2)");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
                 .withSafeOnError(Base.FIRST, Base.SECOND)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -297,7 +301,7 @@ public final class EventParserTest {
     public void pickoffAttemptWithError() {
         PlayOutcome outcome = EventParser.parse("PO1(13E6)#");
         PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -308,7 +312,7 @@ public final class EventParserTest {
         PlayOutcome outcome = EventParser.parse("PO1(E2/TH).2-3");
         PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
                 .withSafeAdvance(Base.SECOND, Base.THIRD)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -609,7 +613,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
                 .withSafeOnError(Base.FIRST, Base.SECOND)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -636,7 +640,7 @@ public final class EventParserTest {
         PlayOutcome outcome = EventParser.parse("S8.BX3(E8)(845)");
         PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
                 .withOut(Base.HOME, Base.THIRD)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -657,7 +661,7 @@ public final class EventParserTest {
         PlayOutcome outcome = EventParser.parse("SB2.1XH(E2/TH2)(42)");
         PlayOutcome expected = PlayOutcome.builder(EventType.STOLEN_BASE)
                 .withOut(Base.FIRST, Base.HOME)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -678,7 +682,7 @@ public final class EventParserTest {
         PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
                 .withOut(Base.FIRST, Base.SECOND)
                 .withOut(Base.HOME, Base.THIRD)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -691,7 +695,7 @@ public final class EventParserTest {
                 .withSafeAdvance(Base.THIRD, Base.HOME)
                 .withOut(Base.FIRST, Base.HOME)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -704,7 +708,7 @@ public final class EventParserTest {
                 .withSafeAdvance(Base.SECOND, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.HOME)
                 .withSafeOnError(Base.HOME, Base.HOME)
-                .withErrors(1)
+                .withAdditionalErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
