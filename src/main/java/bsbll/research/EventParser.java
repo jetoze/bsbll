@@ -178,8 +178,17 @@ public final class EventParser {
         case PASSED_BALL:
             // Same as WILD_PITCH
             break;
+        case REACHED_ON_ERROR:
+            // TODO: Implement me.
+            break;
+        case OTHER_ADVANCE:
+            // TODO: Implement me
+            break;
+        case DEFENSIVE_INDIFFERENCE:
+            // TODO: Implement me
+            break;
         default:
-            throw new RuntimeException("Not implemented yet");
+            throw new RuntimeException("Unexpected additional event type: " + additionalEventType + " (" + this.field + ")");
         }
     }
     

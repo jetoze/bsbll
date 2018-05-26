@@ -289,7 +289,7 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        for (int n = 1; n <= 100; ++n) {
+        for (int n = 1; n <= 10; ++n) {
             System.out.println("#" + n + ":");
             AL1923 league = new AL1923();
             Standings standings = league.run();
