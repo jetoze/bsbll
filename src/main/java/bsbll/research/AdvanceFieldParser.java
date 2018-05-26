@@ -23,7 +23,7 @@ public final class AdvanceFieldParser {
     public static Advances parse(AdvanceField field, EventType eventType) {
         Map<Base, Advance> advances = new HashMap<>();
         for (String part : field.getParts()) {
-            Advance a = fromString(part);
+            Advance a = fromString(field, part);
             advances.put(a.from(), a);
         }
         if (!advances.containsKey(Base.HOME)) {
@@ -34,13 +34,17 @@ public final class AdvanceFieldParser {
         return new Advances(advances.values());
     }
     
-    private static Advance fromString(String s) {
+    private static Advance fromString(AdvanceField field, String part) {
         // Each part consists of P-Q or PXQ, followed by zero or
         // more expressions within parentheses. We're only interested
         // in the first part.
-        String core = s.substring(0, 3);
+        String core = part.substring(0, 3);
         Base from = Base.fromChar(core.charAt(0));
         Outcome outcome = Outcome.fromChar(core.charAt(1));
+        if (outcome == Outcome.OUT && field.countErrors(from) > 0) {
+            // An error negates the out
+            outcome = Outcome.SAFE;
+        }
         Base to = Base.fromChar(core.charAt(2));
         return new Advance(from, to, outcome);
     }

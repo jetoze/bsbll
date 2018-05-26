@@ -337,4 +337,30 @@ public final class EventParserTest {
         
         assertEquals(2, outcome.getNumberOfOuts());
     }
+    
+    @Test
+    public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
+        PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
+    public void fieldersChoiceWithRunnerSafeAtSecondOnErrorIsNotAnOut() {
+        PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
+        
+        assertEquals(0, outcome.getNumberOfOuts());
+    }
+
+    @Test
+    public void fieldersChoiceWithRunnerSafeAtSecondOnErrorIsAnError() {
+        PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
+        
+        assertEquals(1, outcome.getNumberOfErrors());
+    }
 }

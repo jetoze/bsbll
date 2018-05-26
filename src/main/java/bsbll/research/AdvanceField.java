@@ -44,11 +44,17 @@ final class AdvanceField {
             return 0;
         }
         int e = 0;
-        String marker = "(E";
-        int index = s.indexOf(marker);
-        while (index != -1) {
-            ++e;
-            index = s.indexOf("(E", index + "(E".length());
+        int start = s.indexOf("(");
+        while (start != -1) {
+            int end = s.indexOf(")", start + 1);
+            if (end == -1) {
+                break;
+            }
+            String x = s.substring(start + 1, end);
+            if (x.contains("E")) {
+                ++e;
+            }
+            start = s.indexOf("(", end + 1);
         }
         return e;
     }
