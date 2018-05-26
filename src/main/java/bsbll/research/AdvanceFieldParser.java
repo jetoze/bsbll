@@ -43,7 +43,7 @@ public final class AdvanceFieldParser {
         Outcome outcome = Outcome.fromChar(core.charAt(1));
         if (outcome == Outcome.OUT && field.countErrors(from) > 0) {
             // An error negates the out
-            outcome = Outcome.SAFE;
+            outcome = Outcome.SAFE_ON_ERROR;
         }
         Base to = Base.fromChar(core.charAt(2));
         return new Advance(from, to, outcome);

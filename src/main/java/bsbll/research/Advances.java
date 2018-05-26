@@ -9,19 +9,23 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.Base;
 import bsbll.game.BaseSituation;
 import bsbll.player.Player;
+import tzeth.collections.ImCollectors;
 
 /**
  * Represents all base advances made on a single play. 
@@ -158,6 +162,21 @@ public final class Advances {
         List<Advance> list = new ArrayList<>(this.advances.values());
         list.add(a);
         return new Advances(list);
+    }
+    
+    public Stream<Advance> stream(Predicate<Advance> filter) {
+        return this.advances.values().stream().filter(filter);
+    }
+    
+    public ImmutableList<Advance> collect(Predicate<Advance> filter) {
+        return stream(filter).collect(ImCollectors.toList());
+    }
+
+    public Advances replace(Advance a) {
+        checkArgument(this.advances.containsKey(a.from()));
+        Map<Base, Advance> tmp = new HashMap<>(this.advances);
+        tmp.put(a.from(), a);
+        return new Advances(tmp.values());
     }
     
     @Override

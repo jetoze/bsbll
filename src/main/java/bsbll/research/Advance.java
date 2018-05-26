@@ -31,6 +31,10 @@ public final class Advance {
         return new Advance(from, to, Outcome.SAFE);
     }
     
+    public static Advance safeOnError(Base from, Base to) {
+        return new Advance(from, to, Outcome.SAFE_ON_ERROR);
+    }
+    
     public static Advance out(Base from, Base to) {
         return new Advance(from, to, Outcome.OUT);
     }
@@ -48,7 +52,11 @@ public final class Advance {
     }
     
     public boolean isSafe() {
-        return (this.outcome == Outcome.SAFE);
+        return (this.outcome == Outcome.SAFE) || (this.outcome == Outcome.SAFE_ON_ERROR);
+    }
+    
+    public boolean isSafeOnError() {
+        return (this.outcome == Outcome.SAFE_ON_ERROR);
     }
     
     public boolean isOut() {
@@ -105,6 +113,7 @@ public final class Advance {
     
     public static enum Outcome {
         SAFE,
+        SAFE_ON_ERROR,
         OUT;
         
         public static Outcome fromChar(char c) {
@@ -113,6 +122,8 @@ public final class Advance {
                 return SAFE;
             case 'X':
                 return OUT;
+            case 'x':
+                return SAFE_ON_ERROR;
             default:
                 throw new IllegalArgumentException("Invalid char: " + c);
             }
@@ -124,6 +135,8 @@ public final class Advance {
                 return '-';
             case OUT:
                 return 'X';
+            case SAFE_ON_ERROR:
+                return 'x';
             default:
                 throw new AssertionError("Unexpected Outcome: " + this);
             }

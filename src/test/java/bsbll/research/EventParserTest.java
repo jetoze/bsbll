@@ -438,6 +438,24 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+
+    @Test
+    public void batterIsNotOutOnDoublePlayWhereTwoRunnersAreThrownOutAtHome() {
+        PlayOutcome outcome = EventParser.parse("62(3)/DP.2XH(232)");
+        // Not sure what the EventType should be for this one. This is
+        // a real example from a 1925 game between Pittsburgh and St. Louis.
+        // It happened with one out in the bottom of the fourth, so ended
+        // the inning --> it didn't really matter what happened to the batter.
+        // Stick with OUT for now, since that's what the play-by-play file
+        // indicates.
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.THIRD, Base.HOME)
+                .withOut(Base.SECOND, Base.HOME)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
     
     @Test
     public void bothOutsInDoublePlayAreOnBasesIsTwoOuts() {
@@ -481,7 +499,7 @@ public final class EventParserTest {
     public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
         PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
         PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
-                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withSafeOnError(Base.FIRST, Base.SECOND)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
                 .withErrors(1)
                 .build();
@@ -543,6 +561,18 @@ public final class EventParserTest {
         // Same concept as above
         PlayOutcome outcome = EventParser.parse("SB2.1XH(E2/TH2)(42)");
         
-        assertEquals(1, outcome.getNumberOfRuns());
+        assertEquals(1, outcome.getNumberOfOuts());
+    }
+    
+    @Test
+    public void batterThrownOutTryingToAdvanceOnForceOutWithError() {
+        PlayOutcome outcome = EventParser.parse("64(1)/FO/NDP.BX3(E4/TH1)(35)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.HOME, Base.THIRD)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
     }
 }

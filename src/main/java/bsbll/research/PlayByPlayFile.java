@@ -164,6 +164,13 @@ public final class PlayByPlayFile {
                     : new Inning(number + 1, TOP);
         }
         
+        public Inning previous() {
+            checkState(isBottom() || number > 1);
+            return isBottom()
+                    ? new Inning(number, TOP)
+                    : new Inning(number - 1, BOTTOM);
+        }
+        
         @Override
         public String toString() {
             StringBuilder sb = new StringBuilder(half == TOP ? "Top" : "Bottom").append(" of ");

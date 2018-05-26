@@ -56,6 +56,18 @@ public enum EventType {
         return Optional.ofNullable(this.impliedBaseForBatter);
     }
     
+    public boolean isHit() {
+        switch (this) {
+        case SINGLE:
+        case DOUBLE:
+        case TRIPLE:
+        case HOMERUN:
+            return true;
+        default:
+            return false;
+        }
+    }
+    
     public boolean isError() {
         return (this == EventType.REACHED_ON_ERROR) || (this == ERROR_ON_FOUL_FLY);
     }

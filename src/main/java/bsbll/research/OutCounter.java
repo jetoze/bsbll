@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 import bsbll.Year;
 import bsbll.research.PlayByPlayFile.Inning;
 
@@ -12,12 +14,13 @@ import bsbll.research.PlayByPlayFile.Inning;
  * (except possibly the last one in each game) has exactly three outs.
  */
 public final class OutCounter implements PlayByPlayFile.Callback {
+    private String gameId;
     private int outs;
     private List<String> playsInInning;
     
     @Override
     public void onStartGame(String id) {
-        System.out.println(id);
+        this.gameId = id;
         this.outs = 0;
     }
 
@@ -27,10 +30,13 @@ public final class OutCounter implements PlayByPlayFile.Callback {
                 ? 0
                 : 3;
         if (this.outs != expectedOutsCount) {
+            System.err.println(gameId);
+            System.err.println(inning.previous());
             for (String s : playsInInning) {
                 PlayOutcome outcome = EventParser.parse(s);
                 System.err.println(s + ": " + outcome.getNumberOfOuts());
             }
+            System.out.println(Strings.repeat("-", 20));
         }
 //        checkState(this.outs == expectedOutsCount, "Expected %s outs when starting the %s, but found %s. Plays: ",
 //                expectedOutsCount, inning, this.outs, this.playsInInning);

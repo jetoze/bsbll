@@ -106,6 +106,10 @@ public final class PlayOutcome {
             return withAdvance(Advance.safe(from, to));
         }
         
+        public Builder withSafeOnError(Base from, Base to) {
+            return withAdvance(Advance.safeOnError(from, to));
+        }
+        
         public Builder withAdvance(Advance adv) {
             this.advances.add(adv);
             return this;
