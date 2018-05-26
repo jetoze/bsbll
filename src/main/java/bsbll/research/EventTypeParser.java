@@ -110,18 +110,7 @@ public final class EventTypeParser {
         }
         if (Character.isDigit(first)) {
             // This indicates an out of some sort. First check for some special cases.
-            if (basic.length() > 1) {
-                char second = basic.charAt(1);
-                if (second == 'E') {
-                    // e.g. "4E3". Alternate form of "E3".
-                    return EventType.REACHED_ON_ERROR;
-                }
-            }
-            if (field.hasModifier(m -> m.startsWith("FO"))) {
-                // We treat a force out as a fielder's choice.
-                return FORCE_OUT;
-            }
-            return OUT;
+            return parseOut(field);
         }
         switch (basic) {
         case "NP":
@@ -132,6 +121,28 @@ public final class EventTypeParser {
             return OTHER_ADVANCE;
         }
         throw new IllegalArgumentException("Invalid event field: " + field);
+    }
+
+    public static EventType parseOut(EventField field) {
+        String basic = field.getBasicPlay();
+        if (basic.length() > 1) {
+            char second = basic.charAt(1);
+            if (second == 'E') {
+                // e.g. "4E3". Alternate form of "E3".
+                return EventType.REACHED_ON_ERROR;
+            } else if (Character.isDigit(second) && basic.length() > 2) {
+                char third = basic.charAt(2);
+                if (third == 'E') {
+                    // e.g. "34E1"
+                    return EventType.REACHED_ON_ERROR;
+                }
+            }
+        }
+        if (field.hasModifier(m -> m.startsWith("FO"))) {
+            // We treat a force out as a fielder's choice.
+            return FORCE_OUT;
+        }
+        return OUT;
     }
     
     private static boolean matchWithOptionalFielderSuffix(String input, String match) {
