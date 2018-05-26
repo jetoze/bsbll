@@ -253,6 +253,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void pickoffAttemptWithDifferentErrorNotation() {
+        PlayOutcome outcome = EventParser.parse("PO1(E2/TH).2-3");
+        PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
+                .withSafeAdvance(Base.SECOND, Base.THIRD)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void strikeoutIsOneOut() {
         PlayOutcome outcome = EventParser.parse("K");
         

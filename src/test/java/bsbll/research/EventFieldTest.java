@@ -14,15 +14,23 @@ public final class EventFieldTest {
     
     @Test
     public void testBasicOnly() {
-        EventField field = EventField.fromString2("S7");
+        EventField field = EventField.fromString("S7");
         assertEquals("S7", field.getBasicPlay());
+        assertNoModifiers(field);
+        assertTrue(field.getAdvanceField().isEmpty());
+    }
+
+    @Test
+    public void testBasicWithSlash() {
+        EventField field = EventField.fromString("4/");
+        assertEquals("4", field.getBasicPlay());
         assertNoModifiers(field);
         assertTrue(field.getAdvanceField().isEmpty());
     }
     
     @Test
     public void testBasicWithOneModifier() {
-        EventField field = EventField.fromString2("54(B)/BG25");
+        EventField field = EventField.fromString("54(B)/BG25");
         assertEquals("54(B)", field.getBasicPlay());
         assertEquals(Arrays.asList("BG25"), field.getModifiers());
         assertTrue(field.getAdvanceField().isEmpty());
@@ -30,7 +38,7 @@ public final class EventFieldTest {
     
     @Test
     public void testBasicWithTwoModifiers() {
-        EventField field = EventField.fromString2("54(B)/BG25/SH");
+        EventField field = EventField.fromString("54(B)/BG25/SH");
         assertEquals("54(B)", field.getBasicPlay());
         assertEquals(Arrays.asList("BG25", "SH"), field.getModifiers());
         assertTrue(field.getAdvanceField().isEmpty());
@@ -50,7 +58,7 @@ public final class EventFieldTest {
     
     @Test
     public void testFullForm() {
-        EventField field = EventField.fromString2("54(B)/BG25/SH.1-2");
+        EventField field = EventField.fromString("54(B)/BG25/SH.1-2");
         assertEquals("54(B)", field.getBasicPlay());
         assertEquals(Arrays.asList("BG25", "SH"), field.getModifiers());
         assertEquals("1-2", field.getAdvanceField().toString());
@@ -58,10 +66,17 @@ public final class EventFieldTest {
     
     @Test
     public void testErrorNotationInAdvanceSection() {
-        EventField field = EventField.fromString2("D7.1-H;B-3(E5/THH)");
+        EventField field = EventField.fromString("D7.1-H;B-3(E5/THH)");
         assertEquals("D7", field.getBasicPlay());
         assertNoModifiers(field);
         assertEquals("1-H;B-3(E5/THH)", field.getAdvanceField().toString());
     }
     
+    @Test
+    public void annotationWithSlashInBasicPart() {
+        EventField field = EventField.fromString("PO1(E2/TH).2-3");
+        assertEquals("PO1(E2/TH)", field.getBasicPlay());
+        assertNoModifiers(field);
+        assertEquals("2-3", field.getAdvanceField().toString());
+    }
 }

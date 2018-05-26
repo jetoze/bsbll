@@ -22,11 +22,16 @@ import com.google.common.collect.ImmutableList;
  * field.
  */
 public final class EventField {
+    private static final boolean USE_REGEX_PARSING = true;
     private static final Pattern REGEX_PATTERN = compileRegexPattern();
     
     private static Pattern compileRegexPattern() {
-        // One or more characters, not including "/" or "."
-        String basicPlay = "([^/\\.]+)";
+        // The basic play part consists of one or more characters not including
+        // "/" or ".", plus an optional sequence of additional groups within
+        // parentheses. (These additional groups can contain "/".)
+        String basicPlayMain = "(?:[^/\\.\\(\\)]+)";
+        String basicPlayAnnotation = "(?:\\([^\\(\\)]+\\))*";
+        String basicPlay = "((?:" + basicPlayMain + basicPlayAnnotation + ")+)";
         
         // Repeated group of "/" followed by one or more characters that are not "/"
         // Note that we are capturing a repeated group, rather than repeating a captured group
@@ -53,7 +58,17 @@ public final class EventField {
         this.rawString = checkNotEmpty(rawString);
     }
     
-    public static EventField fromString2(String input) {
+    public static EventField fromString(String input) {
+        checkNotEmpty(input);
+        String s = (input.endsWith("#") || input.endsWith("?") || input.endsWith("/"))
+                ? input.substring(0, input.length() - 1)
+                : input;
+        return USE_REGEX_PARSING
+                ? parseWithRegex(s)
+                : parseManually(s);
+    }
+    
+    private static EventField parseWithRegex(String input) {
         Matcher matcher = REGEX_PATTERN.matcher(input);
         checkArgument(matcher.matches(), "Invalid event field: %s", input);
         String basicPlay = matcher.group(1);
@@ -65,32 +80,31 @@ public final class EventField {
         return new EventField(basicPlay, modifiers, advance, input);
     }
 
-    public static EventField fromString(String input) {
-        checkNotEmpty(input);
+    private static EventField parseManually(String input) {
+        // FIXME: This version does not handle a field like the following:
+        //            PO1(E2/TH).2-3
+        //        --> There can be slashes in the basic part.
         try {
-            String s = (input.endsWith("#") || input.endsWith("?"))
-                    ? input.substring(0, input.length() - 1)
-                    : input;
-            int indexOfAdvSep = s.indexOf('.');
-            int indexOfFirstModSep = s.indexOf('/');
+            int indexOfAdvSep = input.indexOf('.');
+            int indexOfFirstModSep = input.indexOf('/');
             if (indexOfFirstModSep == -1 && indexOfAdvSep == -1) {
-                return new EventField(s, ImmutableList.of(), "", input);
+                return new EventField(input, ImmutableList.of(), "", input);
             }
             if ((indexOfAdvSep > 0) && (indexOfFirstModSep > indexOfAdvSep)) {
                 // There are no main modifiers, but the advance field contains a modifier with a slash.
                 indexOfFirstModSep = -1;
             }
             String basic = (indexOfFirstModSep == -1)
-                    ? s.substring(0, indexOfAdvSep)
-                    : s.substring(0, indexOfFirstModSep);
+                    ? input.substring(0, indexOfAdvSep)
+                    : input.substring(0, indexOfFirstModSep);
             String advance = (indexOfAdvSep == -1) 
                     ? ""
-                    : s.substring(indexOfAdvSep + 1);
+                    : input.substring(indexOfAdvSep + 1);
             String modifiersPart = (indexOfFirstModSep == -1)
                     ? ""
                     : (indexOfAdvSep == -1)
-                        ? s.substring(indexOfFirstModSep + 1)
-                        : s.substring(indexOfFirstModSep + 1, indexOfAdvSep);
+                        ? input.substring(indexOfFirstModSep + 1)
+                        : input.substring(indexOfFirstModSep + 1, indexOfAdvSep);
             ImmutableList<String> modifiers = modifiersPart.isEmpty()
                     ? ImmutableList.of()
                     : ImmutableList.copyOf(modifiersPart.split("/"));
