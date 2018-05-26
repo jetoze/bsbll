@@ -435,4 +435,17 @@ public final class EventParserTest {
         
         assertEquals(1, outcome.getNumberOfErrors());
     }
+    
+    @Test
+    public void batterThrownOutAtThirdTryingToStretchSingleAfterError() {
+        // This one is tricky. At the moment the AdvanceField is parsed completely independently,
+        // but in this case it needs knowledge about the play type.
+        PlayOutcome outcome = EventParser.parse("S8.BX3(E8)(845)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
+                .withOut(Base.HOME, Base.THIRD)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 }
