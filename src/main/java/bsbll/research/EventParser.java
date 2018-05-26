@@ -132,7 +132,7 @@ public final class EventParser {
         } else {
             Outcome outcome = Outcome.OUT;
             if (isErrorOnCaughtStealing(marker)) {
-                outcome = Outcome.SAFE;
+                outcome = Outcome.SAFE_ON_ERROR;
                 ++numberOfErrors;
             }
             addAdvance(new Advance(ranFrom, caughtAt, outcome));
@@ -147,7 +147,7 @@ public final class EventParser {
     
     private static boolean isErrorOnCaughtStealing(String basicPlay) {
         assert basicPlay.startsWith("CS");
-        return basicPlay.matches("CS[23H].*\\(\\dE\\d\\).*");
+        return basicPlay.matches("CS[23H].*\\(\\d+E\\d+\\).*");
     }
 
     private void handlePickoff() {

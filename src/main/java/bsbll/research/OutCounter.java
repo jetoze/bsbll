@@ -51,7 +51,7 @@ public final class OutCounter implements PlayByPlayFile.Callback {
     }
 
     public static void main(String[] args) {
-        Year year = Year.of(1925);
+        Year year = Year.of(1926);
         File folder = PlayByPlayFileUtils.getFolder(year);
         PlayByPlayFile.parseAll(folder, new OutCounter());
     }

@@ -131,6 +131,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void twoRunnersCaughtStealing() {
+        PlayOutcome outcome = EventParser.parse("CS2(24);CSH(42)/DP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.THIRD, Base.HOME)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
     public void errorOnCaughtStealingWithExplicitAdvancement() {
         PlayOutcome outcome = EventParser.parse("CS2(2E4).1-3");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
@@ -146,7 +157,19 @@ public final class EventParserTest {
         PlayOutcome outcome = EventParser.parse("CS2(2E4)");
         PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
                 .withErrors(1)
+                .withSafeOnError(Base.FIRST, Base.SECOND)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void caughtStealingHomeNegatedByError() {
+        PlayOutcome outcome = EventParser.parse("CSH(26E2)(UR).1-2");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withSafeOnError(Base.THIRD, Base.HOME)
                 .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withErrors(1)
                 .build();
         
         assertEquals(expected, outcome);
@@ -597,17 +620,6 @@ public final class EventParserTest {
                 .withSafeAdvance(Base.FIRST, Base.HOME)
                 .withSafeOnError(Base.HOME, Base.HOME)
                 .withErrors(1)
-                .build();
-        
-        assertEquals(expected, outcome);
-    }
-    
-    @Test
-    public void twoRunnersCaughtStealing() {
-        PlayOutcome outcome = EventParser.parse("CS2(24);CSH(42)/DP");
-        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
-                .withOut(Base.FIRST, Base.SECOND)
-                .withOut(Base.THIRD, Base.HOME)
                 .build();
         
         assertEquals(expected, outcome);
