@@ -215,7 +215,7 @@ public final class EventParser {
     
     private boolean isTriplePlay() {
         return this.field.getModifiers().stream()
-                .anyMatch(s -> s.startsWith("LTP") || s.startsWith("TP"));
+                .anyMatch(s -> s.startsWith("LTP") || s.startsWith("GTP") || s.startsWith("TP"));
     }
 
     private void handleTriplePlay() {

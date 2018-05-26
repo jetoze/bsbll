@@ -530,6 +530,18 @@ public final class EventParserTest {
     }
     
     @Test
+    public void groundBallTriplePlay() {
+        PlayOutcome outcome = EventParser.parse("5(2)54(1)43(B)/GTP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.SECOND, Base.THIRD)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
         PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");
         PlayOutcome expected = PlayOutcome.builder(EventType.FIELDERS_CHOICE)
