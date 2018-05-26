@@ -182,7 +182,7 @@ public final class EventParser {
     
     private boolean isDoublePlay() {
         return this.field.getModifiers().stream()
-                .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP"));
+                .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP") || s.startsWith("DP"));
     }
     
     private void handleForceOut() {

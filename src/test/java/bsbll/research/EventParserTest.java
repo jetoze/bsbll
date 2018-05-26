@@ -344,6 +344,7 @@ public final class EventParserTest {
         
         assertEquals(2, outcome.getNumberOfOuts());
     }
+    
     @Test
     public void flyBallDoublePlay() {
         PlayOutcome outcome = EventParser.parse("8(B)2(3)/FDP");
@@ -362,6 +363,23 @@ public final class EventParserTest {
         assertEquals(2, outcome.getNumberOfOuts());
     }
     
+    @Test
+    public void unspecifiedDoublePlay() {
+        PlayOutcome outcome = EventParser.parse("5(3)3(B)/DP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.THIRD, Base.HOME)
+                .withOut(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void unspecifiedDoublePlayIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("5(3)3(B)/DP");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
 
     @Test
     public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
