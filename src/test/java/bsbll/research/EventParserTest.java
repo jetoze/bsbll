@@ -319,4 +319,22 @@ public final class EventParserTest {
         
         assertEquals(1, outcome.getNumberOfOuts());
     }
+    
+    @Test
+    public void doublePlay() {
+        PlayOutcome outcome = EventParser.parse("64(1)3/GDP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void doublePlayIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("64(1)3/GDP");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
 }

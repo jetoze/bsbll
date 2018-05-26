@@ -65,6 +65,9 @@ public final class EventParser {
         case WALK:
             handleAdditionalEvent();
             break;
+        case OUT:
+            handleSpecialCasesOnOut();
+            break;
         case FORCE_OUT:
             handleForceOut();
             break;
@@ -155,14 +158,35 @@ public final class EventParser {
             to = from;
         }
         if (!advances.contains(from)) {
-            addAdvance(Advance.out(from, to));
+            addOut(from, to);
         }
+    }
+    
+    private void addOut(Base from, Base to) {
+        addAdvance(Advance.out(from, to));
+    }
+    
+    private void handleSpecialCasesOnOut() {
+        if (isDoublePlay()) {
+            Base runner = extractOriginatingBaseInForceOut(this.field.getBasicPlay());
+            if (runner != null && !advances.contains(runner)) {
+                addOut(runner, runner.next());
+            }
+            if (!advances.contains(Base.HOME)) {
+                addOut(Base.HOME, Base.FIRST);
+            }
+        }
+    }
+    
+    private boolean isDoublePlay() {
+        return this.field.getModifiers().stream()
+                .anyMatch(s -> s.startsWith("GDP"));
     }
     
     private void handleForceOut() {
         Base from = extractOriginatingBaseInForceOut(this.field.getBasicPlay());
         if (from != null) {
-            addAdvance(Advance.out(from, from.next()));
+            addOut(from, from.next());
         }
     }
     
