@@ -3,6 +3,8 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.Nullable;
+
 import bsbll.Base;
 import bsbll.research.Advance.Outcome;
 
@@ -62,6 +64,9 @@ public final class EventParser {
             break;
         case WALK:
             handleAdditionalEvent();
+            break;
+        case FORCE_OUT:
+            handleForceOut();
             break;
         default:
             // no additional processing needed
@@ -152,6 +157,25 @@ public final class EventParser {
         if (!advances.contains(from)) {
             addAdvance(Advance.out(from, to));
         }
+    }
+    
+    private void handleForceOut() {
+        Base from = extractOriginatingBaseInForceOut(this.field.getBasicPlay());
+        if (from != null) {
+            addAdvance(Advance.out(from, from.next()));
+        }
+    }
+    
+    @Nullable
+    private static Base extractOriginatingBaseInForceOut(String basicPlay) {
+        int start = basicPlay.indexOf('(');
+        if (start == -1) {
+            return null;
+        }
+        int end = basicPlay.indexOf(')');
+        return (end - start == 2)
+                ? Base.fromChar(basicPlay.charAt(start + 1))
+                : null;
     }
     
     private void handleAdditionalEvent() {

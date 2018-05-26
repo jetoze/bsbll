@@ -21,6 +21,7 @@ public enum EventType {
      * Fielder's choice, also includes force outs.
      */
     FIELDERS_CHOICE(Base.FIRST),
+    FORCE_OUT(Base.FIRST),
     PASSED_BALL,
     WILD_PITCH,
     REACHED_ON_ERROR(Base.FIRST), // according to the rules of the retrosheet play-by-play file

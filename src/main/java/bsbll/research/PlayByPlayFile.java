@@ -69,7 +69,7 @@ public final class PlayByPlayFile {
         public void accept(String line) {
             if (line.startsWith("id,")) {
                 inning = new Inning(1, Inning.TOP);
-                callback.onStartGame();
+                callback.onStartGame(line.split(",")[1]);
                 callback.onStartInning(inning);
             } else if (line.startsWith("play,")) {
                 parsePlay(line);
@@ -111,14 +111,18 @@ public final class PlayByPlayFile {
     
     
     public static interface Callback {
-        default void onStartGame(/*TODO: Pass in game info*/) {/**/}
+        default void onStartGame(String id) {/**/}
+        
         default void onStartInning(Inning inning) {/**/}
+        
         default Predicate<String> rawEventFieldFilter() {
             return s -> true;
         }
+        
         default Predicate<PlayOutcome> outcomeFilter() {
             return o -> true;
         }
+        
         default void onEvent(EventField field, PlayOutcome outcome) {/**/}
     }
     
@@ -145,16 +149,19 @@ public final class PlayByPlayFile {
         public Half getHalf() {
             return half;
         }
+        
+        public boolean isTop() {
+            return half == TOP;
+        }
+        
+        public boolean isBottom() {
+            return half == BOTTOM;
+        }
 
         public Inning next() {
-            switch (half) {
-            case TOP:
-                return new Inning(number, BOTTOM);
-            case BOTTOM:
-                return new Inning(number + 1, TOP);
-            default:
-                throw new AssertionError(half);
-            }
+            return isTop()
+                    ? new Inning(number, BOTTOM)
+                    : new Inning(number + 1, TOP);
         }
         
         @Override

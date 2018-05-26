@@ -111,7 +111,8 @@ public final class EventTypeParser {
         if (Character.isDigit(first)) {
             // This indicates an out of some sort. First check for some special cases.
             if (field.hasModifier(m -> m.startsWith("FO"))) {
-                return FIELDERS_CHOICE;
+                // We treat a force out as a fielder's choice.
+                return FORCE_OUT;
             }
             return OUT;
         }

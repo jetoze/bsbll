@@ -91,7 +91,6 @@ public final class EventTypeParserTest {
         assertSame(FIELDERS_CHOICE, parse("FC"));
         assertSame(FIELDERS_CHOICE, parse("FC5"));
         assertSame(FIELDERS_CHOICE, parse("FC3/G3S.3-H;1-2"));
-        assertSame(FIELDERS_CHOICE, parse("54(1)/FO/G5.3-H;B-1"));
     }
     
     @Test
@@ -188,7 +187,11 @@ public final class EventTypeParserTest {
     }
     
     @Test
-    //@Ignore("Must make the parse implementation strict first")
+    public void testForceOutAtSecond() {
+        assertSame(FORCE_OUT, parse("54(1)/FO"));
+    }
+    
+    @Test
     public void testInvalidInput() {
         Arrays.asList(
                 "", 

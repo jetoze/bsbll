@@ -301,5 +301,22 @@ public final class EventParserTest {
         
         assertEquals(1, outcome.getNumberOfOuts());
     }
+    
+    @Test
+    public void forceOutAtSecond() {
+        PlayOutcome outcome = EventParser.parse("54(1)/FO");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 
+    @Test
+    public void forceOutAtSecondIsOneOut() {
+        PlayOutcome outcome = EventParser.parse("54(1)/FO");
+        
+        assertEquals(1, outcome.getNumberOfOuts());
+    }
 }
