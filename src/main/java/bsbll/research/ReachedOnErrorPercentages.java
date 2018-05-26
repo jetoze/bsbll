@@ -26,7 +26,7 @@ public final class ReachedOnErrorPercentages {
         report();
     }
 
-    public void report() {
+    private void report() {
         System.out.println("Reached on Error Percentage for the Year " + year + ":");
         System.out.println();
         Padding labelPadding = Padding.of(24);

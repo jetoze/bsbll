@@ -97,6 +97,14 @@ public final class Advances {
         return (a != null) && a.isAdvancement();
     }
     
+    public boolean didRunnerScore(Base base) {
+        if (!contains(base)) {
+            return false;
+        }
+        Advance a = getAdvanceFrom(base);
+        return a.isRun();
+    }
+    
     public BaseSituation applyTo(Player batter, BaseSituation situation) {
         requireNonNull(batter);
         requireNonNull(situation);
