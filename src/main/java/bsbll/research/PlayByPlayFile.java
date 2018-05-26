@@ -1,6 +1,7 @@
 package bsbll.research;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
@@ -69,12 +70,14 @@ public final class PlayByPlayFile {
             if (line.startsWith("id,")) {
                 inning = new Inning(1, Inning.TOP);
                 callback.onStartGame();
+                callback.onStartInning(inning);
             } else if (line.startsWith("play,")) {
                 parsePlay(line);
             }
         }
         
         private void parsePlay(String line) {
+            checkState(this.inning != null);
             String[] parts = line.split(",");
             checkInning(parts);
             parseEventField(parts);
@@ -85,6 +88,8 @@ public final class PlayByPlayFile {
             boolean newInning = (inningNo > this.inning.getNumber()) ||
                     (parts[2].trim().equals("1") && this.inning.getHalf() == Inning.TOP);
             if (newInning) {
+                checkState((this.inning.getHalf() == Inning.TOP && this.inning.getNumber() == inningNo) ||
+                        (this.inning.getHalf() == Inning.BOTTOM && inningNo == (this.inning.getNumber() + 1)));
                 this.inning = inning.next();
                 callback.onStartInning(this.inning);
             }
@@ -150,6 +155,27 @@ public final class PlayByPlayFile {
             default:
                 throw new AssertionError(half);
             }
+        }
+        
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder(half == TOP ? "Top" : "Bottom").append(" of ");
+            String no;
+            switch (number) {
+            case 1:
+                no = "1st";
+                break;
+            case 2:
+                no = "2nd";
+                break;
+            case 3:
+                no = "3rd";
+                break;
+            default:
+                no = number + "th";
+                break;
+            }
+            return sb.append(no).toString();
         }
     }
     

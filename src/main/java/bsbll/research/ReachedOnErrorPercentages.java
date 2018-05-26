@@ -102,8 +102,8 @@ public final class ReachedOnErrorPercentages implements PlayByPlayFile.Callback 
     
     public static void main(String[] args) throws Exception {
         Year year = Year.of(1925);
-        File folder = PlayByPlayFileUtils.getFolder(year);
         ReachedOnErrorPercentages s = new ReachedOnErrorPercentages(year);
+        File folder = PlayByPlayFileUtils.getFolder(year);
         PlayByPlayFile.parseAll(folder, s);
         s.report();
     }

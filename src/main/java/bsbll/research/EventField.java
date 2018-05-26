@@ -44,11 +44,13 @@ public final class EventField {
     private final String basicPlay;
     private final ImmutableList<String> modifiers;
     private final AdvanceField advanceField;
+    private final String rawString;
 
-    public EventField(String basicPlay, Collection<String> modifiers, String advanceField) {
+    public EventField(String basicPlay, Collection<String> modifiers, String advanceField, String rawString) {
         this.basicPlay = checkNotEmpty(basicPlay);
         this.modifiers = ImmutableList.copyOf(modifiers);
         this.advanceField = AdvanceField.fromString(Strings.nullToEmpty(advanceField));
+        this.rawString = checkNotEmpty(rawString);
     }
     
     public static EventField fromString2(String input) {
@@ -60,7 +62,7 @@ public final class EventField {
                 ? ImmutableList.of()
                 : ImmutableList.copyOf(modifiersPart.substring(1).split("/")); // Remove the first "/", to avoid an empty element
         String advance = Strings.nullToEmpty(matcher.group(4));
-        return new EventField(basicPlay, modifiers, advance);
+        return new EventField(basicPlay, modifiers, advance, input);
     }
 
     public static EventField fromString(String input) {
@@ -72,7 +74,7 @@ public final class EventField {
             int indexOfAdvSep = s.indexOf('.');
             int indexOfFirstModSep = s.indexOf('/');
             if (indexOfFirstModSep == -1 && indexOfAdvSep == -1) {
-                return new EventField(s, ImmutableList.of(), "");
+                return new EventField(s, ImmutableList.of(), "", input);
             }
             if ((indexOfAdvSep > 0) && (indexOfFirstModSep > indexOfAdvSep)) {
                 // There are no main modifiers, but the advance field contains a modifier with a slash.
@@ -92,7 +94,7 @@ public final class EventField {
             ImmutableList<String> modifiers = modifiersPart.isEmpty()
                     ? ImmutableList.of()
                     : ImmutableList.copyOf(modifiersPart.split("/"));
-            return new EventField(basic, modifiers, advance);
+            return new EventField(basic, modifiers, advance, input);
         } catch (RuntimeException e) {
             throw new IllegalArgumentException(String.format("Invalid event field: %s. Reported error: %s",
                     input, e.getMessage()), e);
@@ -113,6 +115,10 @@ public final class EventField {
 
     public AdvanceField getAdvanceField() {
         return advanceField;
+    }
+    
+    public String getRawString() {
+        return rawString;
     }
     
     @Override

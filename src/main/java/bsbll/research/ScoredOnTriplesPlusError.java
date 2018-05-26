@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 
 import bsbll.Base;
 import bsbll.Year;
+import bsbll.research.PlayByPlayFile.Inning;
 
 public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
     private final Year year;
@@ -30,6 +31,11 @@ public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
         }
     }
 
+    @Override
+    public void onStartInning(Inning inning) {
+        System.out.println(inning);
+    }
+
     public void report() {
         System.out.println("Batter Scored on Triple for the Year " + year + ":");
         System.out.println();
@@ -39,8 +45,8 @@ public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
 
     public static void main(String[] args) throws Exception {
         Year year = Year.of(1925);
-        File folder = PlayByPlayFileUtils.getFolder(year);
         ScoredOnTriplesPlusError s = new ScoredOnTriplesPlusError(year);
+        File folder = PlayByPlayFileUtils.getFolder(year);
         PlayByPlayFile.parseAll(folder, s);
         s.report();
     }
