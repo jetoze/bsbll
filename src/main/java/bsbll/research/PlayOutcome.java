@@ -119,7 +119,20 @@ public final class PlayOutcome {
             return withAdvance(Advance.out(from, to));
         }
         
+        /**
+         * Sets the number of errors. This overrides any previous settings,
+         * including an error implied from the event type.
+         */
         public Builder withErrors(int errors) {
+            checkNotNegative(errors);
+            this.errors = errors;
+            return this;
+        }
+
+        /**
+         * Adds other errors than the one optionally implied by the event type.
+         */
+        public Builder withAdditionalErrors(int errors) {
             checkPositive(errors);
             this.errors += errors;
             return this;
