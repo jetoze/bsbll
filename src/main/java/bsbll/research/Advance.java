@@ -122,7 +122,7 @@ public final class Advance {
                 return SAFE;
             case 'X':
                 return OUT;
-            case 'x':
+            case '!':
                 return SAFE_ON_ERROR;
             default:
                 throw new IllegalArgumentException("Invalid char: " + c);
@@ -136,7 +136,7 @@ public final class Advance {
             case OUT:
                 return 'X';
             case SAFE_ON_ERROR:
-                return 'x';
+                return '!';
             default:
                 throw new AssertionError("Unexpected Outcome: " + this);
             }

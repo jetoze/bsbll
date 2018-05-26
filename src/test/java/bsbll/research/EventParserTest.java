@@ -575,4 +575,17 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+    
+    @Test
+    public void currentAdvanceParsingIsBroken() {
+        PlayOutcome outcome = EventParser.parse("D7.2-H;1-H;BXH(7E5)(UR)(NR)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.DOUBLE)
+                .withSafeAdvance(Base.SECOND, Base.HOME)
+                .withSafeAdvance(Base.FIRST, Base.HOME)
+                .withSafeOnError(Base.HOME, Base.HOME)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 }
