@@ -4,26 +4,29 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.Base;
+import bsbll.research.Advance.Outcome;
 
 final class AdvanceField {
-    private final ImmutableSortedMap<Base, String> parts;
+    private final ImmutableSortedMap<Base, Part> parts;
     
     private AdvanceField() {
         this.parts = ImmutableSortedMap.of();
     }
     
-    public AdvanceField(Map<Base, String> parts) {
-        this.parts = ImmutableSortedMap.<Base, String>orderedBy(Base.comparingOrigin())
-                .putAll(parts)
+    public AdvanceField(Stream<Part> parts) {
+        Map<Base, Part> tmp = parts.collect(Collectors.toMap(Part::from, p -> p));
+        this.parts = ImmutableSortedMap.<Base, Part>orderedBy(Base.comparingOrigin())
+                .putAll(tmp)
                 .build();
     }
     
@@ -31,7 +34,7 @@ final class AdvanceField {
         return this.parts.isEmpty();
     }
     
-    public ImmutableCollection<String> getParts() {
+    public ImmutableCollection<Part> getParts() {
         return this.parts.values();
     }
     
@@ -41,15 +44,15 @@ final class AdvanceField {
     
     public int countErrors(Base from) {
         requireNonNull(from);
-        String s = this.parts.get(from);
-        return (s != null)
-                ? ParseUtils.countErrorIndicators(s)
+        Part p = this.parts.get(from);
+        return (p != null)
+                ? p.countErrors()
                 : 0;
     }
     
     public int countAllErrors() {
-        return this.parts.keySet().stream()
-                .mapToInt(this::countErrors)
+        return this.parts.values().stream()
+                .mapToInt(Part::countErrors)
                 .sum();
     }
  
@@ -57,24 +60,18 @@ final class AdvanceField {
     public String toString() {
         return isEmpty()
                 ? "[empty]"
-                : getParts().stream().collect(joining(";"));
+                : getParts().stream().map(Part::toString).collect(joining(";"));
     }
     
     public static AdvanceField fromString(String s) {
         if (s.isEmpty()) {
             return new AdvanceField();
         }
-        Map<Base, String> parts = new HashMap<>();
-        for (String p : s.split(";")) {
-            String tp = p.trim();
-            if (tp.isEmpty()) {
-                continue;
-            }
-            checkArgument(tp.length() >= 3, "Invalid advance field: %s", s);
-            Base from = Base.fromChar(tp.charAt(0));
-            parts.put(from, p);
-        }
-        return new AdvanceField(parts);
+        Stream<Part> stream = Arrays.stream(s.split(";"))
+                .map(String::trim)
+                .filter(p -> !p.isEmpty())
+                .map(Part::fromString);
+        return new AdvanceField(stream);
     }
     
     static ImmutableList<Annotation> extractAnnotations(String s) {
@@ -93,12 +90,62 @@ final class AdvanceField {
         return builder.build();
     }
     
+    public static final class Part {
+        private final String raw;
+        private final Advance advance;
+        private final ImmutableList<Annotation> annotations;
+        
+        public Part(Advance advance, ImmutableList<Annotation> annotations, String raw) {
+            this.advance = requireNonNull(advance);
+            this.annotations = requireNonNull(annotations);
+            this.raw = requireNonNull(raw);
+        }
+        
+        public static Part fromString(String s) {
+            checkArgument(s.length() >= 3, "Invalid advance part: " + s);
+            Base from = Base.fromChar(s.charAt(0));
+            Base to = Base.fromChar(s.charAt(2));
+            Outcome outcome = Outcome.fromChar(s.charAt(1));
+            ImmutableList<Annotation> annotations = extractAnnotations(s);
+            if (outcome == Outcome.OUT) {
+                // Check if the runner is safe on an error.
+                if (annotations.contains(Annotation.ERROR) && !annotations.contains(Annotation.FIELDERS)) {
+                    outcome = Outcome.SAFE_ON_ERROR;
+                }
+            }
+            Advance a = new Advance(from, to, outcome);
+            return new Part(a, annotations, s);
+        }
+
+        public Advance getAdvance() {
+            return advance;
+        }
+        
+        public Base from() {
+            return advance.from();
+        }
+
+        public ImmutableList<Annotation> getAnnotations() {
+            return annotations;
+        }
+        
+        public int countErrors() {
+            return (int) annotations.stream()
+                    .filter(a -> a == Annotation.ERROR)
+                    .count();
+        }
+        
+        @Override
+        public String toString() {
+            return raw;
+        }
+    }
+    
     
     /**
-     * The different tpyes of info that can be associated with an individual advance. 
+     * The different types of info that can be associated with an individual advance. 
      */
-    @VisibleForTesting
-    static enum Annotation {
+    public static enum Annotation {
         /**
          * The fielders that participated in the put out if the runner is out. (Note that
          * we don't provide access to the individual fielder's that were involved.) 
