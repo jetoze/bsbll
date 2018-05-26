@@ -110,6 +110,13 @@ public final class EventTypeParser {
         }
         if (Character.isDigit(first)) {
             // This indicates an out of some sort. First check for some special cases.
+            if (basic.length() > 1) {
+                char second = basic.charAt(1);
+                if (second == 'E') {
+                    // e.g. "4E3". Alternate form of "E3".
+                    return EventType.REACHED_ON_ERROR;
+                }
+            }
             if (field.hasModifier(m -> m.startsWith("FO"))) {
                 // We treat a force out as a fielder's choice.
                 return FORCE_OUT;

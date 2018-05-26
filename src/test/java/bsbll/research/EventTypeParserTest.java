@@ -109,6 +109,7 @@ public final class EventTypeParserTest {
     public void parseReachedOnError() {
         assertSame(REACHED_ON_ERROR, parse("E2"));
         assertSame(REACHED_ON_ERROR, parse("E7.3-H"));
+        assertSame(REACHED_ON_ERROR, parse("4E3"));
     }
     
     @Test

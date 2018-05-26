@@ -28,6 +28,12 @@ public final class OutCounter implements PlayByPlayFile.Callback {
         int expectedOutsCount = (inning.getNumber() == 1 && inning.getHalf() == Inning.TOP)
                 ? 0
                 : 3;
+        if (this.outs != expectedOutsCount) {
+            for (String s : playsInInning) {
+                PlayOutcome outcome = EventParser.parse(s);
+                System.out.println(s + ": " + outcome.getNumberOfOuts());
+            }
+        }
         checkState(this.outs == expectedOutsCount, "Expected %s outs when starting the %s, but found %s. Plays: ",
                 expectedOutsCount, inning, this.outs, this.playsInInning);
         this.outs = 0;
