@@ -86,6 +86,10 @@ public final class Advances {
         return this.advances.containsKey(base);
     }
     
+    public boolean isNotKnown(Base base) {
+        return !contains(base);
+    }
+    
     public Advance getAdvanceFrom(Base base) {
         checkArgument(contains(base));
         return this.advances.get(base);

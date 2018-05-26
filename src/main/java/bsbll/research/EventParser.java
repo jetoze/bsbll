@@ -3,6 +3,7 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -188,12 +189,8 @@ public final class EventParser {
     }
 
     private void handleDoublePlay() {
-        Set<Base> indicatedOuts = extractOriginatingBasesInForceOut(this.field.getBasicPlay());
-        for (Base runner : indicatedOuts) {
-            if (!advances.contains(runner)) {
-                addOut(runner, runner.next());
-            }
-        }
+        Set<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
+        recordOutsAtNextBase(indicatedOuts);
         if (!advances.contains(Base.HOME)) {
             // The batter's fate was not given explicitly in the advance section.
             // Let's see what happened to him.
@@ -213,25 +210,34 @@ public final class EventParser {
     }
 
     private void handleTriplePlay() {
-        Set<Base> indicatedOuts = extractOriginatingBasesInForceOut(this.field.getBasicPlay());
-        for (Base runner : indicatedOuts) {
-            if (!advances.contains(runner)) {
-                addOut(runner, runner.next());
-            }
-        }
+        processOutsIndicatedInBasicPlay(this.field.getBasicPlay());
     }
     
     private void handleForceOut() {
-        for (Base from : extractOriginatingBasesInForceOut(this.field.getBasicPlay())) {
-            addOut(from, from.next());
-        }
+        processOutsIndicatedInBasicPlay(this.field.getBasicPlay());
     }
     
     /**
-     * 54(1) -> Base.FIRST.
+     * 54(1) -> Base.FIRST out at SECOND/
+     * 3(B)6(1) -> Base.HOME (batter) out at FIRST, Base.FIRST out at SECOND
+     */
+    private void processOutsIndicatedInBasicPlay(String basicPlay) {
+        Set<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
+        recordOutsAtNextBase(indicatedOuts);
+
+    }
+
+    public void recordOutsAtNextBase(Collection<Base> bases) {
+        bases.stream()
+            .filter(advances::isNotKnown)
+            .forEach(b -> addOut(b, b.next()));
+    }
+
+    /**
+     * 54(1) -> Base.FIRST
      * 3(B)6(1) -> Base.HOME (batter), Base.FIRST
      */
-    private static Set<Base> extractOriginatingBasesInForceOut(String basicPlay) {
+    private static Set<Base> getIndicatedOutsFromBasicPlay(String basicPlay) {
         Set<Base> bases = new HashSet<>();
         int start = basicPlay.indexOf('(');
         while (start != -1) {
