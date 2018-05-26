@@ -7,7 +7,9 @@ import static java.util.stream.Collectors.joining;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableCollection;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.Base;
@@ -73,6 +75,69 @@ final class AdvanceField {
             parts.put(from, p);
         }
         return new AdvanceField(parts);
+    }
+    
+    static ImmutableList<Annotation> extractAnnotations(String s) {
+        ImmutableList.Builder<Annotation> builder = ImmutableList.builder();
+        int start = s.indexOf('(');
+        while (start != -1) {
+            int end = s.indexOf(')', start + 1);
+            if (end == -1) {
+                break;
+            }
+            String x = s.substring(start + 1, end);
+            Annotation a = Annotation.fromString(x);
+            builder.add(a);
+            start = s.indexOf('(', end + 1);
+        }
+        return builder.build();
+    }
+    
+    
+    /**
+     * The different tpyes of info that can be associated with an individual advance. 
+     */
+    @VisibleForTesting
+    static enum Annotation {
+        /**
+         * The fielders that participated in the put out if the runner is out. (Note that
+         * we don't provide access to the individual fielder's that were involved.) 
+         */
+        FIELDERS,
+        /**
+         * There was an error on the play. If this info type is present, an
+         * indicated out is negated and turned into a safe-on-error, unless
+         * there is also an associated {@link FIELDERS} annotation. The latter
+         * case means the runner was allowed to take extra bases because of an
+         * error, but was later thrown out anyway.
+         */
+        ERROR,
+        /**
+         * For a run, indicates that the run is unearned.
+         */
+        UNEARNED_RUN,
+        /**
+         * For a run, indicates that the batter is not credited with an RBI.
+         */
+        NO_RBI;
+        
+        public static Annotation fromString(String s) {
+            checkArgument(s.length() >= 1);
+            if (s.contains("E")) {
+                return ERROR;
+            }
+            char first = s.charAt(0);
+            if (Character.isDigit(first)) {
+                return FIELDERS;
+            }
+            if (s.equals("UR")) {
+                return UNEARNED_RUN;
+            }
+            if (s.equals("NR")) {
+                return NO_RBI;
+            }
+            throw new IllegalArgumentException("Unrecognized annotation: " + s);
+        }
     }
     
 }

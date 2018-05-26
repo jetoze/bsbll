@@ -577,7 +577,20 @@ public final class EventParserTest {
     }
     
     @Test
-    public void currentAdvanceParsingIsBroken() {
+    public void runnerOnFirstScoresOnSinglePlusError() {
+        PlayOutcome outcome = EventParser.parse("S1.3-H;1XH(E2/TH1)(92)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
+                .withSafeAdvance(Base.THIRD, Base.HOME)
+                .withSafeOnError(Base.FIRST, Base.HOME)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void batterScoresOnDoublePlusError() {
         PlayOutcome outcome = EventParser.parse("D7.2-H;1-H;BXH(7E5)(UR)(NR)");
         PlayOutcome expected = PlayOutcome.builder(EventType.DOUBLE)
                 .withSafeAdvance(Base.SECOND, Base.HOME)
