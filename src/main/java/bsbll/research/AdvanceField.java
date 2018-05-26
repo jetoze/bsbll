@@ -40,23 +40,9 @@ final class AdvanceField {
     public int countErrors(Base from) {
         requireNonNull(from);
         String s = this.parts.get(from);
-        if (s == null) {
-            return 0;
-        }
-        int e = 0;
-        int start = s.indexOf("(");
-        while (start != -1) {
-            int end = s.indexOf(")", start + 1);
-            if (end == -1) {
-                break;
-            }
-            String x = s.substring(start + 1, end);
-            if (x.contains("E")) {
-                ++e;
-            }
-            start = s.indexOf("(", end + 1);
-        }
-        return e;
+        return (s != null)
+                ? ParseUtils.countErrorIndicators(s)
+                : 0;
     }
     
     public int countAllErrors() {

@@ -149,6 +149,11 @@ public final class EventParser {
     
     private void handlePickoff(String marker) {
         assert marker.startsWith("PO");
+        int errors = ParseUtils.countErrorIndicators(marker);
+        if (errors > 0) {
+            this.numberOfErrors += errors;
+            return;
+        }
         Base from;
         Base to;
         if (marker.startsWith("POCS")) {
