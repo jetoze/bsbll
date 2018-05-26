@@ -147,7 +147,7 @@ public final class EventParser {
     
     private static boolean isErrorOnCaughtStealing(String basicPlay) {
         assert basicPlay.startsWith("CS");
-        return basicPlay.matches("CS[23H].*\\(\\d+E\\d+\\).*");
+        return basicPlay.matches("CS[23H].*\\(\\d*E\\d+\\).*");
     }
 
     private void handlePickoff() {

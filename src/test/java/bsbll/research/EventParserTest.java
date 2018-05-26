@@ -188,6 +188,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void caughtStealingWithMinimalErrorNotation() {
+        PlayOutcome outcome = EventParser.parse("CS2(E2)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.CAUGHT_STEALING)
+                .withSafeOnError(Base.FIRST, Base.SECOND)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void pickedOffCaughtStealing() {
         PlayOutcome outcome = EventParser.parse("POCSH");
         PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
