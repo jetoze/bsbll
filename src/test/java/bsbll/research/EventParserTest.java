@@ -321,7 +321,7 @@ public final class EventParserTest {
     }
     
     @Test
-    public void doublePlay() {
+    public void groundBallDoublePlay() {
         PlayOutcome outcome = EventParser.parse("64(1)3/GDP");
         PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
                 .withOut(Base.FIRST, Base.SECOND)
@@ -332,12 +332,37 @@ public final class EventParserTest {
     }
     
     @Test
-    public void doublePlayIsTwoOuts() {
+    public void groundBallDoublePlayIsTwoOuts() {
         PlayOutcome outcome = EventParser.parse("64(1)3/GDP");
         
         assertEquals(2, outcome.getNumberOfOuts());
     }
     
+    @Test
+    public void doublePlayWithBothOutsGivenInBasicPlay() {
+        PlayOutcome outcome = EventParser.parse("3(B)6(1)/GDP");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+    @Test
+    public void flyBallDoublePlay() {
+        PlayOutcome outcome = EventParser.parse("8(B)2(3)/FDP");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.THIRD, Base.HOME)
+                .withOut(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
+    public void flyBallDoublePlayIsTwoOuts() {
+        PlayOutcome outcome = EventParser.parse("8(B)2(3)/FDP");
+        
+        assertEquals(2, outcome.getNumberOfOuts());
+    }
+    
+
     @Test
     public void fieldersChoiceWithRunnerSafeAtSecondOnError() {
         PlayOutcome outcome = EventParser.parse("FC4.1X2(4E6);B-1");

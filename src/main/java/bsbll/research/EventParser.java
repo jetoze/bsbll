@@ -3,7 +3,8 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
-import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Set;
 
 import bsbll.Base;
 import bsbll.research.Advance.Outcome;
@@ -168,9 +169,10 @@ public final class EventParser {
     
     private void handleSpecialCasesOnOut() {
         if (isDoublePlay()) {
-            Base runner = extractOriginatingBaseInForceOut(this.field.getBasicPlay());
-            if (runner != null && !advances.contains(runner)) {
-                addOut(runner, runner.next());
+            for (Base runner : extractOriginatingBasesInForceOut(this.field.getBasicPlay())) {
+                if (!advances.contains(runner)) {
+                    addOut(runner, runner.next());
+                }
             }
             if (!advances.contains(Base.HOME)) {
                 addOut(Base.HOME, Base.FIRST);
@@ -180,26 +182,33 @@ public final class EventParser {
     
     private boolean isDoublePlay() {
         return this.field.getModifiers().stream()
-                .anyMatch(s -> s.startsWith("GDP"));
+                .anyMatch(s -> s.startsWith("GDP") || s.startsWith("FDP"));
     }
     
     private void handleForceOut() {
-        Base from = extractOriginatingBaseInForceOut(this.field.getBasicPlay());
-        if (from != null) {
+        for (Base from : extractOriginatingBasesInForceOut(this.field.getBasicPlay())) {
             addOut(from, from.next());
         }
     }
     
-    @Nullable
-    private static Base extractOriginatingBaseInForceOut(String basicPlay) {
+    /**
+     * 54(1) -> Base.FIRST.
+     * 3(B)6(1) -> Base.HOME (batter), Base.FIRST
+     */
+    private static Set<Base> extractOriginatingBasesInForceOut(String basicPlay) {
+        Set<Base> bases = new HashSet<>();
         int start = basicPlay.indexOf('(');
-        if (start == -1) {
-            return null;
+        while (start != -1) {
+            int end = basicPlay.indexOf(')', start + 1);
+            if (end == -1) {
+                break;
+            }
+            if (end - start == 2) {
+                bases.add(Base.fromChar(basicPlay.charAt(start + 1)));
+            }
+            start = basicPlay.indexOf('(', end + 1);
         }
-        int end = basicPlay.indexOf(')');
-        return (end - start == 2)
-                ? Base.fromChar(basicPlay.charAt(start + 1))
-                : null;
+        return bases;
     }
     
     private void handleAdditionalEvent() {
