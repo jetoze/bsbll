@@ -577,11 +577,11 @@ public final class EventParserTest {
     }
     
     @Test
-    public void runnerOnFirstScoresOnSinglePlusError() {
+    public void runnerOnFirstOutAtHomeTryingToScoreOnSinglePlusError() {
         PlayOutcome outcome = EventParser.parse("S1.3-H;1XH(E2/TH1)(92)");
         PlayOutcome expected = PlayOutcome.builder(EventType.SINGLE)
                 .withSafeAdvance(Base.THIRD, Base.HOME)
-                .withSafeOnError(Base.FIRST, Base.HOME)
+                .withOut(Base.FIRST, Base.HOME)
                 .withSafeAdvance(Base.HOME, Base.FIRST)
                 .withErrors(1)
                 .build();

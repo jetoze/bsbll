@@ -4,12 +4,8 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-
-import com.google.common.collect.ImmutableList;
 
 import bsbll.Base;
 import bsbll.research.Advance.Outcome;
@@ -45,11 +41,6 @@ public final class EventParser {
     private final EventField field;
     private Advances advances;
     private int numberOfErrors;
-    /**
-     * The advances that are expected to be made on a normal play, when known.
-     * For example, on a single the batter is expected to reach first base.
-     */
-    private final Map<Base, Base> expectedAdvances = new HashMap<>();
     
     private EventParser(EventField field) {
         this.field = requireNonNull(field);
@@ -58,9 +49,6 @@ public final class EventParser {
     private PlayOutcome parse() {
         EventType eventType = EventTypeParser.parse(field);
         this.advances = AdvanceFieldParser.parse(field.getAdvanceField(), eventType);
-        if (eventType.isHit()) {
-            eventType.getImpliedBaseForBatter().ifPresent(to -> expectedAdvances.put(Base.HOME, to));
-        }
         
         // Here starts the special cases...
         switch (eventType) {
@@ -85,14 +73,9 @@ public final class EventParser {
         case FORCE_OUT:
             handleForceOut();
             break;
-        case FIELDERS_CHOICE:
-            handleFieldersChoice();
-            break;
         default:
             // no additional processing needed
         }
-        
-        adjustSafeOnErrorAdvancementsToOutsIfNecessary();
         
         numberOfErrors += field.getAdvanceField().countAllErrors();
         
@@ -112,7 +95,6 @@ public final class EventParser {
             if (p.startsWith("SB")) {
                 Base stolen = Base.fromChar(p.charAt(2));
                 Base from = stolen.preceding();
-                expectedAdvances.put(from, stolen);
                 if (this.advances.contains(from)) {
                     lookForErrorOnStolenBase(stolen, from);
                 } else {
@@ -236,13 +218,7 @@ public final class EventParser {
     
     private void handleForceOut() {
         // The batter is expected to reach first on a force out.
-        this.expectedAdvances.put(Base.HOME, Base.FIRST);
         processOutsIndicatedInBasicPlay(this.field.getBasicPlay());
-    }
-    
-    private void handleFieldersChoice() {
-        // The batter is expected to reach first on a fielder's choice.
-        this.expectedAdvances.put(Base.HOME, Base.FIRST);
     }
     
     /**
@@ -323,51 +299,4 @@ public final class EventParser {
         checkState(this.advances != null);
         this.advances = this.advances.concat(a);
     }
-    
-    /**
-     * We currently parse the advance field up front, applying the rule that an
-     * 'X' advance with an associated error means that the out was negated by
-     * the error ("safe on error"). However, this is not always true. As an
-     * example, consider the following play: {@code S8.BX3(E8)(845)}. The batter
-     * singled, but an error allowed him to take second. The batter decided to
-     * try it for third, and was thrown out there.
-     * <p>
-     * There are a couple of ways we could tackle this problem:
-     * <ul>
-     * <li>Assuming there will always be two indicators next to the advance, one
-     * for the error and one for the subsequent putout ({@code (E8)(845)} in the
-     * example above), look for that second indicator to figure out if the
-     * runner is safe or out.</li>
-     * <li>Figure out the expected advances for each runner. If the indicated
-     * out is at a base two or more bases beyond the expected advance, the
-     * runner is out. In the example above, the batter singled so is expected to
-     * reach first. Since the play took place at third, he was out.</li>
-     * <li>Others?</li>
-     * </ul>
-     * The first approach seems superior, and is probably what we should do. For
-     * now we use the second approach. However, since the current implementation
-     * relies on the advance field to be parsed first, before we know all
-     * expected advances, we do two passes of the advance field. First one up
-     * front, that always considers an 'X' advance with an associated error as
-     * safe on error. Then, once we have all expected advances, we do a second
-     * pass here where we check all safe-on-error advances, and adjust them to
-     * outs as needed.
-     */
-    private void adjustSafeOnErrorAdvancementsToOutsIfNecessary() {
-        if (this.expectedAdvances.isEmpty()) {
-            return;
-        }
-        ImmutableList<Advance> safeOnError = this.advances.collect(
-                a -> a.isSafeOnError() && this.expectedAdvances.containsKey(a.from()));
-        for (Advance a : safeOnError) {
-            Base from = a.from();
-            Base expected = this.expectedAdvances.get(from);
-            Base actual = a.to();
-            if ((actual.ordinal() - expected.ordinal()) >= 2) {
-                Advance replacement = Advance.out(from, actual);
-                this.advances = this.advances.replace(replacement);
-            }
-        }
-    }
-    
 }
