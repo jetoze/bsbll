@@ -32,8 +32,23 @@ public final class AdvanceFieldTest {
     }
     
     @Test
+    public void throwOnlyAnnotation() {
+        verifyAnnotations("B-2(TH)", Annotation.FIELDERS);
+    }
+    
+    @Test
+    public void rbiAnnotation() {
+        verifyAnnotations("3-H(RBI)", Annotation.RBI);
+    }
+
+    @Test
     public void annotationsForErrorLeadingToUnearnedRun() {
         verifyAnnotations("2-H(E4/TH)(UR)(NR)", Annotation.ERROR, Annotation.UNEARNED_RUN, Annotation.NO_RBI);
+    }
+    
+    @Test
+    public void teamUnearnedRunAnnotation() {
+        verifyAnnotations("3-H(TUR)", Annotation.UNEARNED_RUN);
     }
     
     @Test

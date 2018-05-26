@@ -160,13 +160,30 @@ final class AdvanceField {
          */
         ERROR,
         /**
+         * For a run, explicitly indicates that a the batter is credited with an
+         * RBI.
+         */
+        RBI,
+        /**
          * For a run, indicates that the run is unearned.
          */
         UNEARNED_RUN,
         /**
          * For a run, indicates that the batter is not credited with an RBI.
          */
-        NO_RBI;
+        NO_RBI,
+        /**
+         * Advance due to passed ball.
+         */
+        PASSED_BALL,
+        /**
+         * Advance due to wild pitch.
+         */
+        WILD_PITCH;
+        /**
+         * Any other annotations (e.g. PB (passed ball), WP (wild pitch)).
+         */
+        //OTHER;
         
         public static Annotation fromString(String s) {
             checkArgument(s.length() >= 1);
@@ -174,16 +191,24 @@ final class AdvanceField {
                 return ERROR;
             }
             char first = s.charAt(0);
-            if (Character.isDigit(first)) {
+            if (Character.isDigit(first) || s.startsWith("TH")) {
                 return FIELDERS;
             }
-            if (s.equals("UR")) {
+            switch (s) {
+            case "UR":
+            case "TUR":
                 return UNEARNED_RUN;
-            }
-            if (s.equals("NR")) {
+            case "NR":
                 return NO_RBI;
+            case "RBI":
+                return RBI;
+            case "PB":
+                return PASSED_BALL;
+            case "WP":
+                return WILD_PITCH;
+            default:
+                throw new IllegalArgumentException("Unrecognized annotation: " + s);
             }
-            throw new IllegalArgumentException("Unrecognized annotation: " + s);
         }
     }
     
