@@ -79,4 +79,13 @@ public final class EventFieldTest {
         assertNoModifiers(field);
         assertEquals("2-3", field.getAdvanceField().toString());
     }
+    
+    @Test
+    public void questionMarkAtEndOfBasicPlay() {
+        EventField field = EventField.fromString("S8?/8S.1-H(UR)");
+        assertEquals("S8", field.getBasicPlay());
+        assertEquals(Arrays.asList("8S"), field.getModifiers());
+        assertEquals("1-H(UR)", field.getAdvanceField().toString());
+    }
+
 }

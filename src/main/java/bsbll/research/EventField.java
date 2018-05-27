@@ -26,25 +26,28 @@ public final class EventField {
     private static final Pattern REGEX_PATTERN = compileRegexPattern();
     
     private static Pattern compileRegexPattern() {
+        // Various parts of the field can end with a '#' or a '?', that can be ignored.
+        String specialCharacters = "[#\\?]*";
         // The basic play part consists of one or more characters not including
-        // "/" or ".", plus an optional sequence of additional groups within
+        // "/", ".", '#', or '?', plus an optional sequence of additional groups within
         // parentheses. (These additional groups can contain "/".)
-        String basicPlayMain = "(?:[^/\\.\\(\\)]+)";
+        String basicPlayMain = "(?:[^/\\.#\\?\\(\\)]+)";
         String basicPlayAnnotation = "(?:\\([^\\(\\)]+\\))*";
-        String basicPlay = "((?:" + basicPlayMain + basicPlayAnnotation + ")+)";
+        String basicPlay = "((?:" + basicPlayMain + basicPlayAnnotation + ")+)" + specialCharacters;
         
-        // Repeated group of "/" followed by one or more characters that are not "/"
+        // Repeated group of '/' followed by zero (the field can end with a '.') or more 
+        // characters that are not '/'.
         // Note that we are capturing a repeated group, rather than repeating a captured group
         // (which is a common mistake). The inner group, which ends up matching the last 
         // modifier, is not of interest, so we mark it as a non-capturing group (?:).
-        String modifiers = "((?:/[^/\\.]+)*)";
+        String modifiers = "((?:/[^/\\.]*)*)";
         
         // "." followed by one or more characters.
         String advance = "(\\.(.+))?";
         
         // Lastly, the field may end with some special characters (/, #, ?) that we 
         // can ignore.
-        String regex = "(?:" + basicPlay + modifiers + advance + ")[/#\\?]*";
+        String regex = "(?:" + basicPlay + modifiers + advance + ")";
         return Pattern.compile(regex);
     }
     
@@ -72,9 +75,13 @@ public final class EventField {
         checkArgument(matcher.matches(), "Invalid event field: %s", input);
         String basicPlay = matcher.group(1);
         String modifiersPart = matcher.group(2);
+        if (modifiersPart.startsWith("/")) {
+            // Remove the first "/", to avoid an empty element
+            modifiersPart = modifiersPart.substring(1);
+        }
         ImmutableList<String> modifiers = Strings.isNullOrEmpty(modifiersPart)
                 ? ImmutableList.of()
-                : ImmutableList.copyOf(modifiersPart.substring(1).split("/")); // Remove the first "/", to avoid an empty element
+                : ImmutableList.copyOf(modifiersPart.split("/"));
         String advance = Strings.nullToEmpty(matcher.group(4));
         return new EventField(basicPlay, modifiers, advance, input);
     }
