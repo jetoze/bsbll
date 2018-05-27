@@ -23,6 +23,8 @@ public class ThreeOutsPerInningVerifier extends GameHandler {
     }
     
     private static boolean isInvalidOutCount(Inning inning, ImmutableList<PlayOutcome> plays) {
+        // We will get false positives in games that were stopped short of 9 innings,
+        // e.g. because of rain or darkness. Not much to do about that.
         int outs = countOuts(plays);
         return (outs > 3) || ((outs < 3) && !inning.isWalkOffPossible());
     }
