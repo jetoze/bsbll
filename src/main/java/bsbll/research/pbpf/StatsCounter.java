@@ -10,6 +10,10 @@ import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.strings.Padding;
 
+/**
+ * Sums the number of games, (half) innings, hits, runs, errors, and plays
+ * across one or more play-by-play file.
+ */
 public final class StatsCounter extends GameHandler {
     private int games;
     private int innings;
