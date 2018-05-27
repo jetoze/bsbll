@@ -13,6 +13,15 @@ import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.collections.Zip;
 import tzeth.strings.Padding;
 
+/**
+ * Verifies our parsing of play-by-play files, by verifiying that there are
+ * exactly three outs in every inning, excepting possibly walk-off innings.
+ * <p>
+ * Note that this class will currently identify false positives in cases where a
+ * game was called in the middle of an ongoing inning, e.g. due to darkness or
+ * rain. Each violation must therefore be investigated to determine if it indeed
+ * due to a parsing problem.
+ */
 public class ThreeOutsPerInningVerifier extends GameHandler {
 
     @Override

@@ -37,7 +37,7 @@ public enum EventType {
      * not advance on this event.
      */
     ERROR_ON_FOUL_FLY,
-    INTERFERENCE,
+    INTERFERENCE(Base.FIRST, Outcome.SAFE_ON_ERROR),
     OTHER_ADVANCE,
     DEFENSIVE_INDIFFERENCE,
     NO_PLAY,
@@ -75,7 +75,7 @@ public enum EventType {
     }
     
     public boolean isError() {
-        return (this == EventType.REACHED_ON_ERROR) || (this == ERROR_ON_FOUL_FLY);
+        return (this == EventType.REACHED_ON_ERROR) || (this == ERROR_ON_FOUL_FLY) || (this == INTERFERENCE);
     }
     
     public boolean isOut() {

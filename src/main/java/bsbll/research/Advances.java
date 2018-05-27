@@ -24,6 +24,7 @@ import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.Base;
 import bsbll.game.BaseSituation;
+import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
 import tzeth.collections.ImCollectors;
 
@@ -131,8 +132,11 @@ public final class Advances {
                 }
             } else {
                 Player runner = runners.get(a.from());
-                checkArgument(runner != null, "The given BaseSituation is not applicable for "
-                        + "advancement %s: there was no runner on %s.", a, a.from());
+                if (runner == null) {
+                    throw new InvalidBaseSitutationException(String.format(
+                            "The given BaseSituation is not applicable for advancement %s: "
+                            + "there was no runner on %s.", a, a.from()));
+                }
                 if (a.isOut() || a.isAdvancement()) {
                     runners.remove(a.from());
                 }

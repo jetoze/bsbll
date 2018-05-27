@@ -634,6 +634,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void batterIsAwardedFirstOnCatchersInterference() {
+        PlayOutcome outcome = EventParser.parse("C/E2");
+        PlayOutcome expected = PlayOutcome.builder(EventType.INTERFERENCE)
+                .withSafeOnError(Base.HOME, Base.FIRST)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void batterThrownOutAtThirdTryingToStretchSingleAfterError() {
         // This one is tricky. At the moment the AdvanceField is parsed completely independently,
         // but in this case it needs knowledge about the play type.
