@@ -176,24 +176,23 @@ public final class EventParser {
         int errors = ParseUtils.countErrorIndicators(marker);
         if (errors > 0) {
             this.numberOfErrors += errors;
-            return;
         }
-        Base from;
-        Base to;
         if (marker.startsWith("POCS")) {
-            to = Base.fromChar(marker.charAt(4));
-            from = to.preceding();
+            Base to = Base.fromChar(marker.charAt(4));
+            Base from = to.preceding();
+            Outcome outcome = (errors == 0)
+                    ? Outcome.OUT
+                    : Outcome.SAFE_ON_ERROR;
+            addAdvanceIfNotPresent(new Advance(from, to, outcome));
         } else {
-            from = Base.fromChar(marker.charAt(2));
-            to = from;
+            if (errors > 0) {
+                // The error negates the pickoff, so nothing to do.
+                return;
+            }
+            Base from = Base.fromChar(marker.charAt(2));
+            Base to = from;
+            addAdvanceIfNotPresent(Advance.out(from, to));
         }
-        if (!advances.contains(from)) {
-            addOut(from, to);
-        }
-    }
-    
-    private void addOut(Base from, Base to) {
-        addAdvance(Advance.out(from, to));
     }
     
     private void handleSpecialCasesOnOut() {
@@ -343,6 +342,10 @@ public final class EventParser {
         }
     }
     
+    private void addOut(Base from, Base to) {
+        addAdvance(Advance.out(from, to));
+    }
+
     private void addAdvance(Advance a) {
         checkState(this.advances != null);
         this.advances = this.advances.concat(a);

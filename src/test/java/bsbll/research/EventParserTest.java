@@ -264,6 +264,17 @@ public final class EventParserTest {
     }
     
     @Test
+    public void runnerIsSafeWhenPickedOffCaughtStealingIsNegatedByError() {
+        PlayOutcome outcome = EventParser.parse("POCS2(1E3)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
+                .withSafeOnError(Base.FIRST, Base.SECOND)
+                .withErrors(1)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
+    @Test
     public void pickoff() {
         PlayOutcome outcome = EventParser.parse("PO1(23)");
         PlayOutcome expected = PlayOutcome.builder(EventType.PICKED_OFF)
