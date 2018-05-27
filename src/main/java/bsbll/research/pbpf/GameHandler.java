@@ -49,6 +49,9 @@ public abstract class GameHandler {
     private void parseImpl(PlayByPlayFile file, EventRouter router) {
         currentFile = file;
         file.parse(router);
+        if (currentGameId != null) {
+            router.endPreviousGame();
+        }
         currentFile = null;
     }
     
@@ -60,9 +63,6 @@ public abstract class GameHandler {
     private void parseAndRoute(Consumer<EventRouter> f) {
         EventRouter router = new EventRouter();
         f.accept(router);
-        if (currentGameId != null) {
-            router.endPreviousGame();
-        }
     }
     
     private class EventRouter implements PlayByPlayFile.Callback {
