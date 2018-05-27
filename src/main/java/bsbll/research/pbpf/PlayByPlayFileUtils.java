@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.research.pbpf;
 
 import static java.util.Objects.requireNonNull;
 
@@ -7,7 +7,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import bsbll.Year;
-import bsbll.research.PlayByPlayFile.Callback;
+import bsbll.research.EventField;
+import bsbll.research.PlayOutcome;
+import bsbll.research.pbpf.PlayByPlayFile.Callback;
 
 final class PlayByPlayFileUtils {
     public static File getFolder(Year year) {

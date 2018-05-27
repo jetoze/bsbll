@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.research.pbpf;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -7,7 +7,10 @@ import java.util.List;
 import com.google.common.base.Strings;
 
 import bsbll.Year;
-import bsbll.research.PlayByPlayFile.Inning;
+import bsbll.research.EventField;
+import bsbll.research.EventParser;
+import bsbll.research.PlayOutcome;
+import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 /**
  * Verifies our parsing of play-by-play files by checking that each inning
@@ -51,7 +54,7 @@ public final class OutCounter implements PlayByPlayFile.Callback {
     }
 
     public static void main(String[] args) {
-        Year year = Year.of(1982);
+        Year year = Year.of(1925);
         File folder = PlayByPlayFileUtils.getFolder(year);
         PlayByPlayFile.parseAll(folder, new OutCounter());
     }

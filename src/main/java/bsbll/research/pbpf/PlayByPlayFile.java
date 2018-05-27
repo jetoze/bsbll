@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.research.pbpf;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
@@ -14,6 +14,10 @@ import java.util.Arrays;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
+
+import bsbll.research.EventField;
+import bsbll.research.EventParser;
+import bsbll.research.PlayOutcome;
 
 public final class PlayByPlayFile {
     private final Path path;
@@ -44,6 +48,10 @@ public final class PlayByPlayFile {
     
     public static void parseAll(File folder, Callback callback) {
         stream(folder).forEach(f -> f.parse(callback));
+    }
+    
+    public Path getPath() {
+        return path;
     }
 
     public void parse(Callback callback) {
@@ -169,6 +177,10 @@ public final class PlayByPlayFile {
             return isBottom()
                     ? new Inning(number, TOP)
                     : new Inning(number - 1, BOTTOM);
+        }
+        
+        public boolean isWalkOffPossible() {
+            return isBottom() && (number >= 9);
         }
         
         @Override
