@@ -80,18 +80,26 @@ public abstract class GameHandler {
         }
         
         public void endPreviousGame() {
+            endPreviousInning();
+            GameHandler.this.onEndGame(currentGameId);
+            currentGameId = null;
+        }
+
+        public void endPreviousInning() {
             assert currentInning != null;
             assert fields != null;
             assert plays != null;
             GameHandler.this.onEndOfInning(currentInning, fields.build(), plays.build());
-            GameHandler.this.onEndGame(currentGameId);
             currentInning = null;
-            currentGameId = null;
+            fields = null;
             plays = null;
         }
 
         @Override
         public void onStartInning(Inning inning) {
+            if (currentInning != null) {
+                endPreviousInning();
+            }
             currentInning = inning;
             fields = ImmutableList.builder();
             plays = ImmutableList.builder();
