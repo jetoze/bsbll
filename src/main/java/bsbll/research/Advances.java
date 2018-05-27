@@ -56,15 +56,17 @@ public final class Advances {
         for (Advance a : advances) {
             if (a.isSafe()) {
                 Base to = a.to();
-                if (!safeAt.add(a.to())) {
-                    checkArgument(to == Base.HOME, "More than one runner cannot advance safely to " + to);
+                if (to.isOccupiable() && !safeAt.add(a.to())) {
+                    throw new InvalidBaseSitutationException("More than one runner cannot advance safely to " + to);
                 }
             }
         }
         
         Set<Base> from = new HashSet<>();
         for(Advance a : advances) {
-            checkArgument(from.add(a.from()), "More than one runner cannot advance from " + a.from());
+            if (!from.add(a.from())) {
+                throw new InvalidBaseSitutationException("More than one runner cannot advance from " + a.from());
+            }
         }
     }
     
