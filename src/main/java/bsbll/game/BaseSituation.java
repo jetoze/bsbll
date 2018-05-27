@@ -22,6 +22,12 @@ import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 
 public final class BaseSituation {
+    // XXX: In some situations, such as when testing, it is cumbersome to have to
+    // create actual Players to move around the bases. All that we really need
+    // in those situations is some kind of arbitrary marker, like a string.
+    // I've been considering making this class generic, with a type parameter for
+    // the type of objects that occupy the bases, but have decided against it 
+    // since it adds extra complexity.
     private final ImmutableMap<Base, Player> bases;
     
     public static BaseSituation empty() {

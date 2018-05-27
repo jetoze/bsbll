@@ -81,6 +81,11 @@ public final class BaseSitationSanityVerifier extends GameHandler {
         System.err.println(field + " -> [" + bases + "]");
     }
 
+    /**
+     * We generate a new Player for each play. This is obviously not realistic,
+     * but that is irrelevant - we just need Players to move around the bases.
+     * See corresponding XXX comment in BaseSituation, about making that class generic.
+     */
     private Player nextBatter() {
         ++playerId;
         return new Player(PlayerId.of(Integer.toString(playerId)));
@@ -88,7 +93,7 @@ public final class BaseSitationSanityVerifier extends GameHandler {
 
     
     public static void main(String[] args) {
-        Year year = Year.of(1932);
+        Year year = Year.of(2001);
         File folder = PlayByPlayFileUtils.getFolder(year);
         BaseSitationSanityVerifier v = new BaseSitationSanityVerifier();
         v.parseAll(folder);
