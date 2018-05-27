@@ -431,6 +431,18 @@ public final class EventParserTest {
     }
     
     @Test
+    public void batterReachesFirstWhenRunnerOnSecondIsThrownOutAtThird() {
+        PlayOutcome outcome = EventParser.parse("75(2)/F7S.1-2");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withOut(Base.SECOND, Base.THIRD)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
     public void groundBallDoublePlay() {
         PlayOutcome outcome = EventParser.parse("64(1)3/GDP");
         PlayOutcome expected = PlayOutcome.builder(EventType.OUT)

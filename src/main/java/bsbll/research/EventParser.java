@@ -6,6 +6,8 @@ import static java.util.Objects.requireNonNull;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import bsbll.Base;
 import bsbll.research.Advance.Outcome;
@@ -95,7 +97,7 @@ public final class EventParser {
         if (this.advances.contains(Base.HOME)) {
             Advance a = this.advances.getAdvanceFrom(Base.HOME);
             if (a.isSafe()) {
-                this.advances = this.advances.replace(Advance.safeOnError(Base.HOME, a.to()));
+                replaceAdvance(Advance.safeOnError(Base.HOME, a.to()));
             }
         }
     }
@@ -199,6 +201,17 @@ public final class EventParser {
             handleDoublePlay();
         } else if (isTriplePlay()) {
             handleTriplePlay();
+        } else {
+            Base from = getBaseOfRunnerThatWasThrownOut();
+            if (from == Base.HOME) {
+                // This is the normal case of the batter being thrown out.
+                return;
+            }
+            Base outAt = from.next(); // implied
+            addAdvanceIfNotPresent(Advance.out(from, outAt));
+            // The batter is awarded first. In case we've already recorded that
+            // the batter is out, correct that.
+            replaceAdvance(Advance.safe(Base.HOME, Base.FIRST));
         }
     }
     
@@ -237,6 +250,18 @@ public final class EventParser {
 
     private void handleTriplePlay() {
         processOutsIndicatedInBasicPlay(this.field.getBasicPlay());
+    }
+    
+    private static final Pattern OUT_AT_BASE_PATTERN = Pattern.compile("\\d+\\((\\d)\\).*");
+    
+    private Base getBaseOfRunnerThatWasThrownOut() {
+        String basicPlay = this.field.getBasicPlay();
+        Matcher matcher = OUT_AT_BASE_PATTERN.matcher(basicPlay);
+        if (matcher.matches()) {
+            String s = matcher.group(1);
+            return Base.fromChar(s.charAt(0));
+        }
+        return Base.HOME;
     }
     
     private void handleForceOut() {
@@ -321,5 +346,21 @@ public final class EventParser {
     private void addAdvance(Advance a) {
         checkState(this.advances != null);
         this.advances = this.advances.concat(a);
+    }
+    
+    private void addAdvanceIfNotPresent(Advance a) {
+        checkState(this.advances != null);
+        if (!this.advances.contains(a.from())) {
+            this.advances = this.advances.concat(a);
+        }
+    }
+    
+    private void replaceAdvance(Advance a) {
+        checkState(this.advances != null);
+        if (this.advances.contains(a.from())) {
+            this.advances = this.advances.replace(a);
+        } else {
+            addAdvance(a);
+        }
     }
 }
