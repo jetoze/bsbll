@@ -24,7 +24,7 @@ public final class WLTTest {
         WLT wlt = new WLT(10, 2);
         GamesBehind gb = wlt.gamesBehind(wlt);
         
-        assertEquals("0.0", gb.toString());
+        assertEquals("-", gb.toString());
     }
     
     @Test
