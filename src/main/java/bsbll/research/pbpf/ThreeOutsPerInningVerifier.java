@@ -66,7 +66,7 @@ public class ThreeOutsPerInningVerifier extends GameHandler {
 
     
     public static void main(String[] args) {
-        Year year = Year.of(1926);
+        Year year = Year.of(1931);
         File folder = PlayByPlayFileUtils.getFolder(year);
         ThreeOutsPerInningVerifier v = new ThreeOutsPerInningVerifier();
         v.parseAll(folder);
