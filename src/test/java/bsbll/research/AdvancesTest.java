@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableMap;
 
 import bsbll.Base;
 import bsbll.game.BaseSituation;
+import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 
@@ -83,7 +84,7 @@ public final class AdvancesTest {
         assertEquals(2, advances.getNumberOfOuts());
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBaseSitutationException.class)
     public void moreThanOneRunnerFromTheSameBaseIsNotAllowed() {
         Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
@@ -91,7 +92,7 @@ public final class AdvancesTest {
         );
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBaseSitutationException.class)
     public void twoRunnersOnTheSameBaseIsNotAllowed() {
         Advances.of(
                 Advance.safe(Base.FIRST, Base.THIRD),
@@ -100,7 +101,7 @@ public final class AdvancesTest {
         );
     }
     
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidBaseSitutationException.class)
     public void cannotApplyAdvancesToIncompatibleBaseSituation() {
         BaseSituation before = new BaseSituation(RUNNER_A, null, null);
         Advances advances = Advances.of(
@@ -147,6 +148,4 @@ public final class AdvancesTest {
     private static BaseSituation basesLoaded() {
         return new BaseSituation(RUNNER_A, RUNNER_B, RUNNER_C);
     }
-    
-
 }
