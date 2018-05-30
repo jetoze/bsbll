@@ -16,11 +16,6 @@ import bsbll.matchup.MatchupRunner.Outcome;
 public final class BattingStats {
     private final ImmutableMap<Batting, Integer> values;
     
-    // TODO: Come up with a better data representation of this? Something like
-    // Map<StatEnum, Integer>
-    //       ^
-    //       |-- Or CountingStatEnum
-    
     public BattingStats() {
         this.values = ImmutableMap.of();
     }

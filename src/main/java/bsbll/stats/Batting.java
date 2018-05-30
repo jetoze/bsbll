@@ -10,6 +10,9 @@ public enum Batting {
     // Suggestions:
     //    + simply "Batting"?
     
+    // TODO:
+    //   + GROUNDED_INTO_DOUBLE_PLAYS
+    
     GAMES,
     GAMES_STARTED, // ? unorthodox stat for batting
     PLATE_APPEARANCES,
