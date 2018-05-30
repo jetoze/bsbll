@@ -1,11 +1,12 @@
 package bsbll.stats;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.text.DecimalFormat;
 
 import javax.annotation.Nullable;
+
+import com.google.common.math.IntMath;
 
 /**
  * Represents an average, such as a Batting Average or Slugging Average.
@@ -17,7 +18,6 @@ public final class Average implements Comparable<Average> {
     public Average(int numerator, int denominator) {
         this.numerator = checkNotNegative(numerator);
         this.denominator = checkNotNegative(denominator);
-        checkArgument(numerator <= denominator);
     }
 
     public double asDouble() {
@@ -54,6 +54,18 @@ public final class Average implements Comparable<Average> {
         } else {
             DecimalFormat fmt = new DecimalFormat("#.000");
             return fmt.format(asDouble());
+        }
+    }
+    
+    public static Average sumOf(Average a1, Average a2) {
+        if (a1.denominator == a2.denominator) {
+            return new Average(a1.numerator + a2.numerator, a1.denominator);
+        } else {
+            int gcd = IntMath.gcd(a1.denominator, a2.denominator);
+            int lcm = (a1.denominator / gcd) * a2.denominator;
+            int n1 = a1.numerator * (lcm / a1.denominator);
+            int n2 = a2.numerator * (lcm / a2.denominator);
+            return new Average(n1 + n2, lcm);
         }
     }
     

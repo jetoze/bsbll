@@ -1,5 +1,6 @@
 package bsbll.card;
 
+import static bsbll.stats.Batting.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
@@ -98,13 +99,13 @@ public final class PlayerCard {
     
     public static PlayerCard of(BattingStats stats) {
         return builder(stats.getPlateAppearances())
-                .hits(stats.getHits())
-                .doubles(stats.getDoubles())
-                .triples(stats.getTriples())
-                .homeruns(stats.getHomeruns())
-                .walks(stats.getWalks())
-                .strikeouts(stats.getStrikeouts())
-                .hitByPitches(stats.getHitByPitches())
+                .hits(stats.get(HITS))
+                .doubles(stats.get(DOUBLES))
+                .triples(stats.get(TRIPLES))
+                .homeruns(stats.get(HOMERUNS))
+                .walks(stats.get(WALKS))
+                .strikeouts(stats.get(STRIKEOUTS))
+                .hitByPitches(stats.get(HIT_BY_PITCHES))
                 .build();
     }
     

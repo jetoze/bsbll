@@ -1,5 +1,7 @@
 package bsbll.card;
 
+import static bsbll.stats.Batting.*;
+
 import bsbll.Year;
 import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
@@ -25,16 +27,15 @@ public final class PlayerCardExperiments {
         }
         System.out.println("PA: " + stats.getPlateAppearances());
         System.out.println("AB: " + stats.getAtBats());
-        System.out.println("H : " + stats.getHits());
-        System.out.println("S : " + stats.getSingles());
-        System.out.println("2B: " + stats.getDoubles());
-        System.out.println("3B: " + stats.getTriples());
-        System.out.println("HR: " + stats.getHomeruns());
-        System.out.println("BB: " + stats.getWalks());
-        System.out.println("SO: " + stats.getStrikeouts());
+        System.out.println("H : " + stats.get(HITS));
+        System.out.println("2B: " + stats.get(DOUBLES));
+        System.out.println("3B: " + stats.get(TRIPLES));
+        System.out.println("HR: " + stats.get(HOMERUNS));
+        System.out.println("BB: " + stats.get(WALKS));
+        System.out.println("SO: " + stats.get(STRIKEOUTS));
         System.out.println("BA: " + stats.getBattingAverage());
         System.out.println("SA: " + stats.getSluggingPercentage());
-        System.out.println("HBP: " + stats.getHitByPitches());
+        System.out.println("HBP: " + stats.get(HIT_BY_PITCHES));
     }
     
 }

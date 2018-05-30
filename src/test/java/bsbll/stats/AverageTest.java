@@ -76,5 +76,23 @@ public final class AverageTest {
         
         assertEquals(Arrays.asList(a1, a2, a3, a4), list);
     }
+    
+    @Test
+    public void sumOfWithSameDenominator() {
+        Average a1 = new Average(10, 100);
+        Average a2 = new Average(7, 100);
+        Average sum = Average.sumOf(a1, a2);
+        
+        assertEquals(".170", sum.toString());
+    }
+    
+    @Test
+    public void sumOfWithDifferentDenominators() {
+        Average a1 = new Average(1, 5);
+        Average a2 = new Average(30, 100);
+        Average sum = Average.sumOf(a1, a2);
+        
+        assertEquals(".500", sum.toString());
+    }
 
 }
