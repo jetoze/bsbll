@@ -1,5 +1,8 @@
 package bsbll.stats;
 
+import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
+
 public interface Batting<T> {
     T get(BattingStats stats);
     
@@ -22,6 +25,27 @@ public interface Batting<T> {
         @Override
         public Integer get(BattingStats stats) {
             return stats.getBasicStat(this);
+        }
+        
+        public BasicBattingValue withValue(int value) {
+            return new BasicBattingValue(this, value);
+        }
+    }
+    
+    public static final class BasicBattingValue {
+        private final BasicBatting stat;
+        private final int value;
+        public BasicBattingValue(BasicBatting stat, int value) {
+            this.stat = requireNonNull(stat);
+            this.value = checkNotNegative(value);
+        }
+        
+        public BasicBatting getStat() {
+            return stat;
+        }
+
+        public int getValue() {
+            return value;
         }
     }
 

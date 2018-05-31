@@ -109,4 +109,22 @@ public final class BattingStatsTest {
                 .set(SACRIFICE_FLIES, 10).build();
         assertEquals(expected, total);
     }
+    
+    @Test
+    public void addIndividualStats() {
+        BattingStats start = BattingStats.forNewGame();
+        
+        BattingStats result = start.add(PLATE_APPEARANCES, 5, HITS, 2,
+                STRIKEOUTS, 1, RUNS, 2, RUNS_BATTED_IN, 3);
+        
+        BattingStats expected = BattingStats.builder()
+                .set(GAMES, 1)
+                .set(PLATE_APPEARANCES, 5)
+                .set(HITS, 2)
+                .set(STRIKEOUTS, 1)
+                .set(RUNS, 2)
+                .set(RUNS_BATTED_IN, 3)
+                .build();
+        assertEquals(expected, result);
+    }
 }

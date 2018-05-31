@@ -10,10 +10,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.google.common.collect.ImmutableMap;
 
 import bsbll.stats.Pitching.BasicPitching;
 
+@Immutable
 public final class PitchingStats {
     private final ImmutableMap<BasicPitching, Integer> values;
     
@@ -42,6 +45,14 @@ public final class PitchingStats {
                 .put(STRIKEOUTS, strikeouts)
                 .put(HIT_BY_PITCHES, hitByPitches)
                 .build());
+    }
+    
+    /**
+     * Creates a PitchingStats instance initialized for a new game. All values
+     * are 0 (zero), except for GAMES which is set to 1 (one).
+     */
+    public static PitchingStats forNewGame() {
+        return new PitchingStats(ImmutableMap.of(GAMES, 1));
     }
     
     public <T> T get(Pitching<T> stat) {

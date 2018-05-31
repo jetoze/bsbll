@@ -5,6 +5,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,7 @@ import com.google.common.collect.ImmutableMap;
 
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.stats.Batting.BasicBatting;
+import bsbll.stats.Batting.BasicBattingValue;
 
 /**
  * A collection of batting stats, and their values.
@@ -47,6 +49,14 @@ public final class BattingStats {
                 .build());
     }
 
+    /**
+     * Creates a BattingStats instance initialized for a new game. All values
+     * are 0 (zero), except for GAMES which is set to 1 (one).
+     */
+    public static BattingStats forNewGame() {
+        return new BattingStats(ImmutableMap.of(GAMES, 1));
+    }
+
     public <T> T get(Batting<T> stat) {
         return stat.get(this);
     }
@@ -63,6 +73,38 @@ public final class BattingStats {
     public BattingStats add(BattingStats o) {
         Map<BasicBatting, Integer> tmp = new HashMap<>(this.values);
         o.values.forEach((s, v) -> tmp.merge(s, v, (p, q) -> p + q));
+        return new BattingStats(tmp);
+    }
+
+    public BattingStats add(BasicBatting stat, int value) {
+        return add(stat.withValue(value));
+    }
+    
+    public BattingStats add(BasicBatting stat1, int value1, BasicBatting stat2, int value2) {
+        return add(stat1.withValue(value1), stat2.withValue(value2));
+    }
+    
+    public BattingStats add(BasicBatting stat1, int value1, BasicBatting stat2, int value2,
+            BasicBatting stat3, int value3) {
+        return add(stat1.withValue(value1), stat2.withValue(value2), stat3.withValue(value3));
+    }
+    
+    public BattingStats add(BasicBatting stat1, int value1, BasicBatting stat2, int value2,
+            BasicBatting stat3, int value3, BasicBatting stat4, int value4) {
+        return add(stat1.withValue(value1), stat2.withValue(value2), stat3.withValue(value3),
+                stat4.withValue(value4));
+    }
+    
+    public BattingStats add(BasicBatting stat1, int value1, BasicBatting stat2, int value2,
+            BasicBatting stat3, int value3, BasicBatting stat4, int value4,
+            BasicBatting stat5, int value5) {
+        return add(stat1.withValue(value1), stat2.withValue(value2), stat3.withValue(value3),
+                stat4.withValue(value4), stat5.withValue(value5));
+    }
+    
+    public BattingStats add(BasicBattingValue... values) {
+        Map<BasicBatting, Integer> tmp = new HashMap<>(this.values);
+        Arrays.stream(values).forEach(v -> tmp.merge(v.getStat(), v.getValue(), (p, q) -> p + q));
         return new BattingStats(tmp);
     }
     
