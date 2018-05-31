@@ -1,18 +1,29 @@
 package bsbll.stats;
 
+import static bsbll.stats.Pitching.*;
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.google.common.collect.ImmutableMap;
+
+import bsbll.stats.Pitching.BasicPitching;
+
 public final class PitchingStats {
-    private final int battersFaced;
-    private final int outs;
-    private final int hits;
-    private final int homeruns;
-    private final int walks;
-    private final int strikeouts;
-    private final int hitByPitches;
+    private final ImmutableMap<BasicPitching, Integer> values;
     
     public PitchingStats() {
-        this(0, 0, 0, 0, 0, 0, 0);
+        this.values = ImmutableMap.of();
+    }
+    
+    public PitchingStats(Map<BasicPitching, Integer> values) {
+        this.values = ImmutableMap.copyOf(values);
+        checkArgument(this.values.values().stream().allMatch(i -> i >= 0), "Negative values are not allowed");
     }
     
     public PitchingStats(int battersFaced,
@@ -22,65 +33,70 @@ public final class PitchingStats {
                          int walks,
                          int strikeouts,
                          int hitByPitches) {
-        this.battersFaced = checkNotNegative(battersFaced);
-        this.outs = checkNotNegative(outs);
-        this.hits = checkNotNegative(hits);
-        this.homeruns = checkNotNegative(homeruns);
-        this.walks = checkNotNegative(walks);
-        this.strikeouts = checkNotNegative(strikeouts);
-        this.hitByPitches = checkNotNegative(hitByPitches);
-    }
-
-    public int getBattersFaced() {
-        return battersFaced;
+        this(ImmutableMap.<BasicPitching, Integer>builder()
+                .put(BATTERS_FACED, battersFaced)
+                .put(OUTS, outs)
+                .put(HITS, hits)
+                .put(HOMERUNS, homeruns)
+                .put(WALKS, walks)
+                .put(STRIKEOUTS, strikeouts)
+                .put(HIT_BY_PITCHES, hitByPitches)
+                .build());
     }
     
-    public InningsPitched getInningsPitched() {
-        return InningsPitched.fromOuts(outs);
+    public <T> T get(Pitching<T> stat) {
+        return stat.get(this);
     }
     
-    public int getAtBats() {
-        return -1;
-    }
-    
-    public int getHits() {
-        return hits;
-    }
-    
-    public int getHomeruns() {
-        return homeruns;
-    }
-    
-    public int getWalks() {
-        return walks;
-    }
-    
-    public int getStrikeouts() {
-        return strikeouts;
-    }
-    
-    public int getHitByPitches() {
-        return hitByPitches;
-    }
-    
-    public int getRuns() {
-        return -1;
-    }
-    
-    public int getEarnedRuns() {
-        return -1;
+    /**
+     * Package-private method used by the BasicPitching enum to lookup the
+     * corresponding value.
+     */
+    int getBasicStat(BasicPitching stat) {
+        requireNonNull(stat);
+        throw new RuntimeException("TODO: Implement me");
     }
     
     public PitchingStats add(PitchingStats o) {
-        return new PitchingStats(
-                this.battersFaced + o.battersFaced,
-                this.outs + o.outs,
-                this.hits + o.hits,
-                this.homeruns + o.homeruns,
-                this.walks + o.walks,
-                this.strikeouts + o.strikeouts,
-                this.hitByPitches + o.hitByPitches
-        );
+        Map<BasicPitching, Integer> tmp = new HashMap<>(this.values);
+        o.values.forEach((s, v) -> tmp.merge(s, v, (p, q) -> p + q));
+        return new PitchingStats(tmp);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj == this) ||
+                ((obj instanceof PitchingStats) && this.values.equals(((PitchingStats) obj).values));
+    }
+
+    @Override
+    public int hashCode() {
+        return this.values.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        TreeMap<BasicPitching, Integer> sorted = new TreeMap<>(this.values);
+        return sorted.toString();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
     
+    
+    public static final class Builder {
+        private final EnumMap<BasicPitching, Integer> values = new EnumMap<>(BasicPitching.class);
+        
+        public Builder set(BasicPitching stat, int value) {
+            requireNonNull(stat);
+            checkNotNegative(value);
+            values.put(stat, value);
+            return this;
+        }
+        
+        public PitchingStats build() {
+            return new PitchingStats(values);
+        }
+    }
 }

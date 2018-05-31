@@ -21,7 +21,7 @@ public interface Batting<T> {
 
         @Override
         public Integer get(BattingStats stats) {
-            return stats.getCountedStat(this);
+            return stats.getBasicStat(this);
         }
     }
 

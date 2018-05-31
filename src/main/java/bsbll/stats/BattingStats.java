@@ -35,9 +35,7 @@ public final class BattingStats {
     
     public BattingStats(int plateAppearances, int hits, int doubles, int triples, int homeruns,
             int walks, int strikeouts, int hitByPitches) {
-        // TODO: Preconditions. No negatives. The sum of (hits + walks + strikeouts + hitByPitches)
-        // must be <= plateAppearances.
-        this.values = ImmutableMap.<BasicBatting, Integer>builder()
+        this(ImmutableMap.<BasicBatting, Integer>builder()
                 .put(PLATE_APPEARANCES, plateAppearances)
                 .put(HITS, hits)
                 .put(DOUBLES, doubles)
@@ -46,7 +44,7 @@ public final class BattingStats {
                 .put(WALKS, walks)
                 .put(STRIKEOUTS, strikeouts)
                 .put(HIT_BY_PITCHES, hitByPitches)
-                .build();
+                .build());
     }
 
     public <T> T get(Batting<T> stat) {
@@ -54,10 +52,10 @@ public final class BattingStats {
     }
 
     /**
-     * Package-private method used by the CountedBattingStat enum to lookup the
+     * Package-private method used by the BasicBatting enum to lookup the
      * corresponding value.
      */
-    int getCountedStat(BasicBatting stat) {
+    int getBasicStat(BasicBatting stat) {
         requireNonNull(stat);
         return this.values.getOrDefault(stat, 0);
     }

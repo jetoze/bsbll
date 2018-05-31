@@ -1,12 +1,13 @@
 package bsbll.card;
 
-import static bsbll.stats.Batting.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import bsbll.stats.Batting;
 import bsbll.stats.BattingStats;
+import bsbll.stats.Pitching;
 import bsbll.stats.PitchingStats;
 
 public final class PlayerCard {
@@ -98,14 +99,14 @@ public final class PlayerCard {
     }
     
     public static PlayerCard of(BattingStats stats) {
-        return builder(stats.get(PLATE_APPEARANCES))
-                .hits(stats.get(HITS))
-                .doubles(stats.get(DOUBLES))
-                .triples(stats.get(TRIPLES))
-                .homeruns(stats.get(HOMERUNS))
-                .walks(stats.get(WALKS))
-                .strikeouts(stats.get(STRIKEOUTS))
-                .hitByPitches(stats.get(HIT_BY_PITCHES))
+        return builder(stats.get(Batting.PLATE_APPEARANCES))
+                .hits(stats.get(Batting.HITS))
+                .doubles(stats.get(Batting.DOUBLES))
+                .triples(stats.get(Batting.TRIPLES))
+                .homeruns(stats.get(Batting.HOMERUNS))
+                .walks(stats.get(Batting.WALKS))
+                .strikeouts(stats.get(Batting.STRIKEOUTS))
+                .hitByPitches(stats.get(Batting.HIT_BY_PITCHES))
                 .build();
     }
     
@@ -120,14 +121,14 @@ public final class PlayerCard {
      *            PitchingStats.
      */
     public static PlayerCard of(PitchingStats stats, PlayerCard league) {
-        return builder(stats.getBattersFaced())
-                .hits(stats.getHits())
+        return builder(stats.get(Pitching.BATTERS_FACED))
+                .hits(stats.get(Pitching.HITS))
                 .doubles(league.doubles())
                 .triples(league.triples())
-                .homeruns(stats.getHomeruns())
-                .walks(stats.getWalks())
-                .strikeouts(stats.getStrikeouts())
-                .hitByPitches(stats.getHitByPitches())
+                .homeruns(stats.get(Pitching.HOMERUNS))
+                .walks(stats.get(Pitching.WALKS))
+                .strikeouts(stats.get(Pitching.STRIKEOUTS))
+                .hitByPitches(stats.get(Pitching.HIT_BY_PITCHES))
                 .build();
     }
     
