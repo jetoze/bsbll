@@ -35,6 +35,7 @@ public interface Batting<T> {
     public static final class BasicBattingValue {
         private final BasicBatting stat;
         private final int value;
+        
         public BasicBattingValue(BasicBatting stat, int value) {
             this.stat = requireNonNull(stat);
             this.value = checkNotNegative(value);

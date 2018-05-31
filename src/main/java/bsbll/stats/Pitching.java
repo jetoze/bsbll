@@ -1,5 +1,8 @@
 package bsbll.stats;
 
+import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
+
 public interface Pitching<T> {
     T get(PitchingStats stats);
     
@@ -19,12 +22,35 @@ public interface Pitching<T> {
         SAVES,
         SHUTOUTS,
         HIT_BY_PITCHES;
+        
         @Override
         public Integer get(PitchingStats stats) {
             return stats.getBasicStat(this);
         }
+        
+        public BasicPitchingValue withValue(int value) {
+            return new BasicPitchingValue(this, value);
+        }
     }
     
+    public static final class BasicPitchingValue {
+        private final BasicPitching stat;
+        private final int value;
+        
+        public BasicPitchingValue(BasicPitching stat, int value) {
+            this.stat = requireNonNull(stat);
+            this.value = checkNotNegative(value);
+        }
+        
+        public BasicPitching getStat() {
+            return stat;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
     public static final BasicPitching GAMES = BasicPitching.GAMES;
     public static final BasicPitching GAMES_STARTED = BasicPitching.GAMES_STARTED;
     public static final BasicPitching COMPLETE_GAMES = BasicPitching.COMPLETE_GAMES;
