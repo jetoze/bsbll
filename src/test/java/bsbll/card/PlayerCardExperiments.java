@@ -25,17 +25,16 @@ public final class PlayerCardExperiments {
             Outcome outcome = matchup.run(batter, pitcher);
             stats = stats.add(outcome);
         }
-        System.out.println("PA: " + stats.getPlateAppearances());
-        System.out.println("AB: " + stats.getAtBats());
+        System.out.println("PA: " + stats.get(PLATE_APPEARANCES));
+        System.out.println("AB: " + stats.get(AT_BATS));
         System.out.println("H : " + stats.get(HITS));
         System.out.println("2B: " + stats.get(DOUBLES));
         System.out.println("3B: " + stats.get(TRIPLES));
         System.out.println("HR: " + stats.get(HOMERUNS));
         System.out.println("BB: " + stats.get(WALKS));
         System.out.println("SO: " + stats.get(STRIKEOUTS));
-        System.out.println("BA: " + stats.getBattingAverage());
-        System.out.println("SA: " + stats.getSluggingPercentage());
+        System.out.println("BA: " + stats.get(BATTING_AVERAGE));
+        System.out.println("SA: " + stats.get(SLUGGING_PERCENTAGE));
         System.out.println("HBP: " + stats.get(HIT_BY_PITCHES));
     }
-    
 }

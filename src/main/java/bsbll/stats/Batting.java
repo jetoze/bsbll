@@ -1,52 +1,108 @@
 package bsbll.stats;
 
-public enum Batting {
-    // TODO: Naming problem. Not only is BattingStat/BattingStats easy to mixup, there's also a 
-    // semantic collision: The class BattingStats represents a collection of batting stats with 
-    // their values. That would suggest that "BattingStat" is a single stat with a value.
-    // Or vice versa, if "BattingStat" is the enum of the various individual stats, then
-    // "BattingStats" sounds like it would be a collection of "BattingStat" instances,
-    // i.e. without their corresponding values.
-    // Suggestions:
-    //    + simply "Batting"?
+public interface Batting<T> {
+    T get(BattingStats stats);
     
-    // TODO:
-    //   + GROUNDED_INTO_DOUBLE_PLAYS
-    
-    GAMES,
-    GAMES_STARTED, // ? unorthodox stat for batting
-    PLATE_APPEARANCES,
-    AT_BATS(true),
-    HITS,
-    SINGLES(true),
-    DOUBLES,
-    TRIPLES,
-    HOMERUNS,
-    STRIKEOUTS,
-    WALKS,
-    RUNS,
-    RUNS_BATTED_IN,
-    HIT_BY_PITCHES,
-    SACRIFICE_HITS,
-    SACRIFICE_FLIES,
-    EXTRA_BASE_HITS(true),
-    TOTAL_BASES(true),
-    BATTING_AVERAGE(true),
-    SLUGGING_PERCENTAGE(true),
-    ON_BASE_PERCENTAGE(true),
-    OPS(true);
-    
-    private boolean derived;
-    
-    private Batting() {
-        this(false);
+    // TODO: "BasicBattingStat" is perhaps a better name.
+    public static enum BasicBatting implements Batting<Integer> {
+        GAMES,
+        PLATE_APPEARANCES,
+        HITS,
+        DOUBLES,
+        TRIPLES,
+        HOMERUNS,
+        STRIKEOUTS,
+        WALKS,
+        RUNS,
+        RUNS_BATTED_IN,
+        HIT_BY_PITCHES,
+        SACRIFICE_HITS,
+        SACRIFICE_FLIES;
+
+        @Override
+        public Integer get(BattingStats stats) {
+            return stats.getCountedStat(this);
+        }
     }
+
+    public static final BasicBatting GAMES = BasicBatting.GAMES;
+    public static final BasicBatting PLATE_APPEARANCES = BasicBatting.PLATE_APPEARANCES;
+    public static final BasicBatting HITS = BasicBatting.HITS;
+    public static final BasicBatting DOUBLES = BasicBatting.DOUBLES;
+    public static final BasicBatting TRIPLES = BasicBatting.TRIPLES;
+    public static final BasicBatting HOMERUNS = BasicBatting.HOMERUNS;
+    public static final BasicBatting STRIKEOUTS = BasicBatting.STRIKEOUTS;
+    public static final BasicBatting WALKS = BasicBatting.WALKS;
+    public static final BasicBatting RUNS = BasicBatting.RUNS;
+    public static final BasicBatting RUNS_BATTED_IN = BasicBatting.RUNS_BATTED_IN;
+    public static final BasicBatting HIT_BY_PITCHES = BasicBatting.HIT_BY_PITCHES;
+    public static final BasicBatting SACRIFICE_HITS = BasicBatting.SACRIFICE_HITS;
+    public static final BasicBatting SACRIFICE_FLIES = BasicBatting.SACRIFICE_FLIES;
+
+    public static final Batting<Integer> AT_BATS = new Batting<Integer>() {
+        @Override
+        public Integer get(BattingStats stats) {
+            return PLATE_APPEARANCES.get(stats) - 
+                    WALKS.get(stats) -
+                    HIT_BY_PITCHES.get(stats) -
+                    SACRIFICE_HITS.get(stats) -
+                    SACRIFICE_FLIES.get(stats);
+        }
+    };
     
-    private Batting(boolean derived) {
-        this.derived = derived;
-    }
+    public static final Batting<Integer> EXTRA_BASE_HITS = new Batting<Integer>() {
+        @Override
+        public Integer get(BattingStats stats) {
+            return DOUBLES.get(stats) +
+                    TRIPLES.get(stats) +
+                    HOMERUNS.get(stats);
+        }
+    };
     
-    public boolean isDerived() {
-        return this.derived;
-    }
+    public static final Batting<Integer> SINGLES = new Batting<Integer>() {
+        @Override
+        public Integer get(BattingStats stats) {
+            return HITS.get(stats) - EXTRA_BASE_HITS.get(stats);
+        }
+    };
+    
+    public static final Batting<Integer> TOTAL_BASES = new Batting<Integer>() {
+        @Override
+        public Integer get(BattingStats stats) {
+            return HITS.get(stats) + 
+                    DOUBLES.get(stats) + 
+                    2 * TRIPLES.get(stats) + 
+                    3 * HOMERUNS.get(stats);
+        }
+    };
+    
+    public static final Batting<Average> BATTING_AVERAGE = new Batting<Average>() {
+        @Override
+        public Average get(BattingStats stats) {
+            return new Average(HITS.get(stats), AT_BATS.get(stats));
+        }
+    };
+    
+    public static final Batting<Average> SLUGGING_PERCENTAGE = new Batting<Average>() {
+        @Override
+        public Average get(BattingStats stats) {
+            return new Average(TOTAL_BASES.get(stats), AT_BATS.get(stats));
+        }
+    };
+    
+    public static final Batting<Average> ON_BASE_PERCENTAGE = new Batting<Average>() {
+        @Override
+        public Average get(BattingStats stats) {
+            return new Average(HITS.get(stats) + WALKS.get(stats) + HIT_BY_PITCHES.get(stats),
+                    PLATE_APPEARANCES.get(stats) - SACRIFICE_HITS.get(stats));
+        }
+    };
+    
+    public static final Batting<Average> OPS = new Batting<Average>() {
+        @Override
+        public Average get(BattingStats stats) {
+            return Average.sumOf(SLUGGING_PERCENTAGE.get(stats), ON_BASE_PERCENTAGE.get(stats));
+        }
+    };
+    
 }

@@ -98,7 +98,7 @@ public final class PlayerCard {
     }
     
     public static PlayerCard of(BattingStats stats) {
-        return builder(stats.getPlateAppearances())
+        return builder(stats.get(PLATE_APPEARANCES))
                 .hits(stats.get(HITS))
                 .doubles(stats.get(DOUBLES))
                 .triples(stats.get(TRIPLES))

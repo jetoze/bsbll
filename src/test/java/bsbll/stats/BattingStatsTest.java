@@ -7,9 +7,6 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-/**
- * Unit tests for BattingStats.
- */
 public final class BattingStatsTest {
     private static final BattingStats willieMays1955 = BattingStats.builder()
             .set(GAMES, 152)
@@ -26,62 +23,57 @@ public final class BattingStatsTest {
             // We're not setting this value to test the behavior of looking up a stat
             // that has not been set explicitly.
             //.set(Batting.SACRIFICE_HITS, 0)
-            .set(Batting.SACRIFICE_FLIES, 7)
+            .set(SACRIFICE_FLIES, 7)
             .build();
     
     @Test
     public void lookupOfStatThatHasNotBeenSet() {
-        assertEquals(0, willieMays1955.get(SACRIFICE_HITS));
+        assertEquals(0, willieMays1955.get(SACRIFICE_HITS).intValue());
     }
 
     @Test
     public void testAtBats() {
-        assertEquals(580, willieMays1955.getAtBats());
+        assertEquals(580, willieMays1955.get(AT_BATS).intValue());
     }
     
     @Test
     public void testExtraBaseHits() {
-        assertEquals(82, willieMays1955.getExtraBaseHits());
+        assertEquals(82, willieMays1955.get(EXTRA_BASE_HITS).intValue());
     }
 
     @Test
     public void testSingles() {
-        assertEquals(103, willieMays1955.getSingles());
+        assertEquals(103, willieMays1955.get(SINGLES).intValue());
     }
     
     @Test
     public void testTotalBases() {
-        assertEquals(382, willieMays1955.getTotalBases());
+        assertEquals(382, willieMays1955.get(TOTAL_BASES).intValue());
     }
     
     @Test
     public void testBattingAverage() {
-        assertEquals(".319", willieMays1955.getBattingAverage().toString());
+        assertEquals(".319", willieMays1955.get(BATTING_AVERAGE).toString());
     }
     
     @Test
     public void testSluggingAverage() {
-        assertEquals(".659", willieMays1955.getSluggingPercentage().toString());
+        assertEquals(".659", willieMays1955.get(SLUGGING_PERCENTAGE).toString());
     }
     
     @Test
     public void testOnBasePercentage() {
-        assertEquals(".400", willieMays1955.getOnBasePercentage().toString());
+        assertEquals(".400", willieMays1955.get(ON_BASE_PERCENTAGE).toString());
     }
     
     @Test
     public void testOps() {
-        assertEquals("1.059", willieMays1955.getOps().toString());
-    }
-    
-    @Test(expected = IllegalArgumentException.class)
-    public void ctorRejectsDerivedStats() {
-        new BattingStats(ImmutableMap.of(GAMES, 1, AT_BATS, 4));
+        assertEquals("1.059", willieMays1955.get(OPS).toString());
     }
     
     @Test(expected = IllegalArgumentException.class)
     public void ctorRejectsNegativeValues() {
-        new BattingStats(ImmutableMap.of(GAMES, 1, AT_BATS, -4));
+        new BattingStats(ImmutableMap.of(GAMES, 1, PLATE_APPEARANCES, -4));
     }
     
     @Test
