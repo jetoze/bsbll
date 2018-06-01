@@ -42,10 +42,4 @@ public interface Stat<T> {
         /**/
     }
     
-    
-    public static final Comparator<Integer> INT_ASCENDING = Comparator.naturalOrder();
-    public static final Comparator<Integer> INT_DESCENDING = INT_ASCENDING.reversed();
-    public static final Comparator<Average> AVG_ASCENDING = Comparator.naturalOrder();
-    public static final Comparator<Average> AVG_DESCENDING = AVG_ASCENDING.reversed();
-
 }

@@ -41,7 +41,7 @@ public interface PitchingStat<T> extends Stat<T> {
         // measurement. We could still consider returning INT_ASCENDING here for those stats.
         @Override
         public Comparator<Integer> leaderOrder() {
-            return INT_DESCENDING;
+            return Comparator.reverseOrder();
         }
 
         @Override
