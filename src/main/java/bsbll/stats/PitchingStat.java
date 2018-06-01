@@ -3,7 +3,7 @@ package bsbll.stats;
 public interface PitchingStat<T> extends Stat<T> {
     T get(PitchingStatLine stats);
     
-    public static enum PrimitivePitchingStat implements PitchingStat<Integer>, PrimitiveStat<PrimitivePitchingStat> {
+    public static enum PrimitivePitchingStat implements PitchingStat<Integer>, PrimitiveStat {
         GAMES,
         GAMES_STARTED,
         COMPLETE_GAMES,

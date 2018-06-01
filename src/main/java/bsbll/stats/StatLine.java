@@ -27,7 +27,7 @@ import bsbll.stats.Stat.PrimitiveStat;
  *            the {@link #newInstance(Map)} method is an example of the
  *            simulated self-type idiom (Effective Java, 3rd edition, Item 2).
  */
-public abstract class StatLine<S extends PrimitiveStat<S>, T extends StatLine<S, T>> {
+public abstract class StatLine<S extends PrimitiveStat, T extends StatLine<S, T>> {
     private final ImmutableMap<S, Integer> values;
     
     /**
@@ -153,7 +153,7 @@ public abstract class StatLine<S extends PrimitiveStat<S>, T extends StatLine<S,
     
     
     
-    private static final class PrimitiveStatValue<S extends PrimitiveStat<S>> {
+    private static final class PrimitiveStatValue<S extends PrimitiveStat> {
         public final S stat;
         public final int value;
         
