@@ -32,7 +32,7 @@ public final class PitchingFileExplorer {
                     .filter(s -> s.startsWith(playerId.toString()))
                     .map(s -> s.split(",", -1))
                     .map(this::toStats)
-                    .reduce(new PitchingStatLine(), PitchingStatLine::add);
+                    .reduce(new PitchingStatLine(), PitchingStatLine::plus);
                     
         }
     }

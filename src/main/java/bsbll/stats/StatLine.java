@@ -45,32 +45,32 @@ public abstract class StatLine<S extends PrimitiveStat, T extends StatLine<S, T>
         checkArgument(this.values.values().stream().allMatch(i -> i >= 0), "Negative values are not allowed");
     }
 
-    public final T add(S stat, int value) {
-        return add(new PrimitiveStatValue<>(stat, value));
+    public final T plus(S stat, int value) {
+        return plus(new PrimitiveStatValue<>(stat, value));
     }
     
-    public final T add(S stat1, int value1, S stat2, int value2) {
-        return add(new PrimitiveStatValue<>(stat1, value1), 
+    public final T plus(S stat1, int value1, S stat2, int value2) {
+        return plus(new PrimitiveStatValue<>(stat1, value1), 
                 new PrimitiveStatValue<>(stat2, value2));
     }
     
-    public final T add(S stat1, int value1, S stat2, int value2, S stat3, int value3) {
-        return add(new PrimitiveStatValue<>(stat1, value1), 
+    public final T plus(S stat1, int value1, S stat2, int value2, S stat3, int value3) {
+        return plus(new PrimitiveStatValue<>(stat1, value1), 
                 new PrimitiveStatValue<>(stat2, value2), 
                 new PrimitiveStatValue<>(stat3, value3));
     }
     
-    public final T add(S stat1, int value1, S stat2, int value2, S stat3, int value3,
+    public final T plus(S stat1, int value1, S stat2, int value2, S stat3, int value3,
             S stat4, int value4) {
-        return add(new PrimitiveStatValue<>(stat1, value1), 
+        return plus(new PrimitiveStatValue<>(stat1, value1), 
                 new PrimitiveStatValue<>(stat2, value2), 
                 new PrimitiveStatValue<>(stat3, value3), 
                 new PrimitiveStatValue<>(stat4, value4));
     }
     
-    public final T add(S stat1, int value1, S stat2, int value2, S stat3, int value3,
+    public final T plus(S stat1, int value1, S stat2, int value2, S stat3, int value3,
             S stat4, int value4, S stat5, int value5) {
-        return add(new PrimitiveStatValue<>(stat1, value1), 
+        return plus(new PrimitiveStatValue<>(stat1, value1), 
                 new PrimitiveStatValue<>(stat2, value2), 
                 new PrimitiveStatValue<>(stat3, value3), 
                 new PrimitiveStatValue<>(stat4, value4),
@@ -78,7 +78,7 @@ public abstract class StatLine<S extends PrimitiveStat, T extends StatLine<S, T>
     }
     
     @SafeVarargs
-    private final T add(PrimitiveStatValue<S>... newValues) {
+    private final T plus(PrimitiveStatValue<S>... newValues) {
         Map<S, Integer> tmp = new HashMap<>(this.values);
         for (PrimitiveStatValue<S> sv : newValues) {
             tmp.merge(sv.stat, sv.value, (p, q) -> p + q);
@@ -90,7 +90,7 @@ public abstract class StatLine<S extends PrimitiveStat, T extends StatLine<S, T>
      * Adds another StatLine to this StatLine, and returns the result. This
      * StatLine is not modified.
      */
-    public final T add(T o) {
+    public final T plus(T o) {
         Map<S, Integer> tmp = new HashMap<>(this.values);
         o.forEach((s, v) -> tmp.merge(s, v, (p, q) -> p + q));
         return newInstance(tmp);

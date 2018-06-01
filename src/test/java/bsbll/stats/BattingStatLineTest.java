@@ -92,7 +92,7 @@ public final class BattingStatLineTest {
                 .set(HIT_BY_PITCHES, 1)
                 .set(SACRIFICE_FLIES, 3)
                 .build();
-        BattingStatLine total = willieMays1955.add(willieMays1956);
+        BattingStatLine total = willieMays1955.plus(willieMays1956);
         
         BattingStatLine expected = BattingStatLine.builder()
                 .set(GAMES, 304)
@@ -114,7 +114,7 @@ public final class BattingStatLineTest {
     public void addIndividualStats() {
         BattingStatLine start = BattingStatLine.forNewGame();
         
-        BattingStatLine result = start.add(PLATE_APPEARANCES, 5, HITS, 2,
+        BattingStatLine result = start.plus(PLATE_APPEARANCES, 5, HITS, 2,
                 STRIKEOUTS, 1, RUNS, 2, RUNS_BATTED_IN, 3);
         
         BattingStatLine expected = BattingStatLine.builder()

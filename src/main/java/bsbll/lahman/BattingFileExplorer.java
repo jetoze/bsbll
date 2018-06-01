@@ -36,7 +36,7 @@ public final class BattingFileExplorer {
     }
     
     private BattingStatLine createStats(Stream<String[]> stream) {
-        return stream.map(this::toStats).reduce(new BattingStatLine(), BattingStatLine::add);
+        return stream.map(this::toStats).reduce(new BattingStatLine(), BattingStatLine::plus);
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
