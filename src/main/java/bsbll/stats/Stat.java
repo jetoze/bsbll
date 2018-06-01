@@ -14,16 +14,16 @@ public interface Stat<T> {
         U self();
     }
     
-    public static final class BasicStatValue<T extends BasicStat<T>> {
-        private final T stat;
+    public static final class BasicStatValue<S extends BasicStat<S>> {
+        private final S stat;
         private final int value;
         
-        public BasicStatValue(T stat, int value) {
+        public BasicStatValue(S stat, int value) {
             this.stat = requireNonNull(stat);
             this.value = checkNotNegative(value);
         }
 
-        public T getStat() {
+        public S getStat() {
             return stat;
         }
 
