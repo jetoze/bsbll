@@ -10,15 +10,15 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
 
-import bsbll.stats.PitchingStat.BasicPitchingStat;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 
 @Immutable
-public final class PitchingStatLine extends StatLine<BasicPitchingStat, PitchingStatLine> {
+public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, PitchingStatLine> {
     public PitchingStatLine() {
         super();
     }
 
-    public PitchingStatLine(Map<BasicPitchingStat, Integer> values) {
+    public PitchingStatLine(Map<PrimitivePitchingStat, Integer> values) {
         super(values);
     }
 
@@ -31,7 +31,7 @@ public final class PitchingStatLine extends StatLine<BasicPitchingStat, Pitching
     }
     
     @Override
-    protected PitchingStatLine newInstance(Map<BasicPitchingStat, Integer> values) {
+    protected PitchingStatLine newInstance(Map<PrimitivePitchingStat, Integer> values) {
         return new PitchingStatLine(values);
     }
 
@@ -40,9 +40,9 @@ public final class PitchingStatLine extends StatLine<BasicPitchingStat, Pitching
     }
     
     public static final class Builder {
-        private final EnumMap<BasicPitchingStat, Integer> values = new EnumMap<>(BasicPitchingStat.class);
+        private final EnumMap<PrimitivePitchingStat, Integer> values = new EnumMap<>(PrimitivePitchingStat.class);
         
-        public Builder set(BasicPitchingStat stat, int value) {
+        public Builder set(PrimitivePitchingStat stat, int value) {
             requireNonNull(stat);
             checkNotNegative(value);
             values.put(stat, value);

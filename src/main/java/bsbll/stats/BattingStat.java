@@ -3,7 +3,7 @@ package bsbll.stats;
 public interface BattingStat<T> extends Stat<T> {
     T get(BattingStatLine statLine);
 
-    public static enum BasicBattingStat implements BattingStat<Integer>, BasicStat<BasicBattingStat> {
+    public static enum PrimitiveBattingStat implements BattingStat<Integer>, PrimitiveStat<PrimitiveBattingStat> {
         GAMES,
         PLATE_APPEARANCES,
         HITS,
@@ -19,29 +19,24 @@ public interface BattingStat<T> extends Stat<T> {
         SACRIFICE_FLIES;
 
         @Override
-        public BasicBattingStat self() {
-            return this;
-        }
-
-        @Override
         public Integer get(BattingStatLine statLine) {
-            return statLine.getBasicStat(this);
+            return statLine.getPrimitiveStat(this);
         }
     }
 
-    public static final BasicBattingStat GAMES = BasicBattingStat.GAMES;
-    public static final BasicBattingStat PLATE_APPEARANCES = BasicBattingStat.PLATE_APPEARANCES;
-    public static final BasicBattingStat HITS = BasicBattingStat.HITS;
-    public static final BasicBattingStat DOUBLES = BasicBattingStat.DOUBLES;
-    public static final BasicBattingStat TRIPLES = BasicBattingStat.TRIPLES;
-    public static final BasicBattingStat HOMERUNS = BasicBattingStat.HOMERUNS;
-    public static final BasicBattingStat STRIKEOUTS = BasicBattingStat.STRIKEOUTS;
-    public static final BasicBattingStat WALKS = BasicBattingStat.WALKS;
-    public static final BasicBattingStat RUNS = BasicBattingStat.RUNS;
-    public static final BasicBattingStat RUNS_BATTED_IN = BasicBattingStat.RUNS_BATTED_IN;
-    public static final BasicBattingStat HIT_BY_PITCHES = BasicBattingStat.HIT_BY_PITCHES;
-    public static final BasicBattingStat SACRIFICE_HITS = BasicBattingStat.SACRIFICE_HITS;
-    public static final BasicBattingStat SACRIFICE_FLIES = BasicBattingStat.SACRIFICE_FLIES;
+    public static final PrimitiveBattingStat GAMES = PrimitiveBattingStat.GAMES;
+    public static final PrimitiveBattingStat PLATE_APPEARANCES = PrimitiveBattingStat.PLATE_APPEARANCES;
+    public static final PrimitiveBattingStat HITS = PrimitiveBattingStat.HITS;
+    public static final PrimitiveBattingStat DOUBLES = PrimitiveBattingStat.DOUBLES;
+    public static final PrimitiveBattingStat TRIPLES = PrimitiveBattingStat.TRIPLES;
+    public static final PrimitiveBattingStat HOMERUNS = PrimitiveBattingStat.HOMERUNS;
+    public static final PrimitiveBattingStat STRIKEOUTS = PrimitiveBattingStat.STRIKEOUTS;
+    public static final PrimitiveBattingStat WALKS = PrimitiveBattingStat.WALKS;
+    public static final PrimitiveBattingStat RUNS = PrimitiveBattingStat.RUNS;
+    public static final PrimitiveBattingStat RUNS_BATTED_IN = PrimitiveBattingStat.RUNS_BATTED_IN;
+    public static final PrimitiveBattingStat HIT_BY_PITCHES = PrimitiveBattingStat.HIT_BY_PITCHES;
+    public static final PrimitiveBattingStat SACRIFICE_HITS = PrimitiveBattingStat.SACRIFICE_HITS;
+    public static final PrimitiveBattingStat SACRIFICE_FLIES = PrimitiveBattingStat.SACRIFICE_FLIES;
 
     public static final BattingStat<Integer> AT_BATS = new BattingStat<Integer>() {
         @Override

@@ -3,7 +3,7 @@ package bsbll.stats;
 public interface PitchingStat<T> extends Stat<T> {
     T get(PitchingStatLine stats);
     
-    public static enum BasicPitchingStat implements PitchingStat<Integer>, BasicStat<BasicPitchingStat> {
+    public static enum PrimitivePitchingStat implements PitchingStat<Integer>, PrimitiveStat<PrimitivePitchingStat> {
         GAMES,
         GAMES_STARTED,
         COMPLETE_GAMES,
@@ -22,31 +22,26 @@ public interface PitchingStat<T> extends Stat<T> {
         
         @Override
         public Integer get(PitchingStatLine stats) {
-            return stats.getBasicStat(this);
-        }
-
-        @Override
-        public BasicPitchingStat self() {
-            return this;
+            return stats.getPrimitiveStat(this);
         }
     }
 
 
-    public static final BasicPitchingStat GAMES = BasicPitchingStat.GAMES;
-    public static final BasicPitchingStat GAMES_STARTED = BasicPitchingStat.GAMES_STARTED;
-    public static final BasicPitchingStat COMPLETE_GAMES = BasicPitchingStat.COMPLETE_GAMES;
-    public static final BasicPitchingStat BATTERS_FACED = BasicPitchingStat.BATTERS_FACED;
-    public static final BasicPitchingStat OUTS = BasicPitchingStat.OUTS;
-    public static final BasicPitchingStat HITS = BasicPitchingStat.HITS;
-    public static final BasicPitchingStat HOMERUNS = BasicPitchingStat.HOMERUNS;
-    public static final BasicPitchingStat STRIKEOUTS = BasicPitchingStat.STRIKEOUTS;
-    public static final BasicPitchingStat WALKS = BasicPitchingStat.WALKS;
-    public static final BasicPitchingStat EARNED_RUNS = BasicPitchingStat.EARNED_RUNS;
-    public static final BasicPitchingStat WINS = BasicPitchingStat.WINS;
-    public static final BasicPitchingStat LOSSES = BasicPitchingStat.LOSSES;
-    public static final BasicPitchingStat SAVES = BasicPitchingStat.SAVES;
-    public static final BasicPitchingStat SHUTOUTS = BasicPitchingStat.SHUTOUTS;
-    public static final BasicPitchingStat HIT_BY_PITCHES = BasicPitchingStat.HIT_BY_PITCHES;
+    public static final PrimitivePitchingStat GAMES = PrimitivePitchingStat.GAMES;
+    public static final PrimitivePitchingStat GAMES_STARTED = PrimitivePitchingStat.GAMES_STARTED;
+    public static final PrimitivePitchingStat COMPLETE_GAMES = PrimitivePitchingStat.COMPLETE_GAMES;
+    public static final PrimitivePitchingStat BATTERS_FACED = PrimitivePitchingStat.BATTERS_FACED;
+    public static final PrimitivePitchingStat OUTS = PrimitivePitchingStat.OUTS;
+    public static final PrimitivePitchingStat HITS = PrimitivePitchingStat.HITS;
+    public static final PrimitivePitchingStat HOMERUNS = PrimitivePitchingStat.HOMERUNS;
+    public static final PrimitivePitchingStat STRIKEOUTS = PrimitivePitchingStat.STRIKEOUTS;
+    public static final PrimitivePitchingStat WALKS = PrimitivePitchingStat.WALKS;
+    public static final PrimitivePitchingStat EARNED_RUNS = PrimitivePitchingStat.EARNED_RUNS;
+    public static final PrimitivePitchingStat WINS = PrimitivePitchingStat.WINS;
+    public static final PrimitivePitchingStat LOSSES = PrimitivePitchingStat.LOSSES;
+    public static final PrimitivePitchingStat SAVES = PrimitivePitchingStat.SAVES;
+    public static final PrimitivePitchingStat SHUTOUTS = PrimitivePitchingStat.SHUTOUTS;
+    public static final PrimitivePitchingStat HIT_BY_PITCHES = PrimitivePitchingStat.HIT_BY_PITCHES;
     
     public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new PitchingStat<InningsPitched>() {
         @Override
