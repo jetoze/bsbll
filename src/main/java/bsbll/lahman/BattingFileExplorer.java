@@ -1,5 +1,6 @@
 package bsbll.lahman;
 
+import static bsbll.stats.BattingStat.*;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import bsbll.Year;
 import bsbll.card.PlayerCard;
 import bsbll.league.LeagueId;
 import bsbll.player.PlayerId;
-import bsbll.stats.BattingStats;
+import bsbll.stats.BattingStatLine;
 
 public final class BattingFileExplorer {
     private static final String DEFAULT_LOCATION = "/Users/torgil/coding/data/bsbll/baseballdatabank-master/core/";
@@ -26,7 +27,7 @@ public final class BattingFileExplorer {
         return new BattingFileExplorer(new File(DEFAULT_LOCATION));
     }
     
-    public BattingStats getPlayerStats(PlayerId playerId, Year year) {
+    public BattingStatLine getPlayerStats(PlayerId playerId, Year year) {
         try (Stream<String> stream = openFile(year)) {
             return createStats(stream
                     .filter(s -> s.startsWith(playerId.toString()))
@@ -34,13 +35,13 @@ public final class BattingFileExplorer {
         }
     }
     
-    private BattingStats createStats(Stream<String[]> stream) {
-        return stream.map(this::toStats).reduce(new BattingStats(), BattingStats::add);
+    private BattingStatLine createStats(Stream<String[]> stream) {
+        return stream.map(this::toStats).reduce(new BattingStatLine(), BattingStatLine::add);
     }
     
     public PlayerCard generatePlayerCard(PlayerId playerId, Year year) {
         try {
-            BattingStats stats = getPlayerStats(playerId, year);
+            BattingStatLine stats = getPlayerStats(playerId, year);
             return PlayerCard.of(stats);
         } catch (Exception e) {
             throw new RuntimeException(String.format("Failed to generate batting card for %s [%s]. Error: %s",
@@ -48,7 +49,7 @@ public final class BattingFileExplorer {
         }
     }
     
-    public BattingStats getLeagueStats(LeagueId leagueId, Year year) {
+    public BattingStatLine getLeagueStats(LeagueId leagueId, Year year) {
         try (Stream<String> stream = openFile(year)) {
             return createStats(stream
                     .map(s -> s.split(",", -1))
@@ -58,7 +59,7 @@ public final class BattingFileExplorer {
     
     public PlayerCard generateLeagueCard(LeagueId leagueId, Year year) {
         try {
-            BattingStats stats = getLeagueStats(leagueId, year);
+            BattingStatLine stats = getLeagueStats(leagueId, year);
             return PlayerCard.of(stats);
         } catch (Exception e) {
             throw new RuntimeException(String.format("Failed to generate league card for %s [%s]. Error: %s",
@@ -80,7 +81,7 @@ public final class BattingFileExplorer {
         return new File(parent, "batting-" + year + ".csv");
     }
     
-    private BattingStats toStats(String[] parts) {
+    private BattingStatLine toStats(String[] parts) {
         int atBats = toInt(parts[6]);
         int hits = toInt(parts[8]);
         int doubles = toInt(parts[9]);
@@ -93,15 +94,16 @@ public final class BattingFileExplorer {
         int sacrificeFlies = toInt(parts[20]);
         // TODO: What about interference calls? Probably negligible.
         int plateAppearances = atBats + walks + hitByPitches + sacrificeHits + sacrificeFlies;
-        return new BattingStats(
-                plateAppearances,
-                hits,
-                doubles,
-                triples,
-                homeruns,
-                walks,
-                strikeouts,
-                hitByPitches);
+        return BattingStatLine.builder()
+                .set(PLATE_APPEARANCES, plateAppearances)
+                .set(HITS, hits)
+                .set(DOUBLES, doubles)
+                .set(TRIPLES, triples)
+                .set(HOMERUNS, homeruns)
+                .set(WALKS, walks)
+                .set(STRIKEOUTS, strikeouts)
+                .set(HIT_BY_PITCHES, hitByPitches)
+                .build();
     }
     
     private static int toInt(String s) {

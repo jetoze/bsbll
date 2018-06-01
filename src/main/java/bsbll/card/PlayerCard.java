@@ -5,10 +5,10 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
-import bsbll.stats.Batting;
-import bsbll.stats.BattingStats;
-import bsbll.stats.Pitching;
-import bsbll.stats.PitchingStats;
+import bsbll.stats.BattingStat;
+import bsbll.stats.BattingStatLine;
+import bsbll.stats.PitchingStat;
+import bsbll.stats.PitchingStatLine;
 
 public final class PlayerCard {
     private final Probability hits;
@@ -98,15 +98,15 @@ public final class PlayerCard {
         return new Builder(plateAppearances);
     }
     
-    public static PlayerCard of(BattingStats stats) {
-        return builder(stats.get(Batting.PLATE_APPEARANCES))
-                .hits(stats.get(Batting.HITS))
-                .doubles(stats.get(Batting.DOUBLES))
-                .triples(stats.get(Batting.TRIPLES))
-                .homeruns(stats.get(Batting.HOMERUNS))
-                .walks(stats.get(Batting.WALKS))
-                .strikeouts(stats.get(Batting.STRIKEOUTS))
-                .hitByPitches(stats.get(Batting.HIT_BY_PITCHES))
+    public static PlayerCard of(BattingStatLine stats) {
+        return builder(stats.get(BattingStat.PLATE_APPEARANCES))
+                .hits(stats.get(BattingStat.HITS))
+                .doubles(stats.get(BattingStat.DOUBLES))
+                .triples(stats.get(BattingStat.TRIPLES))
+                .homeruns(stats.get(BattingStat.HOMERUNS))
+                .walks(stats.get(BattingStat.WALKS))
+                .strikeouts(stats.get(BattingStat.STRIKEOUTS))
+                .hitByPitches(stats.get(BattingStat.HIT_BY_PITCHES))
                 .build();
     }
     
@@ -120,15 +120,15 @@ public final class PlayerCard {
      *            unknowns such as doubles and triples, that are not covered by
      *            PitchingStats.
      */
-    public static PlayerCard of(PitchingStats stats, PlayerCard league) {
-        return builder(stats.get(Pitching.BATTERS_FACED))
-                .hits(stats.get(Pitching.HITS))
+    public static PlayerCard of(PitchingStatLine stats, PlayerCard league) {
+        return builder(stats.get(PitchingStat.BATTERS_FACED))
+                .hits(stats.get(PitchingStat.HITS))
                 .doubles(league.doubles())
                 .triples(league.triples())
-                .homeruns(stats.get(Pitching.HOMERUNS))
-                .walks(stats.get(Pitching.WALKS))
-                .strikeouts(stats.get(Pitching.STRIKEOUTS))
-                .hitByPitches(stats.get(Pitching.HIT_BY_PITCHES))
+                .homeruns(stats.get(PitchingStat.HOMERUNS))
+                .walks(stats.get(PitchingStat.WALKS))
+                .strikeouts(stats.get(PitchingStat.STRIKEOUTS))
+                .hitByPitches(stats.get(PitchingStat.HIT_BY_PITCHES))
                 .build();
     }
     

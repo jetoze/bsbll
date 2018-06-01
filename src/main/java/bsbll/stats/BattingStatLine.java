@@ -1,5 +1,6 @@
 package bsbll.stats;
 
+import static bsbll.stats.BattingStat.*;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
@@ -10,6 +11,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
 
+import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.stats.BattingStat.PrimitiveBattingStat;
 
 @Immutable
@@ -36,6 +38,19 @@ public final class BattingStatLine extends StatLine<PrimitiveBattingStat, Battin
         return new BattingStatLine(values);
     }
     
+    // TODO: This is for experimentation purposes only. Remove this method eventually.
+    public BattingStatLine add(Outcome o) {
+        return builder()
+                .set(PLATE_APPEARANCES, get(PLATE_APPEARANCES) + 1)
+                .set(HITS, get(HITS) + (o.isHit() ? 1 : 0))
+                .set(DOUBLES, get(DOUBLES) + (o == Outcome.DOUBLE ? 1 : 0))
+                .set(TRIPLES, get(TRIPLES) + (o == Outcome.TRIPLE ? 1 : 0))
+                .set(HOMERUNS, get(HOMERUNS) + (o == Outcome.HOMERUN ? 1 : 0))
+                .set(WALKS, get(WALKS) + (o == Outcome.WALK ? 1 : 0))
+                .set(STRIKEOUTS, get(STRIKEOUTS) + (o == Outcome.STRIKEOUT ? 1 : 0))
+                .set(HIT_BY_PITCHES, get(HIT_BY_PITCHES) + (o == Outcome.HIT_BY_PITCH ? 1 : 0))
+                .build();
+    }
     public static Builder builder() {
         return new Builder();
     }

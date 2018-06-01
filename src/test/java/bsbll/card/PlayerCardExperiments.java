@@ -1,6 +1,6 @@
 package bsbll.card;
 
-import static bsbll.stats.Batting.*;
+import static bsbll.stats.BattingStat.*;
 
 import bsbll.Year;
 import bsbll.league.LeagueId;
@@ -8,7 +8,7 @@ import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
-import bsbll.stats.BattingStats;
+import bsbll.stats.BattingStatLine;
 
 public final class PlayerCardExperiments {
 
@@ -20,7 +20,7 @@ public final class PlayerCardExperiments {
         
         Player batter = new Player(PlayerId.of("ruthba01"));
         Player pitcher = new Player(PlayerId.of("johnswa01"));
-        BattingStats stats = new BattingStats();
+        BattingStatLine stats = new BattingStatLine();
         for (int n = 0; n < 697; ++n) {
             Outcome outcome = matchup.run(batter, pitcher);
             stats = stats.add(outcome);
