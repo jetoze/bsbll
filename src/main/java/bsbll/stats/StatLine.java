@@ -69,6 +69,13 @@ public abstract class StatLine<S extends BasicStat<S>, T extends StatLine<S, T>>
         this.values.forEach(c);
     }
     
+    // HACK: This method is conceptually a factory method, and should be static.
+    // Since static methods can't be abstract, we instead make it an instance
+    // method. It's only used when creating a new StatLine instance from an
+    // an existing one, by updating one or more of the existing StatLine's values,
+    // so it works out, but it is super ugly.
+    // One alternative would be to instead use reflection to lookup the corresponding
+    // constructor, but that feels even worse.
     protected abstract T newInstance(Map<S, Integer> values);
 
     protected final int getBasicStat(S stat) {
