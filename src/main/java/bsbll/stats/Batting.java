@@ -6,7 +6,6 @@ import static tzeth.preconds.MorePreconditions.checkNotNegative;
 public interface Batting<T> {
     T get(BattingStats stats);
     
-    // TODO: "BasicBattingStat" is perhaps a better name.
     public static enum BasicBatting implements Batting<Integer> {
         GAMES,
         PLATE_APPEARANCES,

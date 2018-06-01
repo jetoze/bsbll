@@ -1,35 +1,34 @@
 package bsbll.stats;
 
-public enum Stat {
-    PLATE_APPEARANCE("PA"),
-    AT_BAT("AB"),
-    HIT("H"),
-    SINGLE("S"),
-    DOUBLE("2B"),
-    TRIPLE("3B"),
-    HOMERUN("HR"),
-    RUN("R"),
-    RUNS_BATTED_IN("RBI"),
-    STRIKEOUT("SO"),
-    WALK("BB"),
-    HIT_BY_PITCH("HBP"),
-    SACRIFICE_FLY("SF"),
-    SACRIFICE_HIT("SH"),
-    BATTING_AVERAGE("BA"),
-    SLUGGING_AVERAGE("SA"),
-    ON_BASE_PERCENTAGE("OBP"),
-    OPS("OPS"),
-    EARNED_RUN("ER");
+import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
+
+public interface Stat<T> {
+    // TODO: Add this
+    // String abbrev();
     
-    private Stat(String abbrev) {
-        this.abbrev = abbrev;
+    public static interface BasicStat<U extends BasicStat<U>> extends Stat<Integer> {
+        default BasicStatValue<U> withValue(int value) {
+            return new BasicStatValue<>(self(), value);
+        }
+        U self();
     }
     
-    private final String abbrev;
-    
-    
-    @Override
-    public String toString() {
-        return abbrev;
+    public static final class BasicStatValue<T extends BasicStat<T>> {
+        private final T stat;
+        private final int value;
+        
+        public BasicStatValue(T stat, int value) {
+            this.stat = requireNonNull(stat);
+            this.value = checkNotNegative(value);
+        }
+
+        public T getStat() {
+            return stat;
+        }
+
+        public int getValue() {
+            return value;
+        }
     }
 }
