@@ -6,8 +6,7 @@ package bsbll.stats;
  * @param <T> the type of value associated with the stat, such as Integer, or Average.
  */
 public interface Stat<T> {
-    // TODO: Add this
-    // String abbrev();
+    String abbrev();
     
     // TODO: I would like a generic declaration of the get(StatLine) method here, but
     // I don't know yet how to pull that off. The generic trickery becomes rather

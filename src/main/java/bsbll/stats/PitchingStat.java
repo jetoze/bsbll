@@ -1,28 +1,41 @@
 package bsbll.stats;
 
+import bsbll.stats.AbstractStat.AbstractPitchingStat;
+
 public interface PitchingStat<T> extends Stat<T> {
     T get(PitchingStatLine stats);
     
     public static enum PrimitivePitchingStat implements PitchingStat<Integer>, PrimitiveStat {
-        GAMES,
-        GAMES_STARTED,
-        COMPLETE_GAMES,
-        BATTERS_FACED,
-        OUTS,
-        HITS,
-        HOMERUNS,
-        STRIKEOUTS,
-        WALKS,
-        EARNED_RUNS,
-        WINS,
-        LOSSES,
-        SAVES,
-        SHUTOUTS,
-        HIT_BY_PITCHES;
+        GAMES("G"),
+        GAMES_STARTED("GS"),
+        COMPLETE_GAMES("CG"),
+        BATTERS_FACED("BF"),
+        OUTS("O"),
+        HITS("H"),
+        HOMERUNS("HR"),
+        STRIKEOUTS("SO"),
+        WALKS("BB"),
+        EARNED_RUNS("ER"),
+        WINS("W"),
+        LOSSES("L"),
+        SAVES("SV"),
+        SHUTOUTS("SHO"),
+        HIT_BY_PITCHES("HBP");
+        
+        private final String abbrev;
+        
+        private PrimitivePitchingStat(String abbrev) {
+            this.abbrev = abbrev;
+        }
         
         @Override
         public Integer get(PitchingStatLine stats) {
             return stats.getPrimitiveStat(this);
+        }
+        
+        @Override
+        public String abbrev() {
+            return this.abbrev;
         }
     }
 
@@ -43,14 +56,14 @@ public interface PitchingStat<T> extends Stat<T> {
     public static final PrimitivePitchingStat SHUTOUTS = PrimitivePitchingStat.SHUTOUTS;
     public static final PrimitivePitchingStat HIT_BY_PITCHES = PrimitivePitchingStat.HIT_BY_PITCHES;
     
-    public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new PitchingStat<InningsPitched>() {
+    public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new AbstractPitchingStat<InningsPitched>("IP") {
         @Override
         public InningsPitched get(PitchingStatLine stats) {
             return InningsPitched.fromOuts(stats.get(OUTS));
         }
     };
     
-    public static final PitchingStat<ERA> ERA = new PitchingStat<ERA>() {
+    public static final PitchingStat<ERA> ERA = new AbstractPitchingStat<ERA>("ERA") {
         @Override
         public bsbll.stats.ERA get(PitchingStatLine stats) {
             return new ERA(stats.get(EARNED_RUNS), stats.get(OUTS));
