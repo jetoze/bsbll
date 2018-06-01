@@ -39,7 +39,6 @@ public interface PitchingStat<T> extends Stat<T> {
         }
     }
 
-
     public static final PrimitivePitchingStat GAMES = PrimitivePitchingStat.GAMES;
     public static final PrimitivePitchingStat GAMES_STARTED = PrimitivePitchingStat.GAMES_STARTED;
     public static final PrimitivePitchingStat COMPLETE_GAMES = PrimitivePitchingStat.COMPLETE_GAMES;
@@ -65,11 +64,20 @@ public interface PitchingStat<T> extends Stat<T> {
     
     public static final PitchingStat<ERA> ERA = new AbstractPitchingStat<ERA>("ERA") {
         @Override
-        public bsbll.stats.ERA get(PitchingStatLine stats) {
-            return new ERA(stats.get(EARNED_RUNS), stats.get(OUTS));
+        public ERA get(PitchingStatLine stats) {
+            return new ERA(EARNED_RUNS.get(stats), OUTS.get(stats));
         }
     };
     
-    // TODO: Add more here, like SO/9, BB/9, H/9, WHIP, Opponent BA.
+    public static final PitchingStat<Average> WHIP = new AbstractPitchingStat<Average>("WHIP") {
+        @Override
+        public Average get(PitchingStatLine stats) {
+            return new Average(
+                    3 * (HITS.get(stats) + WALKS.get(stats)),
+                    OUTS.get(stats)
+            );
+        }
+    };
 
+    // TODO: Add more here, like SO/9, BB/9, H/9, Opponent BA.
 }
