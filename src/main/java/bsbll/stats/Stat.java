@@ -1,5 +1,7 @@
 package bsbll.stats;
 
+import java.util.Comparator;
+
 /**
  * Represents a single stat, such as Games Played, Hits, or Batting Average.
  *
@@ -7,6 +9,17 @@ package bsbll.stats;
  */
 public interface Stat<T> {
     String abbrev();
+    
+    /**
+     * Returns a Comparator for sorting this stats, so that the resulting order
+     * is the order in which the leaders of this stat is sorted. (Ugh. Rewrite
+     * the previous sentence.)
+     * <p>
+     * For a pitching example: Both ERA and SO/9 is represented by the same
+     * value class, {@link Per9IPStat}. For ERA, a lower value is better, but
+     * for SO/9 a higher value is better.
+     */
+    Comparator<T> leaderOrder();
     
     // TODO: I would like a generic declaration of the get(StatLine) method here, but
     // I don't know yet how to pull that off. The generic trickery becomes rather
@@ -28,5 +41,11 @@ public interface Stat<T> {
     public static interface PrimitiveStat extends Stat<Integer> {
         /**/
     }
+    
+    
+    public static final Comparator<Integer> INT_ASCENDING = Comparator.naturalOrder();
+    public static final Comparator<Integer> INT_DESCENDING = INT_ASCENDING.reversed();
+    public static final Comparator<Average> AVG_ASCENDING = Comparator.naturalOrder();
+    public static final Comparator<Average> AVG_DESCENDING = AVG_ASCENDING.reversed();
 
 }

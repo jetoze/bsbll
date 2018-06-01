@@ -1,5 +1,7 @@
 package bsbll.stats;
 
+import java.util.Comparator;
+
 import bsbll.stats.AbstractStat.AbstractPitchingStat;
 
 public interface PitchingStat<T> extends Stat<T> {
@@ -33,6 +35,15 @@ public interface PitchingStat<T> extends Stat<T> {
             return stats.getPrimitiveStat(this);
         }
         
+        // For many primitivies, such as WALKS and HOMERUNS, less is better, but only in the 
+        // when comparing two pitchers who has faced the same number of batters. So a leader 
+        // sorting of HOMERUNS (for example) is slightly nonsensical, and HR/9 is a superior 
+        // measurement. We could still consider returning INT_ASCENDING here for those stats.
+        @Override
+        public Comparator<Integer> leaderOrder() {
+            return INT_DESCENDING;
+        }
+
         @Override
         public String abbrev() {
             return this.abbrev;
@@ -55,35 +66,36 @@ public interface PitchingStat<T> extends Stat<T> {
     public static final PrimitivePitchingStat SHUTOUTS = PrimitivePitchingStat.SHUTOUTS;
     public static final PrimitivePitchingStat HIT_BY_PITCHES = PrimitivePitchingStat.HIT_BY_PITCHES;
     
-    public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new AbstractPitchingStat<InningsPitched>("IP") {
+    public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new AbstractPitchingStat<InningsPitched>("IP",
+            Comparator.reverseOrder()) {
         @Override
         public InningsPitched get(PitchingStatLine stats) {
             return InningsPitched.fromOuts(stats.get(OUTS));
         }
     };
     
-    public static final PitchingStat<Per9IPStat> ERA = new AbstractPitchingStat<Per9IPStat>("ERA") {
+    public static final PitchingStat<Per9IPStat> ERA = new AbstractPitchingStat<Per9IPStat>("ERA", Comparator.naturalOrder()) {
         @Override
         public Per9IPStat get(PitchingStatLine stats) {
             return new Per9IPStat(EARNED_RUNS.get(stats), OUTS.get(stats));
         }
     };
     
-    public static final PitchingStat<Per9IPStat> SO9 = new AbstractPitchingStat<Per9IPStat>("SO9") {
+    public static final PitchingStat<Per9IPStat> SO9 = new AbstractPitchingStat<Per9IPStat>("SO9", Comparator.reverseOrder()) {
         @Override
         public Per9IPStat get(PitchingStatLine stats) {
             return new Per9IPStat(STRIKEOUTS.get(stats), OUTS.get(stats));
         }
     };
     
-    public static final PitchingStat<Per9IPStat> BB9 = new AbstractPitchingStat<Per9IPStat>("BB9") {
+    public static final PitchingStat<Per9IPStat> BB9 = new AbstractPitchingStat<Per9IPStat>("BB9", Comparator.naturalOrder()) {
         @Override
         public Per9IPStat get(PitchingStatLine stats) {
             return new Per9IPStat(WALKS.get(stats), OUTS.get(stats));
         }
     };
     
-    public static final PitchingStat<Average> WHIP = new AbstractPitchingStat<Average>("WHIP") {
+    public static final PitchingStat<Average> WHIP = new AbstractPitchingStat<Average>("WHIP", Comparator.naturalOrder()) {
         @Override
         public Average get(PitchingStatLine stats) {
             return new Average(

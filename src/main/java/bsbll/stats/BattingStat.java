@@ -1,5 +1,7 @@
 package bsbll.stats;
 
+import java.util.Comparator;
+
 import bsbll.stats.AbstractStat.AbstractBattingStat;
 
 public interface BattingStat<T> extends Stat<T> {
@@ -32,6 +34,11 @@ public interface BattingStat<T> extends Stat<T> {
         }
         
         @Override
+        public Comparator<Integer> leaderOrder() {
+            return INT_DESCENDING;
+        }
+
+        @Override
         public String abbrev() {
             return this.abbrev;
         }
@@ -51,7 +58,7 @@ public interface BattingStat<T> extends Stat<T> {
     public static final PrimitiveBattingStat SACRIFICE_HITS = PrimitiveBattingStat.SACRIFICE_HITS;
     public static final PrimitiveBattingStat SACRIFICE_FLIES = PrimitiveBattingStat.SACRIFICE_FLIES;
     
-    public static final BattingStat<Integer> AT_BATS = new AbstractBattingStat<Integer>("AB") {
+    public static final BattingStat<Integer> AT_BATS = new AbstractBattingStat<Integer>("AB", INT_DESCENDING) {
         @Override
         public Integer get(BattingStatLine stats) {
             return PLATE_APPEARANCES.get(stats) - 
@@ -62,7 +69,7 @@ public interface BattingStat<T> extends Stat<T> {
         }
     };
     
-    public static final BattingStat<Integer> EXTRA_BASE_HITS = new AbstractBattingStat<Integer>("XBH") {
+    public static final BattingStat<Integer> EXTRA_BASE_HITS = new AbstractBattingStat<Integer>("XBH", INT_DESCENDING) {
         @Override
         public Integer get(BattingStatLine stats) {
             return DOUBLES.get(stats) +
@@ -71,14 +78,14 @@ public interface BattingStat<T> extends Stat<T> {
         }
     };
     
-    public static final BattingStat<Integer> SINGLES = new AbstractBattingStat<Integer>("S") {
+    public static final BattingStat<Integer> SINGLES = new AbstractBattingStat<Integer>("S", INT_DESCENDING) {
         @Override
         public Integer get(BattingStatLine stats) {
             return HITS.get(stats) - EXTRA_BASE_HITS.get(stats);
         }
     };
     
-    public static final BattingStat<Integer> TOTAL_BASES = new AbstractBattingStat<Integer>("TB") {
+    public static final BattingStat<Integer> TOTAL_BASES = new AbstractBattingStat<Integer>("TB", INT_DESCENDING) {
         @Override
         public Integer get(BattingStatLine stats) {
             return HITS.get(stats) + 
@@ -88,21 +95,21 @@ public interface BattingStat<T> extends Stat<T> {
         }
     };
     
-    public static final BattingStat<Average> BATTING_AVERAGE = new AbstractBattingStat<Average>("BA") {
+    public static final BattingStat<Average> BATTING_AVERAGE = new AbstractBattingStat<Average>("BA", AVG_DESCENDING) {
         @Override
         public Average get(BattingStatLine stats) {
             return new Average(HITS.get(stats), AT_BATS.get(stats));
         }
     };
     
-    public static final BattingStat<Average> SLUGGING_PERCENTAGE = new AbstractBattingStat<Average>("SLG") {
+    public static final BattingStat<Average> SLUGGING_PERCENTAGE = new AbstractBattingStat<Average>("SLG", AVG_DESCENDING) {
         @Override
         public Average get(BattingStatLine stats) {
             return new Average(TOTAL_BASES.get(stats), AT_BATS.get(stats));
         }
     };
     
-    public static final BattingStat<Average> ON_BASE_PERCENTAGE = new AbstractBattingStat<Average>("OBP") {
+    public static final BattingStat<Average> ON_BASE_PERCENTAGE = new AbstractBattingStat<Average>("OBP", AVG_DESCENDING) {
         @Override
         public Average get(BattingStatLine stats) {
             return new Average(HITS.get(stats) + WALKS.get(stats) + HIT_BY_PITCHES.get(stats),
@@ -110,7 +117,7 @@ public interface BattingStat<T> extends Stat<T> {
         }
     };
     
-    public static final BattingStat<Average> OPS = new AbstractBattingStat<Average>("OPS") {
+    public static final BattingStat<Average> OPS = new AbstractBattingStat<Average>("OPS", AVG_DESCENDING) {
         @Override
         public Average get(BattingStatLine stats) {
             return Average.sumOf(SLUGGING_PERCENTAGE.get(stats), ON_BASE_PERCENTAGE.get(stats));
