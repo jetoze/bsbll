@@ -14,10 +14,16 @@ import com.google.common.math.IntMath;
 public final class Average implements Comparable<Average> {
     private final int numerator;
     private final int denominator;
+    private final boolean includeLeadingZero;
     
     public Average(int numerator, int denominator) {
+        this(numerator, denominator, false);
+    }
+    
+    public Average(int numerator, int denominator, boolean includeLeadingZero) {
         this.numerator = checkNotNegative(numerator);
         this.denominator = checkNotNegative(denominator);
+        this.includeLeadingZero = includeLeadingZero;
     }
 
     public double asDouble() {
@@ -52,7 +58,9 @@ public final class Average implements Comparable<Average> {
         if (denominator == 0) {
             return "----";
         } else {
-            DecimalFormat fmt = new DecimalFormat("#.000");
+            DecimalFormat fmt = includeLeadingZero
+                    ? new DecimalFormat("0.000")
+                    : new DecimalFormat("#.000");
             return fmt.format(asDouble());
         }
     }

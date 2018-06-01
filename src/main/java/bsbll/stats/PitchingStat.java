@@ -74,6 +74,13 @@ public interface PitchingStat<T> extends Stat<T> {
         }
     };
     
+    public static final PitchingStat<Average> WIN_PCT = new AbstractPitchingStat<Average>("W%", Comparator.reverseOrder()) {
+        @Override
+        public Average get(PitchingStatLine stats) {
+            return new Average(WINS.get(stats), WINS.get(stats) + LOSSES.get(stats));
+        }
+    };
+    
     public static final PitchingStat<Per9IPStat> ERA = new AbstractPitchingStat<Per9IPStat>("ERA", Comparator.naturalOrder()) {
         @Override
         public Per9IPStat get(PitchingStatLine stats) {
@@ -100,7 +107,8 @@ public interface PitchingStat<T> extends Stat<T> {
         public Average get(PitchingStatLine stats) {
             return new Average(
                     3 * (HITS.get(stats) + WALKS.get(stats)),
-                    OUTS.get(stats)
+                    OUTS.get(stats),
+                    true
             );
         }
     };
