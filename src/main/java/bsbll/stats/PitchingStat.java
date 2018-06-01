@@ -62,10 +62,24 @@ public interface PitchingStat<T> extends Stat<T> {
         }
     };
     
-    public static final PitchingStat<ERA> ERA = new AbstractPitchingStat<ERA>("ERA") {
+    public static final PitchingStat<Per9IPStat> ERA = new AbstractPitchingStat<Per9IPStat>("ERA") {
         @Override
-        public ERA get(PitchingStatLine stats) {
-            return new ERA(EARNED_RUNS.get(stats), OUTS.get(stats));
+        public Per9IPStat get(PitchingStatLine stats) {
+            return new Per9IPStat(EARNED_RUNS.get(stats), OUTS.get(stats));
+        }
+    };
+    
+    public static final PitchingStat<Per9IPStat> SO9 = new AbstractPitchingStat<Per9IPStat>("SO9") {
+        @Override
+        public Per9IPStat get(PitchingStatLine stats) {
+            return new Per9IPStat(STRIKEOUTS.get(stats), OUTS.get(stats));
+        }
+    };
+    
+    public static final PitchingStat<Per9IPStat> BB9 = new AbstractPitchingStat<Per9IPStat>("BB9") {
+        @Override
+        public Per9IPStat get(PitchingStatLine stats) {
+            return new Per9IPStat(WALKS.get(stats), OUTS.get(stats));
         }
     };
     
@@ -79,5 +93,5 @@ public interface PitchingStat<T> extends Stat<T> {
         }
     };
 
-    // TODO: Add more here, like SO/9, BB/9, H/9, Opponent BA.
+    // TODO: Add more here, like H/9, Opponent BA.
 }
