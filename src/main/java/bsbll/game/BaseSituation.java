@@ -14,8 +14,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 import bsbll.Base;
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -206,7 +206,7 @@ public final class BaseSituation {
     
     public static final class ResultOfAdvance {
         private final BaseSituation newSituation;
-        private final ImmutableSet<Player> runs;
+        private final ImmutableList<Player> runs;
         
         public ResultOfAdvance(Map<Base, Player> newSituation, Collection<Player> runs) {
             this(new BaseSituation(newSituation), runs);
@@ -214,14 +214,14 @@ public final class BaseSituation {
         
         public ResultOfAdvance(BaseSituation newSituation, Collection<Player> runs) {
             this.newSituation = requireNonNull(newSituation);
-            this.runs = ImmutableSet.copyOf(runs);
+            this.runs = ImmutableList.copyOf(runs);
         }
         
         public BaseSituation getNewSituation() {
             return newSituation;
         }
         
-        public ImmutableSet<Player> getRunnersThatScored() {
+        public ImmutableList<Player> getRunnersThatScored() {
             return runs;
         }
         

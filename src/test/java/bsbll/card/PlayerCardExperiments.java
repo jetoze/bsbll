@@ -23,7 +23,7 @@ public final class PlayerCardExperiments {
         BattingStatLine stats = new BattingStatLine();
         for (int n = 0; n < 697; ++n) {
             Outcome outcome = matchup.run(batter, pitcher);
-            stats = stats.add(outcome);
+            stats = stats.plus(outcome);
         }
         System.out.println("PA: " + stats.get(PLATE_APPEARANCES));
         System.out.println("AB: " + stats.get(AT_BATS));

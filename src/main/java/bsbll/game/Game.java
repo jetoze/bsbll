@@ -4,10 +4,17 @@ import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import bsbll.matchup.MatchupRunner;
+import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.player.Player;
+import bsbll.stats.BattingStat;
+import bsbll.stats.BattingStatLine;
+import bsbll.stats.PitchingStatLine;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.collections.LoopingIterator;
@@ -21,7 +28,8 @@ public final class Game {
     
     private final MatchupRunner matchupRunner;
 
-    private final Innings innings = new Innings();
+    private final Innings innings = new Innings();    
+    private final GameStats stats = new GameStats();
 
     public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
         this.homeTeam = homeTeam;
@@ -43,6 +51,7 @@ public final class Game {
                     batting.getBattingOrder(),
                     fielding.getPitcher(),
                     matchupRunner,
+                    stats,
                     innings.runsNeededToWalkOf().orElse(0));
             HalfInning.Stats stats = halfInning.run();
             innings.add(stats);
@@ -105,6 +114,42 @@ public final class Game {
         
         public boolean isEmpty() {
             return top.isEmpty() && bottom.isEmpty();
+        }
+    }
+    
+    
+    public static final class GameStats {
+        private final Map<Player, BattingStatLine> battingStats = new HashMap<>();
+        private final Map<Player, PitchingStatLine> pitchingStats = new HashMap<>();
+        
+        public void update(Player batter, Player pitcher, Outcome outcome, List<Player> runs) {
+            updateBatterStats(batter, outcome, runs.size());
+            updateStatsForRunnersThatScored(batter, runs);
+            updatePitchingStats(pitcher, outcome, runs.size());
+        }
+        
+        private void updateBatterStats(Player batter, Outcome outcome, int rbis) {
+            BattingStatLine line = battingStats(batter);
+            BattingStatLine newLine = line.plus(outcome, rbis);
+            battingStats.put(batter, newLine);
+        }
+        
+        private void updateStatsForRunnersThatScored(Player batter, List<Player> runs) {
+            runs.stream().filter(p -> p != batter).forEach(p -> {
+                BattingStatLine line = battingStats(batter);
+                BattingStatLine newLine = line.plus(BattingStat.RUNS, 1);
+                battingStats.put(batter, newLine);
+            });
+        }
+        
+        private BattingStatLine battingStats(Player player) {
+            return battingStats.getOrDefault(player, BattingStatLine.forNewGame());
+        }
+        
+        private void updatePitchingStats(Player pitcher, Outcome outcome, int numberOfRuns) {
+            PitchingStatLine line = pitchingStats.getOrDefault(pitcher, PitchingStatLine.forNewGame());
+            PitchingStatLine newLine = line.plus(outcome, numberOfRuns);
+            pitchingStats.put(pitcher, newLine);
         }
     }
     

@@ -7,7 +7,10 @@ import java.util.Objects;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import bsbll.game.BaseSituation.ResultOfAdvance;
+import bsbll.game.Game.GameStats;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
@@ -17,6 +20,7 @@ public final class HalfInning {
     private final BattingOrder battingOrder;
     private final Player pitcher;
     private final MatchupRunner matchupRunner;
+    private final GameStats gameStats; // TODO: do this via an observer instead?
     private final int runsNeededToWin;
 
     /**
@@ -37,15 +41,15 @@ public final class HalfInning {
     public HalfInning(BattingOrder battingOrder, 
                       Player pitcher, 
                       MatchupRunner matchupRunner,
+                      GameStats stats,
                       int runsNeededToWin) {
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
+        this.gameStats = requireNonNull(stats);
         this.runsNeededToWin = runsNeededToWin;
     }
 
-    // TODO: Let this method return a structure containing hits, runs, and errors, instead of 
-    // having getters for them.
     public Stats run() {
         Stats stats = new Stats();
         BaseSituation baseSituation = BaseSituation.empty();
@@ -55,6 +59,7 @@ public final class HalfInning {
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;
+            gameStats.update(batter, pitcher, outcome, sam.playersThatScored);
         } while (!isDone(stats));
         int lob = baseSituation.getNumberOfRunners();
         return stats.withLeftOnBase(lob);
@@ -69,7 +74,7 @@ public final class HalfInning {
             //   + Evaluate fielder's choice
             //   + Evaluate runners advancing
             //   + Etc?
-            return new StateAfterMatchup(preStats.addOut(), baseSituation);
+            return new StateAfterMatchup(preStats.addOut(), ImmutableList.of(), baseSituation);
         }
         ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome);
         Stats newStats = new Stats(
@@ -78,7 +83,7 @@ public final class HalfInning {
                 preStats.errors,
                 preStats.outs,
                 preStats.leftOnBase);
-        return new StateAfterMatchup(newStats, roa.getNewSituation());
+        return new StateAfterMatchup(newStats, roa.getRunnersThatScored(), roa.getNewSituation());
     }
     
     private boolean isDone(Stats stats) {
@@ -97,10 +102,13 @@ public final class HalfInning {
     
     private static class StateAfterMatchup {
         public final Stats stats;
+        public final ImmutableList<Player> playersThatScored;
         public final BaseSituation baseSituation;
         
-        public StateAfterMatchup(Stats stats, BaseSituation baseSituation) {
+        public StateAfterMatchup(Stats stats, ImmutableList<Player> playersThatScored, 
+                BaseSituation baseSituation) {
             this.stats = stats;
+            this.playersThatScored = playersThatScored;
             this.baseSituation = baseSituation;
         }
     }
