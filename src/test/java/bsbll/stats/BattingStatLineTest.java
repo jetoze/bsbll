@@ -112,7 +112,7 @@ public final class BattingStatLineTest {
     
     @Test
     public void addIndividualStats() {
-        BattingStatLine start = BattingStatLine.forNewGame();
+        BattingStatLine start = BattingStatLine.forNewGame().build();
         
         BattingStatLine result = start.plus(PLATE_APPEARANCES, 5, HITS, 2,
                 STRIKEOUTS, 1, RUNS, 2, RUNS_BATTED_IN, 3);

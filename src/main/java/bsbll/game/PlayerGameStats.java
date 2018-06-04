@@ -9,9 +9,7 @@ import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
-import bsbll.stats.BattingStat.PrimitiveBattingStat;
 import bsbll.stats.BattingStatLine;
-import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 import bsbll.stats.PitchingStatLine;
 
 public final class PlayerGameStats {
@@ -37,12 +35,7 @@ public final class PlayerGameStats {
     }
     
     private BattingStatLine.Builder battingStats(Player player) {
-        BattingStatLine.Builder builder = battingStats.get(player.getId());
-        if (builder == null) {
-            builder = BattingStatLine.builder().set(PrimitiveBattingStat.GAMES, 1);
-            battingStats.put(player.getId(), builder);
-        }
-        return builder;
+        return battingStats.computeIfAbsent(player.getId(), id -> BattingStatLine.forNewGame());
     }
     
     private void updatePitchingStats(Player pitcher, Outcome outcome, int numberOfRuns) {
@@ -51,12 +44,7 @@ public final class PlayerGameStats {
     }
     
     private PitchingStatLine.Builder pitchingStats(Player player) {
-        PitchingStatLine.Builder builder = pitchingStats.get(player.getId());
-        if (builder == null) {
-            builder = PitchingStatLine.builder().set(PrimitivePitchingStat.GAMES, 1);
-            pitchingStats.put(player.getId(), builder);
-        }
-        return builder;
+        return pitchingStats.computeIfAbsent(player.getId(), id -> PitchingStatLine.forNewGame());
     }
     
     public void gatherBattingStats(BiConsumer<PlayerId, BattingStatLine> c) {

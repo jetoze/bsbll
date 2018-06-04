@@ -9,8 +9,6 @@ import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ImmutableMap;
-
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 
@@ -22,10 +20,6 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
 
     public PitchingStatLine(Map<PrimitivePitchingStat, Integer> values) {
         super(values);
-    }
-
-    public static PitchingStatLine forNewGame() {
-        return new PitchingStatLine(ImmutableMap.of(PitchingStat.GAMES, 1));
     }
 
     public <T> T get(PitchingStat<T> stat) {
@@ -56,6 +50,10 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
         return new Builder();
     }
     
+    public static Builder forNewGame() {
+        return builder().set(GAMES, 1);
+    }
+
     public static final class Builder {
         private final EnumMap<PrimitivePitchingStat, Integer> values = new EnumMap<>(PrimitivePitchingStat.class);
         
