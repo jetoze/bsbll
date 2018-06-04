@@ -7,6 +7,7 @@ import static tzeth.preconds.MorePreconditions.checkPositive;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
@@ -23,15 +24,30 @@ public final class BattingLeaders<T> { // TODO: Replace with a generic StatLeade
     
     public static <T> BattingLeaders<T> forStat(Map<PlayerId, BattingStatLine> statLines,
             BattingStat<T> stat, int top) {
+        return forStat(statLines, stat, top, i -> true);
+    }
+    
+    public static <T> BattingLeaders<T> forStat(Map<PlayerId, BattingStatLine> statLines,
+            BattingStat<T> stat, int top, int minAtBats) {
+        checkPositive(minAtBats);
+        return forStat(statLines, stat, top, e -> e.getValue().get(BattingStat.AT_BATS) >= minAtBats);
+    }
+    
+    public static <T> BattingLeaders<T> forStat(Map<PlayerId, BattingStatLine> statLines,
+            BattingStat<T> stat, int top, Predicate<Map.Entry<PlayerId, BattingStatLine>> filter) {
         requireNonNull(stat);
         checkPositive(top);
+        requireNonNull(filter);
         List<Entry<T>> entries = statLines.entrySet().stream()
-                .map(e -> new Entry<>(e.getKey(), stat.get(e.getValue())))
+                .filter(filter)
+                .map(e -> new Entry<>(e.getKey(), e.getValue().get(stat)))
                 .sorted(Comparator.comparing(Entry::getValue, stat.leaderOrder()))
                 .limit(top)
                 .collect(toList());
         return new BattingLeaders<>(stat, entries);
     }
+    
+    
     
     public Stat<T> getStat() {
         return stat;

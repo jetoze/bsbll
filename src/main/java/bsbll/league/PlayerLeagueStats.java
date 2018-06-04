@@ -45,6 +45,10 @@ public final class PlayerLeagueStats {
     public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top) {
         return BattingLeaders.forStat(this.battingStats, stat, top);
     }
+    
+    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top, int minAtBats) {
+        return BattingLeaders.forStat(this.battingStats, stat, top, minAtBats);
+    }
 
     public PitchingStatLine getPitchingStats(Player player) {
         return getPitchingStats(player.getId());

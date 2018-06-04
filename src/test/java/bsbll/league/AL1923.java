@@ -17,6 +17,7 @@ import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner;
+import bsbll.stats.Average;
 import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.team.Team;
@@ -304,6 +305,10 @@ public final class AL1923 {
             BattingLeaders<Integer> rbiLeaders = league.league.getBattingLeaders(BattingStat.RUNS_BATTED_IN, 5);
             System.out.println("RBI Leaders:");
             rbiLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
+            System.out.println();
+            BattingLeaders<Average> baLeaders = league.league.getBattingLeaders(BattingStat.BATTING_AVERAGE, 5);
+            System.out.println("BA Leaders:");
+            baLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
         }
     }
 }

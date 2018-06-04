@@ -115,7 +115,9 @@ public final class League {
         return playerStats.getBattingLeaders(stat, top);
     }
     
-    // TODO: getBattingLeaders overload that takes a min-AB requirement as additional input.
+    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top, int minAtBats) {
+        return playerStats.getBattingLeaders(stat, top, minAtBats);
+    }
     
     public void addBoxScores(BoxScore... boxScores) {
         addBoxScores(Arrays.asList(boxScores));
