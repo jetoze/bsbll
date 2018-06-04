@@ -290,7 +290,11 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        for (int n = 1; n <= 1; ++n) {
+        long start = 0L;
+        for (int n = 1; n <= 25; ++n) {
+            if (n == 5) {
+                start = System.currentTimeMillis();
+            }
             System.out.println("#" + n + ":");
             AL1923 league = new AL1923();
             Standings standings = league.run();
@@ -298,5 +302,8 @@ public final class AL1923 {
             System.out.println();
             System.out.println(league.league.getBattingStatLine(PlayerId.of("ruthba01")));
         }
+        long end = System.currentTimeMillis();
+        System.out.println("Total time (ms); " + (end - start));
+        System.out.println("Average time (ms); " + ((end - start) / 20));
     }
 }

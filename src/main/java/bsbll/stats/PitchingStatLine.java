@@ -66,6 +66,23 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
             return this;
         }
         
+        public Builder add(Outcome o, int runs) {
+            requireNonNull(o);
+            checkNotNegative(runs);
+            return set(BATTERS_FACED, get(BATTERS_FACED) + 1)
+                    .set(OUTS, get(OUTS) + (o.isOut() ? 1 : 0))
+                    .set(HITS, get(HITS) + (o.isHit() ? 1 : 0))
+                    .set(HOMERUNS, get(HOMERUNS) + (o == Outcome.HOMERUN ? 1 : 0))
+                    .set(EARNED_RUNS, get(EARNED_RUNS) + runs)
+                    .set(WALKS, get(WALKS) + (o == Outcome.WALK ? 1 : 0))
+                    .set(STRIKEOUTS, get(STRIKEOUTS) + (o == Outcome.STRIKEOUT ? 1 : 0))
+                    .set(HIT_BY_PITCHES, get(HIT_BY_PITCHES) + (o == Outcome.HIT_BY_PITCH ? 1 : 0));
+        }
+
+        private int get(PrimitivePitchingStat stat) {
+            return values.getOrDefault(stat, 0);
+        }
+
         public PitchingStatLine build() {
             return new PitchingStatLine(values);
         }
