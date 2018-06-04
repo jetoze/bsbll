@@ -23,6 +23,8 @@ import bsbll.game.GameResult;
 import bsbll.game.LineScore;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
+import bsbll.stats.BattingLeaders;
+import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStatLine;
 import bsbll.team.Record;
@@ -108,6 +110,12 @@ public final class League {
     public PitchingStatLine getPitchingStatLine(PlayerId playerId) {
         return this.playerStats.getPitchingStats(playerId);
     }
+    
+    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top) {
+        return playerStats.getBattingLeaders(stat, top);
+    }
+    
+    // TODO: getBattingLeaders overload that takes a min-AB requirement as additional input.
     
     public void addBoxScores(BoxScore... boxScores) {
         addBoxScores(Arrays.asList(boxScores));

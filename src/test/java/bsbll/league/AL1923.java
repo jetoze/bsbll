@@ -17,7 +17,8 @@ import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner;
-import bsbll.player.PlayerId;
+import bsbll.stats.BattingLeaders;
+import bsbll.stats.BattingStat;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
 import bsbll.team.TeamId;
@@ -296,7 +297,13 @@ public final class AL1923 {
             Standings standings = league.run();
             print(standings);
             System.out.println();
-            System.out.println(league.league.getBattingStatLine(PlayerId.of("ruthba01")));
+            BattingLeaders<Integer> hrLeaders = league.league.getBattingLeaders(BattingStat.HOMERUNS, 5);
+            System.out.println("HR Leaders:");
+            hrLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
+            System.out.println();
+            BattingLeaders<Integer> rbiLeaders = league.league.getBattingLeaders(BattingStat.RUNS_BATTED_IN, 5);
+            System.out.println("RBI Leaders:");
+            rbiLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
         }
     }
 }

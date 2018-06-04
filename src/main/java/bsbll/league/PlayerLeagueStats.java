@@ -12,6 +12,8 @@ import bsbll.game.BoxScore;
 import bsbll.game.PlayerGameStats;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
+import bsbll.stats.BattingLeaders;
+import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStatLine;
 
@@ -38,6 +40,10 @@ public final class PlayerLeagueStats {
         BattingStatLine line = battingStats.get(playerId);
         checkArgument(line != null, "No such player: %s", playerId);
         return line;
+    }
+    
+    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top) {
+        return BattingLeaders.forStat(this.battingStats, stat, top);
     }
 
     public PitchingStatLine getPitchingStats(Player player) {
