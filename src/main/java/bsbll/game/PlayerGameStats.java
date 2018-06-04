@@ -31,7 +31,7 @@ public final class PlayerGameStats {
     
     private void updateStatsForRunnersThatScored(Player batter, List<Player> runs) {
         runs.stream().filter(p -> p != batter).forEach(p -> {
-            BattingStatLine.Builder line = battingStats(batter);
+            BattingStatLine.Builder line = battingStats(p);
             line.add(BattingStat.RUNS, 1);
         });
     }
