@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.BaseSituation.ResultOfAdvance;
-import bsbll.game.Game.GameStats;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
@@ -20,7 +19,7 @@ public final class HalfInning {
     private final BattingOrder battingOrder;
     private final Player pitcher;
     private final MatchupRunner matchupRunner;
-    private final GameStats gameStats; // TODO: do this via an observer instead?
+    private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
     private final int runsNeededToWin;
 
     /**
@@ -41,12 +40,12 @@ public final class HalfInning {
     public HalfInning(BattingOrder battingOrder, 
                       Player pitcher, 
                       MatchupRunner matchupRunner,
-                      GameStats stats,
+                      PlayerGameStats playerStats,
                       int runsNeededToWin) {
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
-        this.gameStats = requireNonNull(stats);
+        this.playerStats = requireNonNull(playerStats);
         this.runsNeededToWin = runsNeededToWin;
     }
 
@@ -59,7 +58,7 @@ public final class HalfInning {
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;
-            gameStats.update(batter, pitcher, outcome, sam.playersThatScored);
+            playerStats.update(batter, pitcher, outcome, sam.playersThatScored);
         } while (!isDone(stats));
         int lob = baseSituation.getNumberOfRunners();
         return stats.withLeftOnBase(lob);

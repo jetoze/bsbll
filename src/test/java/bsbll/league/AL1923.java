@@ -10,12 +10,14 @@ import java.util.Random;
 import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
+import bsbll.game.BoxScore;
 import bsbll.game.Game;
 import bsbll.game.LineScore;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner;
+import bsbll.player.PlayerId;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
 import bsbll.team.TeamId;
@@ -44,7 +46,7 @@ public final class AL1923 {
     }
     
     public Standings run() {
-        List<LineScore> scores = new ArrayList<>();
+        List<BoxScore> scores = new ArrayList<>();
         List<Team> teams = new ArrayList<>(league.getTeams());
         Collections.shuffle(teams);
         for (int a = 0; a < teams.size(); ++a) {
@@ -55,14 +57,14 @@ public final class AL1923 {
                 scores.addAll(runSeries(teamB, teamA, 11));
             }
         }
-        league.addLineScores(scores);
+        league.addBoxScores(scores);
         return league.getStandings();
     }
     
     public void runRoundsOfRandomSeries(int numberOfRounds) {
         List<Team> teams = new ArrayList<>(league.getTeams());
         for (int n = 0; n < numberOfRounds; ++n) {
-            List<LineScore> scores = new ArrayList<>();
+            List<BoxScore> scores = new ArrayList<>();
             Collections.shuffle(teams);
             for (int t = 0; t < teams.size(); t += 2) {
                 Team home = teams.get(t);
@@ -70,26 +72,25 @@ public final class AL1923 {
                 int numberOfGames = random.nextInt(4) + 1;
                 scores.addAll(runSeries(home, visiting, numberOfGames));
             }
-            league.addLineScores(scores);
+            league.addBoxScores(scores);
             Standings standings = league.getStandings();
             print(standings, n + 1);
         }
     }
     
-    private List<LineScore> runSeries(Team home, Team visiting, int numberOfGames) {
-        List<LineScore> scores = new ArrayList<>();
+    private List<BoxScore> runSeries(Team home, Team visiting, int numberOfGames) {
+        List<BoxScore> scores = new ArrayList<>();
         for (int n = 0; n < numberOfGames; ++n) {
-            LineScore score = runGame(home, visiting);
+            BoxScore score = runGame(home, visiting);
             scores.add(score);
         }
         return scores;
     }
     
-    private LineScore runGame(Team home, Team visiting) {
+    private BoxScore runGame(Team home, Team visiting) {
         Game game = new Game(home, visiting, matchupRunner);
-        LineScore score = game.run();
-        //print(score);
-        return score;
+        BoxScore boxScore = game.run();
+        return boxScore;
     }
     
     private static void print(LineScore score) {
@@ -295,7 +296,7 @@ public final class AL1923 {
             Standings standings = league.run();
             print(standings);
             System.out.println();
+            System.out.println(league.league.getBattingStatLine(PlayerId.of("ruthba01")));
         }
     }
-    
 }

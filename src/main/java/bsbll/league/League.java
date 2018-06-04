@@ -18,8 +18,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import bsbll.Year;
+import bsbll.game.BoxScore;
 import bsbll.game.GameResult;
 import bsbll.game.LineScore;
+import bsbll.player.Player;
+import bsbll.player.PlayerId;
+import bsbll.stats.BattingStatLine;
+import bsbll.stats.PitchingStatLine;
 import bsbll.team.Record;
 import bsbll.team.RunDifferential;
 import bsbll.team.Team;
@@ -32,7 +37,8 @@ public final class League {
     private final Year year;
     private final ImmutableMap<TeamId, Team> teams;
     private final Map<TeamId, Record> teamRecords;
-    private final List<LineScore> lineScores = new ArrayList<>();
+    private final PlayerLeagueStats playerStats = new PlayerLeagueStats();
+    private final List<BoxScore> boxScores = new ArrayList<>();
     private final List<GameResult> gameResults = new ArrayList<>();
     
     public League(LeagueId id, Year year, Team... teams) {
@@ -87,13 +93,30 @@ public final class League {
         return Standings.of(tmp);
     }
     
-    public void addLineScores(LineScore... scores) {
-        addLineScores(Arrays.asList(scores));
+    public BattingStatLine getBattingStatLine(Player player) {
+        return this.playerStats.getBattingStats(player);
     }
     
-    public void addLineScores(Collection<LineScore> scores) {
-        addGameResults(scores.stream().map(LineScore::toGameResult));
-        this.lineScores.addAll(scores);
+    public BattingStatLine getBattingStatLine(PlayerId playerId) {
+        return this.playerStats.getBattingStats(playerId);
+    }
+    
+    public PitchingStatLine getPitchingStatLine(Player player) {
+        return this.playerStats.getPitchingStats(player);
+    }
+    
+    public PitchingStatLine getPitchingStatLine(PlayerId playerId) {
+        return this.playerStats.getPitchingStats(playerId);
+    }
+    
+    public void addBoxScores(BoxScore... boxScores) {
+        addBoxScores(Arrays.asList(boxScores));
+    }
+    
+    public void addBoxScores(Collection<BoxScore> boxScores) {
+        addGameResults(boxScores.stream().map(BoxScore::toGameResult));
+        boxScores.forEach(this.playerStats::update);
+        this.boxScores.addAll(boxScores);
     }
     
     public void addGameResults(GameResult... results) {
@@ -126,6 +149,8 @@ public final class League {
     }
     
     public ImmutableList<LineScore> getGameLog() {
-        return ImmutableList.copyOf(lineScores);
+        return this.boxScores.stream()
+                .map(BoxScore::getLineScore)
+                .collect(ImCollectors.toList());
     }
 }
