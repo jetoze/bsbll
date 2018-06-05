@@ -23,6 +23,7 @@ public final class Game {
 
     private final Innings innings = new Innings();    
     private final PlayerGameStats playerStats = new PlayerGameStats();
+    private final GameEvents.Builder gameEventsBuilder = GameEvents.builder();
 
     public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
         this.homeTeam = homeTeam;

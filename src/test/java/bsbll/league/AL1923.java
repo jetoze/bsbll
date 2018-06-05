@@ -306,7 +306,7 @@ public final class AL1923 {
             System.out.println("RBI Leaders:");
             rbiLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
             System.out.println();
-            BattingLeaders<Average> baLeaders = league.league.getBattingLeaders(BattingStat.BATTING_AVERAGE, 5);
+            BattingLeaders<Average> baLeaders = league.league.getBattingLeaders(BattingStat.BATTING_AVERAGE, 5, 400);
             System.out.println("BA Leaders:");
             baLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
         }
