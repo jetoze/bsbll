@@ -15,7 +15,9 @@ import bsbll.player.PlayerId;
 import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
+import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
+import bsbll.stats.PlayerStatLookup;
 
 @NotThreadSafe
 public final class PlayerLeagueStats {
@@ -59,5 +61,25 @@ public final class PlayerLeagueStats {
         PitchingStatLine line = pitchingStats.get(playerId);
         checkArgument(line != null, "No such player: %s", playerId);
         return line;
+    }
+    
+    public PlayerStatLookup asLookup() {
+        return new PlayerStatLookup() {
+            @Override
+            public <T> T getPitchingStat(Player player, PitchingStat<T> stat) {
+                requireNonNull(player);
+                requireNonNull(stat);
+                PitchingStatLine line = getPitchingStats(player);
+                return line.get(stat);
+            }
+            
+            @Override
+            public <T> T getBattingStat(Player player, BattingStat<T> stat) {
+                requireNonNull(player);
+                requireNonNull(stat);
+                BattingStatLine line = getBattingStats(player);
+                return line.get(stat);
+            }
+        };
     }
 }

@@ -2,6 +2,7 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
+import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Objects;
 
@@ -16,14 +17,18 @@ import bsbll.player.Player;
 import bsbll.team.BattingOrder;
 
 public final class HalfInning {
+    private final int num;
     private final BattingOrder battingOrder;
     private final Player pitcher;
     private final MatchupRunner matchupRunner;
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
+    private final GameEvents.Builder gameEventsBuilder;
     private final int runsNeededToWin;
 
     /**
      * 
+     * @param num
+     *            the inning number (1 for the first inning, etc)
      * @param battingOrder
      *            the batting order
      * @param pitcher
@@ -37,15 +42,19 @@ public final class HalfInning {
      *            will come to a stop once this many runs score (or three outs
      *            are made). {@code 0} if not applicable.
      */
-    public HalfInning(BattingOrder battingOrder, 
+    public HalfInning(int num,
+                      BattingOrder battingOrder, 
                       Player pitcher, 
                       MatchupRunner matchupRunner,
                       PlayerGameStats playerStats,
+                      GameEvents.Builder gameEventsBuilder,
                       int runsNeededToWin) {
+        this.num = checkPositive(num);
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
         this.playerStats = requireNonNull(playerStats);
+        this.gameEventsBuilder = requireNonNull(gameEventsBuilder);
         this.runsNeededToWin = runsNeededToWin;
     }
 
@@ -55,6 +64,7 @@ public final class HalfInning {
         do {
             Player batter = battingOrder.nextBatter();
             Outcome outcome = matchupRunner.run(batter, pitcher);
+            gameEventsBuilder.examine(outcome, batter, batter, num, stats.outs, baseSituation);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;

@@ -1,5 +1,6 @@
 package bsbll.game;
 
+import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
@@ -34,5 +35,42 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
 
     public int getRunnersOn() {
         return runnersOn;
+    }
+    
+    public static Builder builder(Player batter, Player pitcher) {
+        return new Builder(batter, pitcher);
+    }
+    
+    
+    public static final class Builder {
+        private final Player batter;
+        private final Player pitcher;
+        private int inning;
+        private int outs;
+        private int runnersOn;
+        
+        public Builder(Player batter, Player pitcher) {
+            this.batter = requireNonNull(batter);
+            this.pitcher = requireNonNull(pitcher);
+        }
+
+        public Builder inInning(int inning) {
+            this.inning = checkPositive(inning);
+            return this;
+        }
+        
+        public Builder withOuts(int outs) {
+            this.outs = checkInRange(outs, 0, 2);
+            return this;
+        }
+        
+        public Builder withRunnersOn(int runnersOn) {
+            this.runnersOn = checkInRange(runnersOn, 0, 3);
+            return this;
+        }
+        
+        public HomerunEvent build() {
+            return new HomerunEvent(batter, pitcher, inning, outs, runnersOn);
+        }
     }
 }

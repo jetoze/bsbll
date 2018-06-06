@@ -27,7 +27,8 @@ public final class HalfInningTest {
     @Test
     public void threeUpThreeDown() {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.OUT, Outcome.STRIKEOUT, Outcome.OUT);
-        HalfInning halfInning = new HalfInning(battingOrder, pitcher, mr, new PlayerGameStats(), 0);
+        HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
+                GameEvents.builder(), 0);
         
         Stats stats = halfInning.run();
         
@@ -38,7 +39,8 @@ public final class HalfInningTest {
     public void singleWalkStrikeoutHomerunDoubleOutOut() {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.WALK, 
                 Outcome.STRIKEOUT, Outcome.HOMERUN, Outcome.DOUBLE, Outcome.OUT, Outcome.OUT);
-        HalfInning halfInning = new HalfInning(battingOrder, pitcher, mr, new PlayerGameStats(), 0);
+        HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
+                GameEvents.builder(), 0);
         
         Stats stats = halfInning.run();
         
@@ -49,7 +51,8 @@ public final class HalfInningTest {
     public void walkOffHitByPitch() {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.SINGLE, Outcome.WALK, Outcome.WALK);
         int runsNeededToWin = 1;
-        HalfInning halfInning = new HalfInning(battingOrder, pitcher, mr, new PlayerGameStats(), runsNeededToWin);
+        HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
+                GameEvents.builder(), runsNeededToWin);
         
         Stats stats = halfInning.run();
         

@@ -23,7 +23,6 @@ public final class Game {
 
     private final Innings innings = new Innings();    
     private final PlayerGameStats playerStats = new PlayerGameStats();
-    private final GameEvents.Builder gameEventsBuilder = GameEvents.builder();
 
     public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
         this.homeTeam = homeTeam;
@@ -37,15 +36,18 @@ public final class Game {
         checkState(innings.isEmpty(), "Game already in progress");
         LoopingIterator<Lineup> battingLineup = LoopingIterator.of(visitingLineup, homeLineup);
         LoopingIterator<Lineup> fieldingLineup = LoopingIterator.of(homeLineup, visitingLineup);
+        GameEvents.Builder eventsBuilder = GameEvents.builder();
         do {
             Lineup batting = battingLineup.next();
             Lineup fielding = fieldingLineup.next();
             assert batting != fielding;
             HalfInning halfInning = new HalfInning(
+                    innings.num(),
                     batting.getBattingOrder(),
                     fielding.getPitcher(),
                     matchupRunner,
                     playerStats,
+                    eventsBuilder,
                     innings.runsNeededToWalkOf().orElse(0));
             HalfInning.Stats stats = halfInning.run();
             innings.add(stats);
@@ -54,13 +56,18 @@ public final class Game {
                 new LineScore.Line(homeTeam, innings.bottom),
                 new LineScore.Line(visitingTeam, innings.top)
         );
-        return new BoxScore(lineScore, homeLineup, visitingLineup, playerStats);
+        GameEvents events = eventsBuilder.build();
+        return new BoxScore(lineScore, homeLineup, visitingLineup, playerStats, events);
     }
 
     
     private static class Innings {
         private final List<HalfInning.Stats> top = new ArrayList<>();
         private final List<HalfInning.Stats> bottom = new ArrayList<>();
+        
+        public int num() {
+            return 1 + Math.min(top.size(), bottom.size());
+        }
         
         public void add(HalfInning.Stats stats) {
             if (top.size() == bottom.size()) {

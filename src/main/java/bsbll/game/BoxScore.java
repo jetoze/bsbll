@@ -9,13 +9,15 @@ public final class BoxScore {
     private final Lineup homeLineup;
     private final Lineup visitingLineup;
     private final PlayerGameStats playerStats;
+    private final GameEvents gameEvents;
 
     public BoxScore(LineScore lineScore, Lineup homeLineup, Lineup visitingLineup,
-            PlayerGameStats playerStats) {
+            PlayerGameStats playerStats, GameEvents gameEvents) {
         this.lineScore = requireNonNull(lineScore);
         this.homeLineup = requireNonNull(homeLineup);
         this.visitingLineup = requireNonNull(visitingLineup);
         this.playerStats = requireNonNull(playerStats);
+        this.gameEvents = requireNonNull(gameEvents);
     }
 
     public LineScore getLineScore() {
@@ -34,6 +36,10 @@ public final class BoxScore {
         return playerStats;
     }
     
+    public GameEvents getGameEvents() {
+        return gameEvents;
+    }
+
     public GameResult toGameResult() {
         return lineScore.toGameResult();
     }

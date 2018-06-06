@@ -11,6 +11,9 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 
+import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.player.Player;
+
 /**
  * A collection of events that occurred in a game.
  */
@@ -68,6 +71,27 @@ public final class GameEvents {
             requireNonNull(event);
             bin.accept(event);
             return this;
+        }
+        
+        public void examine(Outcome outcome, Player batter, Player pitcher, int inning, 
+                int outs, BaseSituation baseSituation) {
+            switch (outcome) {
+            case DOUBLE:
+                addDouble(new DoubleEvent(batter, pitcher));
+                break;
+            case TRIPLE:
+                addTriple(new TripleEvent(batter, pitcher));
+                break;
+            case HOMERUN:
+                addHomerun(HomerunEvent.builder(batter, pitcher)
+                        .inInning(inning)
+                        .withOuts(outs)
+                        .withRunnersOn(baseSituation.getNumberOfRunners())
+                        .build());
+                break;
+            default:
+                // Not of interest.
+            }
         }
     }
 }
