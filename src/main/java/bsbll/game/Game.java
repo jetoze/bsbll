@@ -1,5 +1,6 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
@@ -25,6 +26,9 @@ public final class Game {
     private final PlayerGameStats playerStats = new PlayerGameStats();
 
     public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
+        requireNonNull(homeTeam);
+        requireNonNull(visitingTeam);
+        checkArgument(homeTeam != visitingTeam, "A team cannot play a game against itself (%s)", homeTeam);
         this.homeTeam = homeTeam;
         this.homeLineup = homeTeam.getRoster().getLineup();
         this.visitingTeam = visitingTeam;
