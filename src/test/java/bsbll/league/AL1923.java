@@ -21,12 +21,15 @@ import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner;
+import bsbll.player.Player;
+import bsbll.player.PlayerFactory;
 import bsbll.stats.Average;
 import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
 import bsbll.team.TeamId;
+import tzeth.strings.Padding;
 
 public final class AL1923 {
     private final League league;
@@ -302,6 +305,10 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
+        playCompleteLeague(1);
+    }
+
+    public static void playOneGameAndPrintBoxScore() {
         AL1923 league = new AL1923();
         ImmutableList<Team> teams = league.league.getTeams();
         List<BoxScore> boxScores = league.runSeries(teams.get(4), teams.get(2), 1);
@@ -316,16 +323,24 @@ public final class AL1923 {
             print(standings);
             System.out.println();
             BattingLeaders<Integer> hrLeaders = league.league.getBattingLeaders(BattingStat.HOMERUNS, 5);
-            System.out.println("HR Leaders:");
-            hrLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
+            printLeaders("HR", hrLeaders);
             System.out.println();
             BattingLeaders<Integer> rbiLeaders = league.league.getBattingLeaders(BattingStat.RUNS_BATTED_IN, 5);
-            System.out.println("RBI Leaders:");
-            rbiLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
+            printLeaders("RBI", rbiLeaders);
             System.out.println();
             BattingLeaders<Average> baLeaders = league.league.getBattingLeaders(BattingStat.BATTING_AVERAGE, 5, 400);
-            System.out.println("BA Leaders:");
-            baLeaders.getEntries().forEach(e -> System.out.println(e.getPlayerId() + "  " + e.getValue()));
+            printLeaders("Batting Average", baLeaders);
         }
+    }
+    
+    private static void printLeaders(String stat, BattingLeaders<?> leaders) {
+        System.out.println(stat + " Leaders:");
+        PlayerFactory pf = PlayerFactory.defaultFactory();
+        Padding namePadding = Padding.of(20);
+        Padding valuePadding = Padding.of(5);
+        leaders.getEntries().forEach(e -> {
+            Player p = pf.getPlayer(e.getPlayerId());
+            System.out.println(namePadding.right(p.getName().getShortForm()) + valuePadding.left(e.getValue()));
+        });
     }
 }
