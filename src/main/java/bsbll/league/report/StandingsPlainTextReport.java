@@ -16,17 +16,20 @@ import bsbll.team.Record;
 import tzeth.strings.Padding;
 
 public final class StandingsPlainTextReport extends AbstractPlainTextReport<Standings> {
+    private final NameMode mode;
+    private final Padding namePad;
     @Nullable
     private final Comparator<Entry> order;
-    
-    
+
     public StandingsPlainTextReport(NameMode mode) {
-        super(mode);
+        this.mode = requireNonNull(mode);
+        this.namePad = Padding.of(mode.getWidthOfTeamName());
         this.order = null;
     }
     
     public StandingsPlainTextReport(NameMode mode, Comparator<Entry> order) {
-        super(mode);
+        this.mode = requireNonNull(mode);
+        this.namePad = Padding.of(mode.getWidthOfTeamName());
         this.order = requireNonNull(order);
     }
 
@@ -43,14 +46,14 @@ public final class StandingsPlainTextReport extends AbstractPlainTextReport<Stan
         Padding raPadding = Padding.of(5);
         
         ImmutableList.Builder<String> builder = ImmutableList.builder();
-        String header = getNamePadding().right("") +
+        String header = namePad.right("") +
                 wlPadding.left("W") + wlPadding.left("L") +
                 pctPadding.left("PCT") + gbPadding.left("GB") +
                 rPadding.left("RS") + raPadding.left("RA");
         builder.add(header);
         for (Entry e : entries) {
             Record record = e.getRecord();
-            String line = getTeamName(e.getTeam().getName()) +
+            String line = namePad.right(mode.applyTo(e.getTeam().getName())) +
                     wlPadding.left(record.getWins()) + wlPadding.left(record.getLosses()) +
                     pctPadding.left(record.getWinPct()) + gbPadding.left(e.getGamesBehind()) +
                     rPadding.left(record.getRunsScored()) + raPadding.left(record.getRunsAgainst());

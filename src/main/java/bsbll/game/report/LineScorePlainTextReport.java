@@ -1,5 +1,7 @@
 package bsbll.game.report;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
@@ -7,24 +9,33 @@ import bsbll.NameMode;
 import bsbll.game.HalfInning.Stats;
 import bsbll.game.LineScore;
 import bsbll.report.AbstractPlainTextReport;
+import bsbll.team.TeamName;
+import tzeth.strings.Padding;
 
 /**
  * Writes a line score as plain text.
  */
 public final class LineScorePlainTextReport extends AbstractPlainTextReport<LineScore> {
-    
+    private final NameMode mode;
+    private final Padding namePad;
+
     public LineScorePlainTextReport(NameMode mode) {
-        super(mode);
+        this.mode = requireNonNull(mode);
+        this.namePad = Padding.of(mode.getWidthOfTeamName());
     }
 
     @Override
     public ImmutableList<String> format(LineScore score) {
-        StringBuilder header = new StringBuilder(getNamePadding().right(""));
+        StringBuilder header = new StringBuilder(namePad.right(""));
         StringBuilder visitingLine = new StringBuilder(getTeamName(score.getVisitingLine().getTeam().getName()));
         StringBuilder homeLine = new StringBuilder(getTeamName(score.getHomeLine().getTeam().getName()));
         appendInnings(score, header, visitingLine, homeLine);
         appendSummary(score, header, visitingLine, homeLine);
         return ImmutableList.of(header.toString(), visitingLine.toString(), homeLine.toString());
+    }
+    
+    private String getTeamName(TeamName name) {
+        return namePad.right(mode.applyTo(name));
     }
     
     private void appendInnings(LineScore score,

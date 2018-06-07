@@ -1,5 +1,7 @@
 package bsbll.game.report;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableList;
 
 import bsbll.NameMode;
@@ -13,11 +15,14 @@ import tzeth.strings.Padding;
  * Writes the summary lines from a {@link LineScore} as plain text.
  */
 public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextReport<LineScore> {
+    private final NameMode mode;
+    private final Padding namePad;
     private final Padding valuePad = Padding.of(3);
     private final String header;
     
     public LineScoreSummaryPlainTextReport(NameMode mode) {
-        super(mode);
+        this.mode = requireNonNull(mode);
+        this.namePad = Padding.of(mode.getWidthOfTeamName());
         this.header = createHeader(mode);
     }
     
@@ -25,7 +30,7 @@ public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextRepo
         String rhe = valuePad.left("R") + valuePad.left("H") + valuePad.left("E");
         return (mode == NameMode.NONE)
                 ? rhe
-                : getNamePadding().right("") + rhe;
+                : namePad.right("") + rhe;
     }
 
     @Override
@@ -37,7 +42,7 @@ public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextRepo
     }
     
     public String format(Line line) {
-        String name = getTeamName(line.getTeam().getName());
+        String name = namePad.right(mode.applyTo(line.getTeam().getName()));
         LineSummary summary = line.getSummary();
         String statLine = valuePad.left(summary.getRuns()) +
                 valuePad.left(line.getSummary().getHits()) +
