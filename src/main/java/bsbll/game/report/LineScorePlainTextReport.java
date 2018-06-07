@@ -3,18 +3,17 @@ package bsbll.game.report;
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
+import bsbll.NameMode;
 import bsbll.game.HalfInning.Stats;
-import bsbll.report.AbstractPlainTextReport;
 import bsbll.game.LineScore;
-import bsbll.team.TeamName;
-import bsbll.team.TeamName.Mode;
+import bsbll.report.AbstractPlainTextReport;
 
 /**
  * Writes a line score as plain text.
  */
 public final class LineScorePlainTextReport extends AbstractPlainTextReport<LineScore> {
     
-    public LineScorePlainTextReport(TeamName.Mode mode) {
+    public LineScorePlainTextReport(NameMode mode) {
         super(mode);
     }
 
@@ -109,7 +108,7 @@ public final class LineScorePlainTextReport extends AbstractPlainTextReport<Line
         header.append(Strings.repeat(" ", div.length()));
         visitingLine.append(div);
         homeLine.append(div);
-        ImmutableList<String> summaryLines = new LineScoreSummaryPlainTextReport(Mode.NONE).format(score);
+        ImmutableList<String> summaryLines = new LineScoreSummaryPlainTextReport(NameMode.NONE).format(score);
         header.append(summaryLines.get(0));
         visitingLine.append(summaryLines.get(1));
         homeLine.append(summaryLines.get(2));

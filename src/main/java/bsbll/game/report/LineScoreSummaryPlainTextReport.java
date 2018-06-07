@@ -2,11 +2,11 @@ package bsbll.game.report;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.NameMode;
 import bsbll.game.LineScore;
 import bsbll.game.LineScore.Line;
 import bsbll.game.LineScore.LineSummary;
 import bsbll.report.AbstractPlainTextReport;
-import bsbll.team.TeamName;
 import tzeth.strings.Padding;
 
 /**
@@ -16,14 +16,14 @@ public final class LineScoreSummaryPlainTextReport extends AbstractPlainTextRepo
     private final Padding valuePad = Padding.of(3);
     private final String header;
     
-    public LineScoreSummaryPlainTextReport(TeamName.Mode mode) {
+    public LineScoreSummaryPlainTextReport(NameMode mode) {
         super(mode);
         this.header = createHeader(mode);
     }
     
-    private String createHeader(TeamName.Mode mode) {
+    private String createHeader(NameMode mode) {
         String rhe = valuePad.left("R") + valuePad.left("H") + valuePad.left("E");
-        return (mode == TeamName.Mode.NONE)
+        return (mode == NameMode.NONE)
                 ? rhe
                 : getNamePadding().right("") + rhe;
     }

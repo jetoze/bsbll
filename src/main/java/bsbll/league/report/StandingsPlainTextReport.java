@@ -8,11 +8,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.NameMode;
 import bsbll.league.Standings;
 import bsbll.league.Standings.Entry;
 import bsbll.report.AbstractPlainTextReport;
 import bsbll.team.Record;
-import bsbll.team.TeamName.Mode;
 import tzeth.strings.Padding;
 
 public final class StandingsPlainTextReport extends AbstractPlainTextReport<Standings> {
@@ -20,12 +20,12 @@ public final class StandingsPlainTextReport extends AbstractPlainTextReport<Stan
     private final Comparator<Entry> order;
     
     
-    public StandingsPlainTextReport(Mode mode) {
+    public StandingsPlainTextReport(NameMode mode) {
         super(mode);
         this.order = null;
     }
     
-    public StandingsPlainTextReport(Mode mode, Comparator<Entry> order) {
+    public StandingsPlainTextReport(NameMode mode, Comparator<Entry> order) {
         super(mode);
         this.order = requireNonNull(order);
     }

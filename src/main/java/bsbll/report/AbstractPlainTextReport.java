@@ -1,25 +1,26 @@
 package bsbll.report;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.IOException;
 import java.io.PrintStream;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.NameMode;
 import bsbll.team.TeamName;
 import tzeth.strings.Padding;
 
 public abstract class AbstractPlainTextReport<T> {
-    // TODO: Eventually we will generate reports that do not include team names,
-    // so the TeamName.Mode does not belong here.
-    private final TeamName.Mode mode;
+    private final NameMode mode;
     private final Padding namePad;
 
-    protected AbstractPlainTextReport(TeamName.Mode mode) {
-        this.mode = mode;
+    protected AbstractPlainTextReport(NameMode mode) {
+        this.mode = requireNonNull(mode);
         this.namePad = Padding.of(getNameWidth(mode));
     }
     
-    private static int getNameWidth(TeamName.Mode mode) {
+    private static int getNameWidth(NameMode mode) {
         switch (mode) {
         case NONE:
             return 0;
@@ -39,7 +40,7 @@ public abstract class AbstractPlainTextReport<T> {
     }
     
     protected final String getTeamName(TeamName name) {
-        return namePad.right(mode.apply(name));
+        return namePad.right(mode.applyTo(name));
     }
 
     public abstract ImmutableList<String> format(T t);

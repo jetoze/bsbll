@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import bsbll.NameMode;
 import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
@@ -23,8 +24,6 @@ import bsbll.stats.BattingStat;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
 import bsbll.team.TeamId;
-import bsbll.team.TeamName;
-import bsbll.team.TeamName.Mode;
 
 public final class AL1923 {
     private final League league;
@@ -96,7 +95,7 @@ public final class AL1923 {
     }
     
     private static void print(LineScore score) {
-        LineScorePlainTextReport report = new LineScorePlainTextReport(TeamName.Mode.ABBREV);
+        LineScorePlainTextReport report = new LineScorePlainTextReport(NameMode.ABBREV);
         report.writeTo(score, System.out);
         System.out.println();
     }
@@ -107,7 +106,7 @@ public final class AL1923 {
     }
 
     public static void print(Standings standings) {
-        StandingsPlainTextReport report = new StandingsPlainTextReport(Mode.MAIN);
+        StandingsPlainTextReport report = new StandingsPlainTextReport(NameMode.MAIN);
         report.writeTo(standings, System.out);
         System.out.println();
     }
