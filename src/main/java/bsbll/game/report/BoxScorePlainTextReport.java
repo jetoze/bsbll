@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
@@ -12,6 +13,7 @@ import com.google.common.collect.Multimaps;
 import bsbll.NameMode;
 import bsbll.game.BoxScore;
 import bsbll.game.ExtraBaseHitEvent;
+import bsbll.game.HomerunEvent;
 import bsbll.game.PlayerGameStats;
 import bsbll.player.Player;
 import bsbll.report.AbstractPlainTextReport;
@@ -130,37 +132,46 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         
         public List<String> getBattingEventLines() {
             List<String> lines = new ArrayList<>();
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getDoubles(), BattingStat.DOUBLES.abbrev()));
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getTriples(), BattingStat.TRIPLES.abbrev()));
-            // TODO: Add homeruns
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getDoubles(), BattingStat.DOUBLES,
+                    this::xbhToString));
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getTriples(), BattingStat.TRIPLES,
+                    this::xbhToString));
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getHomeruns(), BattingStat.HOMERUNS, this::hrToString));
             return lines;
         }
         
-        private List<String> getExtraBaseHits(ImmutableList<? extends ExtraBaseHitEvent> xbhs, String abbrev) {
+        private <T extends ExtraBaseHitEvent> List<String> getExtraBaseHits(
+                ImmutableList<T> xbhs, 
+                BattingStat<?> type,
+                Function<? super T, String> eventToString) {
             if (xbhs.isEmpty()) {
                 return Collections.emptyList();
             }
-            Multimap<Team, ? extends ExtraBaseHitEvent> byTeam = Multimaps.index(xbhs, x -> boxScore.getTeam(x.getBatter()));
+            Multimap<Team, ? extends T> byTeam = Multimaps.index(xbhs, x -> boxScore.getTeam(x.getBatter()));
             List<String> lines = new ArrayList<>();
-            StringBuilder line = new StringBuilder(abbrev).append(": ");
-            line = addExtraBaseHits(boxScore.getVisitingTeam(), byTeam.get(boxScore.getVisitingTeam()), line, lines);
-            line = addExtraBaseHits(boxScore.getHomeTeam(), byTeam.get(boxScore.getHomeTeam()), line, lines);
+            StringBuilder line = new StringBuilder(type.abbrev()).append(": ");
+            line = addExtraBaseHits(boxScore.getVisitingTeam(), byTeam.get(boxScore.getVisitingTeam()), 
+                    eventToString, line, lines);
+            line = addExtraBaseHits(boxScore.getHomeTeam(), byTeam.get(boxScore.getHomeTeam()), 
+                    eventToString, line, lines);
             // Replace the last "; " with a "."
             line.replace(line.length() - 2, line.length(), ".");
             lines.add(line.toString());
             return lines;
         }
         
-        private StringBuilder addExtraBaseHits(Team team, 
-                                               Collection<? extends ExtraBaseHitEvent> xbhs,
-                                               StringBuilder line,
-                                               List<String> lines) {
+        private <T extends ExtraBaseHitEvent> StringBuilder addExtraBaseHits(
+                Team team, 
+                Collection<? extends T> xbhs,
+                Function<? super T, String> eventToString,
+                StringBuilder line,
+                List<String> lines) {
             if (xbhs.isEmpty()) {
                 return line;
             }
             line.append(team.getName().getMainName()).append(" ");
-            for (ExtraBaseHitEvent xbh : xbhs) {
-                String e = xbhToString(xbh);
+            for (T xbh : xbhs) {
+                String e = eventToString.apply(xbh);
                 if ((line.length() + e.length()) > MAX_WIDTH) {
                     lines.add(line.toString());
                     line = new StringBuilder();
@@ -174,6 +185,30 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             // TODO: Add season totals. And make it configurable if the pitcher should
             // be included.
             return String.format("%s (off %s); ", xbh.getBatter().getId(), xbh.getPitcher().getId());
+        }
+        
+        private String hrToString(HomerunEvent hr) {
+            // TODO: Add season totals
+            return String.format("%s (%s inning off %s, %d on, %d out); ", 
+                    hr.getBatter().getId(),
+                    inningToString(hr.getInning()),
+                    hr.getPitcher().getId(),
+                    hr.getRunnersOn(),
+                    hr.getOuts());
+        }
+        
+        private static String inningToString(int num) {
+            // TODO: Move to common utility
+            switch (num) {
+            case 1:
+                return "1st";
+            case 2:
+                return "2nd";
+            case 3:
+                return "3rd";
+            default:
+                return num + "th";
+            }
         }
     }
 }

@@ -304,7 +304,7 @@ public final class AL1923 {
     public static void main(String[] args) {
         AL1923 league = new AL1923();
         ImmutableList<Team> teams = league.league.getTeams();
-        List<BoxScore> boxScores = league.runSeries(teams.get(6), teams.get(7), 1);
+        List<BoxScore> boxScores = league.runSeries(teams.get(4), teams.get(2), 1);
         boxScores.forEach(AL1923::print);
     }
 
