@@ -32,6 +32,9 @@ import bsbll.team.Team;
 import tzeth.strings.Padding;
 
 public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
+    
+    // TODO: Support horizontal layout, with the two teams next to each other.
+    
     public BoxScorePlainTextReport() {
     }
     
