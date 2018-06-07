@@ -26,6 +26,7 @@ import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
+import bsbll.stats.Stat;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.strings.Padding;
@@ -72,7 +73,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
         Padding pad3 = Padding.of(3);
         Padding pad4 = Padding.of(4);
-        BoxScoreLine lineGenerator = new BoxScoreLine(
+        BattingLineGenerator lineGenerator = new BattingLineGenerator(
                 Arrays.asList(BattingStat.AT_BATS, BattingStat.RUNS, BattingStat.HITS, BattingStat.RUNS_BATTED_IN), 
                 Arrays.asList(namePadding, pad3, pad3, pad3, pad4));
         lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
@@ -94,24 +95,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
         Padding pad3 = Padding.of(3);
         Padding pad4 = Padding.of(4);
-        lines.add(namePadding.right(team.getName()) +
-                pad4.left(PitchingStat.INNINGS_PITCHED.abbrev()) +
-                pad3.left(PitchingStat.HITS.abbrev()) +
-                pad3.left(PitchingStat.RUNS.abbrev()) +
-                pad3.left(PitchingStat.EARNED_RUNS.abbrev()) +
-                pad3.left(PitchingStat.WALKS.abbrev()) +
-                pad3.left(PitchingStat.STRIKEOUTS.abbrev()));
+        PitchingLineGenerator lineGenerator = new PitchingLineGenerator(
+                Arrays.asList(PitchingStat.INNINGS_PITCHED, PitchingStat.HITS, PitchingStat.RUNS, PitchingStat.EARNED_RUNS, PitchingStat.WALKS, PitchingStat.STRIKEOUTS),
+                Arrays.asList(namePadding, pad4, pad3, pad3, pad3, pad3, pad3)
+        );
+        lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
         // TODO: This will obviously change once we implement pitcher substitutions.
         Player pitcher = lineup.getPitcher();
         PitchingStatLine statLine = stats.getPitchingLine(pitcher);
         // TODO: Use the player name, once we have it
-        lines.add(namePadding.right(pitcher) +
-                pad4.left(statLine.get(PitchingStat.INNINGS_PITCHED)) +
-                pad3.left(statLine.get(PitchingStat.HITS)) +
-                pad3.left(statLine.get(PitchingStat.RUNS)) +
-                pad3.left(statLine.get(PitchingStat.EARNED_RUNS)) +
-                pad3.left(statLine.get(PitchingStat.WALKS)) +
-                pad3.left(statLine.get(PitchingStat.STRIKEOUTS)));
+        lines.add(lineGenerator.generateStatLine(pitcher.getId().toString(), statLine));
     }
     
     
@@ -216,30 +209,51 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     }
     
     
-    private static class BoxScoreLine {
-        private final ImmutableList<BattingStat<?>> stats;
+    // TODO: This class represents a general concept. We have the same issue in e.g. the Standings report.
+    // Anywhere we're going to use Paddings to generate a table with a header, we're going to do something
+    // like this.
+    // Come up with a way to generalize it to not be tied to Stats. But first, generalize it so that
+    // we can use it for the pitching part of the box score as well. It's not completely trivial in the
+    // absence of a get-method in Stat.
+    private static abstract class LineGenerator<T extends Stat<?>> {
+        private final ImmutableList<T> stats;
         private final ImmutableList<Padding> paddings;
         
-        public BoxScoreLine(List<BattingStat<?>> stats, List<Padding> paddings) {
+        public LineGenerator(List<T> stats, List<Padding> paddings) {
             this.stats = ImmutableList.copyOf(stats);
             this.paddings = ImmutableList.copyOf(paddings);
             assert paddings.size() == (stats.size() + 1); // Name + Stats
         }
         
-        public String generateHeader(String name) {
-            return generate(name, BattingStat::abbrev);
+        public final String generateHeader(String name) {
+            return generate(name, Stat::abbrev);
         }
         
-        public String generateStatLine(String name, BattingStatLine line) {
-            return generate(name, line::get);
-        }
-        
-        private String generate(String name, Function<? super BattingStat<?>, Object> toString) {
+        protected final String generate(String name, Function<? super T, Object> toString) {
             StringBuilder sb = new StringBuilder(paddings.get(0).right(name));
-            BiFunction<BattingStat<?>, Padding, String> bif = (b, p) -> p.left(toString.apply(b));
+            BiFunction<T, Padding, String> bif = (b, p) -> p.left(toString.apply(b));
             Streams.zip(stats.stream(), paddings.stream().skip(1), bif).forEach(sb::append);
             return sb.toString();
         }
     }
     
+    private static class BattingLineGenerator extends LineGenerator<BattingStat<?>> {
+        public BattingLineGenerator(List<BattingStat<?>> stats, List<Padding> paddings) {
+            super(stats, paddings);
+        }
+      
+        public String generateStatLine(String name, BattingStatLine line) {
+            return generate(name, line::get);
+        }
+    }
+    
+    private static class PitchingLineGenerator extends LineGenerator<PitchingStat<?>> {
+        public PitchingLineGenerator(List<PitchingStat<?>> stats, List<Padding> paddings) {
+            super(stats, paddings);
+        }
+      
+        public String generateStatLine(String name, PitchingStatLine line) {
+            return generate(name, line::get);
+        }
+    }
 }
