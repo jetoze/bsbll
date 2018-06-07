@@ -70,12 +70,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
                                    Lineup lineup, 
                                    PlayerGameStats stats, 
                                    ImmutableList.Builder<String> lines) {
-        Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
-        Padding pad3 = Padding.of(3);
-        Padding pad4 = Padding.of(4);
-        BattingLineGenerator lineGenerator = new BattingLineGenerator(
-                Arrays.asList(BattingStat.AT_BATS, BattingStat.RUNS, BattingStat.HITS, BattingStat.RUNS_BATTED_IN), 
-                Arrays.asList(namePadding, pad3, pad3, pad3, pad4));
+        BattingLineGenerator lineGenerator = BattingLineGenerator.create();
         lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
         BattingStatLine totals = new BattingStatLine();
         for (Player p : lineup.getBattingOrder().getBatters()) {
@@ -91,14 +86,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
                                     Lineup lineup, 
                                     PlayerGameStats stats, 
                                     ImmutableList.Builder<String> lines) {
-        // TODO: Winning and losing pitchers, and their new records.
-        Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
-        Padding pad3 = Padding.of(3);
-        Padding pad4 = Padding.of(4);
-        PitchingLineGenerator lineGenerator = new PitchingLineGenerator(
-                Arrays.asList(PitchingStat.INNINGS_PITCHED, PitchingStat.HITS, PitchingStat.RUNS, PitchingStat.EARNED_RUNS, PitchingStat.WALKS, PitchingStat.STRIKEOUTS),
-                Arrays.asList(namePadding, pad4, pad3, pad3, pad3, pad3, pad3)
-        );
+        PitchingLineGenerator lineGenerator = PitchingLineGenerator.create();
         lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
         // TODO: This will obviously change once we implement pitcher substitutions.
         Player pitcher = lineup.getPitcher();
@@ -238,7 +226,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     }
     
     private static class BattingLineGenerator extends LineGenerator<BattingStat<?>> {
-        public BattingLineGenerator(List<BattingStat<?>> stats, List<Padding> paddings) {
+        public static BattingLineGenerator create() {
+            Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
+            Padding pad3 = Padding.of(3);
+            Padding pad4 = Padding.of(4);
+            return new BattingLineGenerator(
+                    Arrays.asList(BattingStat.AT_BATS, BattingStat.RUNS, BattingStat.HITS, BattingStat.RUNS_BATTED_IN), 
+                    Arrays.asList(namePadding, pad3, pad3, pad3, pad4));
+        }
+        
+        private BattingLineGenerator(List<BattingStat<?>> stats, List<Padding> paddings) {
             super(stats, paddings);
         }
       
@@ -248,6 +245,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     }
     
     private static class PitchingLineGenerator extends LineGenerator<PitchingStat<?>> {
+        public static PitchingLineGenerator create() {
+            Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
+            Padding pad3 = Padding.of(3);
+            Padding pad4 = Padding.of(4);
+            return new PitchingLineGenerator(
+                    Arrays.asList(PitchingStat.INNINGS_PITCHED, PitchingStat.HITS, PitchingStat.RUNS, PitchingStat.EARNED_RUNS, PitchingStat.WALKS, PitchingStat.STRIKEOUTS),
+                    Arrays.asList(namePadding, pad4, pad3, pad3, pad3, pad3, pad3)
+            );
+        }
+        
         public PitchingLineGenerator(List<PitchingStat<?>> stats, List<Padding> paddings) {
             super(stats, paddings);
         }
