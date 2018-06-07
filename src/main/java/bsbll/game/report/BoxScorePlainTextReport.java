@@ -1,16 +1,19 @@
 package bsbll.game.report;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
+import com.google.common.collect.Streams;
 
 import bsbll.NameMode;
 import bsbll.game.BoxScore;
@@ -69,30 +72,18 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
         Padding pad3 = Padding.of(3);
         Padding pad4 = Padding.of(4);
-        // TODO: Between the header, the player lines, and the Totals line, we
-        // do the same padding + concatenation logic in three places. Come up
-        // with a way to do this once only.
-        lines.add(namePadding.right(team.getName()) +
-                pad3.left(BattingStat.AT_BATS.abbrev()) +
-                pad3.left(BattingStat.RUNS.abbrev()) +
-                pad3.left(BattingStat.HITS.abbrev()) +
-                pad4.left(BattingStat.RUNS_BATTED_IN.abbrev()));
+        BoxScoreLine lineGenerator = new BoxScoreLine(
+                Arrays.asList(BattingStat.AT_BATS, BattingStat.RUNS, BattingStat.HITS, BattingStat.RUNS_BATTED_IN), 
+                Arrays.asList(namePadding, pad3, pad3, pad3, pad4));
+        lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
         BattingStatLine totals = new BattingStatLine();
         for (Player p : lineup.getBattingOrder().getBatters()) {
             BattingStatLine statLine = stats.getBattingLine(p);
             // TODO: Use the player name, once we have it
-            lines.add(namePadding.right(p.getId()) +
-                    pad3.left(statLine.get(BattingStat.AT_BATS)) +
-                    pad3.left(statLine.get(BattingStat.RUNS)) +
-                    pad3.left(statLine.get(BattingStat.HITS)) +
-                    pad4.left(statLine.get(BattingStat.RUNS_BATTED_IN)));
+            lines.add(lineGenerator.generateStatLine(p.getId().toString(), statLine));
             totals = totals.plus(statLine);
         }
-        lines.add(namePadding.right("Totals:") +
-                    pad3.left(totals.get(BattingStat.AT_BATS)) +
-                    pad3.left(totals.get(BattingStat.RUNS)) +
-                    pad3.left(totals.get(BattingStat.HITS)) +
-                    pad4.left(totals.get(BattingStat.RUNS_BATTED_IN)));
+        lines.add(lineGenerator.generateStatLine("Totals:", totals));
     }
     
     private void writePitchingStats(Team team, 
@@ -134,6 +125,8 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         }
         
         public List<String> getBattingEventLines() {
+            // TODO: This logic could be separated out to a different class. It's a 
+            // perfect example of something that should be covered by unit tests.
             List<String> lines = new ArrayList<>();
             lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getDoubles(), BattingStat.DOUBLES,
                     this::xbhToString));
@@ -221,4 +214,32 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             }
         }
     }
+    
+    
+    private static class BoxScoreLine {
+        private final ImmutableList<BattingStat<?>> stats;
+        private final ImmutableList<Padding> paddings;
+        
+        public BoxScoreLine(List<BattingStat<?>> stats, List<Padding> paddings) {
+            this.stats = ImmutableList.copyOf(stats);
+            this.paddings = ImmutableList.copyOf(paddings);
+            assert paddings.size() == (stats.size() + 1); // Name + Stats
+        }
+        
+        public String generateHeader(String name) {
+            return generate(name, BattingStat::abbrev);
+        }
+        
+        public String generateStatLine(String name, BattingStatLine line) {
+            return generate(name, line::get);
+        }
+        
+        private String generate(String name, Function<? super BattingStat<?>, Object> toString) {
+            StringBuilder sb = new StringBuilder(paddings.get(0).right(name));
+            BiFunction<BattingStat<?>, Padding, String> bif = (b, p) -> p.left(toString.apply(b));
+            Streams.zip(stats.stream(), paddings.stream().skip(1), bif).forEach(sb::append);
+            return sb.toString();
+        }
+    }
+    
 }
