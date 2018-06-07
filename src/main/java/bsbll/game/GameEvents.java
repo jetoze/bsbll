@@ -8,7 +8,6 @@ import java.util.function.Consumer;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -30,15 +29,15 @@ public final class GameEvents {
         this.triples = ImmutableList.copyOf(triples);
     }
 
-    public ImmutableCollection<HomerunEvent> getHomeruns() {
+    public ImmutableList<HomerunEvent> getHomeruns() {
         return homeruns;
     }
     
-    public ImmutableCollection<DoubleEvent> getDoubles() {
+    public ImmutableList<DoubleEvent> getDoubles() {
         return doubles;
     }
     
-    public ImmutableCollection<TripleEvent> getTriples() {
+    public ImmutableList<TripleEvent> getTriples() {
         return triples;
     }
     

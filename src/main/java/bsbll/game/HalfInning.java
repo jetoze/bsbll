@@ -64,7 +64,7 @@ public final class HalfInning {
         do {
             Player batter = battingOrder.nextBatter();
             Outcome outcome = matchupRunner.run(batter, pitcher);
-            gameEventsBuilder.examine(outcome, batter, batter, num, stats.outs, baseSituation);
+            gameEventsBuilder.examine(outcome, batter, pitcher, num, stats.outs, baseSituation);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;
