@@ -8,22 +8,28 @@ import java.util.Arrays;
 import java.util.List;
 
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
+import bsbll.player.PlayerFactory;
 
 public final class TeamBuilder {
     private final TeamId id;
     private String mainName;
     private String nickname;
     private String abbrev;
+    private final PlayerFactory playerFactory;
     private final List<Player> batters = new ArrayList<>();
     private final List<Player> pitchers = new ArrayList<>();
 
-    public TeamBuilder(TeamId id) {
+    public TeamBuilder(TeamId id, PlayerFactory playerFactory) {
         this.id = requireNonNull(id);
+        this.playerFactory = requireNonNull(playerFactory);
     }
     
     public static TeamBuilder newBuilder(TeamId id) {
-        return new TeamBuilder(id);
+        return newBuilder(id, PlayerFactory.defaultFactory());
+    }
+    
+    public static TeamBuilder newBuilder(TeamId id, PlayerFactory playerFactory) {
+        return new TeamBuilder(id, playerFactory);
     }
 
     public TeamBuilder withMainName(String name) {
@@ -52,8 +58,8 @@ public final class TeamBuilder {
     }
 
     private Player getPlayer(String id) {
-        // TODO: Once we have it, lookup player data (such as name) from Lahman.
-        return new Player(PlayerId.of(id));
+        requireNonNull(id);
+        return playerFactory.getPlayer(id);
     }
     
     public TeamBuilder withPitcher(String id) {

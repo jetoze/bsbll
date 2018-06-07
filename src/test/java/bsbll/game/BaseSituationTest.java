@@ -9,16 +9,15 @@ import com.google.common.collect.ImmutableSet;
 import bsbll.game.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
 
 /**
  * Unit tests for BaseSituation.
  */
 public final class BaseSituationTest {
-    private static final Player BATTER = new Player(PlayerId.of("BATTER"));
-    private static final Player RUNNER_A = new Player(PlayerId.of("RUNNER_A"));
-    private static final Player RUNNER_B = new Player(PlayerId.of("RUNNER_B"));
-    private static final Player RUNNER_C = new Player(PlayerId.of("RUNNER_C"));
+    private static final Player BATTER = new Player("Batter", "Bob Doe");
+    private static final Player RUNNER_A = new Player("Runner A", "Adam Doe");
+    private static final Player RUNNER_B = new Player("Runner B", "Bill Doe");
+    private static final Player RUNNER_C = new Player("Runner C", "Charlie Doe");
     
     @Test
     public void walkWithNoOneOnBase() {

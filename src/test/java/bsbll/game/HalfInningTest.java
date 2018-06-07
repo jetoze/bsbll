@@ -14,7 +14,6 @@ import bsbll.game.HalfInning.Stats;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
 import bsbll.team.BattingOrder;
 
 /**
@@ -22,7 +21,7 @@ import bsbll.team.BattingOrder;
  */
 public final class HalfInningTest {
     private final BattingOrder battingOrder = createBattingOrder();
-    private final Player pitcher = new Player(PlayerId.of("Pitcher 1"));
+    private final Player pitcher = new Player("Pitcher 1", "John Doe");
     
     @Test
     public void threeUpThreeDown() {
@@ -63,7 +62,7 @@ public final class HalfInningTest {
     private static BattingOrder createBattingOrder() {
         List<Player> batters = new ArrayList<>();
         for (int n = 1; n <= 9; ++n) {
-            batters.add(new Player(PlayerId.of("Batter " + n)));
+            batters.add(new Player("Batter " + n, "John Doe"));
         }
         return new BattingOrder(batters);
     }

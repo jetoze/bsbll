@@ -13,16 +13,15 @@ import bsbll.Base;
 import bsbll.game.BaseSituation;
 import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
 
 /**
  * Unit test for {@code Advances}.
  */
 public final class AdvancesTest {
-    private static final Player BATTER = new Player(PlayerId.of("Batter"));
-    private static final Player RUNNER_A = new Player(PlayerId.of("Runner A"));
-    private static final Player RUNNER_B = new Player(PlayerId.of("Runner B"));
-    private static final Player RUNNER_C = new Player(PlayerId.of("Runner C"));
+    private static final Player BATTER = new Player("Batter", "Bob Doe");
+    private static final Player RUNNER_A = new Player("Runner A", "Adam Doe");
+    private static final Player RUNNER_B = new Player("Runner B", "Bill Doe");
+    private static final Player RUNNER_C = new Player("Runner C", "Charlie Doe");
     
     @Test
     public void testGrandSlamScores4() {

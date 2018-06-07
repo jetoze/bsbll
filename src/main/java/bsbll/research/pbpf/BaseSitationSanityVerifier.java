@@ -12,7 +12,6 @@ import bsbll.Year;
 import bsbll.game.BaseSituation;
 import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
 import bsbll.research.EventField;
 import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
@@ -88,7 +87,7 @@ public final class BaseSitationSanityVerifier extends GameHandler {
      */
     private Player nextBatter() {
         ++playerId;
-        return new Player(PlayerId.of(Integer.toString(playerId)));
+        return new Player(Integer.toString(playerId), "John Doe");
     }
 
     

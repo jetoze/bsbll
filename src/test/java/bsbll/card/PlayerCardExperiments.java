@@ -7,7 +7,7 @@ import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
-import bsbll.player.PlayerId;
+import bsbll.player.PlayerFactory;
 import bsbll.stats.BattingStatLine;
 
 public final class PlayerCardExperiments {
@@ -18,8 +18,8 @@ public final class PlayerCardExperiments {
         
         Log5BasedMatchupRunner matchup = new Log5BasedMatchupRunner(cardLookup, DieFactory.random());
         
-        Player batter = new Player(PlayerId.of("ruthba01"));
-        Player pitcher = new Player(PlayerId.of("johnswa01"));
+        Player batter = PlayerFactory.defaultFactory().getPlayer("ruthba01");
+        Player pitcher = PlayerFactory.defaultFactory().getPlayer("johnswa01");
         BattingStatLine stats = new BattingStatLine();
         for (int n = 0; n < 697; ++n) {
             Outcome outcome = matchup.run(batter, pitcher);
