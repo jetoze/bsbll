@@ -78,8 +78,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         BattingStatLine totals = new BattingStatLine();
         for (Player p : lineup.getBattingOrder().getBatters()) {
             BattingStatLine statLine = stats.getBattingLine(p);
-            // TODO: Use the player name, once we have it
-            lines.add(lineGenerator.generateStatLine(p.getId().toString(), statLine));
+            lines.add(lineGenerator.generateStatLine(nameOf(p), statLine));
             totals = totals.plus(statLine);
         }
         lines.add(lineGenerator.generateStatLine("Totals:", totals));
@@ -94,8 +93,11 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         // TODO: This will obviously change once we implement pitcher substitutions.
         Player pitcher = lineup.getPitcher();
         PitchingStatLine statLine = stats.getPitchingLine(pitcher);
-        // TODO: Use the player name, once we have it
-        lines.add(lineGenerator.generateStatLine(pitcher.getId().toString(), statLine));
+        lines.add(lineGenerator.generateStatLine(nameOf(pitcher), statLine));
+    }
+    
+    private static String nameOf(Player p) {
+        return p.getName().getShortForm();
     }
     
     
@@ -171,15 +173,15 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         private String xbhToString(ExtraBaseHitEvent xbh) {
             // TODO: Add season totals. And make it configurable if the pitcher should
             // be included.
-            return String.format("%s (off %s); ", xbh.getBatter().getId(), xbh.getPitcher().getId());
+            return String.format("%s (off %s); ", nameOf(xbh.getBatter()), nameOf(xbh.getPitcher()));
         }
         
         private String hrToString(HomerunEvent hr) {
             // TODO: Add season totals
             return String.format("%s (%s inning off %s, %d on, %d out); ", 
-                    hr.getBatter().getId(),
+                    nameOf(hr.getBatter()),
                     inningToString(hr.getInning()),
-                    hr.getPitcher().getId(),
+                    nameOf(hr.getPitcher()),
                     hr.getRunnersOn(),
                     hr.getOuts());
         }
