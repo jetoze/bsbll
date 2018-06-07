@@ -17,6 +17,7 @@ public interface PitchingStat<T> extends Stat<T> {
         HOMERUNS("HR"),
         STRIKEOUTS("SO"),
         WALKS("BB"),
+        RUNS("R"),
         EARNED_RUNS("ER"),
         WINS("W"),
         LOSSES("L"),
@@ -59,6 +60,7 @@ public interface PitchingStat<T> extends Stat<T> {
     public static final PrimitivePitchingStat HOMERUNS = PrimitivePitchingStat.HOMERUNS;
     public static final PrimitivePitchingStat STRIKEOUTS = PrimitivePitchingStat.STRIKEOUTS;
     public static final PrimitivePitchingStat WALKS = PrimitivePitchingStat.WALKS;
+    public static final PrimitivePitchingStat RUNS = PrimitivePitchingStat.RUNS;
     public static final PrimitivePitchingStat EARNED_RUNS = PrimitivePitchingStat.EARNED_RUNS;
     public static final PrimitivePitchingStat WINS = PrimitivePitchingStat.WINS;
     public static final PrimitivePitchingStat LOSSES = PrimitivePitchingStat.LOSSES;

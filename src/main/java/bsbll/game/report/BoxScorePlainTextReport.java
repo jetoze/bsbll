@@ -85,12 +85,14 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
                                     Lineup lineup, 
                                     PlayerGameStats stats, 
                                     ImmutableList.Builder<String> lines) {
+        // TODO: Winning and losing pitchers, and their new records.
         Padding namePadding = Padding.of(NameMode.FULL.getWidthOfTeamName());
         Padding pad3 = Padding.of(3);
         Padding pad4 = Padding.of(4);
         lines.add(namePadding.right(team.getName()) +
                 pad4.left(PitchingStat.INNINGS_PITCHED.abbrev()) +
                 pad3.left(PitchingStat.HITS.abbrev()) +
+                pad3.left(PitchingStat.RUNS.abbrev()) +
                 pad3.left(PitchingStat.EARNED_RUNS.abbrev()) +
                 pad3.left(PitchingStat.WALKS.abbrev()) +
                 pad3.left(PitchingStat.STRIKEOUTS.abbrev()));
@@ -101,6 +103,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         lines.add(namePadding.right(pitcher) +
                 pad4.left(statLine.get(PitchingStat.INNINGS_PITCHED)) +
                 pad3.left(statLine.get(PitchingStat.HITS)) +
+                pad3.left(statLine.get(PitchingStat.RUNS)) +
                 pad3.left(statLine.get(PitchingStat.EARNED_RUNS)) +
                 pad3.left(statLine.get(PitchingStat.WALKS)) +
                 pad3.left(statLine.get(PitchingStat.STRIKEOUTS)));

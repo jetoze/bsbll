@@ -71,6 +71,7 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
                     .set(OUTS, get(OUTS) + (o.isOut() ? 1 : 0))
                     .set(HITS, get(HITS) + (o.isHit() ? 1 : 0))
                     .set(HOMERUNS, get(HOMERUNS) + (o == Outcome.HOMERUN ? 1 : 0))
+                    .set(RUNS, get(RUNS) + runs)
                     .set(EARNED_RUNS, get(EARNED_RUNS) + runs)
                     .set(WALKS, get(WALKS) + (o == Outcome.WALK ? 1 : 0))
                     .set(STRIKEOUTS, get(STRIKEOUTS) + (o == Outcome.STRIKEOUT ? 1 : 0))
