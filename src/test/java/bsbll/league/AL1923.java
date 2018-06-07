@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.ImmutableList;
+
 import bsbll.NameMode;
 import bsbll.Year;
 import bsbll.card.DieFactory;
@@ -14,6 +16,7 @@ import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.game.BoxScore;
 import bsbll.game.Game;
 import bsbll.game.LineScore;
+import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
@@ -94,9 +97,17 @@ public final class AL1923 {
         return boxScore;
     }
     
+    @SuppressWarnings("unused")
     private static void print(LineScore score) {
         LineScorePlainTextReport report = new LineScorePlainTextReport(NameMode.ABBREV);
         report.writeTo(score, System.out);
+        System.out.println();
+    }
+    
+    @SuppressWarnings("unused")
+    private static void print(BoxScore boxScore) {
+        BoxScorePlainTextReport report = new BoxScorePlainTextReport();
+        report.writeTo(boxScore, System.out);
         System.out.println();
     }
     
@@ -291,7 +302,14 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        for (int n = 1; n <= 1; ++n) {
+        AL1923 league = new AL1923();
+        ImmutableList<Team> teams = league.league.getTeams();
+        List<BoxScore> boxScores = league.runSeries(teams.get(2), teams.get(3), 1);
+        boxScores.forEach(AL1923::print);
+    }
+
+    public static void playCompleteLeague(int times) {
+        for (int n = 1; n <= times; ++n) {
             System.out.println("#" + n + ":");
             AL1923 league = new AL1923();
             Standings standings = league.run();
