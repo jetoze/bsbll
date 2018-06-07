@@ -1,5 +1,7 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +51,18 @@ public final class PlayerGameStats {
     
     public void gatherBattingStats(BiConsumer<PlayerId, BattingStatLine> c) {
         battingStats.forEach((id, builder) -> c.accept(id, builder.build()));
+    }
+    
+    public BattingStatLine getBattingLine(Player player) {
+        BattingStatLine.Builder builder = battingStats.get(player.getId());
+        checkArgument(builder != null, "No such player: %s", player);
+        return builder.build();
+    }
+
+    public PitchingStatLine getPitchingLine(Player player) {
+        PitchingStatLine.Builder builder = pitchingStats.get(player.getId());
+        checkArgument(builder != null, "No such player: %s", player);
+        return builder.build();
     }
     
     public void gatherPitchingStats(BiConsumer<PlayerId, PitchingStatLine> c) {

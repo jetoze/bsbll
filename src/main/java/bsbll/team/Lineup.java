@@ -26,5 +26,8 @@ public final class Lineup {
     public BattingOrder getBattingOrder() {
         return battingOrder;
     }
-
+    
+    public boolean contains(Player player) {
+        return (player == pitcher) || battingOrder.contains(player);
+    }
 }

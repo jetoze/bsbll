@@ -26,6 +26,10 @@ public final class BattingOrder {
         this.batters = ImmutableList.copyOf(batters);
     }
     
+    public ImmutableList<Player> getBatters() {
+        return batters;
+    }
+    
     public Player nextBatter() {
         Player batter = batters.get(nextBatter);
         ++nextBatter;
@@ -38,5 +42,4 @@ public final class BattingOrder {
     boolean contains(Player p) {
         return batters.contains(p);
     }
-
 }
