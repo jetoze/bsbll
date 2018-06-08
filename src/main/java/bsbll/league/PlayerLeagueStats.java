@@ -1,6 +1,5 @@
 package bsbll.league;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.util.HashMap;
@@ -63,7 +62,11 @@ public final class PlayerLeagueStats {
     public PitchingStatLine getPitchingStats(PlayerId playerId) {
         requireNonNull(playerId);
         PitchingStatLine line = pitchingStats.get(playerId);
-        checkArgument(line != null, "No such player: %s", playerId);
+        if (line == null) {
+            // This can happen e.g. when looking up the current stats for a player
+            // that's playing his very first game.
+            line = PitchingStatLine.empty();
+        }
         return line;
     }
     

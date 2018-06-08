@@ -14,12 +14,18 @@ import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 
 @Immutable
 public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, PitchingStatLine> {
+    private static final PitchingStatLine EMPTY = new PitchingStatLine();
+    
     public PitchingStatLine() {
         super();
     }
 
     public PitchingStatLine(Map<PrimitivePitchingStat, Integer> values) {
         super(values);
+    }
+    
+    public static PitchingStatLine empty() {
+        return EMPTY;
     }
 
     public <T> T get(PitchingStat<T> stat) {
