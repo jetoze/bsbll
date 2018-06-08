@@ -4,7 +4,6 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.player.Player;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 
@@ -31,6 +30,12 @@ public final class BoxScore {
     public Team getVisitingTeam() {
         return lineScore.getVisitingTeam();
     }
+    
+    public Team getBattingTeam(Inning inning) {
+        return inning.isTop()
+                ? getVisitingTeam()
+                : getHomeTeam();
+    }
 
     public LineScore getLineScore() {
         return lineScore;
@@ -54,19 +59,5 @@ public final class BoxScore {
 
     public GameResult toGameResult() {
         return lineScore.toGameResult();
-    }
-    
-    /**
-     * Returns the team the given player played for in this game.
-     */
-    public Team getTeam(Player player) {
-        requireNonNull(player);
-        if (homeLineup.contains(player)) {
-            return lineScore.getHomeTeam();
-        } else if (visitingLineup.contains(player)) {
-            return lineScore.getVisitingTeam();
-        } else {
-            throw new IllegalArgumentException("Player did not play in this game: " + player);
-        }
     }
 }

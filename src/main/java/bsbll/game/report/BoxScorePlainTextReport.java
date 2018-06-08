@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -19,7 +17,9 @@ import bsbll.NameMode;
 import bsbll.game.BoxScore;
 import bsbll.game.DoubleEvent;
 import bsbll.game.ExtraBaseHitEvent;
+import bsbll.game.GameEvent;
 import bsbll.game.HomerunEvent;
+import bsbll.game.Inning;
 import bsbll.game.PlayerGameStats;
 import bsbll.game.TripleEvent;
 import bsbll.player.Player;
@@ -106,7 +106,6 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     private static class EventReporter {
         private static final int MAX_WIDTH = 76;
         private final BoxScore boxScore;
-        private final Map<Player, Team> teamLookup = new HashMap<>();
         
         public EventReporter(BoxScore boxScore) {
             this.boxScore = boxScore;
@@ -132,7 +131,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             if (xbhs.isEmpty()) {
                 return Collections.emptyList();
             }
-            Multimap<Team, ? extends T> byTeam = Multimaps.index(xbhs, this::getTeamForBatter);
+            Multimap<Team, ? extends T> byTeam = Multimaps.index(xbhs, this::getTeamForEvent);
             List<String> lines = new ArrayList<>();
             StringBuilder line = new StringBuilder(type.abbrev()).append(": ");
             line = addExtraBaseHits(boxScore.getVisitingTeam(), byTeam.get(boxScore.getVisitingTeam()), 
@@ -145,9 +144,9 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             return lines;
         }
         
-        private Team getTeamForBatter(ExtraBaseHitEvent e) {
-            // Memoize the results to avoid repeated linear searches through batting order.
-            return teamLookup.computeIfAbsent(e.getBatter(), b -> boxScore.getTeam(b));
+        private Team getTeamForEvent(GameEvent e) {
+            Inning inning = e.getInning();
+            return boxScore.getBattingTeam(inning);
         }
         
         private <T extends ExtraBaseHitEvent> StringBuilder addExtraBaseHits(
