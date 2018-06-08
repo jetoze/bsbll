@@ -309,13 +309,13 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        playOneGameAndPrintBoxScore();
+        playSeriesAndPrintBoxScores(4, 0, 3);
     }
 
-    public static void playOneGameAndPrintBoxScore() {
+    public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {
         AL1923 league = new AL1923();
         ImmutableList<Team> teams = league.league.getTeams();
-        List<BoxScore> boxScores = league.runSeries(teams.get(4), teams.get(2), 1);
+        List<BoxScore> boxScores = league.runSeries(teams.get(homeTeamIndex), teams.get(visitingTeamIndex), numberOfGames);
         boxScores.forEach(AL1923::print);
     }
 

@@ -175,13 +175,15 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         private String xbhToString(ExtraBaseHitEvent xbh) {
             // TODO: Add season totals. And make it configurable if the pitcher should
             // be included.
-            return String.format("%s (off %s); ", nameOf(xbh.getBatter()), nameOf(xbh.getPitcher()));
+            return String.format("%s (%d, off %s); ", 
+                    nameOf(xbh.getBatter()), xbh.getSeasonTotal(), nameOf(xbh.getPitcher()));
         }
         
         private String hrToString(HomerunEvent hr) {
             // TODO: Add season totals
-            return String.format("%s (%s inning off %s, %d on, %d out); ", 
+            return String.format("%s (%d, %s inning off %s, %d on, %d out); ", 
                     nameOf(hr.getBatter()),
+                    hr.getSeasonTotal(),
                     inningToString(hr.getInning()),
                     nameOf(hr.getPitcher()),
                     hr.getRunnersOn(),
