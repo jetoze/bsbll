@@ -2,7 +2,6 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
-import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import bsbll.player.Player;
 import bsbll.team.BattingOrder;
 
 public final class HalfInning {
-    private final int num;
+    private final Inning inning;
     private final BattingOrder battingOrder;
     private final Player pitcher;
     private final MatchupRunner matchupRunner;
@@ -29,8 +28,8 @@ public final class HalfInning {
 
     /**
      * 
-     * @param num
-     *            the inning number (1 for the first inning, etc)
+     * @param inning
+     *            what inning we're in
      * @param battingOrder
      *            the batting order
      * @param pitcher
@@ -50,14 +49,14 @@ public final class HalfInning {
      *            will come to a stop once this many runs score (or three outs
      *            are made). {@code 0} if not applicable.
      */
-    public HalfInning(int num,
+    public HalfInning(Inning inning,
                       BattingOrder battingOrder, 
                       Player pitcher, 
                       MatchupRunner matchupRunner,
                       PlayerGameStats playerStats,
                       GameEventDetector eventDetector,
                       int runsNeededToWin) {
-        this.num = checkPositive(num);
+        this.inning = requireNonNull(inning);
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
@@ -73,7 +72,7 @@ public final class HalfInning {
         do {
             Player batter = battingOrder.nextBatter();
             Outcome outcome = matchupRunner.run(batter, pitcher);
-            eventDetector.examine(outcome, batter, pitcher, num, stats.outs, baseSituation).ifPresent(events::add);
+            eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;

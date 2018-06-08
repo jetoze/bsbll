@@ -52,7 +52,7 @@ public final class Game {
             Lineup fielding = fieldingLineup.next();
             assert batting != fielding;
             HalfInning halfInning = new HalfInning(
-                    innings.num(),
+                    innings.current(),
                     batting.getBattingOrder(),
                     fielding.getPitcher(),
                     matchupRunner,
@@ -60,7 +60,7 @@ public final class Game {
                     eventDetector,
                     innings.runsNeededToWalkOf().orElse(0));
             HalfInning.Summary summary = halfInning.run();
-            innings.add(summary.getStats());
+            innings.onHalfInningCompleted(summary.getStats());
             events.addAll(summary.getEvents());
         } while (!innings.isGameOver());
         LineScore lineScore = new LineScore(
@@ -74,17 +74,19 @@ public final class Game {
     private static class Innings {
         private final List<HalfInning.Stats> top = new ArrayList<>();
         private final List<HalfInning.Stats> bottom = new ArrayList<>();
+        private Inning current = Inning.startOfGame();
         
-        public int num() {
-            return 1 + Math.min(top.size(), bottom.size());
+        public Inning current() {
+            return current;
         }
         
-        public void add(HalfInning.Stats stats) {
-            if (top.size() == bottom.size()) {
+        public void onHalfInningCompleted(HalfInning.Stats stats) {
+            if (current.isTop()) {
                 top.add(stats);
             } else {
                 bottom.add(stats);
             }
+            current = current.next();
         }
         
         public int getHomeScore() {

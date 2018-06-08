@@ -184,24 +184,10 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             return String.format("%s (%d, %s inning off %s, %d on, %d out); ", 
                     nameOf(hr.getBatter()),
                     hr.getSeasonTotal(),
-                    inningToString(hr.getInning()),
+                    hr.getInning().getNumberAsString(),
                     nameOf(hr.getPitcher()),
                     hr.getRunnersOn(),
                     hr.getOuts());
-        }
-        
-        private static String inningToString(int num) {
-            // TODO: Move to common utility
-            switch (num) {
-            case 1:
-                return "1st";
-            case 2:
-                return "2nd";
-            case 3:
-                return "3rd";
-            default:
-                return num + "th";
-            }
         }
     }
     

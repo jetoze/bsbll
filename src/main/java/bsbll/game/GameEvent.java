@@ -5,5 +5,5 @@ package bsbll.game;
  * in the box score.
  */
 public interface GameEvent {
-    // marker interface for now
+    Inning getInning();
 }

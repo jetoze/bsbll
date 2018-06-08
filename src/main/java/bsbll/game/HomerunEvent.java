@@ -3,7 +3,6 @@ package bsbll.game;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
-import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -15,19 +14,13 @@ import bsbll.player.Player;
  */
 @Immutable
 public final class HomerunEvent extends ExtraBaseHitEvent {
-    private final int inning;
     private final int outs;
     private final int runnersOn;
     
-    public HomerunEvent(Player batter, Player pitcher, int seasonTotal, int inning, int outs, int runnersOn) {
-        super(Outcome.HOMERUN, batter, pitcher, seasonTotal);
-        this.inning = checkPositive(inning);
+    public HomerunEvent(Inning inning, Player batter, Player pitcher, int seasonTotal, int outs, int runnersOn) {
+        super(Outcome.HOMERUN, inning, batter, pitcher, seasonTotal);
         this.outs = checkInRange(outs, 0, 2);
         this.runnersOn = checkInRange(runnersOn, 0, 3);
-    }
-
-    public int getInning() {
-        return inning;
     }
     
     public int getOuts() {
@@ -38,20 +31,21 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
         return runnersOn;
     }
     
-    public static Builder builder(Player batter, Player pitcher) {
-        return new Builder(batter, pitcher);
+    public static Builder builder(Inning inning, Player batter, Player pitcher) {
+        return new Builder(inning, batter, pitcher);
     }
     
     
     public static final class Builder {
         private final Player batter;
         private final Player pitcher;
-        private int inning;
+        private final Inning inning;
         private int seasonTotal = 1;
         private int outs;
         private int runnersOn;
         
-        public Builder(Player batter, Player pitcher) {
+        public Builder(Inning inning, Player batter, Player pitcher) {
+            this.inning = requireNonNull(inning);
             this.batter = requireNonNull(batter);
             this.pitcher = requireNonNull(pitcher);
         }
@@ -59,11 +53,6 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
         public Builder withSeasonTotal(int total) {
             checkArgument(total >= 1);
             this.seasonTotal = total;
-            return this;
-        }
-
-        public Builder inInning(int inning) {
-            this.inning = checkPositive(inning);
             return this;
         }
         
@@ -78,7 +67,7 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
         }
         
         public HomerunEvent build() {
-            return new HomerunEvent(batter, pitcher, seasonTotal, inning, outs, runnersOn);
+            return new HomerunEvent(inning, batter, pitcher, seasonTotal, outs, runnersOn);
         }
     }
 }

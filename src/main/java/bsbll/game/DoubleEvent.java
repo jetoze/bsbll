@@ -7,7 +7,7 @@ import bsbll.player.Player;
 
 @Immutable
 public final class DoubleEvent extends ExtraBaseHitEvent {
-    public DoubleEvent(Player batter, Player pitcher, int seasonTotal) {
-        super(Outcome.DOUBLE, batter, pitcher, seasonTotal);
+    public DoubleEvent(Inning inning, Player batter, Player pitcher, int seasonTotal) {
+        super(Outcome.DOUBLE, inning, batter, pitcher, seasonTotal);
     }
 }

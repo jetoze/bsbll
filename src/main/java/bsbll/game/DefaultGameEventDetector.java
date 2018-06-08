@@ -2,7 +2,6 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
-import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Optional;
 
@@ -29,39 +28,38 @@ public final class DefaultGameEventDetector implements GameEventDetector {
 
     @Override
     public Optional<GameEvent> examine(Outcome outcome, 
+                                       Inning inning,
                                        Player batter, 
                                        Player pitcher, 
-                                       int inning,
                                        int outs, 
                                        BaseSituation baseSituation) {
         requireNonNull(outcome);
+        requireNonNull(inning);
         requireNonNull(batter);
         requireNonNull(pitcher);
-        checkPositive(inning);
         checkInRange(outs, 0, 2);
         requireNonNull(baseSituation);
-        GameEvent event = examineImpl(outcome, batter, pitcher, inning, outs, baseSituation);
+        GameEvent event = examineImpl(outcome, inning, batter, pitcher, outs, baseSituation);
         return Optional.ofNullable(event);
     }
     
     @Nullable
     private GameEvent examineImpl(Outcome outcome, 
-                                       Player batter, 
-                                       Player pitcher, 
-                                       int inning,
-                                       int outs, 
-                                       BaseSituation baseSituation) {
+                                  Inning inning,
+                                  Player batter, 
+                                  Player pitcher, 
+                                  int outs, 
+                                  BaseSituation baseSituation) {
         switch (outcome) {
         case DOUBLE:
             int seasonTotal2B = updateSeasonTotal(batter, BattingStat.DOUBLES);
-            return new DoubleEvent(batter, pitcher, seasonTotal2B);
+            return new DoubleEvent(inning, batter, pitcher, seasonTotal2B);
         case TRIPLE:
             int seasonTotal3B = updateSeasonTotal(batter, BattingStat.TRIPLES);
-            return new TripleEvent(batter, pitcher, seasonTotal3B);
+            return new TripleEvent(inning, batter, pitcher, seasonTotal3B);
         case HOMERUN:
             int seasonTotalHR = updateSeasonTotal(batter, BattingStat.HOMERUNS);
-            return HomerunEvent.builder(batter, pitcher)
-                    .inInning(inning)
+            return HomerunEvent.builder(inning, batter, pitcher)
                     .withOuts(outs)
                     .withSeasonTotal(seasonTotalHR)
                     .withRunnersOn(baseSituation.getNumberOfRunners())

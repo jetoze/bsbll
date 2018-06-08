@@ -9,15 +9,17 @@ import bsbll.player.Player;
 
 public abstract class ExtraBaseHitEvent implements GameEvent {
     private final Outcome type;
+    private final Inning inning;
     private final Player batter;
     private final Player pitcher;
     private final int seasonTotal;
     
-    public ExtraBaseHitEvent(Outcome type, Player batter, Player pitcher, int seasonTotal) {
+    public ExtraBaseHitEvent(Outcome type, Inning inning, Player batter, Player pitcher, int seasonTotal) {
         requireNonNull(type);
         checkArgument(type == Outcome.DOUBLE || type == Outcome.TRIPLE || type == Outcome.HOMERUN,
                 "Not an extra base hit: " + type);
         this.type = type;
+        this.inning = requireNonNull(inning);
         this.batter = requireNonNull(batter);
         this.pitcher = requireNonNull(pitcher);
         this.seasonTotal = checkNotNegative(seasonTotal);
@@ -25,6 +27,11 @@ public abstract class ExtraBaseHitEvent implements GameEvent {
 
     public final Outcome getType() {
         return type;
+    }
+
+    @Override
+    public final Inning getInning() {
+        return inning;
     }
 
     public final Player getBatter() {
