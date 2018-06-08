@@ -17,7 +17,7 @@ import bsbll.NameMode;
 import bsbll.game.BoxScore;
 import bsbll.game.DoubleEvent;
 import bsbll.game.ExtraBaseHitEvent;
-import bsbll.game.GameEvent;
+import bsbll.game.GameEvents;
 import bsbll.game.HomerunEvent;
 import bsbll.game.Inning;
 import bsbll.game.PlayerGameStats;
@@ -51,12 +51,12 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         writeBattingStats(boxScore.getVisitingTeam(), boxScore.getVisitingLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
+        writeBattingEvents(boxScore, boxScore.getVisitingTeam(), linesBuilder);
+        linesBuilder.add("");
         writeBattingStats(boxScore.getHomeTeam(), boxScore.getHomeLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
-        
-        EventReporter events = new EventReporter(boxScore);
-        linesBuilder.addAll(events.getBattingEventLines());
+        writeBattingEvents(boxScore, boxScore.getHomeTeam(), linesBuilder);
         linesBuilder.add("");
         
         writePitchingStats(boxScore.getVisitingTeam(), boxScore.getVisitingLineup(), 
@@ -86,6 +86,15 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         lines.add(lineGenerator.generateStatLine("Totals:", totals));
     }
     
+    private void writeBattingEvents(BoxScore boxScore, Team team, ImmutableList.Builder<String> lines) {
+        Inning.Half half = (team == boxScore.getVisitingTeam())
+                ? Inning.Half.TOP
+                : Inning.Half.BOTTOM;
+        GameEvents relevantEvents = boxScore.getGameEvents().subset(e -> e.getInning().getHalf() == half);
+        EventReporter reporter = new EventReporter(relevantEvents);
+        lines.addAll(reporter.getBattingEventLines());
+    }
+    
     private void writePitchingStats(Team team, 
                                     Lineup lineup, 
                                     PlayerGameStats stats, 
@@ -105,21 +114,21 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     
     private static class EventReporter {
         private static final int MAX_WIDTH = 76;
-        private final BoxScore boxScore;
+        private final GameEvents events;
         
-        public EventReporter(BoxScore boxScore) {
-            this.boxScore = boxScore;
+        public EventReporter(GameEvents events) {
+            this.events = events;
         }
         
         public List<String> getBattingEventLines() {
             // TODO: This logic could be separated out to a different class. It's a 
             // perfect example of something that should be covered by unit tests.
             List<String> lines = new ArrayList<>();
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(DoubleEvent.class), BattingStat.DOUBLES,
+            lines.addAll(getExtraBaseHits(events.getEvents(DoubleEvent.class), BattingStat.DOUBLES,
                     this::xbhToString));
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(TripleEvent.class), BattingStat.TRIPLES,
+            lines.addAll(getExtraBaseHits(events.getEvents(TripleEvent.class), BattingStat.TRIPLES,
                     this::xbhToString));
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(HomerunEvent.class), BattingStat.HOMERUNS, 
+            lines.addAll(getExtraBaseHits(events.getEvents(HomerunEvent.class), BattingStat.HOMERUNS, 
                     this::hrToString));
             return lines;
         }
@@ -131,26 +140,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             if (xbhs.isEmpty()) {
                 return Collections.emptyList();
             }
-            Multimap<Team, ? extends T> byTeam = Multimaps.index(xbhs, this::getTeamForEvent);
             List<String> lines = new ArrayList<>();
             StringBuilder line = new StringBuilder(type.abbrev()).append(": ");
-            line = addExtraBaseHits(boxScore.getVisitingTeam(), byTeam.get(boxScore.getVisitingTeam()), 
-                    eventToString, line, lines);
-            line = addExtraBaseHits(boxScore.getHomeTeam(), byTeam.get(boxScore.getHomeTeam()), 
-                    eventToString, line, lines);
+            line = addExtraBaseHits(xbhs, eventToString, line, lines);
             // Replace the last "; " with a "."
             line.replace(line.length() - 2, line.length(), ".");
             lines.add(line.toString());
             return lines;
         }
         
-        private Team getTeamForEvent(GameEvent e) {
-            Inning inning = e.getInning();
-            return boxScore.getBattingTeam(inning);
-        }
-        
         private <T extends ExtraBaseHitEvent> StringBuilder addExtraBaseHits(
-                Team team, 
                 Collection<T> xbhs,
                 Function<? super T, String> eventToString,
                 StringBuilder line,
@@ -159,7 +158,6 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
                 return line;
             }
             Multimap<Player, T> byPlayer = Multimaps.index(xbhs, ExtraBaseHitEvent::getBatter);
-            line.append(team.getName().getMainName()).append(" ");
             for (T xbh : byPlayer.values()) {
                 String e = eventToString.apply(xbh);
                 if ((line.length() + e.length()) > MAX_WIDTH) {

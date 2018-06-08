@@ -309,7 +309,7 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 0, 10);
+        playSeriesAndPrintBoxScores(0, 4, 4);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {

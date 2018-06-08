@@ -1,6 +1,7 @@
 package bsbll.game;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -30,5 +31,11 @@ public final class GameEvents {
                 .filter(type::isInstance)
                 .map(type::cast)
                 .collect(ImCollectors.toList());
+    }
+    
+    public GameEvents subset(Predicate<? super GameEvent> filter) {
+        return new GameEvents(this.events.stream()
+                .filter(filter)
+                .collect(ImCollectors.toList()));
     }
 }

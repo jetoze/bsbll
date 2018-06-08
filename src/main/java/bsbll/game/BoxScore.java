@@ -2,8 +2,6 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.collect.ImmutableList;
-
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 
@@ -53,8 +51,8 @@ public final class BoxScore {
         return playerStats;
     }
     
-    public <T extends GameEvent> ImmutableList<T> getGameEvents(Class<T> type) {
-        return this.gameEvents.getEvents(type);
+    public GameEvents getGameEvents() {
+        return this.gameEvents;
     }
 
     public GameResult toGameResult() {
