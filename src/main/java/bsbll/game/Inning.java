@@ -3,6 +3,9 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class Inning {
     
     public static enum Half { TOP, BOTTOM }

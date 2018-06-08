@@ -14,10 +14,10 @@ import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.game.BoxScore;
-import bsbll.game.DefaultGameEventDetector;
 import bsbll.game.Game;
-import bsbll.game.GameEventDetector;
 import bsbll.game.LineScore;
+import bsbll.game.event.DefaultGameEventDetector;
+import bsbll.game.event.GameEventDetector;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
@@ -309,7 +309,8 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(0, 4, 4);
+        playSeriesAndPrintBoxScores(1, 7, 4);
+        //playCompleteLeague(1);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {

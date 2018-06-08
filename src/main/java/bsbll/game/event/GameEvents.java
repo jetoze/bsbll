@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.game.event;
 
 import java.util.List;
 import java.util.function.Predicate;

@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.game.event;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
@@ -6,19 +6,20 @@ import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import javax.annotation.concurrent.Immutable;
 
-import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.game.BattingEvent;
+import bsbll.game.Inning;
 import bsbll.player.Player;
 
 /**
  * Data regarding a homerun that was hit during the game.
  */
 @Immutable
-public final class HomerunEvent extends ExtraBaseHitEvent {
+public final class HomerunEvent extends BattingEvent {
     private final int outs;
     private final int runnersOn;
     
     public HomerunEvent(Inning inning, Player batter, Player pitcher, int seasonTotal, int outs, int runnersOn) {
-        super(Outcome.HOMERUN, inning, batter, pitcher, seasonTotal);
+        super(inning, batter, pitcher, seasonTotal);
         this.outs = checkInRange(outs, 0, 2);
         this.runnersOn = checkInRange(runnersOn, 0, 3);
     }

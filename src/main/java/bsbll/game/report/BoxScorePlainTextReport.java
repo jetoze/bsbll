@@ -14,14 +14,15 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Streams;
 
 import bsbll.NameMode;
+import bsbll.game.BattingEvent;
 import bsbll.game.BoxScore;
-import bsbll.game.DoubleEvent;
-import bsbll.game.ExtraBaseHitEvent;
-import bsbll.game.GameEvents;
-import bsbll.game.HomerunEvent;
 import bsbll.game.Inning;
 import bsbll.game.PlayerGameStats;
-import bsbll.game.TripleEvent;
+import bsbll.game.event.DoubleEvent;
+import bsbll.game.event.GameEvents;
+import bsbll.game.event.HitByPitchEvent;
+import bsbll.game.event.HomerunEvent;
+import bsbll.game.event.TripleEvent;
 import bsbll.player.Player;
 import bsbll.report.AbstractPlainTextReport;
 import bsbll.stats.BattingStat;
@@ -124,60 +125,65 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             // TODO: This logic could be separated out to a different class. It's a 
             // perfect example of something that should be covered by unit tests.
             List<String> lines = new ArrayList<>();
-            lines.addAll(getExtraBaseHits(events.getEvents(DoubleEvent.class), BattingStat.DOUBLES,
-                    this::xbhToString));
-            lines.addAll(getExtraBaseHits(events.getEvents(TripleEvent.class), BattingStat.TRIPLES,
-                    this::xbhToString));
-            lines.addAll(getExtraBaseHits(events.getEvents(HomerunEvent.class), BattingStat.HOMERUNS, 
-                    this::hrToString));
+            lines.addAll(getSpecificBattingEventLines(events.getEvents(DoubleEvent.class), 
+                    BattingStat.DOUBLES, this::xbhToString));
+            lines.addAll(getSpecificBattingEventLines(events.getEvents(TripleEvent.class), 
+                    BattingStat.TRIPLES, this::xbhToString));
+            lines.addAll(getSpecificBattingEventLines(events.getEvents(HomerunEvent.class), 
+                    BattingStat.HOMERUNS, this::hrToString));
+            lines.addAll(getSpecificBattingEventLines(events.getEvents(HitByPitchEvent.class), 
+                    BattingStat.HIT_BY_PITCHES, this::hbpToStringForBatter));
             return lines;
         }
         
-        private <T extends ExtraBaseHitEvent> List<String> getExtraBaseHits(
-                ImmutableList<T> xbhs, 
+        private <T extends BattingEvent> List<String> getSpecificBattingEventLines(
+                ImmutableList<T> battingEvents, 
                 BattingStat<?> type,
                 Function<? super T, String> eventToString) {
-            if (xbhs.isEmpty()) {
+            if (battingEvents.isEmpty()) {
                 return Collections.emptyList();
             }
             List<String> lines = new ArrayList<>();
             StringBuilder line = new StringBuilder(type.abbrev()).append(": ");
-            line = addExtraBaseHits(xbhs, eventToString, line, lines);
+            line = buildBattingEventsString(battingEvents, eventToString, line, lines);
             // Replace the last "; " with a "."
             line.replace(line.length() - 2, line.length(), ".");
             lines.add(line.toString());
             return lines;
         }
         
-        private <T extends ExtraBaseHitEvent> StringBuilder addExtraBaseHits(
-                Collection<T> xbhs,
+        private <T extends BattingEvent> StringBuilder buildBattingEventsString(
+                Collection<T> battingEvents,
                 Function<? super T, String> eventToString,
                 StringBuilder line,
                 List<String> lines) {
-            if (xbhs.isEmpty()) {
+            if (battingEvents.isEmpty()) {
                 return line;
             }
-            Multimap<Player, T> byPlayer = Multimaps.index(xbhs, ExtraBaseHitEvent::getBatter);
-            for (T xbh : byPlayer.values()) {
-                String e = eventToString.apply(xbh);
-                if ((line.length() + e.length()) > MAX_WIDTH) {
+            Multimap<Player, T> byPlayer = Multimaps.index(battingEvents, BattingEvent::getBatter);
+            for (T evt : byPlayer.values()) {
+                String s = eventToString.apply(evt);
+                if ((line.length() + s.length()) > MAX_WIDTH) {
                     lines.add(line.toString());
                     line = new StringBuilder();
                 }
-                line.append(e);
+                line.append(s);
             }
             return line;
         }
         
-        private String xbhToString(ExtraBaseHitEvent xbh) {
-            // TODO: Add season totals. And make it configurable if the pitcher should
-            // be included.
+        /**
+         * Creates the string representation for an extra-base hit other than a homerun. 
+         */
+        private String xbhToString(BattingEvent evt) {
             return String.format("%s (%d, off %s); ", 
-                    nameOf(xbh.getBatter()), xbh.getSeasonTotal(), nameOf(xbh.getPitcher()));
+                    nameOf(evt.getBatter()), evt.getSeasonTotal(), nameOf(evt.getPitcher()));
         }
         
+        /**
+         * Creates the string representation for a homerun. 
+         */
         private String hrToString(HomerunEvent hr) {
-            // TODO: Add season totals
             return String.format("%s (%d, %s inning off %s, %d on, %d out); ", 
                     nameOf(hr.getBatter()),
                     hr.getSeasonTotal(),
@@ -185,6 +191,22 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
                     nameOf(hr.getPitcher()),
                     hr.getRunnersOn(),
                     hr.getOuts());
+        }
+        
+        /**
+         * Creates the string representation for a hit-by-pitch, from the batter's perspective. 
+         */
+        private String hbpToStringForBatter(BattingEvent evt) {
+            return String.format("%s (%d, by %s); ", 
+                    nameOf(evt.getBatter()), evt.getSeasonTotal(), nameOf(evt.getPitcher()));
+        }
+
+        /**
+         * Creates the string representation for a hit-by-pitch, from the pitcher's perspective. 
+         */
+        private String hbpToStringForPitcher(BattingEvent evt) {
+            return String.format("%s (%d, %s); ", 
+                    nameOf(evt.getPitcher()), evt.getSeasonTotal(), nameOf(evt.getBatter()));
         }
     }
     

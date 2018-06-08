@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.game.event;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
+import bsbll.game.BaseSituation;
+import bsbll.game.Inning;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
@@ -64,6 +66,9 @@ public final class DefaultGameEventDetector implements GameEventDetector {
                     .withSeasonTotal(seasonTotalHR)
                     .withRunnersOn(baseSituation.getNumberOfRunners())
                     .build();
+        case HIT_BY_PITCH:
+            int seasonTotalHBP = updateSeasonTotal(batter, BattingStat.HIT_BY_PITCHES);
+            return new HitByPitchEvent(inning, batter, pitcher, seasonTotalHBP);
         default:
             // Not of interest.
             return null;
