@@ -1,5 +1,6 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 import static tzeth.preconds.MorePreconditions.checkPositive;
@@ -18,8 +19,8 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
     private final int outs;
     private final int runnersOn;
     
-    public HomerunEvent(Player batter, Player pitcher, int inning, int outs, int runnersOn) {
-        super(Outcome.HOMERUN, batter, pitcher);
+    public HomerunEvent(Player batter, Player pitcher, int seasonTotal, int inning, int outs, int runnersOn) {
+        super(Outcome.HOMERUN, batter, pitcher, seasonTotal);
         this.inning = checkPositive(inning);
         this.outs = checkInRange(outs, 0, 2);
         this.runnersOn = checkInRange(runnersOn, 0, 3);
@@ -46,12 +47,19 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
         private final Player batter;
         private final Player pitcher;
         private int inning;
+        private int seasonTotal = 1;
         private int outs;
         private int runnersOn;
         
         public Builder(Player batter, Player pitcher) {
             this.batter = requireNonNull(batter);
             this.pitcher = requireNonNull(pitcher);
+        }
+        
+        public Builder withSeasonTotal(int total) {
+            checkArgument(total >= 1);
+            this.seasonTotal = total;
+            return this;
         }
 
         public Builder inInning(int inning) {
@@ -70,7 +78,7 @@ public final class HomerunEvent extends ExtraBaseHitEvent {
         }
         
         public HomerunEvent build() {
-            return new HomerunEvent(batter, pitcher, inning, outs, runnersOn);
+            return new HomerunEvent(batter, pitcher, seasonTotal, inning, outs, runnersOn);
         }
     }
 }
