@@ -14,7 +14,9 @@ import bsbll.Year;
 import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.game.BoxScore;
+import bsbll.game.DefaultGameEventDetector;
 import bsbll.game.Game;
+import bsbll.game.GameEventDetector;
 import bsbll.game.LineScore;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
@@ -96,6 +98,8 @@ public final class AL1923 {
     
     private BoxScore runGame(Team home, Team visiting) {
         Game game = new Game(home, visiting, matchupRunner);
+        GameEventDetector eventDetector = new DefaultGameEventDetector(league.getPlayerStatLookup());
+        game.setGameEventDetector(eventDetector);
         BoxScore boxScore = game.run();
         return boxScore;
     }

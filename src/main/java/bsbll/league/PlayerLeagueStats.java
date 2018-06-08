@@ -40,7 +40,11 @@ public final class PlayerLeagueStats {
     public BattingStatLine getBattingStats(PlayerId playerId) { 
         requireNonNull(playerId);
         BattingStatLine line = battingStats.get(playerId);
-        checkArgument(line != null, "No such player: %s", playerId);
+        if (line == null) {
+            // This can happen e.g. when looking up the current stats for a player
+            // that's playing his very first game.
+            line = BattingStatLine.empty();
+        }
         return line;
     }
     

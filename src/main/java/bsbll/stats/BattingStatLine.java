@@ -14,7 +14,8 @@ import bsbll.stats.BattingStat.PrimitiveBattingStat;
 
 @Immutable
 public final class BattingStatLine extends StatLine<PrimitiveBattingStat, BattingStatLine> {
-
+    private final static BattingStatLine EMPTY = new BattingStatLine();
+    
     public BattingStatLine() {
         super();
     }
@@ -23,6 +24,10 @@ public final class BattingStatLine extends StatLine<PrimitiveBattingStat, Battin
         super(values);
     }
 
+    public static BattingStatLine empty() {
+        return EMPTY;
+    }
+    
     public <T> T get(BattingStat<T> stat) {
         return stat.get(this);
     }

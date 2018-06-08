@@ -24,6 +24,8 @@ public final class Game {
 
     private final Innings innings = new Innings();    
     private final PlayerGameStats playerStats = new PlayerGameStats();
+    // The event detector is not integral to playing a game, so it is optional.
+    private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
 
     public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
         requireNonNull(homeTeam);
@@ -36,12 +38,15 @@ public final class Game {
         this.matchupRunner = requireNonNull(matchupRunner);
     }
     
+    public void setGameEventDetector(GameEventDetector eventDetector) {
+        this.eventDetector = requireNonNull(eventDetector);
+    }
+    
     public BoxScore run() {
         checkState(innings.isEmpty(), "Game already in progress");
         LoopingIterator<Lineup> battingLineup = LoopingIterator.of(visitingLineup, homeLineup);
         LoopingIterator<Lineup> fieldingLineup = LoopingIterator.of(homeLineup, visitingLineup);
         List<GameEvent> events = new ArrayList<>();
-        GameEventDetector eventDetector = GameEventDetector.NO_EVENTS; // TODO: Inject the real detector
         do {
             Lineup batting = battingLineup.next();
             Lineup fielding = fieldingLineup.next();

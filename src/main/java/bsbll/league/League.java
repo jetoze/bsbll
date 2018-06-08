@@ -27,6 +27,7 @@ import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStatLine;
+import bsbll.stats.PlayerStatLookup;
 import bsbll.team.Record;
 import bsbll.team.RunDifferential;
 import bsbll.team.Team;
@@ -117,6 +118,10 @@ public final class League {
     
     public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top, int minAtBats) {
         return playerStats.getBattingLeaders(stat, top, minAtBats);
+    }
+    
+    public PlayerStatLookup getPlayerStatLookup() {
+        return playerStats.asLookup();
     }
     
     public void addBoxScores(BoxScore... boxScores) {
