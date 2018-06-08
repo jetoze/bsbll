@@ -4,41 +4,35 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.matchup.MatchupRunner.Outcome;
-import bsbll.player.Player;
+import tzeth.collections.ImCollectors;
 
 /**
  * A collection of events that occurred in a game.
  */
 @Immutable
 public final class GameEvents {
-    private final ImmutableList<HomerunEvent> homeruns;
-    private final ImmutableList<DoubleEvent> doubles;
-    private final ImmutableList<TripleEvent> triples;
-    // TODO: Add things like Stolen Bases, Errors, Double Plays
+    // TODO: Store the event in a map, with the type as key? The main operation on a
+    // GameEvents instance after instantiation is lookups.
+    private final ImmutableList<? extends GameEvent> events;
     
-    public GameEvents(List<HomerunEvent> homeruns, List<DoubleEvent> doubles, List<TripleEvent> triples) {
-        this.homeruns = ImmutableList.copyOf(homeruns);
-        this.doubles = ImmutableList.copyOf(doubles);
-        this.triples = ImmutableList.copyOf(triples);
-    }
-
-    public ImmutableList<HomerunEvent> getHomeruns() {
-        return homeruns;
+    public GameEvents(List<? extends GameEvent> events) {
+        this.events = ImmutableList.copyOf(events);
     }
     
-    public ImmutableList<DoubleEvent> getDoubles() {
-        return doubles;
+    public static GameEvents of(List<? extends GameEvent> events) {
+        return new GameEvents(events);
     }
     
-    public ImmutableList<TripleEvent> getTriples() {
-        return triples;
+    public <T extends GameEvent> ImmutableList<T> getEvents(Class<T> type) {
+        return this.events.stream()
+                .filter(type::isInstance)
+                .map(type::cast)
+                .collect(ImCollectors.toList());
     }
     
     public static Builder builder() {
@@ -46,32 +40,19 @@ public final class GameEvents {
     }
 
     public static final class Builder {
-        private final List<HomerunEvent> homeruns = new ArrayList<>();
-        private final List<DoubleEvent> doubles = new ArrayList<>();
-        private final List<TripleEvent> triples = new ArrayList<>();
+        private final List<GameEvent> events = new ArrayList<>();
         
         public GameEvents build() {
-            return new GameEvents(homeruns, doubles, triples);
+            return new GameEvents(events);
         }
         
-        public Builder addHomerun(HomerunEvent hr) {
-            return addXBH(hr, this.homeruns::add);
-        }
-        
-        public Builder addDouble(DoubleEvent db) {
-            return addXBH(db, this.doubles::add);
-        }
-        
-        public Builder addTriple(TripleEvent tp) {
-            return addXBH(tp, this.triples::add);
-        }
-        
-        private <T extends ExtraBaseHitEvent> Builder addXBH(T event, Consumer<T> bin) {
-            requireNonNull(event);
-            bin.accept(event);
+        public Builder add(GameEvent e) {
+            requireNonNull(e);
+            this.events.add(e);
             return this;
         }
-        
+
+        /*
         public void examine(Outcome outcome, Player batter, Player pitcher, int inning, 
                 int outs, BaseSituation baseSituation) {
             switch (outcome) {
@@ -92,5 +73,6 @@ public final class GameEvents {
                 // Not of interest.
             }
         }
+        */
     }
 }

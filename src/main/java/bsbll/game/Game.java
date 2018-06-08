@@ -40,7 +40,8 @@ public final class Game {
         checkState(innings.isEmpty(), "Game already in progress");
         LoopingIterator<Lineup> battingLineup = LoopingIterator.of(visitingLineup, homeLineup);
         LoopingIterator<Lineup> fieldingLineup = LoopingIterator.of(homeLineup, visitingLineup);
-        GameEvents.Builder eventsBuilder = GameEvents.builder();
+        List<GameEvent> events = new ArrayList<>();
+        GameEventDetector eventDetector = GameEventDetector.NO_EVENTS; // TODO: Inject the real detector
         do {
             Lineup batting = battingLineup.next();
             Lineup fielding = fieldingLineup.next();
@@ -51,17 +52,17 @@ public final class Game {
                     fielding.getPitcher(),
                     matchupRunner,
                     playerStats,
-                    eventsBuilder,
+                    eventDetector,
                     innings.runsNeededToWalkOf().orElse(0));
-            HalfInning.Stats stats = halfInning.run();
-            innings.add(stats);
+            HalfInning.Summary summary = halfInning.run();
+            innings.add(summary.getStats());
+            events.addAll(summary.getEvents());
         } while (!innings.isGameOver());
         LineScore lineScore = new LineScore(
                 new LineScore.Line(homeTeam, innings.bottom),
                 new LineScore.Line(visitingTeam, innings.top)
         );
-        GameEvents events = eventsBuilder.build();
-        return new BoxScore(lineScore, homeLineup, visitingLineup, playerStats, events);
+        return new BoxScore(lineScore, homeLineup, visitingLineup, playerStats, GameEvents.of(events));
     }
 
     

@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -22,7 +24,7 @@ public final class HalfInning {
     private final Player pitcher;
     private final MatchupRunner matchupRunner;
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
-    private final GameEvents.Builder gameEventsBuilder;
+    private final GameEventDetector eventDetector;
     private final int runsNeededToWin;
 
     /**
@@ -36,6 +38,12 @@ public final class HalfInning {
      * @param matchupRunner
      *            the MatchupRunner that will be asked to simulate the matchup
      *            between the pitcher and the batters in this half inning.
+     * @param playerStats
+     *            the {@code PlayerGameStats} instance that keeps track of the
+     *            individual player performances in the game.
+     * @param eventDetector
+     *            the {@code GameEventDetector} that looks for
+     *            {@code GameEvent}s to report in the box score.
      * @param runsNeededToWin
      *            if the bottom of ninth inning or later, the number of runs
      *            needed by the batting team to win the game. This half inning
@@ -47,31 +55,32 @@ public final class HalfInning {
                       Player pitcher, 
                       MatchupRunner matchupRunner,
                       PlayerGameStats playerStats,
-                      GameEvents.Builder gameEventsBuilder,
+                      GameEventDetector eventDetector,
                       int runsNeededToWin) {
         this.num = checkPositive(num);
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
         this.matchupRunner = requireNonNull(matchupRunner);
         this.playerStats = requireNonNull(playerStats);
-        this.gameEventsBuilder = requireNonNull(gameEventsBuilder);
+        this.eventDetector = requireNonNull(eventDetector);
         this.runsNeededToWin = runsNeededToWin;
     }
 
-    public Stats run() {
+    public Summary run() {
         Stats stats = new Stats();
+        List<GameEvent> events = new ArrayList<>();
         BaseSituation baseSituation = BaseSituation.empty();
         do {
             Player batter = battingOrder.nextBatter();
             Outcome outcome = matchupRunner.run(batter, pitcher);
-            gameEventsBuilder.examine(outcome, batter, pitcher, num, stats.outs, baseSituation);
+            eventDetector.examine(outcome, batter, pitcher, num, stats.outs, baseSituation).ifPresent(events::add);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;
             playerStats.update(batter, pitcher, outcome, sam.playersThatScored);
         } while (!isDone(stats));
         int lob = baseSituation.getNumberOfRunners();
-        return stats.withLeftOnBase(lob);
+        return new Summary(stats.withLeftOnBase(lob), events);
     }
     
     private StateAfterMatchup evaluateOutcome(Player batter, BaseSituation baseSituation, Outcome outcome, Stats preStats) {
@@ -193,6 +202,25 @@ public final class HalfInning {
         @Override
         public String toString() {
             return String.format("R: %d, H: %d, E: %d, O: %d, LOB: %d", runs, hits, errors, outs, leftOnBase);
+        }
+    }
+    
+    
+    public static final class Summary {
+        private final Stats stats;
+        private final ImmutableList<GameEvent> events;
+        
+        public Summary(Stats stats, List<GameEvent> events) {
+            this.stats = stats;
+            this.events = ImmutableList.copyOf(events);
+        }
+
+        public Stats getStats() {
+            return stats;
+        }
+
+        public ImmutableList<GameEvent> getEvents() {
+            return events;
         }
     }
 }

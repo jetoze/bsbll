@@ -17,9 +17,11 @@ import com.google.common.collect.Streams;
 
 import bsbll.NameMode;
 import bsbll.game.BoxScore;
+import bsbll.game.DoubleEvent;
 import bsbll.game.ExtraBaseHitEvent;
 import bsbll.game.HomerunEvent;
 import bsbll.game.PlayerGameStats;
+import bsbll.game.TripleEvent;
 import bsbll.player.Player;
 import bsbll.report.AbstractPlainTextReport;
 import bsbll.stats.BattingStat;
@@ -114,11 +116,11 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             // TODO: This logic could be separated out to a different class. It's a 
             // perfect example of something that should be covered by unit tests.
             List<String> lines = new ArrayList<>();
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getDoubles(), BattingStat.DOUBLES,
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(DoubleEvent.class), BattingStat.DOUBLES,
                     this::xbhToString));
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getTriples(), BattingStat.TRIPLES,
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(TripleEvent.class), BattingStat.TRIPLES,
                     this::xbhToString));
-            lines.addAll(getExtraBaseHits(boxScore.getGameEvents().getHomeruns(), BattingStat.HOMERUNS, 
+            lines.addAll(getExtraBaseHits(boxScore.getGameEvents(HomerunEvent.class), BattingStat.HOMERUNS, 
                     this::hrToString));
             return lines;
         }

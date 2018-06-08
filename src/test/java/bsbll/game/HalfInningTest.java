@@ -27,9 +27,9 @@ public final class HalfInningTest {
     public void threeUpThreeDown() {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.OUT, Outcome.STRIKEOUT, Outcome.OUT);
         HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
-                GameEvents.builder(), 0);
+                GameEventDetector.NO_EVENTS, 0);
         
-        Stats stats = halfInning.run();
+        Stats stats = halfInning.run().getStats();
         
         assertEquals(new Stats(0, 0, 0, 3, 0), stats);
     }
@@ -39,9 +39,9 @@ public final class HalfInningTest {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.WALK, 
                 Outcome.STRIKEOUT, Outcome.HOMERUN, Outcome.DOUBLE, Outcome.OUT, Outcome.OUT);
         HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
-                GameEvents.builder(), 0);
+                GameEventDetector.NO_EVENTS, 0);
         
-        Stats stats = halfInning.run();
+        Stats stats = halfInning.run().getStats();
         
         assertEquals(new Stats(3, 3, 0, 3, 1), stats);
     }
@@ -51,9 +51,9 @@ public final class HalfInningTest {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.SINGLE, Outcome.WALK, Outcome.WALK);
         int runsNeededToWin = 1;
         HalfInning halfInning = new HalfInning(1, battingOrder, pitcher, mr, new PlayerGameStats(), 
-                GameEvents.builder(), runsNeededToWin);
+                GameEventDetector.NO_EVENTS, runsNeededToWin);
         
-        Stats stats = halfInning.run();
+        Stats stats = halfInning.run().getStats();
         
         assertEquals(new Stats(1, 2, 0, 0, 3), stats);
     }
