@@ -66,7 +66,6 @@ public final class AL1923 {
                 scores.addAll(runSeries(teamB, teamA, 11));
             }
         }
-        league.addBoxScores(scores);
         return league.getStandings();
     }
     
@@ -91,6 +90,7 @@ public final class AL1923 {
         List<BoxScore> scores = new ArrayList<>();
         for (int n = 0; n < numberOfGames; ++n) {
             BoxScore score = runGame(home, visiting);
+            league.addBoxScores(score);
             scores.add(score);
         }
         return scores;

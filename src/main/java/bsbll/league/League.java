@@ -124,6 +124,10 @@ public final class League {
         return playerStats.asLookup();
     }
     
+    // TODO: Since we have more than one way of adding box scores, ensure that the same
+    // box score isn't added twice. --> Give each game a unique ID (which is something
+    // we should do anyway), and keep track of the games that have already been added
+    // via their IDs.
     public void addBoxScores(BoxScore... boxScores) {
         addBoxScores(Arrays.asList(boxScores));
     }
