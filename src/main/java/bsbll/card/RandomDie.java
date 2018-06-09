@@ -5,6 +5,9 @@ import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Random;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 final class RandomDie implements Die {
     private final int sides;
     private final Random random;

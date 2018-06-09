@@ -3,8 +3,11 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import javax.annotation.concurrent.Immutable;
+
 import bsbll.team.TeamId;
 
+@Immutable
 public final class GameResult {
     private final TeamId homeTeam;
     private final int homeScore;

@@ -3,7 +3,9 @@ package bsbll.team;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+@Immutable
 public final class GamesBehind implements Comparable<GamesBehind> {
     private final int halfGames;
     

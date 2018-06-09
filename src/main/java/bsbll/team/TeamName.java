@@ -3,6 +3,9 @@ package bsbll.team;
 import static com.google.common.base.Preconditions.checkArgument;
 import static tzeth.preconds.MorePreconditions.checkNotEmpty;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class TeamName {
     private final String mainName;
     private final String nickname;

@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
@@ -18,6 +19,7 @@ import tzeth.collections.ImCollectors;
 /**
  * Represents the probability of an event, such as a batter hitting a homerun.
  */
+@Immutable
 public final class Probability implements Comparable<Probability> {
     private static final int DENOMINATOR = 10_000;
     

@@ -5,11 +5,14 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import javax.annotation.concurrent.Immutable;
+
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
 
+@Immutable
 public final class PlayerCard {
     private final Probability hits;
     private final Probability doubles;
@@ -33,7 +36,7 @@ public final class PlayerCard {
         this.strikeouts = requireNonNull(strikeouts);
         this.walks = requireNonNull(walks);
         this.hitByPitches = requireNonNull(hitByPitches);
-        // TODO: Preconditions, or make the ctor private.
+        // TODO: Preconditions, or make the ctor private. For example
     }
 
     // TODO: What is a good naming strategy for the getters? I would

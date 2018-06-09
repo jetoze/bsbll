@@ -2,8 +2,11 @@ package bsbll.team;
 
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import javax.annotation.concurrent.Immutable;
+
 import bsbll.stats.Average;
 
+@Immutable
 public final class WLT {
     private final int wins;
     private final int losses;

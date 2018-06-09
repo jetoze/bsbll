@@ -3,7 +3,9 @@ package bsbll.stats;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+@Immutable
 public final class InningsPitched implements Comparable<InningsPitched> {
     private final int outs;
     

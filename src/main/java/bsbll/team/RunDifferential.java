@@ -2,6 +2,9 @@ package bsbll.team;
 
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class RunDifferential {
     private final int runsScored;
     private final int runsAgainst;

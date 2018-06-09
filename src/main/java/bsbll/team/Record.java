@@ -2,8 +2,11 @@ package bsbll.team;
 
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.concurrent.Immutable;
+
 import bsbll.stats.Average;
 
+@Immutable
 public final class Record {
     private final WLT wlt;
     private final RunDifferential runDiff;

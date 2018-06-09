@@ -5,12 +5,14 @@ import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import java.text.DecimalFormat;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.math.IntMath;
 
 /**
  * Represents an average, such as a Batting Average or Slugging Average.
  */
+@Immutable
 public final class Average implements Comparable<Average> {
     private final int numerator;
     private final int denominator;

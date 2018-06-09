@@ -5,7 +5,6 @@ import static java.util.Objects.requireNonNull;
 public final class Player {
     private final PlayerId id;
     private final PlayerName name;
-    // TODO: At the very minimum we need some sort of Name abstraction.
     
     public Player(PlayerId id, PlayerName name) {
         this.id = requireNonNull(id);

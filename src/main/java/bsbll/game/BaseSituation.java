@@ -13,6 +13,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -21,6 +22,7 @@ import bsbll.Base;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 
+@Immutable
 public final class BaseSituation {
     // XXX: In some situations, such as when testing, it is cumbersome to have to
     // create actual Players to move around the bases. All that we really need
