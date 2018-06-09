@@ -70,7 +70,7 @@ public final class Game {
                 new LineScore.Line(homeTeam, innings.bottom),
                 new LineScore.Line(visitingTeam, innings.top)
         );
-        return new BoxScore(lineScore, homeLineup, visitingLineup, playerStats, GameEvents.of(events));
+        return new BoxScore(lineScore, homeLineup, visitingLineup, null, null, playerStats, GameEvents.of(events));
     }
 
     
