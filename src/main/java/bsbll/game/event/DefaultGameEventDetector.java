@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 import javax.annotation.Nullable;
 
@@ -16,13 +17,15 @@ import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
+import bsbll.stats.PitchingStat;
 import bsbll.stats.PlayerStatLookup;
+import bsbll.stats.Stat;
 
 // TODO: Terrible name, of course.
 // TODO: Unit tests.
 public final class DefaultGameEventDetector implements GameEventDetector {
     private final PlayerStatLookup totalsLookup;
-    private final Table<PlayerId, BattingStat<Integer>, Integer> battingTotals = HashBasedTable.create();
+    private final Table<PlayerId, Stat<Integer>, Integer> totals = HashBasedTable.create();
     
     public DefaultGameEventDetector(PlayerStatLookup totalsLookup) {
         this.totalsLookup = requireNonNull(totalsLookup);
@@ -54,34 +57,36 @@ public final class DefaultGameEventDetector implements GameEventDetector {
                                   BaseSituation baseSituation) {
         switch (outcome) {
         case DOUBLE:
-            int seasonTotal2B = updateSeasonTotal(batter, BattingStat.DOUBLES);
+            int seasonTotal2B = updateSeasonTotal(batter, BattingStat.DOUBLES, totalsLookup::getBattingStat);
             return new DoubleEvent(inning, batter, pitcher, seasonTotal2B);
         case TRIPLE:
-            int seasonTotal3B = updateSeasonTotal(batter, BattingStat.TRIPLES);
+            int seasonTotal3B = updateSeasonTotal(batter, BattingStat.TRIPLES, totalsLookup::getBattingStat);
             return new TripleEvent(inning, batter, pitcher, seasonTotal3B);
         case HOMERUN:
-            int seasonTotalHR = updateSeasonTotal(batter, BattingStat.HOMERUNS);
+            int seasonTotalHR = updateSeasonTotal(batter, BattingStat.HOMERUNS, totalsLookup::getBattingStat);
             return HomerunEvent.builder(inning, batter, pitcher)
                     .withOuts(outs)
                     .withSeasonTotal(seasonTotalHR)
                     .withRunnersOn(baseSituation.getNumberOfRunners())
                     .build();
         case HIT_BY_PITCH:
-            int seasonTotalHBP = updateSeasonTotal(batter, BattingStat.HIT_BY_PITCHES);
-            return new HitByPitchEvent(inning, batter, pitcher, seasonTotalHBP);
+            int seasonTotalHBP = updateSeasonTotal(batter, BattingStat.HIT_BY_PITCHES, totalsLookup::getBattingStat);
+            int pitcherSeasonTotalHBP = updateSeasonTotal(pitcher, PitchingStat.HIT_BY_PITCHES, totalsLookup::getPitchingStat);
+            return new HitByPitchEvent(inning, batter, pitcher, seasonTotalHBP, pitcherSeasonTotalHBP);
         default:
             // Not of interest.
             return null;
         }
     }
     
-    private int updateSeasonTotal(Player batter, BattingStat<Integer> stat) {
-        Integer current = battingTotals.get(batter.getId(), stat);
+    private <T extends Stat<Integer>> int updateSeasonTotal(Player player, T stat, 
+                                        BiFunction<Player, T, Integer> lookupFunction) {
+        Integer current = totals.get(player.getId(), stat);
         if (current == null) {
-            current = totalsLookup.getBattingStat(batter, stat);
+            current = lookupFunction.apply(player, stat);
         }
         ++current;
-        battingTotals.put(batter.getId(), stat, current);
+        totals.put(player.getId(), stat, current);
         return current;
     }
 

@@ -9,6 +9,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multimaps;
 import com.google.common.collect.Streams;
@@ -49,25 +50,29 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         linesBuilder.addAll(lineScoreReport.format(boxScore.getLineScore()));
         linesBuilder.add("");
         
+        ImmutableMap<Inning.Half, GameEvents> eventsByHalf = boxScore.getGameEvents().splitByInningHalf();
+        
         writeBattingStats(boxScore.getVisitingTeam(), boxScore.getVisitingLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
-        writeBattingEvents(boxScore, boxScore.getVisitingTeam(), linesBuilder);
+        writeBattingEvents(eventsByHalf.get(Inning.Half.TOP), linesBuilder);
         linesBuilder.add("");
         writeBattingStats(boxScore.getHomeTeam(), boxScore.getHomeLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
-        writeBattingEvents(boxScore, boxScore.getHomeTeam(), linesBuilder);
+        writeBattingEvents(eventsByHalf.get(Inning.Half.BOTTOM), linesBuilder);
         linesBuilder.add("");
         
         writePitchingStats(boxScore.getVisitingTeam(), boxScore.getVisitingLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
+        writePitchingEvents(eventsByHalf.get(Inning.Half.BOTTOM), linesBuilder);
+        linesBuilder.add("");
         writePitchingStats(boxScore.getHomeTeam(), boxScore.getHomeLineup(), 
                 boxScore.getPlayerStats(), linesBuilder);
         linesBuilder.add("");
-        
-        // TODO: Pitching Events go here.
+        writePitchingEvents(eventsByHalf.get(Inning.Half.TOP), linesBuilder);
+        linesBuilder.add("");
         
         return linesBuilder.build();
     }
@@ -87,13 +92,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         lines.add(lineGenerator.generateStatLine("Totals:", totals));
     }
     
-    private void writeBattingEvents(BoxScore boxScore, Team team, ImmutableList.Builder<String> lines) {
-        Inning.Half half = (team == boxScore.getVisitingTeam())
-                ? Inning.Half.TOP
-                : Inning.Half.BOTTOM;
-        GameEvents relevantEvents = boxScore.getGameEvents().subset(e -> e.getInning().getHalf() == half);
-        EventReporter reporter = new EventReporter(relevantEvents);
-        lines.addAll(reporter.getBattingEventLines());
+    private void writeBattingEvents(GameEvents events, ImmutableList.Builder<String> lines) {
+        writeEvents(events, EventReporter::getBattingEventLines, lines);
+    }
+    
+    private void writeEvents(GameEvents events, Function<EventReporter, List<String>> generator, 
+            ImmutableList.Builder<String> lines) {
+        if (!events.isEmpty()) {
+            EventReporter reporter = new EventReporter(events);
+            lines.addAll(generator.apply(reporter));
+        }
     }
     
     private void writePitchingStats(Team team, 
@@ -108,6 +116,10 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         lines.add(lineGenerator.generateStatLine(nameOf(pitcher), statLine));
     }
     
+    private void writePitchingEvents(GameEvents events, ImmutableList.Builder<String> lines) {
+        writeEvents(events, EventReporter::getPitchingEventLines, lines);
+    }
+
     private static String nameOf(Player p) {
         return p.getName().getShortForm();
     }
@@ -200,13 +212,22 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             return String.format("%s (%d, by %s); ", 
                     nameOf(evt.getBatter()), evt.getSeasonTotal(), nameOf(evt.getPitcher()));
         }
+        
+        public List<String> getPitchingEventLines() {
+            List<String> lines = new ArrayList<>();
+            // XXX: HBP is reported for both batter and pitcher. We use the getSpecific*Batting*EventLines
+            // here as a consequence, which looks and feels a bit odd.
+            lines.addAll(getSpecificBattingEventLines(events.getEvents(HitByPitchEvent.class), 
+                    BattingStat.HIT_BY_PITCHES, this::hbpToStringForPitcher));
+            return lines;
+        }
 
         /**
          * Creates the string representation for a hit-by-pitch, from the pitcher's perspective. 
          */
-        private String hbpToStringForPitcher(BattingEvent evt) {
+        private String hbpToStringForPitcher(HitByPitchEvent evt) {
             return String.format("%s (%d, %s); ", 
-                    nameOf(evt.getPitcher()), evt.getSeasonTotal(), nameOf(evt.getBatter()));
+                    nameOf(evt.getPitcher()), evt.getPitcherSeasonTotal(), nameOf(evt.getBatter()));
         }
     }
     
