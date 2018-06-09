@@ -1,9 +1,11 @@
 package bsbll.team;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import tzeth.preconds.MorePreconditions;
 
+@Immutable
 public final class TeamId {
     private final String id;
     

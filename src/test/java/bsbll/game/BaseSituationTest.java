@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.ImmutableList;
 
 import bsbll.game.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -26,7 +26,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, null, null), ImmutableSet.of());
+                new BaseSituation(BATTER, null, null), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -37,7 +37,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, null), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, null), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -48,7 +48,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -59,7 +59,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of(RUNNER_C));
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of(RUNNER_C));
         assertEquals(expectedResult, result);
     }
     
@@ -70,7 +70,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -81,7 +81,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.WALK);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -92,7 +92,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, null, null), ImmutableSet.of());
+                new BaseSituation(BATTER, null, null), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -103,7 +103,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, null), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, null), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -114,7 +114,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, null, RUNNER_A), ImmutableSet.of());
+                new BaseSituation(BATTER, null, RUNNER_A), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -125,7 +125,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, null, null), ImmutableSet.of(RUNNER_A));
+                new BaseSituation(BATTER, null, null), ImmutableList.of(RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -136,7 +136,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of());
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -147,7 +147,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, null), ImmutableSet.of(RUNNER_B));
+                new BaseSituation(BATTER, RUNNER_A, null), ImmutableList.of(RUNNER_B));
         assertEquals(expectedResult, result);
     }
     
@@ -158,7 +158,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, null, RUNNER_A), ImmutableSet.of(RUNNER_B));
+                new BaseSituation(BATTER, null, RUNNER_A), ImmutableList.of(RUNNER_B));
         assertEquals(expectedResult, result);
     }
     
@@ -169,7 +169,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.SINGLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableSet.of(RUNNER_C));
+                new BaseSituation(BATTER, RUNNER_A, RUNNER_B), ImmutableList.of(RUNNER_C));
         assertEquals(expectedResult, result);
     }
     
@@ -180,7 +180,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, null), ImmutableSet.of());
+                new BaseSituation(null, BATTER, null), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -191,7 +191,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, RUNNER_A), ImmutableSet.of());
+                new BaseSituation(null, BATTER, RUNNER_A), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -202,7 +202,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, null), ImmutableSet.of(RUNNER_A));
+                new BaseSituation(null, BATTER, null), ImmutableList.of(RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -213,7 +213,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, null), ImmutableSet.of(RUNNER_A));
+                new BaseSituation(null, BATTER, null), ImmutableList.of(RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -224,7 +224,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, RUNNER_A), ImmutableSet.of(RUNNER_B));
+                new BaseSituation(null, BATTER, RUNNER_A), ImmutableList.of(RUNNER_B));
         assertEquals(expectedResult, result);
     }
     
@@ -235,7 +235,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, RUNNER_A), ImmutableSet.of(RUNNER_B));
+                new BaseSituation(null, BATTER, RUNNER_A), ImmutableList.of(RUNNER_B));
         assertEquals(expectedResult, result);
     }
     
@@ -246,7 +246,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, null), ImmutableSet.of(RUNNER_A, RUNNER_B));
+                new BaseSituation(null, BATTER, null), ImmutableList.of(RUNNER_A, RUNNER_B));
         assertEquals(expectedResult, result);
     }
     
@@ -257,7 +257,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.DOUBLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, BATTER, RUNNER_A), ImmutableSet.of(RUNNER_B, RUNNER_C));
+                new BaseSituation(null, BATTER, RUNNER_A), ImmutableList.of(RUNNER_B, RUNNER_C));
         assertEquals(expectedResult, result);
     }
     
@@ -268,7 +268,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.TRIPLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, null, BATTER), ImmutableSet.of());
+                new BaseSituation(null, null, BATTER), ImmutableList.of());
         assertEquals(expectedResult, result);
     }
     
@@ -279,7 +279,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.TRIPLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, null, BATTER), ImmutableSet.of(RUNNER_A));
+                new BaseSituation(null, null, BATTER), ImmutableList.of(RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -290,7 +290,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.TRIPLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, null, BATTER), ImmutableSet.of(RUNNER_A, RUNNER_B));
+                new BaseSituation(null, null, BATTER), ImmutableList.of(RUNNER_B, RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -301,7 +301,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.TRIPLE);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                new BaseSituation(null, null, BATTER), ImmutableSet.of(RUNNER_A, RUNNER_B, RUNNER_C));
+                new BaseSituation(null, null, BATTER), ImmutableList.of(RUNNER_C, RUNNER_B, RUNNER_A));
         assertEquals(expectedResult, result);
     }
     
@@ -312,7 +312,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.HOMERUN);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                BaseSituation.empty(), ImmutableSet.of(BATTER));
+                BaseSituation.empty(), ImmutableList.of(BATTER));
         assertEquals(expectedResult, result);
     }
     
@@ -323,7 +323,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.HOMERUN);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                BaseSituation.empty(), ImmutableSet.of(RUNNER_A, BATTER));
+                BaseSituation.empty(), ImmutableList.of(RUNNER_A, BATTER));
         assertEquals(expectedResult, result);
     }
     
@@ -334,7 +334,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.HOMERUN);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                BaseSituation.empty(), ImmutableSet.of(RUNNER_A, RUNNER_B, BATTER));
+                BaseSituation.empty(), ImmutableList.of(RUNNER_B, RUNNER_A, BATTER));
         assertEquals(expectedResult, result);
     }
     
@@ -345,7 +345,7 @@ public final class BaseSituationTest {
         ResultOfAdvance result = before.advanceRunners(BATTER, Outcome.HOMERUN);
         
         ResultOfAdvance expectedResult = new ResultOfAdvance(
-                BaseSituation.empty(), ImmutableSet.of(RUNNER_A, RUNNER_B, RUNNER_C, BATTER));
+                BaseSituation.empty(), ImmutableList.of(RUNNER_C, RUNNER_B, RUNNER_A, BATTER));
         assertEquals(expectedResult, result);
     }    
 }

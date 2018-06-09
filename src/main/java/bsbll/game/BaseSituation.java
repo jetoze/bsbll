@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -17,6 +16,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.Base;
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -30,14 +30,14 @@ public final class BaseSituation {
     // I've been considering making this class generic, with a type parameter for
     // the type of objects that occupy the bases, but have decided against it 
     // since it adds extra complexity.
-    private final ImmutableMap<Base, Player> bases;
+    private final ImmutableSortedMap<Base, Player> bases;
     
     public static BaseSituation empty() {
         return new BaseSituation(ImmutableMap.of());
     }
     
     public BaseSituation(@Nullable Player onFirst, @Nullable Player onSecond, @Nullable Player onThird) {
-        ImmutableMap.Builder<Base, Player> builder = ImmutableMap.builder();
+        ImmutableSortedMap.Builder<Base, Player> builder = ImmutableSortedMap.naturalOrder();
         if (onFirst != null) {
             builder.put(Base.FIRST, onFirst);
         }
@@ -52,7 +52,7 @@ public final class BaseSituation {
     
     public BaseSituation(Map<Base, Player> bases) {
         checkArgument(!bases.containsKey(Base.HOME));
-        this.bases = ImmutableMap.copyOf(bases);
+        this.bases = ImmutableSortedMap.copyOf(bases);
     }
 
     public boolean isEmpty() {
@@ -163,11 +163,14 @@ public final class BaseSituation {
     }
     
     private ResultOfAdvance advanceOnTriple(Player batter) {
-        return new ResultOfAdvance(new BaseSituation(null, null, batter), this.bases.values());
+        List<Player> runs = new ArrayList<>(this.bases.values());
+        Collections.reverse(runs);
+        return new ResultOfAdvance(new BaseSituation(null, null, batter), runs);
     }
     
     private ResultOfAdvance advanceOnHomeRun(Player batter) {
         List<Player> runs = new ArrayList<>(this.bases.values());
+        Collections.reverse(runs);
         runs.add(batter);
         return new ResultOfAdvance(BaseSituation.empty(), runs);
     }
@@ -210,11 +213,19 @@ public final class BaseSituation {
         private final BaseSituation newSituation;
         private final ImmutableList<Player> runs;
         
-        public ResultOfAdvance(Map<Base, Player> newSituation, Collection<Player> runs) {
+        public ResultOfAdvance(Map<Base, Player> newSituation, List<Player> runs) {
             this(new BaseSituation(newSituation), runs);
         }
         
-        public ResultOfAdvance(BaseSituation newSituation, Collection<Player> runs) {
+        /**
+         * 
+         * @param newSituation
+         *            the new base situation
+         * @param runs
+         *            the runners that scored on the play, in the order in which
+         *            they scored.
+         */
+        public ResultOfAdvance(BaseSituation newSituation, List<Player> runs) {
             this.newSituation = requireNonNull(newSituation);
             this.runs = ImmutableList.copyOf(runs);
         }
@@ -223,6 +234,9 @@ public final class BaseSituation {
             return newSituation;
         }
         
+        /**
+         * Returns the runners that scored on the play, in the order that they scored.
+         */
         public ImmutableList<Player> getRunnersThatScored() {
             return runs;
         }
