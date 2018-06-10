@@ -25,6 +25,9 @@ public final class RunsScored implements Iterable<Run> {
     
     public RunsScored(List<Run> runs) {
         this.runs = ImmutableList.copyOf(runs);
+        // TODO: Precondition that ensures that the list is in increasing order with 
+        // respect to Inning. That would be another reason why this class deserves to be
+        // (see comment in getLosingPitcher).
     }
     
     public static RunsScored of(List<Run> runs) {
@@ -48,6 +51,10 @@ public final class RunsScored implements Iterable<Run> {
     // Is it worth it? The alternative would be to simply use ImmutableList<Run>,
     // and let some other class be responsible for figuring out losing (and 
     // winning) pitcher.
+    // One reason this method does *not* belong here is that the corresponding
+    // getWinningPitcher cannot be implemented here, due to the rule that requires
+    // a starting pitcher to pitch at least 5 innings in order to get credit for 
+    // a win.
     public Player getLosingPitcher() {
         int topScore = 0;
         int bottomScore = 0;
