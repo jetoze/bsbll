@@ -90,6 +90,13 @@ public interface PitchingStat<T> extends Stat<T> {
         }
     };
     
+    public static final PitchingStat<Per9IPStat> H9 = new AbstractPitchingStat<Per9IPStat>("H9", Comparator.naturalOrder()) {
+        @Override
+        public Per9IPStat get(PitchingStatLine stats) {
+            return new Per9IPStat(HITS.get(stats), OUTS.get(stats));
+        }
+    };
+    
     public static final PitchingStat<Per9IPStat> SO9 = new AbstractPitchingStat<Per9IPStat>("SO9", Comparator.reverseOrder()) {
         @Override
         public Per9IPStat get(PitchingStatLine stats) {

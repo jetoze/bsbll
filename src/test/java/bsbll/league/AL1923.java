@@ -337,7 +337,7 @@ public final class AL1923 {
             printPitchingLeaders(league.league, PitchingStat.WINS, PitchingStat.ERA,
                     PitchingStat.WIN_PCT, PitchingStat.WHIP,
                     PitchingStat.STRIKEOUTS, PitchingStat.SHUTOUTS,
-                    PitchingStat.SO9, PitchingStat.BB9);
+                    PitchingStat.H9, PitchingStat.SO9, PitchingStat.BB9);
         }
     }
     
