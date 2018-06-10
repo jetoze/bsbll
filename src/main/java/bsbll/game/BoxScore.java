@@ -1,10 +1,15 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
+
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 
 import bsbll.game.event.GameEvents;
+import bsbll.player.Player;
+import bsbll.stats.PitchingStatLine;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 
@@ -51,6 +56,10 @@ public final class BoxScore {
         this.visitingLineup = requireNonNull(visitingLineup);
         this.winningPitcher = winningPitcher;
         this.losingPitcher = losingPitcher;
+        checkArgument((winningPitcher == null && losingPitcher == null) ||
+                (winningPitcher != null || losingPitcher != null), 
+                "Must provide both a winning and a losing pitcher, or neither. WP: %s. LP: %s",
+                winningPitcher, losingPitcher);
         this.runsScored = requireNonNull(runsScored);
         this.playerStats = requireNonNull(playerStats);
         this.gameEvents = requireNonNull(gameEvents);
@@ -86,6 +95,10 @@ public final class BoxScore {
         return playerStats;
     }
     
+    public PitchingStatLine getPitchingLine(Player player) {
+        return playerStats.getPitchingLine(player);
+    }
+    
     public GameEvents getGameEvents() {
         return this.gameEvents;
     }
@@ -96,5 +109,16 @@ public final class BoxScore {
 
     public GameResult toGameResult() {
         return lineScore.toGameResult();
+    }
+    
+    public Optional<PitcherOfRecord> checkPitcherOfRecord(Player pitcher) {
+        requireNonNull(pitcher);
+        if (winningPitcher != null && winningPitcher.getPitcher() == pitcher) {
+            return Optional.ofNullable(winningPitcher);
+        } else if (losingPitcher != null &&  losingPitcher.getPitcher() == pitcher) {
+            return Optional.ofNullable(losingPitcher);
+        } else {
+            return Optional.empty();
+        }
     }
 }

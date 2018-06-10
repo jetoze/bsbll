@@ -81,6 +81,7 @@ public final class Game {
         PitcherOfRecord wp = officialScorer.getWinningPitcher(homeTeam.getId(), homeLineup, 
                 visitingTeam.getId(), visitingLineup, runsScored);
         PitcherOfRecord lp = officialScorer.getLosingPitcher(runsScored);
+        playerStats.updatePitchersOfRecord(wp, lp);
         return new BoxScore(lineScore, homeLineup, visitingLineup, wp, lp, runsScored, 
                 playerStats, GameEvents.of(events));
     }

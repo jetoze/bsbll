@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,8 +18,8 @@ import bsbll.NameMode;
 import bsbll.game.BattingEvent;
 import bsbll.game.BoxScore;
 import bsbll.game.Inning;
+import bsbll.game.PitcherOfRecord;
 import bsbll.game.PlayerGameStats;
-import bsbll.game.RunsScored.Run;
 import bsbll.game.event.DoubleEvent;
 import bsbll.game.event.GameEvents;
 import bsbll.game.event.HitByPitchEvent;
@@ -65,20 +64,16 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         writeBattingEvents(eventsByHalf.get(Inning.Half.BOTTOM), linesBuilder);
         linesBuilder.add("");
         
-        writePitchingStats(boxScore.getVisitingTeam(), boxScore.getVisitingLineup(), 
-                boxScore.getPlayerStats(), linesBuilder);
+        writePitchingStats(boxScore, boxScore.getVisitingTeam(), 
+                boxScore.getVisitingLineup(), linesBuilder);
         linesBuilder.add("");
         writePitchingEvents(eventsByHalf.get(Inning.Half.BOTTOM), linesBuilder);
         linesBuilder.add("");
-        writePitchingStats(boxScore.getHomeTeam(), boxScore.getHomeLineup(), 
-                boxScore.getPlayerStats(), linesBuilder);
+        writePitchingStats(boxScore, boxScore.getHomeTeam(), 
+                boxScore.getHomeLineup(), linesBuilder);
         linesBuilder.add("");
         writePitchingEvents(eventsByHalf.get(Inning.Half.TOP), linesBuilder);
         linesBuilder.add("");
-        linesBuilder.add("Runs:");
-        linesBuilder.add(boxScore.getRunsScored().stream()
-                .map(Run::toString)
-                .collect(Collectors.joining("\n")));
         
         return linesBuilder.build();
     }
@@ -110,16 +105,28 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         }
     }
     
-    private void writePitchingStats(Team team, 
+    private void writePitchingStats(BoxScore boxScore,
+                                    Team team, 
                                     Lineup lineup, 
-                                    PlayerGameStats stats, 
                                     ImmutableList.Builder<String> lines) {
         PitchingLineGenerator lineGenerator = PitchingLineGenerator.create();
         lines.add(lineGenerator.generateHeader(team.getName().getFullName()));
         // TODO: This will obviously change once we implement pitcher substitutions.
         Player pitcher = lineup.getPitcher();
-        PitchingStatLine statLine = stats.getPitchingLine(pitcher);
-        lines.add(lineGenerator.generateStatLine(nameOf(pitcher), statLine));
+        PitchingStatLine statLine = boxScore.getPitchingLine(pitcher);
+        lines.add(lineGenerator.generateStatLine(getPitcherNameEntry(pitcher, boxScore), statLine));
+    }
+    
+    private String getPitcherNameEntry(Player pitcher, BoxScore boxScore) {
+        StringBuilder name = new StringBuilder(nameOf(pitcher));
+        boxScore.checkPitcherOfRecord(pitcher)
+            .map(r -> toString(r))
+            .ifPresent(name::append);
+        return name.toString();
+    }
+    
+    private static String toString(PitcherOfRecord por) {
+        return String.format(" (%s, %s)", por.getDecision().abbrev(), por.getRecord());
     }
     
     private void writePitchingEvents(GameEvents events, ImmutableList.Builder<String> lines) {

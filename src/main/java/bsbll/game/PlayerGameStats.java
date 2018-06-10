@@ -12,6 +12,7 @@ import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
+import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
 
 public final class PlayerGameStats {
@@ -49,10 +50,6 @@ public final class PlayerGameStats {
         return pitchingStats.computeIfAbsent(player.getId(), id -> PitchingStatLine.forNewGame());
     }
     
-    public void gatherBattingStats(BiConsumer<PlayerId, BattingStatLine> c) {
-        battingStats.forEach((id, builder) -> c.accept(id, builder.build()));
-    }
-    
     public BattingStatLine getBattingLine(Player player) {
         BattingStatLine.Builder builder = battingStats.get(player.getId());
         checkArgument(builder != null, "No such player: %s", player);
@@ -63,6 +60,15 @@ public final class PlayerGameStats {
         PitchingStatLine.Builder builder = pitchingStats.get(player.getId());
         checkArgument(builder != null, "No such player: %s", player);
         return builder.build();
+    }
+
+    public void updatePitchersOfRecord(PitcherOfRecord wp, PitcherOfRecord lp) {
+        pitchingStats(wp.getPitcher()).set(PitchingStat.WINS, 1);
+        pitchingStats(lp.getPitcher()).set(PitchingStat.LOSSES, 1);
+    }
+    
+    public void gatherBattingStats(BiConsumer<PlayerId, BattingStatLine> c) {
+        battingStats.forEach((id, builder) -> c.accept(id, builder.build()));
     }
     
     public void gatherPitchingStats(BiConsumer<PlayerId, PitchingStatLine> c) {
