@@ -16,6 +16,7 @@ public final class BoxScore {
     private final PitcherOfRecord winningPitcher;
     @Nullable
     private final PitcherOfRecord losingPitcher;
+    private final RunsScored runsScored;
     private final PlayerGameStats playerStats;
     private final GameEvents gameEvents;
 
@@ -42,6 +43,7 @@ public final class BoxScore {
                     Lineup visitingLineup,
                     @Nullable PitcherOfRecord winningPitcher,
                     @Nullable PitcherOfRecord losingPitcher,
+                    RunsScored runsScored,
                     PlayerGameStats playerStats, 
                     GameEvents gameEvents) {
         this.lineScore = requireNonNull(lineScore);
@@ -49,6 +51,7 @@ public final class BoxScore {
         this.visitingLineup = requireNonNull(visitingLineup);
         this.winningPitcher = winningPitcher;
         this.losingPitcher = losingPitcher;
+        this.runsScored = requireNonNull(runsScored);
         this.playerStats = requireNonNull(playerStats);
         this.gameEvents = requireNonNull(gameEvents);
     }
@@ -85,6 +88,10 @@ public final class BoxScore {
     
     public GameEvents getGameEvents() {
         return this.gameEvents;
+    }
+
+    public RunsScored getRunsScored() {
+        return runsScored;
     }
 
     public GameResult toGameResult() {

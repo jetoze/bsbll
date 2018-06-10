@@ -1,10 +1,14 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -12,12 +16,14 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.BaseSituation.ResultOfAdvance;
+import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.team.BattingOrder;
+import tzeth.collections.ImCollectors;
 
 public final class HalfInning {
     private final Inning inning;
@@ -27,6 +33,7 @@ public final class HalfInning {
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
     private final GameEventDetector eventDetector;
     private final int runsNeededToWin;
+    private final Map<Player, Player> runnerToResponsiblePitcher = new HashMap<>();
 
     /**
      * 
@@ -69,19 +76,22 @@ public final class HalfInning {
 
     public Summary run() {
         Stats stats = new Stats();
+        List<Run> runs = new ArrayList<>();
         List<GameEvent> events = new ArrayList<>();
         BaseSituation baseSituation = BaseSituation.empty();
         do {
             Player batter = battingOrder.nextBatter();
+            runnerToResponsiblePitcher.put(batter, pitcher);
             Outcome outcome = matchupRunner.run(batter, pitcher);
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;
             baseSituation = sam.baseSituation;
-            playerStats.update(batter, pitcher, outcome, sam.playersThatScored);
+            runs.addAll(sam.runs);
+            playerStats.update(batter, pitcher, outcome, sam.playersThatScored());
         } while (!isDone(stats));
         int lob = baseSituation.getNumberOfRunners();
-        return new Summary(stats.withLeftOnBase(lob), events);
+        return new Summary(stats.withLeftOnBase(lob), runs, events);
     }
     
     private StateAfterMatchup evaluateOutcome(Player batter, BaseSituation baseSituation, Outcome outcome, Stats preStats) {
@@ -102,7 +112,10 @@ public final class HalfInning {
                 preStats.errors,
                 preStats.outs,
                 preStats.leftOnBase);
-        return new StateAfterMatchup(newStats, roa.getRunnersThatScored(), roa.getNewSituation());
+        ImmutableList<Run> runs = roa.getRunnersThatScored().stream()
+                .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))
+                .collect(ImCollectors.toList());
+        return new StateAfterMatchup(newStats, runs, roa.getNewSituation());
     }
     
     private boolean isDone(Stats stats) {
@@ -121,14 +134,20 @@ public final class HalfInning {
     
     private static class StateAfterMatchup {
         public final Stats stats;
-        public final ImmutableList<Player> playersThatScored;
+        public final ImmutableList<Run> runs;
         public final BaseSituation baseSituation;
         
-        public StateAfterMatchup(Stats stats, ImmutableList<Player> playersThatScored, 
+        public StateAfterMatchup(Stats stats, ImmutableList<Run> runs, 
                 BaseSituation baseSituation) {
             this.stats = stats;
-            this.playersThatScored = playersThatScored;
+            this.runs = runs;
             this.baseSituation = baseSituation;
+        }
+        
+        public List<Player> playersThatScored() {
+            return runs.stream()
+                    .map(Run::getRunner)
+                    .collect(toList());
         }
     }
     
@@ -209,17 +228,24 @@ public final class HalfInning {
     
     public static final class Summary {
         private final Stats stats;
+        private final ImmutableList<Run> runs;
         private final ImmutableList<GameEvent> events;
         
-        public Summary(Stats stats, List<GameEvent> events) {
+        public Summary(Stats stats, List<Run> runs, List<GameEvent> events) {
             this.stats = stats;
+            this.runs = ImmutableList.copyOf(runs);
             this.events = ImmutableList.copyOf(events);
+            checkArgument(runs.size() == stats.runs);
         }
 
         public Stats getStats() {
             return stats;
         }
 
+        public ImmutableList<Run> getRuns() {
+            return runs;
+        }
+        
         public ImmutableList<GameEvent> getEvents() {
             return events;
         }

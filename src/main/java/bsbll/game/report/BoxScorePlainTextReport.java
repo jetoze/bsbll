@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,6 +20,7 @@ import bsbll.game.BattingEvent;
 import bsbll.game.BoxScore;
 import bsbll.game.Inning;
 import bsbll.game.PlayerGameStats;
+import bsbll.game.RunsScored.Run;
 import bsbll.game.event.DoubleEvent;
 import bsbll.game.event.GameEvents;
 import bsbll.game.event.HitByPitchEvent;
@@ -73,6 +75,10 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         linesBuilder.add("");
         writePitchingEvents(eventsByHalf.get(Inning.Half.TOP), linesBuilder);
         linesBuilder.add("");
+        linesBuilder.add("Runs:");
+        linesBuilder.add(boxScore.getRunsScored().stream()
+                .map(Run::toString)
+                .collect(Collectors.joining("\n")));
         
         return linesBuilder.build();
     }

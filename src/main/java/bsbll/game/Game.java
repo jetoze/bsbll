@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.event.GameEvents;
@@ -49,6 +50,7 @@ public final class Game {
         checkState(innings.isEmpty(), "Game already in progress");
         LoopingIterator<Lineup> battingLineup = LoopingIterator.of(visitingLineup, homeLineup);
         LoopingIterator<Lineup> fieldingLineup = LoopingIterator.of(homeLineup, visitingLineup);
+        List<Run> runs = new ArrayList<>();
         List<GameEvent> events = new ArrayList<>();
         do {
             Lineup batting = battingLineup.next();
@@ -64,13 +66,15 @@ public final class Game {
                     innings.runsNeededToWalkOf().orElse(0));
             HalfInning.Summary summary = halfInning.run();
             innings.onHalfInningCompleted(summary.getStats());
+            runs.addAll(summary.getRuns());
             events.addAll(summary.getEvents());
         } while (!innings.isGameOver());
         LineScore lineScore = new LineScore(
                 new LineScore.Line(homeTeam, innings.bottom),
                 new LineScore.Line(visitingTeam, innings.top)
         );
-        return new BoxScore(lineScore, homeLineup, visitingLineup, null, null, playerStats, GameEvents.of(events));
+        return new BoxScore(lineScore, homeLineup, visitingLineup, null, null, 
+                RunsScored.of(runs), playerStats, GameEvents.of(events));
     }
 
     
