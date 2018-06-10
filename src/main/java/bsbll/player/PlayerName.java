@@ -4,6 +4,9 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.hash;
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class PlayerName {
     private final String first;
     private final String last;

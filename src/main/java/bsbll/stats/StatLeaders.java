@@ -86,6 +86,7 @@ public final class StatLeaders<T, S extends Stat<T>> {
     }
 
 
+    @Immutable
     public static final class Entry<T> {
         private final PlayerId playerId;
         private final T value;
