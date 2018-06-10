@@ -65,6 +65,12 @@ public final class PlayerGameStats {
     public void updatePitchersOfRecord(PitcherOfRecord wp, PitcherOfRecord lp) {
         pitchingStats(wp.getPitcher()).set(PitchingStat.WINS, 1);
         pitchingStats(lp.getPitcher()).set(PitchingStat.LOSSES, 1);
+        // TODO: This will change once we implement pitcher substitutions
+        pitchingStats(wp.getPitcher()).set(PitchingStat.COMPLETE_GAMES, 1);
+        if (pitchingStats(wp.getPitcher()).get(PitchingStat.RUNS) == 0) {
+            pitchingStats(wp.getPitcher()).set(PitchingStat.SHUTOUTS, 1);
+        }
+        pitchingStats(lp.getPitcher()).set(PitchingStat.COMPLETE_GAMES, 1);
     }
     
     public void gatherBattingStats(BiConsumer<PlayerId, BattingStatLine> c) {

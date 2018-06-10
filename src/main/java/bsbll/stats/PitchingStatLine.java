@@ -84,7 +84,8 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
                     .set(HIT_BY_PITCHES, get(HIT_BY_PITCHES) + (o == Outcome.HIT_BY_PITCH ? 1 : 0));
         }
 
-        private int get(PrimitivePitchingStat stat) {
+        public int get(PrimitivePitchingStat stat) {
+            requireNonNull(stat);
             return values.getOrDefault(stat, 0);
         }
 
