@@ -1,9 +1,11 @@
 package bsbll.player;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import tzeth.preconds.MorePreconditions;
 
+@Immutable
 public final class PlayerId {
     private final String id;
     
