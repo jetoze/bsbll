@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.game.RunsScored.Run;
 import bsbll.player.Player;
+import bsbll.team.TeamId;
 
 /**
  * The runs that scored in a game, in the order that they scored.
@@ -45,6 +46,14 @@ public final class RunsScored implements Iterable<Run> {
     
     public Stream<Run> stream() {
         return runs.stream();
+    }
+    
+    public GameResult toGameResult(TeamId homeTeamId, TeamId visitingTeamId) {
+        int homeScore = (int) runs.stream()
+                .filter(r -> r.inning.isBottom())
+                .count();
+        int visitingScore = runs.size() - homeScore;
+        return new GameResult(homeTeamId, homeScore, visitingTeamId, visitingScore);
     }
 
     // TODO: This method is really the only reason this class needs to exist.

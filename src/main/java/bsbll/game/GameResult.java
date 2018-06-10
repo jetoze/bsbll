@@ -37,6 +37,10 @@ public final class GameResult {
     public int getVisitingScore() {
         return visitingScore;
     }
+    
+    public boolean isTie() {
+        return homeScore == visitingScore;
+    }
 
     @Override
     public String toString() {

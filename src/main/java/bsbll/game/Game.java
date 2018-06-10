@@ -25,16 +25,19 @@ public final class Game {
     private final Lineup visitingLineup;
     
     private final MatchupRunner matchupRunner;
+    
+    private final OfficialScorer officialScorer;
 
     private final Innings innings = new Innings();    
     private final PlayerGameStats playerStats = new PlayerGameStats();
     // The event detector is not integral to playing a game, so it is optional.
     private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
 
-    public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner) {
+    public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner, OfficialScorer officialScorer) {
         requireNonNull(homeTeam);
         requireNonNull(visitingTeam);
         checkArgument(homeTeam != visitingTeam, "A team cannot play a game against itself (%s)", homeTeam);
+        this.officialScorer = requireNonNull(officialScorer);
         this.homeTeam = homeTeam;
         this.homeLineup = homeTeam.getRoster().getLineup();
         this.visitingTeam = visitingTeam;
@@ -73,8 +76,13 @@ public final class Game {
                 new LineScore.Line(homeTeam, innings.bottom),
                 new LineScore.Line(visitingTeam, innings.top)
         );
-        return new BoxScore(lineScore, homeLineup, visitingLineup, null, null, 
-                RunsScored.of(runs), playerStats, GameEvents.of(events));
+        RunsScored runsScored = RunsScored.of(runs);
+        // TODO: This will bomb out when we allow ties
+        PitcherOfRecord wp = officialScorer.getWinningPitcher(homeTeam.getId(), homeLineup, 
+                visitingTeam.getId(), visitingLineup, runsScored);
+        PitcherOfRecord lp = officialScorer.getLosingPitcher(runsScored);
+        return new BoxScore(lineScore, homeLineup, visitingLineup, wp, lp, runsScored, 
+                playerStats, GameEvents.of(events));
     }
 
     

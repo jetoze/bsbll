@@ -6,6 +6,7 @@ import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import javax.annotation.concurrent.Immutable;
 
 import bsbll.game.Decision;
+import bsbll.player.Player;
 
 /**
  * The win-loss record of an individual pitcher.
@@ -22,6 +23,11 @@ public final class WinLossRecord {
     
     public static WinLossRecord of(PitchingStatLine line) {
         return new WinLossRecord(line.get(PitchingStat.WINS), line.get(PitchingStat.LOSSES));
+    }
+    
+    public static WinLossRecord of(Player player, PlayerStatLookup statLookup) {
+        return new WinLossRecord(statLookup.getPitchingStat(player, PitchingStat.WINS),
+                statLookup.getPitchingStat(player, PitchingStat.LOSSES));
     }
 
     public int getWins() {
