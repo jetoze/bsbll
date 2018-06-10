@@ -7,6 +7,7 @@ import static tzeth.preconds.MorePreconditions.checkPositive;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiFunction;
 import java.util.function.Predicate;
 
 import javax.annotation.concurrent.Immutable;
@@ -38,16 +39,7 @@ public final class StatLeaders<T, S extends Stat<T>> {
     
     public static <T, S extends BattingStat<T>> StatLeaders<T, S> batting(Map<PlayerId, BattingStatLine> statLines,
             S stat, int top, Predicate<Map.Entry<PlayerId, BattingStatLine>> filter) {
-        requireNonNull(stat);
-        checkPositive(top);
-        requireNonNull(filter);
-        List<Entry<T>> entries = statLines.entrySet().stream()
-                .filter(filter)
-                .map(e -> new Entry<>(e.getKey(), e.getValue().get(stat)))
-                .sorted(Comparator.comparing(Entry::getValue, stat.leaderOrder()))
-                .limit(top)
-                .collect(toList());
-        return new StatLeaders<>(stat, entries);
+        return compute(statLines, stat, top, filter, BattingStatLine::get);
     }
     
     public static <T, S extends PitchingStat<T>> StatLeaders<T, S> pitching(Map<PlayerId, PitchingStatLine> statLines,
@@ -63,18 +55,23 @@ public final class StatLeaders<T, S extends Stat<T>> {
     
     public static <T, S extends PitchingStat<T>> StatLeaders<T, S> pitching(Map<PlayerId, PitchingStatLine> statLines,
             S stat, int top, Predicate<Map.Entry<PlayerId, PitchingStatLine>> filter) {
+        return compute(statLines, stat, top, filter, PitchingStatLine::get);
+    }
+
+    private static <T, S extends Stat<T>, L> StatLeaders<T, S> compute(Map<PlayerId, L> statLines, S stat, 
+            int top, Predicate<Map.Entry<PlayerId, L>> filter, BiFunction<L, S, T> getter) {
         requireNonNull(stat);
         checkPositive(top);
         requireNonNull(filter);
         List<Entry<T>> entries = statLines.entrySet().stream()
                 .filter(filter)
-                .map(e -> new Entry<>(e.getKey(), e.getValue().get(stat)))
+                .map(e -> new Entry<>(e.getKey(), getter.apply(e.getValue(), stat)))
                 .sorted(Comparator.comparing(Entry::getValue, stat.leaderOrder()))
                 .limit(top)
                 .collect(toList());
         return new StatLeaders<>(stat, entries);
     }
-    
+
     public S getStat() {
         return stat;
     }
