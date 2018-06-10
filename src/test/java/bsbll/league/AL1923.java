@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.NameMode;
@@ -26,9 +27,9 @@ import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerFactory;
-import bsbll.stats.Average;
-import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
+import bsbll.stats.PitchingStat;
+import bsbll.stats.StatLeaders;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
 import bsbll.team.TeamId;
@@ -311,8 +312,8 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 7, 12);
-        //playCompleteLeague(1);
+        //playSeriesAndPrintBoxScores(4, 7, 154);
+        playCompleteLeague(1);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {
@@ -329,25 +330,51 @@ public final class AL1923 {
             Standings standings = league.run();
             print(standings);
             System.out.println();
-            BattingLeaders<Integer> hrLeaders = league.league.getBattingLeaders(BattingStat.HOMERUNS, 5);
-            printLeaders("HR", hrLeaders);
+            printBattingLeaders(league.league, BattingStat.BATTING_AVERAGE, BattingStat.HOMERUNS,
+                    BattingStat.RUNS_BATTED_IN, BattingStat.SLUGGING_PERCENTAGE,
+                    BattingStat.ON_BASE_PERCENTAGE, BattingStat.OPS);
             System.out.println();
-            BattingLeaders<Integer> rbiLeaders = league.league.getBattingLeaders(BattingStat.RUNS_BATTED_IN, 5);
-            printLeaders("RBI", rbiLeaders);
-            System.out.println();
-            BattingLeaders<Average> baLeaders = league.league.getBattingLeaders(BattingStat.BATTING_AVERAGE, 5, 400);
-            printLeaders("Batting Average", baLeaders);
+            printPitchingLeaders(league.league, PitchingStat.WINS, PitchingStat.ERA,
+                    PitchingStat.WIN_PCT, PitchingStat.WHIP,
+                    PitchingStat.STRIKEOUTS, PitchingStat.SHUTOUTS,
+                    PitchingStat.SO9, PitchingStat.SO9);
         }
     }
     
-    private static void printLeaders(String stat, BattingLeaders<?> leaders) {
+    private static void printBattingLeaders(League league, BattingStat<?>... categories) {
+        String caption = "Batting Leaders";
+        String line = Strings.repeat("=", caption.length());
+        System.out.println(line);
+        System.out.println(caption);
+        System.out.println(line);
+        for (BattingStat<?> category : categories) {
+            StatLeaders<?, ?> leaders = league.getBattingLeaders(category, 5);
+            printLeaders(category.abbrev(), leaders);
+        }
+    }
+    
+    private static void printPitchingLeaders(League league, PitchingStat<?>... categories) {
+        String caption = "Pitching Leaders";
+        String line = Strings.repeat("=", caption.length());
+        System.out.println(line);
+        System.out.println(caption);
+        System.out.println(line);
+        for (PitchingStat<?> category : categories) {
+            StatLeaders<?, ?> leaders = league.getPitchingLeaders(category, 5);
+            printLeaders(category.abbrev(), leaders);
+        }
+    }
+    
+    private static void printLeaders(String stat, StatLeaders<?, ?> leaders) {
         System.out.println(stat + " Leaders:");
         PlayerFactory pf = PlayerFactory.defaultFactory();
         Padding namePadding = Padding.of(20);
         Padding valuePadding = Padding.of(5);
+        System.out.println(Strings.repeat("-", 25));
         leaders.getEntries().forEach(e -> {
             Player p = pf.getPlayer(e.getPlayerId());
             System.out.println(namePadding.right(p.getName().getShortForm()) + valuePadding.left(e.getValue()));
         });
+        System.out.println();
     }
 }

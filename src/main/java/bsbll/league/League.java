@@ -23,11 +23,13 @@ import bsbll.game.GameResult;
 import bsbll.game.LineScore;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
-import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
+import bsbll.stats.InningsPitched;
+import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
 import bsbll.stats.PlayerStatLookup;
+import bsbll.stats.StatLeaders;
 import bsbll.team.Record;
 import bsbll.team.RunDifferential;
 import bsbll.team.Team;
@@ -112,12 +114,20 @@ public final class League {
         return this.playerStats.getPitchingStats(playerId);
     }
     
-    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top) {
+    public <T, S extends BattingStat<T>> StatLeaders<T, S> getBattingLeaders(S stat, int top) {
         return playerStats.getBattingLeaders(stat, top);
     }
     
-    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top, int minAtBats) {
+    public <T, S extends BattingStat<T>> StatLeaders<T, S> getBattingLeaders(S stat, int top, int minAtBats) {
         return playerStats.getBattingLeaders(stat, top, minAtBats);
+    }
+    
+    public <T, S extends PitchingStat<T>> StatLeaders<T, S> getPitchingLeaders(S stat, int top) {
+        return playerStats.getPitchingLeaders(stat, top);
+    }
+    
+    public <T, S extends PitchingStat<T>> StatLeaders<T, S> getPitchingLeaders(S stat, int top, InningsPitched minIPs) {
+        return playerStats.getPitchingLeaders(stat, top, minIPs);
     }
     
     public PlayerStatLookup getPlayerStatLookup() {

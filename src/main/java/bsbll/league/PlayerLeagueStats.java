@@ -11,12 +11,13 @@ import bsbll.game.BoxScore;
 import bsbll.game.PlayerGameStats;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
-import bsbll.stats.BattingLeaders;
 import bsbll.stats.BattingStat;
 import bsbll.stats.BattingStatLine;
+import bsbll.stats.InningsPitched;
 import bsbll.stats.PitchingStat;
 import bsbll.stats.PitchingStatLine;
 import bsbll.stats.PlayerStatLookup;
+import bsbll.stats.StatLeaders;
 
 @NotThreadSafe
 public final class PlayerLeagueStats {
@@ -46,14 +47,6 @@ public final class PlayerLeagueStats {
         }
         return line;
     }
-    
-    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top) {
-        return BattingLeaders.forStat(this.battingStats, stat, top);
-    }
-    
-    public <T> BattingLeaders<T> getBattingLeaders(BattingStat<T> stat, int top, int minAtBats) {
-        return BattingLeaders.forStat(this.battingStats, stat, top, minAtBats);
-    }
 
     public PitchingStatLine getPitchingStats(Player player) {
         return getPitchingStats(player.getId());
@@ -70,6 +63,22 @@ public final class PlayerLeagueStats {
         return line;
     }
     
+    public <T, S extends BattingStat<T>> StatLeaders<T, S> getBattingLeaders(S stat, int top) {
+        return StatLeaders.batting(this.battingStats, stat, top);
+    }
+    
+    public <T, S extends BattingStat<T>> StatLeaders<T, S> getBattingLeaders(S stat, int top, int minAtBats) {
+        return StatLeaders.batting(this.battingStats, stat, top, minAtBats);
+    }
+    
+    public <T, S extends PitchingStat<T>> StatLeaders<T, S> getPitchingLeaders(S stat, int top) {
+        return StatLeaders.pitching(this.pitchingStats, stat, top);
+    }
+    
+    public <T, S extends PitchingStat<T>> StatLeaders<T, S> getPitchingLeaders(S stat, int top, InningsPitched minIPs) {
+        return StatLeaders.pitching(this.pitchingStats, stat, top, minIPs);
+    }
+
     public PlayerStatLookup asLookup() {
         return new PlayerStatLookup() {
             @Override
