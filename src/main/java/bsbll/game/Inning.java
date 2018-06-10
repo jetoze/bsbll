@@ -21,6 +21,14 @@ public final class Inning {
     public static Inning startOfGame() {
         return new Inning(1, Half.TOP);
     }
+    
+    public static Inning topOf(int num) {
+        return new Inning(num, Half.TOP);
+    }
+    
+    public static Inning bottomOf(int num) {
+        return new Inning(num, Half.BOTTOM);
+    }
 
     public int getNumber() {
         return number;

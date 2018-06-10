@@ -1,5 +1,6 @@
 package bsbll.game;
 
+import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
@@ -41,6 +42,33 @@ public final class RunsScored implements Iterable<Run> {
     
     public Stream<Run> stream() {
         return runs.stream();
+    }
+
+    // TODO: This method is really the only reason this class needs to exist.
+    // Is it worth it? The alternative would be to simply use ImmutableList<Run>,
+    // and let some other class be responsible for figuring out losing (and 
+    // winning) pitcher.
+    public Player getLosingPitcher() {
+        int topScore = 0;
+        int bottomScore = 0;
+        boolean tie = true;
+        Player losingPitcher = null;
+        for (Run r : runs) {
+            if (tie) {
+                losingPitcher = r.responsiblePitcher;
+            }
+            if (r.inning.isTop()) {
+                ++topScore;
+            } else {
+                ++bottomScore;
+            }
+            tie = (topScore == bottomScore);
+            if (tie) {
+                losingPitcher = null;
+            }
+        }
+        checkState(losingPitcher != null, "The game was a tie");
+        return losingPitcher;
     }
     
     @Immutable
