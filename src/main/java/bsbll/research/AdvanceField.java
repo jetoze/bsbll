@@ -9,6 +9,8 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
@@ -16,6 +18,7 @@ import com.google.common.collect.ImmutableSortedMap;
 import bsbll.Base;
 import bsbll.research.Advance.Outcome;
 
+@Immutable
 final class AdvanceField {
     private final ImmutableSortedMap<Base, Part> parts;
     
@@ -90,6 +93,7 @@ final class AdvanceField {
         return builder.build();
     }
     
+    @Immutable
     public static final class Part {
         private final String raw;
         private final Advance advance;

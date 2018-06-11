@@ -18,6 +18,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
@@ -31,6 +32,7 @@ import tzeth.collections.ImCollectors;
 /**
  * Represents all base advances made on a single play. 
  */
+@Immutable
 public final class Advances {
     /**
      * Maps each Advance to the originating Base. Sorted in descending order,

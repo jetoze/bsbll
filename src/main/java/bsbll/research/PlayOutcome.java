@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
 
@@ -15,6 +16,7 @@ import bsbll.Base;
 import bsbll.game.BaseSituation;
 import bsbll.player.Player;
 
+@Immutable
 public final class PlayOutcome {
     private final EventType type;    
     private final Advances advances;

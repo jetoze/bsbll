@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
@@ -21,6 +22,7 @@ import com.google.common.collect.ImmutableList;
  * play description, an optional list of modifiers, and an optional advance
  * field.
  */
+@Immutable
 public final class EventField {
     private static final boolean USE_REGEX_PARSING = true;
     private static final Pattern REGEX_PATTERN = compileRegexPattern();

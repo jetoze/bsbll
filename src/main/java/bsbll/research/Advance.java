@@ -7,9 +7,11 @@ import static java.util.Objects.requireNonNull;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import bsbll.Base;
 
+@Immutable
 public final class Advance {
     private final Base from;
     private final Base to;

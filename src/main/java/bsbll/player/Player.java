@@ -2,6 +2,9 @@ package bsbll.player;
 
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.concurrent.Immutable;
+
+@Immutable
 public final class Player {
     private final PlayerId id;
     private final PlayerName name;
