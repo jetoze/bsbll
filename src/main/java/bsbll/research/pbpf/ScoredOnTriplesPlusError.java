@@ -1,6 +1,7 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.function.Predicate;
 
 import bsbll.Base;
@@ -9,7 +10,6 @@ import bsbll.research.Advances;
 import bsbll.research.EventField;
 import bsbll.research.EventType;
 import bsbll.research.PlayOutcome;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
     private final Year year;
@@ -35,16 +35,12 @@ public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
         }
     }
 
-    @Override
-    public void onStartInning(Inning inning) {
-        System.out.println(inning);
-    }
-
     public void report() {
         System.out.println("Batter Scored on Triple for the Year " + year + ":");
         System.out.println();
         System.out.println("Triples: " + triples);
         System.out.println("Scored: " + runs);
+        System.out.println("Percentage: " + new DecimalFormat("#.000").format((1.0 * runs) / (triples)));
     }
 
     public static void main(String[] args) throws Exception {

@@ -747,4 +747,16 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+    
+    @Test
+    public void linedIntoCenterFieldForDoublePlay() {
+        PlayOutcome outcome = EventParser.parse("8(B)84(2)/LDP/L8");
+        PlayOutcome expected = PlayOutcome.builder(EventType.OUT)
+                .withOut(Base.HOME, Base.FIRST)
+                .withOut(Base.SECOND, Base.THIRD)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+    
 }

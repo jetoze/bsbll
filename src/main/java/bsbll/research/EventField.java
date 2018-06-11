@@ -142,6 +142,15 @@ public final class EventField {
         return rawString;
     }
     
+    public boolean isOutfieldOut() {
+        char c = basicPlay.charAt(0);
+        return (c == '7' || c == '8' || c == '9');
+    }
+    
+    public boolean isSacrificeFly() {
+        return hasModifier(s -> s.startsWith("SF"));
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.basicPlay, this.modifiers, this.advanceField);
