@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,6 +71,12 @@ public final class BaseSituation {
     public boolean isOccupied(Base base) {
         requireNonNull(base);
         return this.bases.containsKey(base);
+    }
+    
+    public EnumSet<Base> getOccupiedBases() {
+        return isEmpty()
+                ? EnumSet.noneOf(Base.class)
+                : EnumSet.copyOf(this.bases.keySet());
     }
     
     public boolean isEmpty(Base base) {

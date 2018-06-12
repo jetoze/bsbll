@@ -33,6 +33,10 @@ public final class PlayOutcome {
     public EventType getType() {
         return this.type;
     }
+    
+    public boolean isBaseHit() {
+        return this.type.isHit();
+    }
 
     public Advances getAdvances() {
         return this.advances;
