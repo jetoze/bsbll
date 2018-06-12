@@ -95,6 +95,10 @@ public final class Advances {
         return this.advances.containsKey(base);
     }
     
+    public boolean contains(Advance a) {
+        return a.equals(this.advances.get(a.from()));
+    }
+    
     public boolean isNotKnown(Base base) {
         return !contains(base);
     }

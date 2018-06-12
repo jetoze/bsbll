@@ -70,7 +70,7 @@ public final class SacrificeFlyConversion extends GameHandler {
     }
     
     private void report() {
-        System.out.println("Sacrifice FLy Conversion Rate for the Year " + year + ":");
+        System.out.println("Sacrifice Fly Conversion Rate for the Year " + year + ":");
         System.out.println();
         Padding labelPadding = Padding.of(16);
         Padding countPadding = Padding.of(8);
