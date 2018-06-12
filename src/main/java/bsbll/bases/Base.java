@@ -1,4 +1,4 @@
-package bsbll;
+package bsbll.bases;
 
 import java.util.Comparator;
 

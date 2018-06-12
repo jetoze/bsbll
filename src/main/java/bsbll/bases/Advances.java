@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
@@ -23,9 +23,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
-import bsbll.Base;
-import bsbll.game.BaseSituation;
-import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
 import tzeth.collections.ImCollectors;
 

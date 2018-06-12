@@ -6,10 +6,10 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
-import bsbll.Base;
 import bsbll.Year;
-import bsbll.research.Advance;
-import bsbll.research.Advances;
+import bsbll.bases.Advance;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
 import bsbll.research.EventField;
 import bsbll.research.EventType;
 import bsbll.research.PlayOutcome;

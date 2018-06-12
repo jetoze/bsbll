@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.bases;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,7 +6,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.game.BaseSituation.ResultOfAdvance;
+import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 

@@ -12,8 +12,10 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableSet;
 
-import bsbll.Base;
-import bsbll.game.BaseSituation;
+import bsbll.bases.Advance;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
+import bsbll.bases.BaseSituation;
 import bsbll.player.Player;
 
 @Immutable

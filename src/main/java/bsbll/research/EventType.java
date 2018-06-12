@@ -5,8 +5,9 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import bsbll.Base;
-import bsbll.research.Advance.Outcome;
+import bsbll.bases.Advance;
+import bsbll.bases.Base;
+import bsbll.bases.Advance.Outcome;
 
 /**
  * Represents the main outcome of a pitcher-batter matchup.

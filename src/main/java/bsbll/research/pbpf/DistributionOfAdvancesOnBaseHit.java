@@ -13,11 +13,11 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Table;
 
-import bsbll.Base;
 import bsbll.Year;
-import bsbll.game.BaseSituation;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
+import bsbll.bases.BaseSituation;
 import bsbll.player.Player;
-import bsbll.research.Advances;
 import bsbll.research.EventField;
 import bsbll.research.EventType;
 import bsbll.research.PlayOutcome;

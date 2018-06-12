@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
-import bsbll.Base;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 

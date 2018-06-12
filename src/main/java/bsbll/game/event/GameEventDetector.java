@@ -2,7 +2,7 @@ package bsbll.game.event;
 
 import java.util.Optional;
 
-import bsbll.game.BaseSituation;
+import bsbll.bases.BaseSituation;
 import bsbll.game.Inning;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;

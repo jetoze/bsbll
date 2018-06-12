@@ -9,8 +9,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import bsbll.Base;
-import bsbll.research.Advance.Outcome;
+import bsbll.bases.Advance;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
+import bsbll.bases.Advance.Outcome;
 
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding PlayOutcome.

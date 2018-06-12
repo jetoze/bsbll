@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.bases;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableMap;
 
-import bsbll.Base;
-import bsbll.game.BaseSituation;
-import bsbll.game.InvalidBaseSitutationException;
 import bsbll.player.Player;
 
 /**

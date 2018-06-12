@@ -4,7 +4,9 @@ import static java.util.stream.Collectors.toMap;
 
 import java.util.Map;
 
-import bsbll.Base;
+import bsbll.bases.Advance;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
 import bsbll.research.AdvanceField.Part;
 
 /**

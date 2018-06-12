@@ -4,9 +4,9 @@ import java.io.File;
 import java.text.DecimalFormat;
 import java.util.function.Predicate;
 
-import bsbll.Base;
 import bsbll.Year;
-import bsbll.research.Advance;
+import bsbll.bases.Advance;
+import bsbll.bases.Base;
 import bsbll.research.EventField;
 import bsbll.research.EventType;
 import bsbll.research.PlayOutcome;

@@ -15,7 +15,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.game.BaseSituation.ResultOfAdvance;
+import bsbll.bases.BaseSituation;
+import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;

@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 
-import bsbll.game.BaseSituation;
+import bsbll.bases.BaseSituation;
 import bsbll.game.Inning;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;

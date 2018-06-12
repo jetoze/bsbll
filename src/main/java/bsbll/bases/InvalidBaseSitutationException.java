@@ -1,4 +1,4 @@
-package bsbll.game;
+package bsbll.bases;
 
 public final class InvalidBaseSitutationException extends RuntimeException {
     public InvalidBaseSitutationException(String message) {

@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.hash;
@@ -8,8 +8,6 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
-
-import bsbll.Base;
 
 @Immutable
 public final class Advance {
@@ -144,5 +142,4 @@ public final class Advance {
             }
         }
     }
-    
 }

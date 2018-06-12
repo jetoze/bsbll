@@ -9,8 +9,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
-import bsbll.game.BaseSituation;
-import bsbll.game.InvalidBaseSitutationException;
+import bsbll.bases.BaseSituation;
+import bsbll.bases.InvalidBaseSitutationException;
 import bsbll.player.Player;
 import bsbll.research.EventField;
 import bsbll.research.PlayOutcome;

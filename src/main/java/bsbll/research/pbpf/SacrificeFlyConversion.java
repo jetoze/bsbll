@@ -6,9 +6,9 @@ import java.util.Iterator;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.Base;
 import bsbll.Year;
-import bsbll.game.BaseSituation;
+import bsbll.bases.Base;
+import bsbll.bases.BaseSituation;
 import bsbll.player.Player;
 import bsbll.research.EventField;
 import bsbll.research.PlayOutcome;
