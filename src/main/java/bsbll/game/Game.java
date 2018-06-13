@@ -12,7 +12,6 @@ import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.event.GameEvents;
-import bsbll.matchup.MatchupRunner;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.collections.LoopingIterator;
@@ -24,7 +23,7 @@ public final class Game {
     private final Team visitingTeam;
     private final Lineup visitingLineup;
     
-    private final MatchupRunner matchupRunner;
+    private final GamePlayParams gamePlayParams;
     
     private final OfficialScorer officialScorer;
 
@@ -33,16 +32,16 @@ public final class Game {
     // The event detector is not integral to playing a game, so it is optional.
     private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
 
-    public Game(Team homeTeam, Team visitingTeam, MatchupRunner matchupRunner, OfficialScorer officialScorer) {
+    public Game(Team homeTeam, Team visitingTeam, GamePlayParams gamePlayParams, OfficialScorer officialScorer) {
         requireNonNull(homeTeam);
         requireNonNull(visitingTeam);
         checkArgument(homeTeam != visitingTeam, "A team cannot play a game against itself (%s)", homeTeam);
+        this.gamePlayParams = requireNonNull(gamePlayParams);
         this.officialScorer = requireNonNull(officialScorer);
         this.homeTeam = homeTeam;
         this.homeLineup = homeTeam.getRoster().getLineup();
         this.visitingTeam = visitingTeam;
         this.visitingLineup = visitingTeam.getRoster().getLineup();
-        this.matchupRunner = requireNonNull(matchupRunner);
     }
     
     public void setGameEventDetector(GameEventDetector eventDetector) {
@@ -63,7 +62,7 @@ public final class Game {
                     innings.current(),
                     batting.getBattingOrder(),
                     fielding.getPitcher(),
-                    matchupRunner,
+                    gamePlayParams,
                     playerStats,
                     eventDetector,
                     innings.runsNeededToWalkOf().orElse(0));

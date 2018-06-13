@@ -20,7 +20,6 @@ import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
-import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import bsbll.team.BattingOrder;
@@ -30,7 +29,7 @@ public final class HalfInning {
     private final Inning inning;
     private final BattingOrder battingOrder;
     private final Player pitcher;
-    private final MatchupRunner matchupRunner;
+    private final GamePlayParams gamePlayParams;
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
     private final GameEventDetector eventDetector;
     private final int runsNeededToWin;
@@ -44,9 +43,9 @@ public final class HalfInning {
      *            the batting order
      * @param pitcher
      *            the pitcher
-     * @param matchupRunner
-     *            the MatchupRunner that will be asked to simulate the matchup
-     *            between the pitcher and the batters in this half inning.
+     * @param gamePlayParams
+     *            the game play parameters, that control things like the batter-pitcher matchup and 
+     *            base running in this HalfInning.
      * @param playerStats
      *            the {@code PlayerGameStats} instance that keeps track of the
      *            individual player performances in the game.
@@ -62,14 +61,14 @@ public final class HalfInning {
     public HalfInning(Inning inning,
                       BattingOrder battingOrder, 
                       Player pitcher, 
-                      MatchupRunner matchupRunner,
+                      GamePlayParams gamePlayParams,
                       PlayerGameStats playerStats,
                       GameEventDetector eventDetector,
                       int runsNeededToWin) {
         this.inning = requireNonNull(inning);
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
-        this.matchupRunner = requireNonNull(matchupRunner);
+        this.gamePlayParams = requireNonNull(gamePlayParams);
         this.playerStats = requireNonNull(playerStats);
         this.eventDetector = requireNonNull(eventDetector);
         this.runsNeededToWin = runsNeededToWin;
@@ -83,7 +82,7 @@ public final class HalfInning {
         do {
             Player batter = battingOrder.nextBatter();
             runnerToResponsiblePitcher.put(batter, pitcher);
-            Outcome outcome = matchupRunner.run(batter, pitcher);
+            Outcome outcome = gamePlayParams.runMatchup(batter, pitcher);
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
             stats = sam.stats;

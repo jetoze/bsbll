@@ -1,4 +1,4 @@
-package bsbll.bases;
+package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
@@ -16,14 +16,21 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 import com.google.common.collect.Table;
 
+import bsbll.bases.Advance;
+import bsbll.bases.Advances;
+import bsbll.bases.Base;
+import bsbll.bases.BaseHit;
+import bsbll.bases.BaseSituation;
 import bsbll.die.DieFactory;
 
 /**
  * The distributions of possible base-running advances on a base-hit, given the
  * base situation at the time. Only applicable for error-less plays.
  * <p>
- * Note that the outcome is always fixed for a homerun (all runners score), so this
- * class is applicable only to singles, doubles, and triples.
+ * The current implementation is static in the sense that it doesn't take into
+ * account the individual players. In reality, the 1982 Ricky Henderson was
+ * probably more likely to advance from first to third on a single, than, say,
+ * the 2017 Bartolo Colon.
  */
 @Immutable
 public final class BaseHitAdvanceDistribution {
