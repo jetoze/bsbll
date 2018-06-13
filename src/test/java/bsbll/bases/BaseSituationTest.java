@@ -4,13 +4,13 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-import java.util.Map;
 
 import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
+import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.player.Player;
 
 /**
@@ -37,7 +37,6 @@ public final class BaseSituationTest {
     @Test
     public void runnersStayingPut() {
         BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
-        Map<Base, Player> mapBefore = before.toMap();
         Advances advances = Advances.of(
                 Advance.safe(Base.FIRST, Base.FIRST),
                 Advance.safe(Base.THIRD, Base.THIRD)
@@ -45,7 +44,97 @@ public final class BaseSituationTest {
         
         BaseSituation after = before.advanceRunners(BATTER, advances).getNewSituation();
         
-        assertEquals(mapBefore, after.toMap());
+        assertEquals(before, after);
+    }
+    
+    @Test
+    public void basesLoadedWalkScoresRunnerOnThird() {
+        BaseSituation before = basesLoaded();
+        
+        ImmutableList<Player> runs = before.batterAwardedFirstBase(BATTER).getRunnersThatScored();
+        
+        assertEquals(ImmutableList.of(RUNNER_C), runs);
+    }
+    
+    @Test
+    public void basesLoadedWalkKeepsBasesLoaded() {
+        BaseSituation before = basesLoaded();
+        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
+    }
+    
+    @Test
+    public void walkWithRunnerOnFirst() {
+        BaseSituation before = new BaseSituation(RUNNER_A, null, null);
+        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, RUNNER_A, null), after);
+    }
+    
+    @Test
+    public void walkWithRunnerOnFirstAndSecond() {
+        BaseSituation before = new BaseSituation(RUNNER_A, RUNNER_B, null);
+        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
+    }
+    
+    @Test
+    public void walkWithRunnerOnFirstAndThird() {
+        BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
+        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
+    }
+    
+    @Test
+    public void walkWithRunnerOnSecondAndThird() {
+        BaseSituation before = new BaseSituation(null, RUNNER_A, RUNNER_B);
+        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
+    }
+    
+    @Test
+    public void singleWithRunnersOnFirstAndThirdScoresRunnerOnThird() {
+        BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
+        Advances advances = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.THIRD),
+                Advance.safe(Base.THIRD, Base.HOME));
+        
+        ImmutableList<Player> runs = before.advanceRunners(BATTER, advances).getRunnersThatScored();
+        
+        assertEquals(ImmutableList.of(RUNNER_B), runs);
+    }
+    
+    @Test
+    public void singleWithRunnersOnFirstAndThird() {
+        BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
+        Advances advances = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.THIRD),
+                Advance.safe(Base.THIRD, Base.HOME));
+        
+        BaseSituation after = before.advanceRunners(BATTER, advances).getNewSituation();
+        
+        assertEquals(new BaseSituation(BATTER, null, RUNNER_A), after);
+    }
+    
+    @Test
+    public void twoRunnersThrownOutAtHomeOnSingle() {
+        BaseSituation before = new BaseSituation(RUNNER_A, RUNNER_B, RUNNER_C);
+        Advances advances = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.THIRD),
+                Advance.out(Base.SECOND, Base.HOME),
+                Advance.out(Base.THIRD, Base.HOME));
+        
+        ResultOfAdvance result = before.advanceRunners(BATTER, advances);
+        
+        assertEquals(0, result.getNumberOfRuns());
+        assertEquals(new BaseSituation(BATTER, null, RUNNER_A), result.getNewSituation());
     }
     
     @Test
@@ -68,7 +157,7 @@ public final class BaseSituationTest {
         
         BaseSituation after = before.advanceRunners(BATTER, advances).getNewSituation();
         
-        assertEquals(ImmutableMap.of(Base.FIRST, BATTER), after.toMap());
+        assertEquals(new BaseSituation(BATTER, null, null), after);
     }
     
     @Test

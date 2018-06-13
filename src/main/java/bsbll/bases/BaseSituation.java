@@ -87,7 +87,6 @@ public final class BaseSituation {
         return this.bases.get(base);
     }
     
-    // TODO: Unit test
     public ResultOfAdvance advanceRunners(Player batter, Advances advances) {
         BaseSituation newSituation = createNewSituation(batter, advances);
         ImmutableList<Player> runs = advances.getRunnersThatScored()
@@ -118,7 +117,6 @@ public final class BaseSituation {
         return new BaseSituation(newSituation);
     }
 
-    // TODO: Unit test
     public ResultOfAdvance batterAwardedFirstBase(Player batter) {
         List<Base> forcedToAdvance = new ArrayList<>();
         if (isOccupied(Base.FIRST)) {
@@ -242,5 +240,4 @@ public final class BaseSituation {
             return newSituation + " " + runs;
         }
     }
-    
 }
