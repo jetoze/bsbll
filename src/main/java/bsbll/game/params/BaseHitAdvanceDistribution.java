@@ -6,11 +6,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
@@ -34,7 +36,6 @@ import bsbll.die.DieFactory;
  */
 @Immutable
 public final class BaseHitAdvanceDistribution {
-    // TODO: Should I be in this package?
     // TODO: Should my name be pluralized ("Distributions")?
 
     // TODO: Use a ImmutableSet<Base> and ImmutableMultiset<Advances>
@@ -128,6 +129,17 @@ public final class BaseHitAdvanceDistribution {
         }
         // We should never get here. But in case we do, we pick the most common one.
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
+    }
+    
+    public ImmutableMap<EnumSet<Base>, Multiset<Advances>> forHit(BaseHit hit) {
+        requireNonNull(hit);
+        ImmutableMap<EnumSet<Base>, Multiset<Advances>> row = this.data.row(hit);
+        // TODO: Once we store immutable instances, this copying won't be necessary
+        ImmutableMap.Builder<EnumSet<Base>, Multiset<Advances>> copier = ImmutableMap.builder();
+        for (Map.Entry<EnumSet<Base>, Multiset<Advances>> e : row.entrySet()) {
+            copier.put(e.getKey().clone(), HashMultiset.create(e.getValue()));
+        }
+        return copier.build();
     }
 
     public static Builder builder() {

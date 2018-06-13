@@ -4,19 +4,18 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumSet;
-import java.util.Map;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.Table;
 
 import bsbll.Year;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
+import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
+import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.player.Player;
 import bsbll.research.EventField;
 import bsbll.research.EventType;
@@ -25,9 +24,7 @@ import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public final class DistributionOfAdvancesOnBaseHit extends GameHandler {
     private final Year year;
-    // Maps a state, given by the currently occupied bases, to the resulting distribution
-    // of advances after a double, for each type of base hit (except homeruns)
-    private final Table<EventType, EnumSet<Base>, Multiset<Advances>> distributions = HashBasedTable.create();
+    private final BaseHitAdvanceDistribution.Builder builder = BaseHitAdvanceDistribution.builder();
     
     private int playerId;
 
@@ -49,19 +46,30 @@ public final class DistributionOfAdvancesOnBaseHit extends GameHandler {
     }
     
     private void update(EventType typeOfHit, BaseSituation situation, Advances advances) {
-        if (typeOfHit == EventType.HOMERUN) {
-            return;
+        if (typeOfHit != EventType.HOMERUN) {
+            BaseHit hit = eventTypeToBaseHit(typeOfHit);
+            builder.add(hit, situation, advances);
         }
-        EnumSet<Base> occupied = situation.getOccupiedBases();
-        Multiset<Advances> distribution = this.distributions.get(typeOfHit, occupied);
-        if (distribution == null) {
-            distribution = HashMultiset.create();
-            this.distributions.put(typeOfHit, occupied, distribution);
+    }
+    
+    private static BaseHit eventTypeToBaseHit(EventType type) {
+        assert type.isHit();
+        switch (type) {
+        case SINGLE:
+            return BaseHit.SINGLE;
+        case DOUBLE:
+            return BaseHit.DOUBLE;
+        case TRIPLE:
+            return BaseHit.TRIPLE;
+        case HOMERUN:
+            return BaseHit.HOMERUN;
+        default:
+            throw new AssertionError("Unexpected event type: " + type);
         }
-        distribution.add(advances);
     }
     
     private void report() {
+        BaseHitAdvanceDistribution distribution = builder.build();
         System.out.println("Distribution of Advances on Base Hits for the Year " + year);
         String typeOfHitSep = Strings.repeat("=", 30);
         String basesSep = "  " + Strings.repeat("-", 26);
@@ -73,10 +81,10 @@ public final class DistributionOfAdvancesOnBaseHit extends GameHandler {
         // The order in which we will present the individual advances
         Comparator<Multiset.Entry<Advances>> dOrder = presentationOrder();
 
-        for (EventType typeOfHit : Arrays.asList(EventType.SINGLE, EventType.DOUBLE, EventType.TRIPLE)) {
+        for (BaseHit typeOfHit : Arrays.asList(BaseHit.SINGLE, BaseHit.DOUBLE, BaseHit.TRIPLE)) {
             System.out.println(typeOfHit);
             System.out.println(typeOfHitSep);
-            Map<EnumSet<Base>, Multiset<Advances>> distributionForHitType = this.distributions.row(typeOfHit);
+            ImmutableMap<EnumSet<Base>, Multiset<Advances>> distributionForHitType = distribution.forHit(typeOfHit);
             distributionForHitType.keySet().stream()
                 .sorted(bOrder)
                 .forEach(b -> {
