@@ -57,11 +57,11 @@ public final class PlayOutcome {
     }
     
     public BaseSituation applyTo(Player batter, BaseSituation baseSituation) {
-        return this.advances.applyTo(batter, baseSituation);
+        return baseSituation.advanceRunners(batter, this.advances).getNewSituation();
     }
     
     public List<Player> getScoringPlayers(Player batter, BaseSituation baseSituation) {
-        return this.advances.getScoringPlayers(batter, baseSituation);
+        return baseSituation.advanceRunners(batter, this.advances).getRunnersThatScored();
     }
     
     public int getNumberOfErrors() {

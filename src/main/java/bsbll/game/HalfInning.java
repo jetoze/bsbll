@@ -114,7 +114,7 @@ public final class HalfInning {
         } else if (outcome.isHit()) {
             BaseHit baseHit = BaseHit.fromMatchupOutcome(outcome);
             Advances advances = gamePlayParams.getBaseHitAdvanceDistribution().pickOne(baseHit, baseSituation);
-            roa = baseSituation.apply(batter, advances);
+            roa = baseSituation.advanceRunners(batter, advances);
         } else if (outcome == Outcome.STRIKEOUT) {
             // TODO: The batter can reach first
             roa = new ResultOfAdvance(baseSituation, Collections.emptyList());

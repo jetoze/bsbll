@@ -88,8 +88,8 @@ public final class BaseSituation {
     }
     
     // TODO: Unit test
-    public ResultOfAdvance apply(Player batter, Advances advances) {
-        BaseSituation newSituation = apply(batter, advances.toMap());
+    public ResultOfAdvance advanceRunners(Player batter, Advances advances) {
+        BaseSituation newSituation = createNewSituation(batter, advances);
         ImmutableList<Player> runs = advances.getRunnersThatScored()
                 .map(Advance::from)
                 .map(f -> getPlayerOnBase(batter, f))
@@ -97,14 +97,22 @@ public final class BaseSituation {
         return new ResultOfAdvance(newSituation, runs);
     }
     
-    private BaseSituation apply(Player batter, Map<Base, Base> advances) {
-        Map<Base, Player> newSituation = new HashMap<>();
-        for (Map.Entry<Base, Base> a : advances.entrySet()) {
-            Base from = a.getKey();
-            Player p = getPlayerOnBase(batter, from);
-            Base to = a.getValue();
-            if (to != Base.HOME) {
-                newSituation.put(to, p);
+    private BaseSituation createNewSituation(Player batter, Advances advances) {
+        Map<Base, Player> newSituation = new HashMap<>(this.bases);
+        // This implementation relies on the guaranteed iteration order of 
+        // Advances.iterator().
+        for (Advance a : advances) {
+            Player p;
+            if (a.from() == Base.HOME) {
+                p = batter;
+            } else {
+                p = newSituation.remove(a.from());
+                if (p == null) {
+                    throw new InvalidBaseSitutationException("No player on base " + a.from());
+                }
+            }
+            if (!a.isOut() && a.to().isOccupiable()) {
+                newSituation.put(a.to(), p);
             }
         }
         return new BaseSituation(newSituation);
@@ -138,9 +146,14 @@ public final class BaseSituation {
     }
 
     private Player getPlayerOnBase(Player batter, Base base) {
-        return (base == Base.HOME)
-                ? batter
-                : getRunner(base);
+        if (base == Base.HOME) {
+            return batter;
+        }
+        if (isOccupied(base)) {
+            return this.bases.get(base);
+        } else {
+            throw new InvalidBaseSitutationException("No runner on base " + base);
+        }
     }
     
     public List<Player> getScoringPlayers(Player batter, Map<Base, Base> advances) {

@@ -2,7 +2,6 @@ package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +9,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,14 +24,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
-import bsbll.player.Player;
 import tzeth.collections.ImCollectors;
 
 /**
- * Represents all base advances made on a single play. 
+ * Represents all base advances made on a single play.
+ * <p>
+ * This class implements {@code Iterable<Advance>}. The iteration order is
+ * sorted by originating base, in descending order. That is, an advance from
+ * third base appears before an advance from second base, and so on.
  */
 @Immutable
-public final class Advances {
+public final class Advances implements Iterable<Advance> {
     /**
      * Maps each Advance to the originating Base. Sorted in descending order,
      * e.g. "3-H;1-3;B-1".
@@ -70,6 +73,11 @@ public final class Advances {
         }
     }
     
+    @Override
+    public Iterator<Advance> iterator() {
+        return this.advances.values().iterator();
+    }
+
     public int getNumberOfRuns() {
         return count(Advance::isRun);
     }
@@ -125,48 +133,6 @@ public final class Advances {
      */
     public Stream<Advance> getRunnersThatScored() {
         return this.advances.values().stream().filter(Advance::isRun);
-    }
-    
-    public BaseSituation applyTo(Player batter, BaseSituation situation) {
-        requireNonNull(batter);
-        requireNonNull(situation);
-        if (this.advances.isEmpty()) {
-            return situation;
-        }
-        Map<Base, Player> runners = situation.toMap();
-        // The following takes advantage of the fact that we store the advances
-        // in descending order of originating base.
-        for (Advance a : advances.values()) {
-            if (a.from() == Base.HOME) {
-                // This is the batter. It is also guaranteed to be the last
-                // advancement we process, since we do it in descending order.
-                if (a.isSafe() && a.to().isOccupiable()) {
-                    runners.put(a.to(), batter);
-                }
-            } else {
-                Player runner = runners.get(a.from());
-                if (runner == null) {
-                    throw new InvalidBaseSitutationException(String.format(
-                            "The given BaseSituation is not applicable for advancement %s: "
-                            + "there was no runner on %s.", a, a.from()));
-                }
-                if (a.isOut() || a.isAdvancement()) {
-                    runners.remove(a.from());
-                }
-                if (a.isAdvancement() && !a.isRun()) {
-                    runners.put(a.to(), runner);
-                }
-            }
-        }
-        return new BaseSituation(runners);
-    }
-    
-    public List<Player> getScoringPlayers(Player batter, BaseSituation baseSituation) {
-        return this.advances.values().stream()
-                .filter(Advance::isRun)
-                .map(Advance::from)
-                .map(baseSituation::getRunner)
-                .collect(toList());
     }
     
     public boolean didRunnerAdvance(Base base) {
