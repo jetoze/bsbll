@@ -61,8 +61,8 @@ public final class DistributionOfAdvancesOnBaseHit {
     public static void main(String[] args) {
         Year year = Year.of(1925);
         
-        BaseHitAdvanceDistributionFactory factory = BaseHitAdvanceDistributionFactory.retrosheet();
-        BaseHitAdvanceDistribution d = factory.createDistribution(year);
+        BaseHitAdvanceDistributionFactory factory = BaseHitAdvanceDistributionFactory.retrosheet(year);
+        BaseHitAdvanceDistribution d = factory.createDistribution();
         
         report(year, d);
     }

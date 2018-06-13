@@ -19,23 +19,24 @@ import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 /**
- * A factory for constructing {@link BaseHitAdvanceDistribution} for a given
- * year. This can be used to create distributions in bulk, rather than manually
- * via the simple {@link BaseHitAdvanceDistribution.Builder}.
+ * A factory for constructing {@link BaseHitAdvanceDistribution}s. This can be
+ * used to create distributions in bulk, rather than manually via the simple
+ * {@link BaseHitAdvanceDistribution.Builder}.
  */
 public abstract class BaseHitAdvanceDistributionFactory {
 
-    public abstract BaseHitAdvanceDistribution createDistribution(Year year);
+    public abstract BaseHitAdvanceDistribution createDistribution();
     
     // TODO: Implementation that reads from distributions that have been persisted to disk.
     
     /**
      * BaseHitAdvanceDistributionFactory implementation that uses play-by-play data 
-     * provided by retrosheet.
+     * for the given year, provided by retrosheet.
      */
-    public static BaseHitAdvanceDistributionFactory retrosheet() {
+    public static BaseHitAdvanceDistributionFactory retrosheet(Year year) {
         // TODO: Add option to pass in location of play-by-play files.
-        return new RetrosheetPlayByPlayFactory();
+        requireNonNull(year);
+        return new RetrosheetPlayByPlayFactory(year);
     }
     
     /**
@@ -51,18 +52,21 @@ public abstract class BaseHitAdvanceDistributionFactory {
         private static final DefaultDistributionFactory INSTANCE = new DefaultDistributionFactory();
 
         @Override
-        public BaseHitAdvanceDistribution createDistribution(Year year) {
-            requireNonNull(year);
+        public BaseHitAdvanceDistribution createDistribution() {
             return BaseHitAdvanceDistribution.defaultAdvances();
         }
     }
     
     
     private static final class RetrosheetPlayByPlayFactory extends BaseHitAdvanceDistributionFactory {
+        private final Year year;
         
+        public RetrosheetPlayByPlayFactory(Year year) {
+            this.year = year;
+        }
+
         @Override
-        public BaseHitAdvanceDistribution createDistribution(Year year) {
-            requireNonNull(year);
+        public BaseHitAdvanceDistribution createDistribution() {
             Handler handler = new Handler();
             File folder = PlayByPlayFileUtils.getFolder(year);
             handler.parseAll(folder);

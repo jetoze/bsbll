@@ -61,8 +61,9 @@ public final class AL1923 {
                 new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
                 DieFactory.random());
         // We don't have play-by-play data for 1923, so use 1925 instead.
-        BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory.retrosheet()
-                .createDistribution(Year.of(1925));
+        BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
+                .retrosheet(Year.of(1925))
+                .createDistribution();
         return new GamePlayParams(
                 matchupRunner,
                 baseHitAdvanceDistribution);
