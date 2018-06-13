@@ -12,8 +12,8 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.NameMode;
 import bsbll.Year;
-import bsbll.card.DieFactory;
 import bsbll.card.LahmanPlayerCardLookup;
+import bsbll.die.DieFactory;
 import bsbll.game.BoxScore;
 import bsbll.game.Game;
 import bsbll.game.LineScore;

@@ -14,6 +14,8 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.die.Die;
+import bsbll.die.DieFactory;
 import tzeth.collections.ImCollectors;
 
 /**

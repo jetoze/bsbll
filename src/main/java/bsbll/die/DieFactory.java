@@ -1,4 +1,4 @@
-package bsbll.card;
+package bsbll.die;
 
 import java.util.Random;
 

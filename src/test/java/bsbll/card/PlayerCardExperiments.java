@@ -3,6 +3,7 @@ package bsbll.card;
 import static bsbll.stats.BattingStat.*;
 
 import bsbll.Year;
+import bsbll.die.DieFactory;
 import bsbll.league.LeagueId;
 import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;

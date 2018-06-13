@@ -1,4 +1,4 @@
-package bsbll.card;
+package bsbll.die;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
