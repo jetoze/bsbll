@@ -22,11 +22,11 @@ import bsbll.game.OfficialScorer;
 import bsbll.game.event.DefaultGameEventDetector;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.BaseHitAdvanceDistributionFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
 import bsbll.matchup.Log5BasedMatchupRunner;
-import bsbll.matchup.MatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerFactory;
 import bsbll.stats.BattingStat;
@@ -39,7 +39,7 @@ import tzeth.strings.Padding;
 
 public final class AL1923 {
     private final League league;
-    private final MatchupRunner matchupRunner;
+    private final GamePlayParams gamePlayParams;
     private final Random random = new Random();
     
     public AL1923() {
@@ -52,10 +52,20 @@ public final class AL1923 {
                 buildBrowns(),
                 buildAthletics(),
                 buildWhiteSox());
-        matchupRunner = new Log5BasedMatchupRunner(
+        gamePlayParams = createGamePlayParams();
+        checkState(league.getNumberOfTeams() % 2 == 0);
+    }
+    
+    private static GamePlayParams createGamePlayParams() {
+        Log5BasedMatchupRunner matchupRunner = new Log5BasedMatchupRunner(
                 new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
                 DieFactory.random());
-        checkState(league.getNumberOfTeams() % 2 == 0);
+        // We don't have play-by-play data for 1923, so use 1925 instead.
+        BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory.retrosheet()
+                .createDistribution(Year.of(1925));
+        return new GamePlayParams(
+                matchupRunner,
+                baseHitAdvanceDistribution);
     }
     
     public Standings run() {
@@ -101,11 +111,8 @@ public final class AL1923 {
     }
     
     private BoxScore runGame(Team home, Team visiting) {
-        GamePlayParams params = new GamePlayParams(
-                matchupRunner, 
-                BaseHitAdvanceDistribution.defaultAdvances());
         OfficialScorer officialScorer = new OfficialScorer(league.getPlayerStatLookup());
-        Game game = new Game(home, visiting, params, officialScorer);
+        Game game = new Game(home, visiting, gamePlayParams, officialScorer);
         GameEventDetector eventDetector = new DefaultGameEventDetector(league.getPlayerStatLookup());
         game.setGameEventDetector(eventDetector);
         BoxScore boxScore = game.run();

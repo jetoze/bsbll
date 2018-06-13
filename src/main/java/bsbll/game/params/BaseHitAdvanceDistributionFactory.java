@@ -1,5 +1,7 @@
 package bsbll.game.params;
 
+import static java.util.Objects.requireNonNull;
+
 import java.io.File;
 
 import com.google.common.collect.ImmutableList;
@@ -35,11 +37,32 @@ public abstract class BaseHitAdvanceDistributionFactory {
         // TODO: Add option to pass in location of play-by-play files.
         return new RetrosheetPlayByPlayFactory();
     }
+    
+    /**
+     * Returns a factory that always produces distributions given by
+     * {@link BaseHitAdvanceDistribution#defaultAdvances()}.
+     */
+    public static BaseHitAdvanceDistributionFactory defaultAdvances() {
+        return DefaultDistributionFactory.INSTANCE;
+    }
 
+    
+    private static final class DefaultDistributionFactory extends BaseHitAdvanceDistributionFactory {
+        private static final DefaultDistributionFactory INSTANCE = new DefaultDistributionFactory();
+
+        @Override
+        public BaseHitAdvanceDistribution createDistribution(Year year) {
+            requireNonNull(year);
+            return BaseHitAdvanceDistribution.defaultAdvances();
+        }
+    }
+    
+    
     private static final class RetrosheetPlayByPlayFactory extends BaseHitAdvanceDistributionFactory {
         
         @Override
         public BaseHitAdvanceDistribution createDistribution(Year year) {
+            requireNonNull(year);
             Handler handler = new Handler();
             File folder = PlayByPlayFileUtils.getFolder(year);
             handler.parseAll(folder);
