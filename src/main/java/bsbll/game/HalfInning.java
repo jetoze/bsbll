@@ -6,6 +6,7 @@ import static java.util.stream.Collectors.toList;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,8 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.bases.Advances;
+import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
@@ -105,7 +108,19 @@ public final class HalfInning {
             //   + Etc?
             return new StateAfterMatchup(preStats.addOut(), ImmutableList.of(), baseSituation);
         }
-        ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome);
+        ResultOfAdvance roa;
+        if (outcome == Outcome.WALK || outcome == Outcome.HIT_BY_PITCH) {
+            roa = baseSituation.batterAwardedFirstBase(batter);
+        } else if (outcome.isHit()) {
+            BaseHit baseHit = BaseHit.fromMatchupOutcome(outcome);
+            Advances advances = gamePlayParams.getBaseHitAdvanceDistribution().pickOne(baseHit, baseSituation);
+            roa = baseSituation.apply(batter, advances);
+        } else if (outcome == Outcome.STRIKEOUT) {
+            // TODO: The batter can reach first
+            roa = new ResultOfAdvance(baseSituation, Collections.emptyList());
+        } else {
+            throw new RuntimeException("TODO: Implemement me");
+        }
         Stats newStats = new Stats(
                 preStats.runs + roa.getNumberOfRuns(),
                 preStats.hits + (outcome.isHit() ? 1 : 0),

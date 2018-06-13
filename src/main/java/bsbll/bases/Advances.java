@@ -3,7 +3,6 @@ package bsbll.bases;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +14,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.player.Player;
@@ -44,7 +45,7 @@ public final class Advances {
     public Advances(Collection<Advance> individualAdvances) {
         checkLegal(individualAdvances);
         Map<Base, Advance> map = individualAdvances.stream()
-                .collect(toMap(Advance::from, a -> a));
+                .collect(Collectors.toMap(Advance::from, a -> a));
         Comparator<Base> order = Base.comparingOrigin();
         this.advances = ImmutableSortedMap.<Base, Advance>orderedBy(order).putAll(map).build();
     }
@@ -118,6 +119,13 @@ public final class Advances {
         Advance a = getAdvanceFrom(base);
         return a.isRun();
     }
+
+    /**
+     * Returns a stream of the runners that scored, in the order they scored in.
+     */
+    public Stream<Advance> getRunnersThatScored() {
+        return this.advances.values().stream().filter(Advance::isRun);
+    }
     
     public BaseSituation applyTo(Player batter, BaseSituation situation) {
         requireNonNull(batter);
@@ -186,6 +194,11 @@ public final class Advances {
         Map<Base, Advance> tmp = new HashMap<>(this.advances);
         tmp.put(a.from(), a);
         return new Advances(tmp.values());
+    }
+    
+    ImmutableMap<Base, Base> toMap() {
+        return this.advances.values().stream()
+                .collect(ImCollectors.toMap(Advance::from, Advance::to));
     }
     
     @Override

@@ -21,6 +21,7 @@ import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
+import tzeth.collections.ImCollectors;
 
 @Immutable
 public final class BaseSituation {
@@ -100,6 +101,15 @@ public final class BaseSituation {
         return new BaseSituation(newSituation);
     }
     
+    public ResultOfAdvance apply(Player batter, Advances advances) {
+        BaseSituation newSituation = apply(batter, advances.toMap());
+        ImmutableList<Player> runs = advances.getRunnersThatScored()
+                .map(Advance::from)
+                .map(f -> (f == Base.HOME) ? batter : this.bases.get(f))
+                .collect(ImCollectors.toList());
+        return new ResultOfAdvance(newSituation, runs);
+    }
+    
     // TODO: Does this method belong here? Or does this belong in some
     // other class, which is also responsible for the logic of what 
     // runners to advance and how far?
@@ -110,7 +120,7 @@ public final class BaseSituation {
         switch (event) {
         case WALK: /* fall-through */
         case HIT_BY_PITCH:
-            return advanceOnWalkOrHitByPitch(batter);
+            return batterAwardedFirstBase(batter);
         case SINGLE:
             return advanceOnSingleOrDouble(batter, 1);
         case DOUBLE:
@@ -124,7 +134,7 @@ public final class BaseSituation {
         }
     }
 
-    private ResultOfAdvance advanceOnWalkOrHitByPitch(Player batter) {
+    public ResultOfAdvance batterAwardedFirstBase(Player batter) {
         List<Base> forcedToAdvance = new ArrayList<>();
         if (isOccupied(Base.FIRST)) {
             forcedToAdvance.add(Base.FIRST);
