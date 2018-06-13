@@ -1,12 +1,10 @@
 package bsbll.research.pbpf;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.EnumSet;
 
 import com.google.common.base.Strings;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multiset;
 
@@ -14,62 +12,14 @@ import bsbll.Year;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
-import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
-import bsbll.player.Player;
-import bsbll.research.EventField;
-import bsbll.research.EventType;
-import bsbll.research.PlayOutcome;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
+import bsbll.game.params.BaseHitAdvanceDistributionFactory;
 
-public final class DistributionOfAdvancesOnBaseHit extends GameHandler {
-    private final Year year;
-    private final BaseHitAdvanceDistribution.Builder builder = BaseHitAdvanceDistribution.builder();
-    
-    private int playerId;
+public final class DistributionOfAdvancesOnBaseHit {
 
-    private DistributionOfAdvancesOnBaseHit(Year year) {
-        this.year = year;
-    }
+    private DistributionOfAdvancesOnBaseHit() {/**/}
 
-    @Override
-    public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-            ImmutableList<PlayOutcome> plays) {
-        BaseSituation baseSituation = BaseSituation.empty();
-        for (PlayOutcome play : plays) {
-            Player batter = nextBatter();
-            if (play.isBaseHit() && play.getNumberOfErrors() == 0) {
-                update(play.getType(), baseSituation, play.getAdvances());
-            }
-            baseSituation = play.applyTo(batter, baseSituation);
-        }
-    }
-    
-    private void update(EventType typeOfHit, BaseSituation situation, Advances advances) {
-        if (typeOfHit != EventType.HOMERUN) {
-            BaseHit hit = eventTypeToBaseHit(typeOfHit);
-            builder.add(hit, situation, advances);
-        }
-    }
-    
-    private static BaseHit eventTypeToBaseHit(EventType type) {
-        assert type.isHit();
-        switch (type) {
-        case SINGLE:
-            return BaseHit.SINGLE;
-        case DOUBLE:
-            return BaseHit.DOUBLE;
-        case TRIPLE:
-            return BaseHit.TRIPLE;
-        case HOMERUN:
-            return BaseHit.HOMERUN;
-        default:
-            throw new AssertionError("Unexpected event type: " + type);
-        }
-    }
-    
-    private void report() {
-        BaseHitAdvanceDistribution distribution = builder.build();
+    private static void report(Year year, BaseHitAdvanceDistribution distribution) {
         System.out.println("Distribution of Advances on Base Hits for the Year " + year);
         String typeOfHitSep = Strings.repeat("=", 30);
         String basesSep = "  " + Strings.repeat("-", 26);
@@ -106,23 +56,14 @@ public final class DistributionOfAdvancesOnBaseHit extends GameHandler {
         Comparator<Multiset.Entry<Advances>> dOrder = Comparator.comparing(Multiset.Entry::getCount);
         return dOrder.reversed();
     }
-    
-    /**
-     * We generate a new Player for each play. This is obviously not realistic,
-     * but that is irrelevant - we just need Players to move around the bases.
-     * See corresponding XXX comment in BaseSituation, about making that class generic.
-     */
-    private Player nextBatter() {
-        ++playerId;
-        return new Player(Integer.toString(playerId), "John Doe");
-    }
 
 
     public static void main(String[] args) {
         Year year = Year.of(1925);
-        DistributionOfAdvancesOnBaseHit d = new DistributionOfAdvancesOnBaseHit(year);
-        File folder = PlayByPlayFileUtils.getFolder(year);
-        d.parseAll(folder);
-        d.report();
+        
+        BaseHitAdvanceDistributionFactory factory = BaseHitAdvanceDistributionFactory.retrosheet();
+        BaseHitAdvanceDistribution d = factory.createDistribution(year);
+        
+        report(year, d);
     }
 }

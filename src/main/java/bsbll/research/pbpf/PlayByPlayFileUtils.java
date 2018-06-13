@@ -11,7 +11,7 @@ import bsbll.research.EventField;
 import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Callback;
 
-final class PlayByPlayFileUtils {
+public final class PlayByPlayFileUtils {
     public static File getFolder(Year year) {
         return new File("/Users/torgil/coding/data/bsbll/play-by-play-files/" + year);
     }
