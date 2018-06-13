@@ -41,6 +41,7 @@ public final class BaseHitAdvanceDistribution {
     // The SortedMultiset is sorted in descending order, so the most likely
     // outcome is first.
     private final ImmutableTable<BaseHit, EnumSet<Base>, Multiset<Advances>> data;
+    private final DieFactory dieFactory = DieFactory.random();
     
     /**
      * Creates a {@code BaseHitAdvanceDistribution} based on the distribution
@@ -59,8 +60,26 @@ public final class BaseHitAdvanceDistribution {
     }
 
     /**
-     * Rolls a die to select one of the possible advances for the given base hit
-     * and base situation.
+     * Rolls the internal (random) die to select one of the possible advances
+     * for the given base hit and base situation.
+     * 
+     * @param baseHit
+     *            the base hit (other than {@code BaseHit.HOMERUN}.
+     * @param baseSituation
+     *            the {@code BaseSituation} at the time of the hit.
+     * @param dieFactory
+     *            the {@code DieFactory} that will be asked to produce the die
+     *            to roll
+     * @return an {@code Advances} object that describes the resulting base
+     *         advances, including the batter.
+     */
+    public Advances pickOne(BaseHit baseHit, BaseSituation baseSituation) {
+        return pickOne(baseHit, baseSituation, this.dieFactory);
+    }
+    
+    /**
+     * Rolls a die from the given DieFactory to select one of the possible
+     * advances for the given base hit and base situation.
      * 
      * @param baseHit
      *            the base hit (other than {@code BaseHit.HOMERUN}.
@@ -80,10 +99,24 @@ public final class BaseHitAdvanceDistribution {
             // Everything is fixed for homeruns
             return defaultAdvance(baseHit, baseSituation);
         }
-        Multiset<Advances> possibilities = data.get(baseHit, baseSituation.getOccupiedBases());
+        Multiset<Advances> possibilities = this.data.get(baseHit, baseSituation.getOccupiedBases());
         if (possibilities == null || possibilities.isEmpty()) {
             return defaultAdvance(baseHit, baseSituation);
         }
+        return pickOneFromSet(dieFactory, possibilities);
+    }
+    
+    private Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
+        List<Advance> advances = new ArrayList<>();
+        advances.add(Base.HOME.defaultAdvance(baseHit)); // the batter
+        Arrays.stream(Base.occupiable())
+            .filter(baseSituation::isOccupied)
+            .map(b -> b.defaultAdvance(baseHit))
+            .forEach(advances::add);
+        return new Advances(advances);
+    }
+
+    private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {
         int total = possibilities.size();
         int roll = dieFactory.newDie(total).roll();
         int sum = 0;
@@ -96,17 +129,7 @@ public final class BaseHitAdvanceDistribution {
         // We should never get here. But in case we do, we pick the most common one.
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
     }
-    
-    private Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
-        List<Advance> advances = new ArrayList<>();
-        advances.add(Base.HOME.defaultAdvance(baseHit)); // the batter
-        Arrays.stream(Base.occupiable())
-            .filter(baseSituation::isOccupied)
-            .map(b -> b.defaultAdvance(baseHit))
-            .forEach(advances::add);
-        return new Advances(advances);
-    }
-    
+
     public static Builder builder() {
         return new Builder();
     }
