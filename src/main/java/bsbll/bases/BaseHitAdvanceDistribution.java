@@ -1,9 +1,11 @@
 package bsbll.bases;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
@@ -33,8 +35,20 @@ public final class BaseHitAdvanceDistribution {
     // outcome is first.
     private final ImmutableTable<BaseHit, EnumSet<Base>, Multiset<Advances>> data;
     
+    /**
+     * Creates a {@code BaseHitAdvanceDistribution} based on the distribution
+     * data in the given table.
+     */
     public BaseHitAdvanceDistribution(Table<BaseHit, EnumSet<Base>, Multiset<Advances>> data) {
         this.data = ImmutableTable.copyOf(data);
+    }
+    
+    /**
+     * Creates a {@code BaseHitAdvanceDistribution} that will always advance each runner
+     * exactly the number of bases given by the base hit.
+     */
+    public static BaseHitAdvanceDistribution defaultAdvances() {
+        return new BaseHitAdvanceDistribution(ImmutableTable.of());
     }
 
     /**
@@ -55,15 +69,13 @@ public final class BaseHitAdvanceDistribution {
         requireNonNull(baseHit);
         requireNonNull(baseSituation);
         requireNonNull(dieFactory);
-        checkArgument(baseHit != BaseHit.HOMERUN, "Homeruns are not supported");
+        if (baseHit == BaseHit.HOMERUN) {
+            // Everything is fixed for homeruns
+            return defaultAdvance(baseHit, baseSituation);
+        }
         Multiset<Advances> possibilities = data.get(baseHit, baseSituation.getOccupiedBases());
         if (possibilities == null || possibilities.isEmpty()) {
-            // Highly unlikely, since the data is based on a full season of play.
-            // But if it does happen, return a default Advance, by awarding each runner the
-            // number of bases given by the base hit.
-            // TODO: Implement this.
-            throw new UnsupportedOperationException(String.format("Unknown distribution. Hit = %s. Occupied: %s", 
-                    baseHit, baseSituation.getOccupiedBases()));
+            return defaultAdvance(baseHit, baseSituation);
         }
         int total = possibilities.size();
         int roll = dieFactory.newDie(total).roll();
@@ -76,6 +88,20 @@ public final class BaseHitAdvanceDistribution {
         }
         // We should never get here. But in case we do, we pick the most common one.
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
+    }
+    
+    private Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
+        List<Advance> advances = new ArrayList<>();
+        advances.add(Base.HOME.defaultAdvance(baseHit)); // the batter
+        Arrays.stream(Base.occupiable())
+            .filter(baseSituation::isOccupied)
+            .map(b -> b.defaultAdvance(baseHit))
+            .forEach(advances::add);
+        return new Advances(advances);
+    }
+    
+    public static Builder builder() {
+        return new Builder();
     }
     
     

@@ -55,6 +55,14 @@ public enum Base {
         return new Base[] { FIRST, SECOND, THIRD };
     }
     
+    public Advance defaultAdvance(BaseHit baseHit) {
+        int o = (this == HOME) 
+                ? baseHit.value() - 1
+                : Math.min(ordinal() + baseHit.value(), 3);
+        Base to = values()[o];
+        return Advance.safe(this, to);
+    }
+    
     public static Comparator<Base> comparingOrigin() {
         return Comparator.comparing(Base::intValueWhenOrigin).reversed();
     }
