@@ -19,7 +19,6 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
-import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
 import tzeth.collections.ImCollectors;
 
@@ -88,7 +87,17 @@ public final class BaseSituation {
         return this.bases.get(base);
     }
     
-    public BaseSituation apply(Player batter, Map<Base, Base> advances) {
+    // TODO: Unit test
+    public ResultOfAdvance apply(Player batter, Advances advances) {
+        BaseSituation newSituation = apply(batter, advances.toMap());
+        ImmutableList<Player> runs = advances.getRunnersThatScored()
+                .map(Advance::from)
+                .map(f -> getPlayerOnBase(batter, f))
+                .collect(ImCollectors.toList());
+        return new ResultOfAdvance(newSituation, runs);
+    }
+    
+    private BaseSituation apply(Player batter, Map<Base, Base> advances) {
         Map<Base, Player> newSituation = new HashMap<>();
         for (Map.Entry<Base, Base> a : advances.entrySet()) {
             Base from = a.getKey();
@@ -100,40 +109,8 @@ public final class BaseSituation {
         }
         return new BaseSituation(newSituation);
     }
-    
-    public ResultOfAdvance apply(Player batter, Advances advances) {
-        BaseSituation newSituation = apply(batter, advances.toMap());
-        ImmutableList<Player> runs = advances.getRunnersThatScored()
-                .map(Advance::from)
-                .map(f -> (f == Base.HOME) ? batter : this.bases.get(f))
-                .collect(ImCollectors.toList());
-        return new ResultOfAdvance(newSituation, runs);
-    }
-    
-    // TODO: Does this method belong here? Or does this belong in some
-    // other class, which is also responsible for the logic of what 
-    // runners to advance and how far?
-    // Answer: Eventually, yes. Once we start factoring in things like errors,
-    // and runners taking extra bases or being thrown out. For now, when we are
-    // still keeping things dirt simple, this is a good place for it.
-    public ResultOfAdvance advanceRunners(Player batter, Outcome event) {
-        switch (event) {
-        case WALK: /* fall-through */
-        case HIT_BY_PITCH:
-            return batterAwardedFirstBase(batter);
-        case SINGLE:
-            return advanceOnSingleOrDouble(batter, 1);
-        case DOUBLE:
-            return advanceOnSingleOrDouble(batter, 2);
-        case TRIPLE:
-            return advanceOnTriple(batter);
-        case HOMERUN:
-            return advanceOnHomeRun(batter);
-        default:
-            return new ResultOfAdvance(this, Collections.emptyList());
-        }
-    }
 
+    // TODO: Unit test
     public ResultOfAdvance batterAwardedFirstBase(Player batter) {
         List<Base> forcedToAdvance = new ArrayList<>();
         if (isOccupied(Base.FIRST)) {
@@ -159,38 +136,7 @@ public final class BaseSituation {
         newSituation.put(Base.FIRST, batter);
         return new ResultOfAdvance(newSituation, runs);
     }
-    
-    private ResultOfAdvance advanceOnSingleOrDouble(Player batter, int bases) {
-        assert bases == 1 || bases == 2;
-        List<Player> runs = new ArrayList<>();
-        Map<Base, Player> newSituation = new HashMap<>();
-        for (Map.Entry<Base, Player> e : this.bases.entrySet()) {
-            Base from = e.getKey();
-            Player runner = e.getValue();
-            if (Base.HOME.ordinal() - from.ordinal() > bases) {
-                Base to = Base.values()[from.ordinal() + bases];
-                newSituation.put(to, runner);
-            } else {
-                runs.add(runner);
-            }
-        }
-        newSituation.put(Base.values()[bases - 1], batter);
-        return new ResultOfAdvance(newSituation, runs);
-    }
-    
-    private ResultOfAdvance advanceOnTriple(Player batter) {
-        List<Player> runs = new ArrayList<>(this.bases.values());
-        Collections.reverse(runs);
-        return new ResultOfAdvance(new BaseSituation(null, null, batter), runs);
-    }
-    
-    private ResultOfAdvance advanceOnHomeRun(Player batter) {
-        List<Player> runs = new ArrayList<>(this.bases.values());
-        Collections.reverse(runs);
-        runs.add(batter);
-        return new ResultOfAdvance(BaseSituation.empty(), runs);
-    }
-    
+
     private Player getPlayerOnBase(Player batter, Base base) {
         return (base == Base.HOME)
                 ? batter
