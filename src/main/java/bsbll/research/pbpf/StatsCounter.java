@@ -5,8 +5,8 @@ import java.io.File;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.strings.Padding;
 

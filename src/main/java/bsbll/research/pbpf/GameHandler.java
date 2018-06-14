@@ -8,8 +8,8 @@ import java.util.function.Consumer;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public abstract class GameHandler {

@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.EnumSet;
 
+import bsbll.game.play.EventType;
 import bsbll.matchup.MatchupRunner.Outcome;
-import bsbll.research.EventType;
 
 public enum BaseHit {
     // TODO: Should I be in this package?

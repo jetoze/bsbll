@@ -1,6 +1,6 @@
 package bsbll.research;
 
-import static bsbll.research.EventType.*;
+import static bsbll.game.play.EventType.*;
 import static bsbll.research.EventTypeParser.getBasicPlay;
 import static bsbll.research.EventTypeParser.parse;
 import static org.junit.Assert.*;

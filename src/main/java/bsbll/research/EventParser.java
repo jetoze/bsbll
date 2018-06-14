@@ -13,6 +13,8 @@ import bsbll.bases.Advance;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.Advance.Outcome;
+import bsbll.game.play.EventType;
+import bsbll.game.play.PlayOutcome;
 
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding PlayOutcome.

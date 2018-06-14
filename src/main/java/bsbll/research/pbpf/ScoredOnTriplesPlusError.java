@@ -7,9 +7,9 @@ import java.util.function.Predicate;
 import bsbll.Year;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
+import bsbll.game.play.EventType;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.EventType;
-import bsbll.research.PlayOutcome;
 
 public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
     private final Year year;

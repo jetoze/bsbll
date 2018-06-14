@@ -7,8 +7,8 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import bsbll.Year;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Callback;
 
 public final class PlayByPlayFileUtils {

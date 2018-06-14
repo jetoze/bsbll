@@ -12,8 +12,8 @@ import com.google.common.base.Strings;
 
 import bsbll.Year;
 import bsbll.bases.BaseHit;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.PlayOutcome;
 
 public final class ErrorOnHit implements PlayByPlayFile.Callback {
     private final EnumMap<BaseHit, ErrorCount> countsByHitType = new EnumMap<>(BaseHit.class);

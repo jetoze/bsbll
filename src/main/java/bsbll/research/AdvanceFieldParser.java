@@ -7,6 +7,7 @@ import java.util.Map;
 import bsbll.bases.Advance;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
+import bsbll.game.play.EventType;
 import bsbll.research.AdvanceField.Part;
 
 /**

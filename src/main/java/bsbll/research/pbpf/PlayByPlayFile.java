@@ -15,9 +15,9 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
 import bsbll.research.EventParser;
-import bsbll.research.PlayOutcome;
 
 public final class PlayByPlayFile {
     private final Path path;

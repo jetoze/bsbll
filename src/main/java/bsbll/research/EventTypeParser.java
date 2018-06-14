@@ -1,6 +1,6 @@
 package bsbll.research;
 
-import static bsbll.research.EventType.*;
+import static bsbll.game.play.EventType.*;
 
 import java.util.function.Predicate;
 import java.util.regex.Matcher;
@@ -8,6 +8,8 @@ import java.util.regex.Pattern;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
+
+import bsbll.game.play.EventType;
 
 /**
  * Parses the event field of a retrosheet play-by-play file and returns the corresponding event type.

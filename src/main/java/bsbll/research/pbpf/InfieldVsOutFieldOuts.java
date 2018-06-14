@@ -5,9 +5,9 @@ import java.text.DecimalFormat;
 import java.util.function.Predicate;
 
 import bsbll.Year;
+import bsbll.game.play.EventType;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.EventType;
-import bsbll.research.PlayOutcome;
 import tzeth.strings.Padding;
 
 public final class InfieldVsOutFieldOuts implements PlayByPlayFile.Callback {

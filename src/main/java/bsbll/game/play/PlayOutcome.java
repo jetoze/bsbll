@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.game.play;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;

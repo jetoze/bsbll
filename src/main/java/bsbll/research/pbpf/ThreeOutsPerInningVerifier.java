@@ -7,8 +7,8 @@ import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
+import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
-import bsbll.research.PlayOutcome;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.collections.Zip;
 import tzeth.strings.Padding;

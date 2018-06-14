@@ -1,4 +1,4 @@
-package bsbll.research;
+package bsbll.game.play;
 
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -6,13 +6,18 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import bsbll.bases.Advance;
-import bsbll.bases.Base;
 import bsbll.bases.Advance.Outcome;
+import bsbll.bases.Base;
 
 /**
- * Represents the main outcome of a pitcher-batter matchup.
+ * Represents the detailed outcome of a pitcher-batter matchup.
  */
-public enum EventType {
+public enum EventType { // TODO: Rename me now that I'm used in non-retrosheet contexts.
+    
+    // TODO: Some of these events can happen before the batter-pitcher matchup runs,
+    // e.g. PICKED_OFF. Others technically happens during the matchup, but is best
+    // simulated separately before running the matchup, e.g. BALK and ERROR_ON_FOUL_FLY.
+    
     SINGLE(Base.FIRST, Outcome.SAFE),
     DOUBLE(Base.SECOND, Outcome.SAFE),
     TRIPLE(Base.THIRD, Outcome.SAFE),
@@ -39,8 +44,17 @@ public enum EventType {
      */
     ERROR_ON_FOUL_FLY,
     INTERFERENCE(Base.FIRST, Outcome.SAFE_ON_ERROR),
+    /**
+     * A base runner advance that is not covered by one of the other types.
+     * <p>
+     * This EventType will only appear when parsing retrosheet play-by-play files. It will
+     * not appear in normal game play.
+     */
     OTHER_ADVANCE,
     DEFENSIVE_INDIFFERENCE,
+    /**
+     * Used as a marker when substitutions are made.
+     */
     NO_PLAY,
     OUT;
     

@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import bsbll.bases.Base;
+import bsbll.game.play.EventType;
+import bsbll.game.play.PlayOutcome;
 
 /**
  * Unit test for EventParser.
