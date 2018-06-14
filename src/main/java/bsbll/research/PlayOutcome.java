@@ -39,6 +39,10 @@ public final class PlayOutcome {
     public boolean isBaseHit() {
         return this.type.isHit();
     }
+    
+    public boolean isHomerun() {
+        return this.type == EventType.HOMERUN;
+    }
 
     public Advances getAdvances() {
         return this.advances;

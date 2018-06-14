@@ -2,7 +2,10 @@ package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import java.util.EnumSet;
+
 import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.research.EventType;
 
 public enum BaseHit {
     // TODO: Should I be in this package?
@@ -21,6 +24,10 @@ public enum BaseHit {
         return value;
     }
     
+    public static EnumSet<BaseHit> otherThanHomerun() {
+        return EnumSet.of(SINGLE, DOUBLE, TRIPLE);
+    }
+    
     public static BaseHit fromMatchupOutcome(Outcome o) {
         checkArgument(o.isHit());
         switch (o) {
@@ -34,6 +41,22 @@ public enum BaseHit {
             return BaseHit.HOMERUN;
         default:
             throw new AssertionError("Unexpected hit type: " + o);
+        }
+    }
+    
+    public static BaseHit fromEventType(EventType o) {
+        checkArgument(o.isHit());
+        switch (o) {
+        case SINGLE:
+            return BaseHit.SINGLE;
+        case DOUBLE:
+            return BaseHit.DOUBLE;
+        case TRIPLE:
+            return BaseHit.TRIPLE;
+        case HOMERUN:
+            return BaseHit.HOMERUN;
+        default:
+            throw new AssertionError("Unexpected event type: " + o);
         }
     }
 }
