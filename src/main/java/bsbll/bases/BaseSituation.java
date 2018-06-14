@@ -118,6 +118,8 @@ public final class BaseSituation {
     }
 
     public ResultOfAdvance batterAwardedFirstBase(Player batter) {
+        // TODO: Can we use Advances.batterAwardedFirstBase here?
+        // TODO: Is this method going to be needed in the first place?
         List<Base> forcedToAdvance = new ArrayList<>();
         if (isOccupied(Base.FIRST)) {
             forcedToAdvance.add(Base.FIRST);

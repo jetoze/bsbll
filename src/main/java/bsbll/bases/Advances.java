@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,6 +44,21 @@ public final class Advances implements Iterable<Advance> {
 
     public static Advances of(Advance... individualAdvances) {
         return new Advances(Arrays.asList(individualAdvances));
+    }
+    
+    // TODO: Unit test me.
+    public static Advances batterAwardedFirstBase(EnumSet<Base> occupiedBases) {
+        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+        List<Advance> advances = new ArrayList<>();
+        advances.add(Advance.safe(Base.HOME, Base.FIRST));
+        for (Base b : Base.occupiable()) {
+            if (occupiedBases.contains(b)) {
+                advances.add(Advance.safe(b, b.next()));
+            } else {
+                break;
+            }
+        }
+        return new Advances(advances);
     }
     
     public Advances(Collection<Advance> individualAdvances) {

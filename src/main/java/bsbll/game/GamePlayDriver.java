@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -40,9 +41,8 @@ public final class GamePlayDriver {
     //    2. Use the same GamePlayDriver for all games of the league, and pass in the
     //       team and roster info in respective method call.
     
-    // TODO: Instead of pre- and postMatchupCompletionPlays, with the MatchupRunner being
-    // invoked in between, we could let this class handle all of that, and just have
-    // a single method getPlays().
+    // TODO: Instead of preMatchupCompletionPlays and runMatchup, we could let this class 
+    // handle all of that, and just have a single method getPlays().
     // Pros: Simpler API.
     // Cons: This class needs more context about the current state (number of outs, 
     //       walk-off situations). We also need a way to communicate back to the caller 
@@ -73,6 +73,7 @@ public final class GamePlayDriver {
      * not be called. Ditto if any of these plays result in a walk-off run.
      */
     public ImmutableList<PlayOutcome> preMatchupCompletionPlays(Player batter, Player pitcher, BaseSituation baseSituation, int outs) {
+        // TODO: Implement me.
         return ImmutableList.of();
     }
     
@@ -92,7 +93,14 @@ public final class GamePlayDriver {
      * Returns the play that results from the outcome of the matchup.
      */
     private PlayOutcome resultingPlay(Player batter, Player pitcher, Outcome basicOutcome) {
-        throw new RuntimeException("TODO: Implement me");
+        switch (basicOutcome) {
+        case STRIKEOUT:
+            // TODO: Dropped third strike could result in the batter going to first,
+            // without an out being recorded.
+            return PlayOutcome.builder(EventType.STRIKEOUT).build();
+        default:
+            throw new RuntimeException("TODO: Implement me");
+        }
     }
 
 }
