@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -46,8 +45,13 @@ public final class Advances implements Iterable<Advance> {
         return new Advances(Arrays.asList(individualAdvances));
     }
     
-    // TODO: Unit test me.
-    public static Advances batterAwardedFirstBase(EnumSet<Base> occupiedBases) {
+    /**
+     * Creates an {@code Advances} instance from a previous base situation for
+     * the case where the batter is awarded first base, e.g. via a walk or hit
+     * by pitch. The batter advances to first, runners that are forced advance
+     * accordingly.
+     */
+    public static Advances batterAwardedFirstBase(Set<Base> occupiedBases) {
         checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
         List<Advance> advances = new ArrayList<>();
         advances.add(Advance.safe(Base.HOME, Base.FIRST));

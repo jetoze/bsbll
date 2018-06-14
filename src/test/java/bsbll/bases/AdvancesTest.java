@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import com.google.common.collect.ImmutableSet;
+
 /**
  * Unit test for {@code Advances}.
  */
@@ -61,6 +63,82 @@ public final class AdvancesTest {
                 Advance.safe(Base.THIRD, Base.HOME)
         );
     }
+    
+    @Test
+    public void batterAwardedFirstWithEmptyBases() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of());
+        
+        Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnFirst() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.SECOND));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnSecond() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.SECOND));
+        
+        Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnThird() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.THIRD));
+        
+        Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnFirstAndSecond() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.SECOND),
+                Advance.safe(Base.SECOND, Base.THIRD));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnFirstAndThird() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.SECOND));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithRunnerOnSecondAndThird() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void batterAwardedFirstWithBasesLoaded() {
+        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.HOME, Base.FIRST),
+                Advance.safe(Base.FIRST, Base.SECOND),
+                Advance.safe(Base.SECOND, Base.THIRD),
+                Advance.safe(Base.THIRD, Base.HOME));
+        assertEquals(expected, actual);
+    }
+
     
     private static Advances grandSlam() {
         return Advances.of(
