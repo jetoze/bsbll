@@ -1,6 +1,7 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
+import java.text.DecimalFormat;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -35,21 +36,23 @@ public final class ErrorOnHit implements PlayByPlayFile.Callback {
     private void report(Year year) {
         System.out.println("Distribution of Number of Errors on Base Hit Plays for the Year " + year);
         String sep = Strings.repeat("=", 30);
-        String fmt = "  %-6s:%6s";
+        String fmt = "  %-6s:%6s%8s";
+        DecimalFormat pct = new DecimalFormat("#.0000");
         for (BaseHit type : BaseHit.otherThanHomerun()) {
             System.out.println(sep);
             System.out.println(type);
             System.out.println(sep);
             ErrorCount counts = countsByHitType.get(type);
+            int total = counts.sum();
             counts.stream()
-                .map(e -> String.format(fmt, e.getKey(), e.getValue()))
+                .map(e -> String.format(fmt, e.getKey(), e.getValue(), pct.format((1.0 * e.getValue()) / total)))
                 .forEach(System.out::println);
-            System.out.println(String.format(fmt, "Total", counts.sum()));
+            System.out.println(String.format(fmt, "Total", total, ""));
         }
     }
 
     public static void main(String[] args) {
-        Year year = Year.of(1925);
+        Year year = Year.of(2001);
         
         ErrorOnHit eoh = new ErrorOnHit();
         File folder = PlayByPlayFileUtils.getFolder(year);
