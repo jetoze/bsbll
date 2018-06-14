@@ -38,29 +38,29 @@ public final class WLT {
         return this.wins + this.losses + this.ties;
     }
     
-    public WLT add(WLT other) {
+    public WLT plus(WLT other) {
         return new WLT(this.wins + other.wins, this.losses + other.losses, this.ties + other.ties);
     }
     
-    public WLT addWin() {
+    public WLT plusWin() {
         return new WLT(this.wins + 1, this.losses, this.ties);
     }
     
-    public WLT addLoss() {
+    public WLT plusLoss() {
         return new WLT(this.wins, this.losses + 1, this.ties);
     }
     
-    public WLT addTie() {
+    public WLT plusTie() {
         return new WLT(this.wins, this.losses, this.ties + 1);
     }
     
-    public WLT addGame(RunDifferential runDiff) {
+    public WLT plus(RunDifferential runDiff) {
         if (runDiff.isWin()) {
-            return addWin();
+            return plusWin();
         } else if (runDiff.isLoss()) {
-            return addLoss();
+            return plusLoss();
         } else {
-            return addTie();
+            return plusTie();
         }
     }
 

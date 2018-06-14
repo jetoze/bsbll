@@ -46,11 +46,11 @@ public final class RunDifferential {
         return runsScored == runsAgainst;
     }
     
-    public RunDifferential add(RunDifferential other) {
-        return addScore(other.runsScored, other.runsAgainst);
+    public RunDifferential plus(RunDifferential other) {
+        return plusScore(other.runsScored, other.runsAgainst);
     }
     
-    public RunDifferential addScore(int runsScored, int runsAgainst) {
+    public RunDifferential plusScore(int runsScored, int runsAgainst) {
         return new RunDifferential(this.runsScored + runsScored, this.runsAgainst + runsAgainst);
     }
     

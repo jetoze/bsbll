@@ -60,13 +60,13 @@ public final class Record {
         return runDiff.getRunsAgainst();
     }
     
-    public Record add(Record other) {
-        return new Record(this.wlt.add(other.wlt), this.runDiff.add(other.runDiff));
+    public Record plus(Record other) {
+        return new Record(this.wlt.plus(other.wlt), this.runDiff.plus(other.runDiff));
     }
     
-    public Record addGame(RunDifferential gameScore) {
-        WLT newWlt = wlt.addGame(gameScore);
-        RunDifferential newRunDiff = runDiff.add(gameScore);
+    public Record plus(RunDifferential gameScore) {
+        WLT newWlt = wlt.plus(gameScore);
+        RunDifferential newRunDiff = runDiff.plus(gameScore);
         return new Record(newWlt, newRunDiff);
     }
     

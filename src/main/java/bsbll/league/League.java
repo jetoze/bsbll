@@ -173,8 +173,8 @@ public final class League {
         Record visitingRecord = getRecord(visitingTeam);
 
         RunDifferential homeTeamRunDiff = new RunDifferential(gr.getHomeScore(), gr.getVisitingScore());
-        teamRecords.put(homeTeam.getId(), homeRecord.addGame(homeTeamRunDiff));
-        teamRecords.put(visitingTeam.getId(), visitingRecord.addGame(homeTeamRunDiff.reverse()));
+        teamRecords.put(homeTeam.getId(), homeRecord.plus(homeTeamRunDiff));
+        teamRecords.put(visitingTeam.getId(), visitingRecord.plus(homeTeamRunDiff.reverse()));
     }
     
     public ImmutableList<LineScore> getGameLog() {
