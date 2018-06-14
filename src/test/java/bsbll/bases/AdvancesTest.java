@@ -138,6 +138,91 @@ public final class AdvancesTest {
                 Advance.safe(Base.THIRD, Base.HOME));
         assertEquals(expected, actual);
     }
+    
+    @Test
+    public void homerunWithBasesEmpty() {
+        Advances actual = Advances.homerun(ImmutableSet.of());
+        
+        Advances expected = Advances.of(Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnFirst() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.FIRST, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnSecond() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.SECOND));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.SECOND, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnThird() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.THIRD, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnFirstAndSecond() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.SECOND, Base.HOME),
+                Advance.safe(Base.FIRST, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnFirstAndThird() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.THIRD, Base.HOME),
+                Advance.safe(Base.FIRST, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void homerunWithRunnerOnSecondAndThird() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.THIRD, Base.HOME),
+                Advance.safe(Base.SECOND, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    
+    @Test
+    public void homerunWithBasesLoaded() {
+        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.THIRD, Base.HOME),
+                Advance.safe(Base.SECOND, Base.HOME),
+                Advance.safe(Base.FIRST, Base.HOME),
+                Advance.safe(Base.HOME, Base.HOME));
+        assertEquals(expected, actual);
+    }
+
 
     
     private static Advances grandSlam() {

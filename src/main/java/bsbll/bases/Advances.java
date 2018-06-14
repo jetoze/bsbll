@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -35,6 +36,8 @@ import tzeth.collections.ImCollectors;
  */
 @Immutable
 public final class Advances implements Iterable<Advance> {
+    private final static Advances EMPTY = Advances.of();
+    
     /**
      * Maps each Advance to the originating Base. Sorted in descending order,
      * e.g. "3-H;1-3;B-1".
@@ -43,6 +46,10 @@ public final class Advances implements Iterable<Advance> {
 
     public static Advances of(Advance... individualAdvances) {
         return new Advances(Arrays.asList(individualAdvances));
+    }
+    
+    public static Advances empty() {
+        return EMPTY;
     }
     
     /**
@@ -63,6 +70,20 @@ public final class Advances implements Iterable<Advance> {
             }
         }
         return new Advances(advances);
+    }
+    
+    /**
+     * Creates an {@code Advances} instance from a previous base situation for
+     * the case where the batter hits a homerun. All runners, including the batter,
+     * advance safely to home.
+     */
+    public static Advances homerun(Set<Base> occupiedBases) {
+        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+        EnumSet<Base> from = EnumSet.of(Base.HOME);
+        from.addAll(occupiedBases);
+        return new Advances(from.stream()
+                .map(f -> Advance.safe(f, Base.HOME))
+                .collect(Collectors.toList()));
     }
     
     public Advances(Collection<Advance> individualAdvances) {

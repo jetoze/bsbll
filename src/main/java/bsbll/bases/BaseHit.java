@@ -9,19 +9,25 @@ import bsbll.matchup.MatchupRunner.Outcome;
 
 public enum BaseHit {
     // TODO: Should I be in this package?
-    SINGLE(1),
-    DOUBLE(2),
-    TRIPLE(3),
-    HOMERUN(4);
+    SINGLE(1, EventType.SINGLE),
+    DOUBLE(2, EventType.DOUBLE),
+    TRIPLE(3, EventType.TRIPLE),
+    HOMERUN(4, EventType.HOMERUN);
     
     private final int value;
+    private final EventType eventType;
     
-    private BaseHit(int value) {
+    private BaseHit(int value, EventType eventType) {
         this.value = value;
+        this.eventType = eventType;
     }
     
     public int value() {
         return value;
+    }
+    
+    public EventType toEventType() {
+        return eventType;
     }
     
     public static EnumSet<BaseHit> otherThanHomerun() {

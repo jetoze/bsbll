@@ -4,6 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.bases.Advances;
+import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.play.EventType;
@@ -86,21 +88,59 @@ public final class GamePlayDriver {
         requireNonNull(batter);
         requireNonNull(pitcher);
         Outcome basicOutcome = matchupRunner.run(batter, pitcher);
-        return resultingPlay(batter, pitcher, basicOutcome);
+        return resultingPlay(baseSituation, basicOutcome);
     }
 
     /**
      * Returns the play that results from the outcome of the matchup.
      */
-    private PlayOutcome resultingPlay(Player batter, Player pitcher, Outcome basicOutcome) {
+    private PlayOutcome resultingPlay(BaseSituation baseSituation, Outcome basicOutcome) {
         switch (basicOutcome) {
+        case SINGLE:
+            return baseHit(BaseHit.SINGLE, baseSituation);
+        case DOUBLE:
+            return baseHit(BaseHit.DOUBLE, baseSituation);
+        case TRIPLE:
+            return baseHit(BaseHit.TRIPLE, baseSituation);
+        case HOMERUN:
+            return baseHit(BaseHit.HOMERUN, baseSituation);
         case STRIKEOUT:
             // TODO: Dropped third strike could result in the batter going to first,
             // without an out being recorded.
             return PlayOutcome.builder(EventType.STRIKEOUT).build();
+        case WALK:
+            return batterAwardedFirst(baseSituation, basicOutcome);
+        case HIT_BY_PITCH:
+            return batterAwardedFirst(baseSituation, basicOutcome);
+        case OUT:
+            // TODO: Simulate errors
+            return new PlayOutcome(EventType.OUT, Advances.empty());
         default:
             throw new RuntimeException("TODO: Implement me");
         }
+    }
+    
+    private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation) {
+        if (baseHit == BaseHit.HOMERUN) {
+            return homerun(baseSituation);
+        } else {
+            Advances advances = baseHitAdvanceDistribution.pickOne(baseHit, baseSituation);
+            return new PlayOutcome(baseHit.toEventType(), advances);
+        }
+    }
+    
+    private PlayOutcome homerun(BaseSituation baseSituation) {
+        Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
+        return new PlayOutcome(EventType.HOMERUN, advances);
+    }
+    
+    private PlayOutcome batterAwardedFirst(BaseSituation baseSituation, Outcome outcome) {
+        assert outcome == Outcome.WALK || outcome == Outcome.HIT_BY_PITCH;
+        Advances advances = Advances.batterAwardedFirstBase(baseSituation.getOccupiedBases());
+        EventType type = (outcome == Outcome.WALK)
+                ? EventType.WALK
+                : EventType.HIT_BY_PITCH;
+        return new PlayOutcome(type, advances);
     }
 
 }

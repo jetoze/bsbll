@@ -23,6 +23,11 @@ public final class PlayOutcome {
     private final EventType type;    
     private final Advances advances;
     private final int numberOfErrors;
+
+    public PlayOutcome(EventType type, 
+            Advances advances) {
+        this(type, advances, 0);
+    }
     
     public PlayOutcome(EventType type, 
                        Advances advances,
