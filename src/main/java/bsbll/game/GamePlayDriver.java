@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
+import bsbll.die.DieFactory;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceKey;
@@ -38,19 +39,22 @@ public final class GamePlayDriver {
     private final FieldersChoiceProbabilities fieldersChoiceProbabilities;
     private final ErrorCountDistribution errorCountDistribution;
     private final ErrorAdvanceDistribution errorAdvanceDistribution;
+    private final DieFactory dieFactory;
     
     public GamePlayDriver(MatchupRunner matchupRunner,
                           BaseHitAdvanceDistribution baseHitAdvanceDistribution,
                           OutAdvanceDistribution outAdvanceDistribution,
                           FieldersChoiceProbabilities fieldersChoiceProbabilities,
                           ErrorCountDistribution errorCountDistribution,
-                          ErrorAdvanceDistribution errorAdvanceDistribution) {
+                          ErrorAdvanceDistribution errorAdvanceDistribution,
+                          DieFactory dieFactory) {
         this.matchupRunner = requireNonNull(matchupRunner);
         this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
         this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
         this.fieldersChoiceProbabilities = requireNonNull(fieldersChoiceProbabilities);
         this.errorCountDistribution = requireNonNull(errorCountDistribution);
         this.errorAdvanceDistribution = requireNonNull(errorAdvanceDistribution);
+        this.dieFactory = requireNonNull(dieFactory);
     }
     
     // TODO: Use our own DieFactory in all calls to AdvanceDistribution etc.
@@ -148,10 +152,11 @@ public final class GamePlayDriver {
             return homerun(baseSituation);
         } else {
             EventType eventType = baseHit.toEventType();
-            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation);
+            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
             Advances advances = (numberOfErrors == 0)
-                    ? baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs)
-                    : errorAdvanceDistribution.pickOne(ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs);
+                    ? baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs, dieFactory)
+                    : errorAdvanceDistribution.pickOne(ErrorAdvanceKey.of(eventType, numberOfErrors), 
+                            baseSituation, outs, dieFactory);
             return new PlayOutcome(eventType, advances, numberOfErrors);
         }
     }
@@ -173,17 +178,17 @@ public final class GamePlayDriver {
     //private int fieldersChoices;
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
-        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation);
+        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
         if (numberOfErrors == 0) {
             OutLocation location = getOutLocation();
             boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                    fieldersChoiceProbabilities.test(baseSituation);
+                    fieldersChoiceProbabilities.test(baseSituation, dieFactory);
             EventType resultingType = convertToFieldersChoice
                     ? EventType.FIELDERS_CHOICE
                     : EventType.OUT;
 
             OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
+            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
 //            if (convertToFieldersChoice) {
 //                ++fieldersChoices;
 //                System.out.println("Fielder's Choice " + fieldersChoices);
@@ -195,7 +200,7 @@ public final class GamePlayDriver {
             return new PlayOutcome(resultingType, advances);
         } else {
             ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
-            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs);
+            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
             // TODO: This will give the incorrect type in the case where the batter is thrown
             // out at some other base than first.
             EventType actualType = advances.didBatterReachBase()

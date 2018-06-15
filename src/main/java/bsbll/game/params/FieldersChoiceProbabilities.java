@@ -2,13 +2,10 @@ package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.Set;
-
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
 
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.card.Probability;
@@ -36,7 +33,6 @@ public final class FieldersChoiceProbabilities {
     private static final FieldersChoiceProbabilities DEFAULT = new FieldersChoiceProbabilities(ImmutableMap.of());
     
     private final ImmutableMap<OccupiedBases, Probability> probabilities;
-    private final DieFactory dieFactory = DieFactory.random();
 
     /**
      * Creates a FieldersChoiceProbabilities instance based on the given
@@ -65,33 +61,11 @@ public final class FieldersChoiceProbabilities {
      *         choice, {@code false} if it should remain as a batter out event. Always returns
      *         {@code true} if the bases are empty.
      */
-    public boolean test(BaseSituation situation) {
+    public boolean test(BaseSituation situation, DieFactory dieFactory) {
         if (situation.isEmpty()) {
             return false;
         }
         Probability p = probabilities.getOrDefault(situation.getOccupiedBases(), DEFAULT_PROBABILITY);
-        return p.test(dieFactory);
-    }
-
-    /**
-     * Tests an out with the given situation to determine if it should be
-     * converted to a fielder's choice, using the given DieFactory
-     * 
-     * @param situation
-     *            the bases that are currently occupied
-     * @param dieFactory
-     *            the DieFactory that will be asked to produce the die to use in
-     *            the test.
-     * @return {@code true} if the out should be converted to a fielder's
-     *         choice, {@code false} if it should remain as a batter out event. Always returns
-     *         {@code true} if the bases are empty.
-     */
-    public boolean test(Set<Base> situation, DieFactory dieFactory) {
-        requireNonNull(dieFactory);
-        if (situation.isEmpty()) {
-            return false;
-        }
-        Probability p = probabilities.getOrDefault(situation, DEFAULT_PROBABILITY);
         return p.test(dieFactory);
     }
     

@@ -65,9 +65,10 @@ public final class AL1923 {
     }
     
     private static GamePlayDriver createGamePlayDriver() {
+        DieFactory dieFactory = DieFactory.random();
         Log5BasedMatchupRunner matchupRunner = new Log5BasedMatchupRunner(
                 new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
-                DieFactory.random());
+                dieFactory);
         // We don't have play-by-play data for 1923, so use 1925 instead.
         Year year = Year.of(1925);
         BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
@@ -89,7 +90,8 @@ public final class AL1923 {
                 outAdvanceDistribution,
                 fieldersChoiceProbabilities,
                 errorCountDistribution,
-                errorAdvanceDistribution);
+                errorAdvanceDistribution,
+                dieFactory);
     }
     
     public Standings run() {

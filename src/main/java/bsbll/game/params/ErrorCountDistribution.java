@@ -30,7 +30,6 @@ public final class ErrorCountDistribution {
     
     // TODO: Should the number of outs be included as well?
     private final ImmutableTable<EventType, OccupiedBases, ImmutableMultiset<Integer>> data;
-    private final DieFactory dieFactory = DieFactory.random();
     
     public ErrorCountDistribution(ImmutableTable<EventType, OccupiedBases, ImmutableMultiset<Integer>> data) {
         this.data = requireNonNull(data);
@@ -38,10 +37,6 @@ public final class ErrorCountDistribution {
     
     public static ErrorCountDistribution noErrors() {
         return NO_ERRORS;
-    }
-
-    public int getNumberOfErrors(EventType type, BaseSituation baseSituation) {
-        return getNumberOfErrors(type, baseSituation, this.dieFactory);
     }
 
     public int getNumberOfErrors(EventType type, BaseSituation baseSituation, DieFactory dieFactory) {

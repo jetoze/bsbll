@@ -30,27 +30,9 @@ import bsbll.die.DieFactory;
  */
 public abstract class AdvanceDistribution<E> {
     private final ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data;
-    private final DieFactory dieFactory = DieFactory.random();
     
     protected AdvanceDistribution(ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data) {
         this.data = requireNonNull(data);
-    }
-
-    /**
-     * Rolls the internal (random) die to select one of the possible advances
-     * for the given key and base situation.
-     * 
-     * @param key
-     *            the key
-     * @param baseSituation
-     *            the {@code BaseSituation} at the time of the event.
-     * @param numberOfOuts
-     *            the number of outs at the time of the event.
-     * @return an {@code Advances} object that describes the resulting base
-     *         advances, including the batter.
-     */
-    public final Advances pickOne(E key, BaseSituation baseSituation, int numberOfOuts) {
-        return pickOne(key, baseSituation, numberOfOuts, this.dieFactory);
     }
     
     /**

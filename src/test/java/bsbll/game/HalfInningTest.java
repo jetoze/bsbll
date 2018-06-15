@@ -10,6 +10,7 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.die.DieFactory;
 import bsbll.game.HalfInning.Stats;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
@@ -47,7 +48,8 @@ public final class HalfInningTest {
                 OutAdvanceDistribution.defaultAdvances(),
                 FieldersChoiceProbabilities.defaultValues(),
                 ErrorCountDistribution.noErrors(),
-                ErrorAdvanceDistribution.defaultAdvances());
+                ErrorAdvanceDistribution.defaultAdvances(),
+                DieFactory.random());
     }
     
     @Test
