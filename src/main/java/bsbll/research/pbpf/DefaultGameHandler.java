@@ -1,8 +1,10 @@
 package bsbll.research.pbpf;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.function.Predicate;
 
@@ -10,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
+import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.research.EventField;
@@ -21,6 +24,17 @@ public abstract class DefaultGameHandler extends GameHandler {
     
     protected DefaultGameHandler() {
         this(p -> true);
+    }
+    
+    protected DefaultGameHandler(EventType type) {
+        this(p -> p.getType() == type);
+        requireNonNull(type);
+    }
+    
+    protected DefaultGameHandler(EnumSet<EventType> types) {
+        this(p -> types.contains(p.getType()));
+        requireNonNull(types);
+        checkArgument(!types.isEmpty());
     }
     
     protected DefaultGameHandler(Predicate<PlayOutcome> interestingPlayPredicate) {

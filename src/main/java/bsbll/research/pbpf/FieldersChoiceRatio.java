@@ -1,10 +1,9 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
-import java.util.Iterator;
+import java.util.EnumSet;
 
 import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 
 import bsbll.Year;
@@ -12,47 +11,31 @@ import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
-public final class FieldersChoiceRatio extends GameHandler {
+public final class FieldersChoiceRatio extends DefaultGameHandler {
     private final Multiset<OccupiedBases> outsWithRunnersOnBase = HashMultiset.create();
     private final Multiset<OccupiedBases> fieldersChoices = HashMultiset.create();
     
-    private int playerId;
+    public FieldersChoiceRatio() {
+        super(EnumSet.of(EventType.OUT, EventType.FIELDERS_CHOICE));
+    }
 
     @Override
-    public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-            ImmutableList<PlayOutcome> plays) {
-        BaseSituation bases = BaseSituation.empty();
-        Iterator<EventField> itF = fields.iterator();
-        for (PlayOutcome p : plays) {
-            EventField field = itF.next();
-            if (!bases.isEmpty()) {
-                OccupiedBases occupied = bases.getOccupiedBases();
-                if (isInfieldOut(p, field)) {
-                    outsWithRunnersOnBase.add(occupied);
-                } else if (p.getType() == EventType.FIELDERS_CHOICE) {
-                    fieldersChoices.add(occupied);
-                }
-            }
-            bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
+    protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+        if (bases.isEmpty()) {
+            return;
+        }
+        OccupiedBases occupied = bases.getOccupiedBases();
+        if (isInfieldOut(play, field)) {
+            outsWithRunnersOnBase.add(occupied);
+        } else if (play.getType() == EventType.FIELDERS_CHOICE) {
+            fieldersChoices.add(occupied);
         }
     }
 
     private boolean isInfieldOut(PlayOutcome p, EventField field) {
         return p.getType() == EventType.OUT && !field.isOutfieldOut();
-    }
-
-    /**
-     * We generate a new Player for each play. This is obviously not realistic,
-     * but that is irrelevant - we just need Players to move around the bases.
-     * See corresponding XXX comment in BaseSituation, about making that class generic.
-     */
-    private Player nextBatter() {
-        ++playerId;
-        return new Player(Integer.toString(playerId), "John Doe");
     }
     
     private void report(Year year) {

@@ -2,20 +2,16 @@ package bsbll.research.pbpf;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.Iterator;
-
-import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.strings.Padding;
 
-public final class SacrificeFlyConversion extends GameHandler {
+public final class SacrificeFlyConversion extends DefaultGameHandler {
     private final Year year;
     /**
      * "opportunities" is really a misnomer. This counts the number of occurrences where
@@ -26,47 +22,27 @@ public final class SacrificeFlyConversion extends GameHandler {
      * The number of "opportunities" that actually resulted in a sacrifice fly.
      */
     private int conversions;
-    private int playerId;
-    
+
     private SacrificeFlyConversion(Year year) {
+        super(EventType.OUT);
         this.year = year;
     }
 
     @Override
-    public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-            ImmutableList<PlayOutcome> plays) {
-        int outs = 0;
-        BaseSituation bases = BaseSituation.empty();
-        Iterator<EventField> itF = fields.iterator();
-        Iterator<PlayOutcome> itP = plays.iterator();
-        while (itF.hasNext() && itP.hasNext()) {
-            PlayOutcome p = itP.next();
-            EventField f = itF.next();
-            boolean isOpportunity = (outs < 2) && bases.isOccupied(Base.THIRD) && f.isOutfieldOut();
-            if (isOpportunity) {
-                ++opportunities;
-                if (f.isSacrificeFly()) {
-                    ++conversions;
-                }
-            } else if (f.isSacrificeFly()) {
-                // Two ways this can happen:
-                //   1. The out was actually made by an infielder, e.g. "5/P5DF/FL/SF.3-H"
-                //   2. There was an error on the play, allowing other runners to advance, e.g. "E8/F8D/SF.3-H(RBI);1-2"
-                // How do we handle this?
-                // TODO: Come up with counts for these events too, so that we can simulate it accordingly.
+    protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+        boolean isOpportunity = (outs < 2) && bases.isOccupied(Base.THIRD) && field.isOutfieldOut();
+        if (isOpportunity) {
+            ++opportunities;
+            if (field.isSacrificeFly()) {
+                ++conversions;
             }
-            bases = p.applyTo(nextBatter(), bases);
+        } else if (field.isSacrificeFly()) {
+            // Two ways this can happen:
+            //   1. The out was actually made by an infielder, e.g. "5/P5DF/FL/SF.3-H"
+            //   2. There was an error on the play, allowing other runners to advance, e.g. "E8/F8D/SF.3-H(RBI);1-2"
+            // How do we handle this?
+            // TODO: Come up with counts for these events too, so that we can simulate it accordingly.
         }
-    }
-
-    /**
-     * We generate a new Player for each play. This is obviously not realistic,
-     * but that is irrelevant - we just need Players to move around the bases.
-     * See corresponding XXX comment in BaseSituation, about making that class generic.
-     */
-    private Player nextBatter() {
-        ++playerId;
-        return new Player(Integer.toString(playerId), "John Doe");
     }
     
     private void report() {
