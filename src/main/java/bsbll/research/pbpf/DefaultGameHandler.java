@@ -4,8 +4,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
-import java.util.EnumSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
@@ -31,7 +31,7 @@ public abstract class DefaultGameHandler extends GameHandler {
         requireNonNull(type);
     }
     
-    protected DefaultGameHandler(EnumSet<EventType> types) {
+    protected DefaultGameHandler(Set<EventType> types) {
         this(p -> types.contains(p.getType()));
         requireNonNull(types);
         checkArgument(!types.isEmpty());

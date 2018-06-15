@@ -1,6 +1,5 @@
 package bsbll.game.params;
 
-import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Objects;
@@ -15,8 +14,12 @@ public final class ErrorAdvanceKey {
     private final int numberOfErrors;
 
     public ErrorAdvanceKey(EventType type, int numberOfErrors) {
-        this.type = requireNonNull(type);
+        this.type = ErrorSupport.requireSupported(type);
         this.numberOfErrors = checkPositive(numberOfErrors);
+    }
+    
+    public static ErrorAdvanceKey of(EventType type, int numberOfErrors) {
+        return new ErrorAdvanceKey(type, numberOfErrors);
     }
     
     int getNumberOfErrors() {

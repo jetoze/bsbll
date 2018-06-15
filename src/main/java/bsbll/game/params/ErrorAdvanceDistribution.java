@@ -11,7 +11,6 @@ import bsbll.bases.OccupiedBases;
  * The distributions of possible base-running advances on an out or fielder's
  * choice, given the base situation at the time. Only applicable for error-less
  * plays.
- *
  */
 public final class ErrorAdvanceDistribution extends AdvanceDistribution<ErrorAdvanceKey> {
     private static ErrorAdvanceDistribution DEFAULT = new ErrorAdvanceDistribution(ImmutableTable.of());

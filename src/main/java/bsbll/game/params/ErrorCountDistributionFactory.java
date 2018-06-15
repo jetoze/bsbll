@@ -6,7 +6,6 @@ import java.io.File;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
-import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
@@ -55,13 +54,7 @@ public abstract class ErrorCountDistributionFactory {
             private final ErrorCountDistribution.Builder builder = ErrorCountDistribution.builder();
 
             public Handler() {
-                super(p -> {
-                    EventType type = p.getType();
-                    return (type == EventType.OUT) ||
-                            (type == EventType.SINGLE) ||
-                            (type == EventType.DOUBLE) ||
-                            (type == EventType.TRIPLE);
-                });
+                super(p -> ErrorSupport.isSupported(p.getType()));
             }
             
             @Override
