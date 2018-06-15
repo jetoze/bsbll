@@ -93,6 +93,16 @@ public final class PlayOutcome {
     
     // TODO: I need a better name
     // TODO: Is this the best way of allowing the official scorer reconstruct the inning without errors?
+    /**
+     * Returns the ideal version of this outcome, i.e. how it would have been
+     * had there not been errors on the play.
+     * <p>
+     * If this outcome did not have any errors, this method simply returns
+     * {@code this}. Otherwise it returns the ideal outcome that was provided in
+     * the {@link #PlayOutcome(EventType, Advances, int, PlayOutcome)
+     * constructor} or via the {@link #withIdealOutcome(PlayOutcome) factory
+     * method}.
+     */
     public PlayOutcome getIdealOutcome() {
         if (this.numberOfErrors == 0) {
             return this;
