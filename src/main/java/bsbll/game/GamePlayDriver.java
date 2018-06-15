@@ -161,7 +161,7 @@ public final class GamePlayDriver {
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
         // TODO: Simulate errors.
         OutLocation location = getOutLocation();
-        OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+        OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outs);
         Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
         if (advances.getNumberOfOuts() == 2) {
             ++doublePlays;

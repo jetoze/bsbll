@@ -16,6 +16,7 @@ import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
 import bsbll.game.params.OutAdvanceKey;
 import bsbll.game.params.OutLocation;
+import bsbll.game.play.EventType;
 
 public final class DistributionOfAdvancesOnOut {
 
@@ -35,7 +36,7 @@ public final class DistributionOfAdvancesOnOut {
 
         for (OutLocation location : OutLocation.values()) {
             for (int outs : new int[] { 0, 1, 2 }) {
-                OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+                OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outs);
                 System.out.println(key);
                 System.out.println(keySep);
                 ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(key);

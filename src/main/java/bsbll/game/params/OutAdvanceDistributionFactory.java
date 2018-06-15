@@ -109,7 +109,7 @@ public abstract class OutAdvanceDistributionFactory {
 
             private void update(PlayOutcome play, EventField field, BaseSituation situation, int outs) {
                 OutLocation location = getLocation(play, field);
-                OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+                OutAdvanceKey key = OutAdvanceKey.of(play.getType(), location, outs);
                 builder.add(key, situation, play.getAdvances());
             }
 

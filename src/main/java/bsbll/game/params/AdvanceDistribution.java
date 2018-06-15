@@ -29,7 +29,7 @@ import bsbll.die.DieFactory;
  * 
  * @param <E> the type that defines the key-space (event types).
  */
-public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pluralized ("Distributions")?
+public abstract class AdvanceDistribution<E> {
     private final ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> data;
     private final DieFactory dieFactory = DieFactory.random();
     
