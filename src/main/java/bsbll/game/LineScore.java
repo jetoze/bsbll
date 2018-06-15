@@ -38,6 +38,18 @@ public final class LineScore {
         return visitingLine.getTeam();
     }
     
+    public int getTotalRuns() {
+        return homeLine.getRuns() + visitingLine.getRuns();
+    }
+    
+    public int getTotalHits() {
+        return homeLine.getHits() + visitingLine.getHits();
+    }
+    
+    public int getTotalErrors() {
+        return homeLine.getErrors() + visitingLine.getErrors();
+    }
+    
     public GameResult toGameResult() {
         return new GameResult(getHomeTeam().getId(), getHomeLine().getRuns(),
                 getVisitingTeam().getId(), getVisitingLine().getRuns());
@@ -90,6 +102,14 @@ public final class LineScore {
         
         public int getRuns() {
             return summary.getRuns();
+        }
+        
+        public int getHits() {
+            return summary.getHits();
+        }
+        
+        public int getErrors() {
+            return summary.getErrors();
         }
     }
     

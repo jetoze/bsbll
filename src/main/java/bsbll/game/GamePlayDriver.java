@@ -145,12 +145,15 @@ public final class GamePlayDriver {
     }
     
     private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation, int outs) {
-        // TODO: Factor in the possibility of errors.
         if (baseHit == BaseHit.HOMERUN) {
             return homerun(baseSituation);
         } else {
-            Advances advances = baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs);
-            return new PlayOutcome(baseHit.toEventType(), advances);
+            EventType eventType = baseHit.toEventType();
+            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation.getOccupiedBases());
+            Advances advances = (numberOfErrors == 0)
+                    ? baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs)
+                    : errorAdvanceDistribution.pickOne(ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs);
+            return new PlayOutcome(eventType, advances, numberOfErrors);
         }
     }
     

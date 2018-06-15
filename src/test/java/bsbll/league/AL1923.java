@@ -368,7 +368,23 @@ public final class AL1923 {
                     PitchingStat.WIN_PCT, PitchingStat.WHIP,
                     PitchingStat.STRIKEOUTS, PitchingStat.SHUTOUTS,
                     PitchingStat.H9, PitchingStat.SO9, PitchingStat.BB9);
+            reportRHETotals(league);
         }
+    }
+    
+    private static void reportRHETotals(AL1923 league) {
+        int runs = league.league.getGameLog().stream()
+                .mapToInt(LineScore::getTotalRuns)
+                .sum();
+        System.out.println("Total number of Runs: " + runs);
+        int hits = league.league.getGameLog().stream()
+                .mapToInt(LineScore::getTotalHits)
+                .sum();
+        System.out.println("Total number of Hits: " + hits);
+        int errors = league.league.getGameLog().stream()
+            .mapToInt(LineScore::getTotalErrors)
+            .sum();
+        System.out.println("Total Number of Errors: " + errors);
     }
     
     private static void printBattingLeaders(League league, BattingStat<?>... categories) {
@@ -409,7 +425,7 @@ public final class AL1923 {
     }
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 7, 10);
-        //playCompleteLeague(1);
+        //playSeriesAndPrintBoxScores(4, 7, 10);
+        playCompleteLeague(1);
     }
 }
