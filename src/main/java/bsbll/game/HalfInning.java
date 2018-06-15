@@ -138,6 +138,10 @@ public final class HalfInning {
         }
         
         private void processPlay(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+            // TODO: Once we implement pitcher substitutions, if FIELDERS_CHOICE we need to
+            // update who's responsible for the batter on base. (The pitcher who was responsible 
+            // for the runner that was out will now become responsible for the batter, even if
+            // that pitcher has been taken out of the game by now.)
             plays.add(new Play(batter, pitcher, outcome));
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             updateState(batter, outcome, updatePlayerStats);
