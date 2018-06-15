@@ -3,7 +3,6 @@ package bsbll.game;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
-import static java.util.stream.Collectors.toList;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.util.ArrayList;
@@ -11,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -76,89 +76,80 @@ public final class HalfInning {
     }
 
     public Summary run() {
-        Stats stats = new Stats();
-        List<Run> runs = new ArrayList<>();
-        List<GameEvent> events = new ArrayList<>();
-        BaseSituation baseSituation = BaseSituation.empty();
-        do {
-            Player batter = battingOrder.nextBatter();
-            runnerToResponsiblePitcher.put(batter, pitcher);
-            ImmutableList<PlayOutcome> preMatchupPlays = driver.preMatchupCompletionPlays(
-                    batter, pitcher, baseSituation, stats.outs);
-            for (PlayOutcome outcome : preMatchupPlays) {
-                checkState(!isDone(stats));
-                eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
-                StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
-                stats = sam.stats;
-                baseSituation = sam.baseSituation;
-                runs.addAll(sam.runs);
+        Loop loop = new Loop();
+        return loop.run();
+    }
+    
+    
+    private class Loop {
+        private Stats stats = new Stats();
+        private BaseSituation baseSituation = BaseSituation.empty();
+        private final List<Run> runs = new ArrayList<>();
+        private final List<GameEvent> events = new ArrayList<>();
+
+        public Summary run() {
+            do {
+                Player batter = battingOrder.nextBatter();
+                runnerToResponsiblePitcher.put(batter, pitcher);
+                ImmutableList<PlayOutcome> preMatchupPlays = driver.preMatchupCompletionPlays(
+                        batter, pitcher, baseSituation, stats.outs);
+                for (PlayOutcome outcome : preMatchupPlays) {
+                    checkState(!isDone(stats));
+                    processOutcome(batter, outcome, false);
+                    // TODO: Update runner and pitching stats
+                }
+                if (isDone(stats)) {
+                    // The inning (or game) ended before the batter-pitcher matchup completed. A couple of 
+                    // ways this can happen:
+                    //   + A runner is caught stealing / picked off for the third out of the inning
+                    //   + A wild pitch / passed ball allows the winning run to score (walk-off)
+                    // In case this is just the end of the inning, not the game, we reset the Batting Order
+                    // so that the same batter comes up again the next time his team is batting.
+                    battingOrder.returnBatter(batter);
+                    break;
+                }
+                PlayOutcome outcome = driver.runMatchup(batter, pitcher, baseSituation, stats.outs);
+                processOutcome(batter, outcome, true);
+            } while (!isDone(stats));
+            int lob = baseSituation.getNumberOfRunners();
+            return new Summary(stats.withLeftOnBase(lob), runs, events);
+        }
+        
+        private boolean isDone(Stats stats) {
+            if (stats.getOuts() == 3) {
+                return true;
             }
-            if (isDone(stats)) {
-                // The inning (or game) ended before the batter-pitcher matchup completed. A couple of 
-                // ways this can happen:
-                //   + A runner is caught stealing / picked off for the third out of the inning
-                //   + A wild pitch / passed ball allows the winning run to score (walk-off)
-                // In case this is just the end of the inning, not the game, we reset the Batting Order
-                // so that the same batter comes up again the next time his team is batting.
-                battingOrder.returnBatter(batter);
-                break;
+            if (stats.getOuts() > 3) {
+                throw new RuntimeException("Invalid number of outs: " + stats.getOuts());
             }
-            PlayOutcome outcome = driver.runMatchup(batter, pitcher, baseSituation, stats.outs);
+            if ((runsNeededToWin > 0) && (stats.getRuns() >= runsNeededToWin)) {
+                return true;
+            }
+            return false;
+        }
+        
+        private void processOutcome(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
-            StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
-            stats = sam.stats;
-            baseSituation = sam.baseSituation;
-            runs.addAll(sam.runs);
-            playerStats.update(batter, pitcher, outcome, sam.playersThatScored());
-        } while (!isDone(stats));
-        int lob = baseSituation.getNumberOfRunners();
-        return new Summary(stats.withLeftOnBase(lob), runs, events);
-    }
-    
-    private StateAfterMatchup evaluateOutcome(Player batter, BaseSituation baseSituation, PlayOutcome outcome, Stats preStats) {
-        ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome.getAdvances());
-        Stats newStats = new Stats(
-                preStats.runs + roa.getNumberOfRuns(),
-                preStats.hits + (outcome.isBaseHit() ? 1 : 0),
-                preStats.errors + outcome.getNumberOfErrors(),
-                preStats.outs + outcome.getNumberOfOuts(),
-                preStats.leftOnBase);
-        ImmutableList<Run> runs = roa.getRunnersThatScored().stream()
-                .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))
-                .collect(ImCollectors.toList());
-        return new StateAfterMatchup(newStats, runs, roa.getNewSituation());
-    }
-    
-    private boolean isDone(Stats stats) {
-        if (stats.getOuts() == 3) {
-            return true;
-        }
-        if (stats.getOuts() > 3) {
-            throw new RuntimeException("Invalid number of outs: " + stats.getOuts());
-        }
-        if ((runsNeededToWin > 0) && (stats.getRuns() >= runsNeededToWin)) {
-            return true;
-        }
-        return false;
-    }
-    
-    
-    private static class StateAfterMatchup {
-        public final Stats stats;
-        public final ImmutableList<Run> runs;
-        public final BaseSituation baseSituation;
-        
-        public StateAfterMatchup(Stats stats, ImmutableList<Run> runs, 
-                BaseSituation baseSituation) {
-            this.stats = stats;
-            this.runs = runs;
-            this.baseSituation = baseSituation;
+            updateState(batter, outcome, updatePlayerStats);
         }
         
-        public List<Player> playersThatScored() {
-            return runs.stream()
-                    .map(Run::getRunner)
-                    .collect(toList());
+        private void updateState(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+            ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome.getAdvances());
+            stats = new Stats(
+                    stats.runs + roa.getNumberOfRuns(),
+                    stats.hits + (outcome.isBaseHit() ? 1 : 0),
+                    stats.errors + outcome.getNumberOfErrors(),
+                    stats.outs + outcome.getNumberOfOuts(),
+                    stats.leftOnBase);
+            ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
+                    .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))
+                    .collect(ImCollectors.toList());
+            this.runs.addAll(runsOnPlay);
+            baseSituation = roa.getNewSituation();
+            if (updatePlayerStats) {
+                playerStats.update(batter, pitcher, outcome,
+                        runsOnPlay.stream().map(Run::getRunner).collect(Collectors.toList()));
+            }
         }
     }
     
