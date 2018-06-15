@@ -4,12 +4,11 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.bases.Advance;
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceKey;
 import bsbll.game.params.OutLocation;
@@ -33,14 +32,19 @@ public final class GamePlayDriver {
     private final MatchupRunner matchupRunner;
     private final BaseHitAdvanceDistribution baseHitAdvanceDistribution;
     private final OutAdvanceDistribution outAdvanceDistribution;
+    private final FieldersChoiceProbabilities fieldersChoiceProbabilities;
     
     public GamePlayDriver(MatchupRunner matchupRunner,
                           BaseHitAdvanceDistribution baseHitAdvanceDistribution,
-                          OutAdvanceDistribution outAdvanceDistribution) {
+                          OutAdvanceDistribution outAdvanceDistribution,
+                          FieldersChoiceProbabilities fieldersChoiceProbabilities) {
         this.matchupRunner = requireNonNull(matchupRunner);
         this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
         this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
+        this.fieldersChoiceProbabilities = requireNonNull(fieldersChoiceProbabilities);
     }
+    
+    // TODO: Use our own DieFactory in all calls to AdvanceDistribution etc.
 
     // TODO: In addition to just the batter and pitcher, a proper driver needs access to 
     // data about both teams lineups, e.g. to determine the probability that a runner on 
@@ -154,32 +158,27 @@ public final class GamePlayDriver {
         return new PlayOutcome(type, advances);
     }
 
-    private int doublePlays;
-    private int triplePlays;
-    private int fieldersChoices;
-    private int sacrificeFlies;
+    //private int fieldersChoices;
+    // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
         // TODO: Simulate errors.
+        boolean convertToFieldersChoice = fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
+        EventType resultingType = convertToFieldersChoice
+                ? EventType.FIELDERS_CHOICE
+                : EventType.OUT;
+        
         OutLocation location = getOutLocation();
-        OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outs);
+        OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
         Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
-        if (advances.getNumberOfOuts() == 2) {
-            ++doublePlays;
-            //System.out.println("Double Play " + doublePlays);
-        }
-        if (advances.getNumberOfOuts() == 3) {
-            ++triplePlays;
-            //System.out.println("Triple Play!! " + triplePlays);
-        }
-        if (advances.didRunnerAdvanceSafely(Base.HOME)) {
-            ++fieldersChoices;
-            System.out.println("Fielder's Choice " + fieldersChoices);
-        }
-        if (location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME))) {
-            ++sacrificeFlies;
-            //System.out.println("Sacrifice Fly " + sacrificeFlies);
-        }
-        return new PlayOutcome(EventType.OUT, advances);
+//        if (convertToFieldersChoice) {
+//            ++fieldersChoices;
+//            System.out.println("Fielder's Choice " + fieldersChoices);
+//        }
+//        if (resultingType == EventType.OUT && location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME)) {
+//            ++sacrificeFlies;
+//            //System.out.println("Sacrifice Fly " + sacrificeFlies);
+//        }
+        return new PlayOutcome(resultingType, advances);
     }
     
     private OutLocation getOutLocation() {

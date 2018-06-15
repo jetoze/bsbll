@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableList;
 import bsbll.game.HalfInning.Stats;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
@@ -38,7 +39,11 @@ public final class HalfInningTest {
     }
     
     private static GamePlayDriver gamePlayDriver(MatchupRunner mr) {
-        return new GamePlayDriver(mr, BaseHitAdvanceDistribution.defaultAdvances(), OutAdvanceDistribution.defaultAdvances());
+        return new GamePlayDriver(
+                mr, 
+                BaseHitAdvanceDistribution.defaultAdvances(), 
+                OutAdvanceDistribution.defaultAdvances(),
+                FieldersChoiceProbabilities.defaultValues());
     }
     
     @Test

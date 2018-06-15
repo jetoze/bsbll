@@ -30,11 +30,12 @@ public final class FieldersChoiceProbabilities {
      * <p>
      * TODO: More realistic would be to use one default probability for each base situation.
      */
-    private static final Probability DEFAULT_PROBABILITY = Probability.of(100, 2);
+    private static final Probability DEFAULT_PROBABILITY = Probability.of(2, 100);
     
     private static final FieldersChoiceProbabilities DEFAULT = new FieldersChoiceProbabilities(ImmutableMap.of());
     
     private final ImmutableMap<ImmutableSet<Base>, Probability> probabilities;
+    private final DieFactory dieFactory = DieFactory.random();
 
     /**
      * Creates a FieldersChoiceProbabilities instance based on the given
@@ -54,8 +55,25 @@ public final class FieldersChoiceProbabilities {
     }
 
     /**
-     * Tests an out with the given situation, to determine if it should be
-     * converted to a fielder's choice.
+     * Tests an out with the given situation to determine if it should be
+     * converted to a fielder's choice, using the internal (random) DieFactory.
+     * 
+     * @param situation
+     *            the bases that are currently occupied
+     * @return {@code true} if the out should be converted to a fielder's
+     *         choice, {@code false} if it should remain as a batter out event.
+     */
+    public boolean test(Set<Base> situation) {
+        if (situation.isEmpty()) {
+            return false;
+        }
+        Probability p = probabilities.getOrDefault(situation, DEFAULT_PROBABILITY);
+        return p.test(dieFactory);
+    }
+
+    /**
+     * Tests an out with the given situation to determine if it should be
+     * converted to a fielder's choice, using the given DieFactory
      * 
      * @param situation
      *            the bases that are currently occupied
@@ -66,6 +84,7 @@ public final class FieldersChoiceProbabilities {
      *         choice, {@code false} if it should remain as a batter out event.
      */
     public boolean test(Set<Base> situation, DieFactory dieFactory) {
+        requireNonNull(dieFactory);
         if (situation.isEmpty()) {
             return false;
         }
@@ -87,7 +106,7 @@ public final class FieldersChoiceProbabilities {
         private final ImmutableMap.Builder<ImmutableSet<Base>, Probability> data = ImmutableMap.builder();
         
         public Builder add(Set<Base> bases, int outs, int fcs) {
-            data.put(ImmutableSet.copyOf(bases), Probability.of(outs, fcs));
+            data.put(ImmutableSet.copyOf(bases), Probability.of(fcs, fcs + outs));
             return this;
         }
         

@@ -29,6 +29,8 @@ public abstract class FieldersChoiceProbabilitiesFactory {
 
     public abstract FieldersChoiceProbabilities createProbabilities();
     
+    // TODO: Implementation that reads from distributions that have been persisted to disk.
+
     /**
      * Returns a factory that creates
      * {@link FieldersChoiceProbabilities#defaultValues() default}
@@ -43,6 +45,7 @@ public abstract class FieldersChoiceProbabilitiesFactory {
      * retrosheet play-by-play data for the given year.
      */
     public static FieldersChoiceProbabilitiesFactory retrosheet(Year year) {
+        // TODO: Add option to pass in location of play-by-play files.
         requireNonNull(year);
         return new RetrosheetFactory(year);
     }
@@ -118,7 +121,5 @@ public abstract class FieldersChoiceProbabilitiesFactory {
                 return builder.build();
             }
         }
-        
     }
-
 }

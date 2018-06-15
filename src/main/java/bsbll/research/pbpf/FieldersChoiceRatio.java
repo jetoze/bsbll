@@ -71,7 +71,7 @@ public final class FieldersChoiceRatio extends GameHandler {
     }
 
     public static void main(String[] args) {
-        Year year = Year.of(1969);
+        Year year = Year.of(1925);
         File folder = PlayByPlayFileUtils.getFolder(year);
         FieldersChoiceRatio r = new FieldersChoiceRatio();
         r.parseAll(folder);

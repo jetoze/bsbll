@@ -23,6 +23,8 @@ import bsbll.game.event.DefaultGameEventDetector;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.BaseHitAdvanceDistributionFactory;
+import bsbll.game.params.FieldersChoiceProbabilities;
+import bsbll.game.params.FieldersChoiceProbabilitiesFactory;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
@@ -69,10 +71,14 @@ public final class AL1923 {
         OutAdvanceDistribution outAdvanceDistribution = OutAdvanceDistributionFactory
                 .retrosheet(Year.of(1925))
                 .createDistribution();
+        FieldersChoiceProbabilities fieldersChoiceProbabilities = FieldersChoiceProbabilitiesFactory
+                .retrosheet(Year.of(1925))
+                .createProbabilities();
         return new GamePlayDriver(
                 matchupRunner,
                 baseHitAdvanceDistribution,
-                outAdvanceDistribution);
+                outAdvanceDistribution,
+                fieldersChoiceProbabilities);
     }
     
     public Standings run() {
