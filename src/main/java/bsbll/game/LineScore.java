@@ -7,8 +7,6 @@ import java.util.List;
 
 import javax.annotation.concurrent.Immutable;
 
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.HalfInning.Stats;
@@ -120,7 +118,6 @@ public final class LineScore {
         }
         
         @Override
-        @Test
         public String toString() {
             return String.format("%4d%4d%4d", runs, hits, errors);
         }

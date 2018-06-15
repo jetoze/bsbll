@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.Test;
-
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
@@ -91,7 +89,6 @@ public final class Game {
     }
     
     @Override
-    @Test
     public String toString() {
         return String.format("%s vs %s", homeTeam.getName().getFullName(), visitingTeam.getName().getFullName());
     }

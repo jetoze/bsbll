@@ -14,8 +14,6 @@ import java.util.Objects;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
-import org.junit.Test;
-
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.BaseSituation;
@@ -83,7 +81,6 @@ public final class HalfInning {
     }
     
     @Override
-    @Test
     public String toString() {
         return inning.toString();
     }
