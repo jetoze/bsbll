@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.Test;
+
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
@@ -87,6 +89,12 @@ public final class Game {
         return new BoxScore(lineScore, homeLineup, visitingLineup, wp, lp, runsScored, 
                 playerStats, plays, GameEvents.of(events));
     }
+    
+    @Override
+    @Test
+    public String toString() {
+        return String.format("%s vs %s", homeTeam.getName().getFullName(), visitingTeam.getName().getFullName());
+    }
 
     
     private static class Innings {
@@ -148,5 +156,4 @@ public final class Game {
             return top.isEmpty() && bottom.isEmpty();
         }
     }
-    
 }
