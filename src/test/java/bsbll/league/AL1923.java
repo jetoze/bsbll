@@ -16,7 +16,7 @@ import bsbll.card.LahmanPlayerCardLookup;
 import bsbll.die.DieFactory;
 import bsbll.game.BoxScore;
 import bsbll.game.Game;
-import bsbll.game.GamePlayParams;
+import bsbll.game.GamePlayDriver;
 import bsbll.game.LineScore;
 import bsbll.game.OfficialScorer;
 import bsbll.game.event.DefaultGameEventDetector;
@@ -39,7 +39,7 @@ import tzeth.strings.Padding;
 
 public final class AL1923 {
     private final League league;
-    private final GamePlayParams gamePlayParams;
+    private final GamePlayDriver gamePlayDriver;
     private final Random random = new Random();
     
     public AL1923() {
@@ -52,11 +52,11 @@ public final class AL1923 {
                 buildBrowns(),
                 buildAthletics(),
                 buildWhiteSox());
-        gamePlayParams = createGamePlayParams();
+        gamePlayDriver = createGamePlayDriver();
         checkState(league.getNumberOfTeams() % 2 == 0);
     }
     
-    private static GamePlayParams createGamePlayParams() {
+    private static GamePlayDriver createGamePlayDriver() {
         Log5BasedMatchupRunner matchupRunner = new Log5BasedMatchupRunner(
                 new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
                 DieFactory.random());
@@ -64,7 +64,7 @@ public final class AL1923 {
         BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
                 .retrosheet(Year.of(1925))
                 .createDistribution();
-        return new GamePlayParams(
+        return new GamePlayDriver(
                 matchupRunner,
                 baseHitAdvanceDistribution);
     }
@@ -113,7 +113,7 @@ public final class AL1923 {
     
     private BoxScore runGame(Team home, Team visiting) {
         OfficialScorer officialScorer = new OfficialScorer(league.getPlayerStatLookup());
-        Game game = new Game(home, visiting, gamePlayParams, officialScorer);
+        Game game = new Game(home, visiting, gamePlayDriver, officialScorer);
         GameEventDetector eventDetector = new DefaultGameEventDetector(league.getPlayerStatLookup());
         game.setGameEventDetector(eventDetector);
         BoxScore boxScore = game.run();

@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
+import bsbll.game.play.EventType;
+import bsbll.game.play.PlayOutcome;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.stats.BattingStat.PrimitiveBattingStat;
 
@@ -85,21 +87,21 @@ public final class BattingStatLine extends StatLine<PrimitiveBattingStat, Battin
             return this;
         }
         
-        public Builder add(Outcome o, int rbis) {
-            requireNonNull(o);
+        public Builder add(PlayOutcome o, int rbis) {
             checkNotNegative(rbis);
+            EventType t = o.getType();
             return set(PLATE_APPEARANCES, get(PLATE_APPEARANCES) + 1)
-                    .set(HITS, get(HITS) + (o.isHit() ? 1 : 0))
-                    .set(DOUBLES, get(DOUBLES) + (o == Outcome.DOUBLE ? 1 : 0))
-                    .set(TRIPLES, get(TRIPLES) + (o == Outcome.TRIPLE ? 1 : 0))
-                    .set(HOMERUNS, get(HOMERUNS) + (o == Outcome.HOMERUN ? 1 : 0))
-                    .set(RUNS, get(RUNS) + (o == Outcome.HOMERUN ? 1 : 0))
+                    .set(HITS, get(HITS) + (t.isHit() ? 1 : 0))
+                    .set(DOUBLES, get(DOUBLES) + (t == EventType.DOUBLE ? 1 : 0))
+                    .set(TRIPLES, get(TRIPLES) + (t == EventType.TRIPLE ? 1 : 0))
+                    .set(HOMERUNS, get(HOMERUNS) + (t == EventType.HOMERUN ? 1 : 0))
+                    .set(RUNS, get(RUNS) + (t == EventType.HOMERUN ? 1 : 0))
                     .set(RUNS_BATTED_IN, get(RUNS_BATTED_IN) + rbis)
-                    .set(WALKS, get(WALKS) + (o == Outcome.WALK ? 1 : 0))
-                    .set(STRIKEOUTS, get(STRIKEOUTS) + (o == Outcome.STRIKEOUT ? 1 : 0))
-                    .set(HIT_BY_PITCHES, get(HIT_BY_PITCHES) + (o == Outcome.HIT_BY_PITCH ? 1 : 0));
+                    .set(WALKS, get(WALKS) + (t == EventType.WALK ? 1 : 0))
+                    .set(STRIKEOUTS, get(STRIKEOUTS) + (t == EventType.STRIKEOUT ? 1 : 0))
+                    .set(HIT_BY_PITCHES, get(HIT_BY_PITCHES) + (t == EventType.HIT_BY_PITCH ? 1 : 0));
         }
-        
+
         private int get(PrimitiveBattingStat stat) {
             return values.getOrDefault(stat, 0);
         }

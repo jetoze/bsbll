@@ -13,7 +13,7 @@ import com.google.common.collect.Table;
 
 import bsbll.bases.BaseSituation;
 import bsbll.game.Inning;
-import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
@@ -32,7 +32,7 @@ public final class DefaultGameEventDetector implements GameEventDetector {
     }
 
     @Override
-    public Optional<GameEvent> examine(Outcome outcome, 
+    public Optional<GameEvent> examine(PlayOutcome outcome, 
                                        Inning inning,
                                        Player batter, 
                                        Player pitcher, 
@@ -49,13 +49,13 @@ public final class DefaultGameEventDetector implements GameEventDetector {
     }
     
     @Nullable
-    private GameEvent examineImpl(Outcome outcome, 
+    private GameEvent examineImpl(PlayOutcome outcome, 
                                   Inning inning,
                                   Player batter, 
                                   Player pitcher, 
                                   int outs, 
                                   BaseSituation baseSituation) {
-        switch (outcome) {
+        switch (outcome.getType()) {
         case DOUBLE:
             int seasonTotal2B = updateSeasonTotal(batter, BattingStat.DOUBLES, totalsLookup::getBattingStat);
             return new DoubleEvent(inning, batter, pitcher, seasonTotal2B);

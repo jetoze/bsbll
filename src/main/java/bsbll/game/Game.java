@@ -23,7 +23,7 @@ public final class Game {
     private final Team visitingTeam;
     private final Lineup visitingLineup;
     
-    private final GamePlayParams gamePlayParams;
+    private final GamePlayDriver driver;
     
     private final OfficialScorer officialScorer;
 
@@ -32,11 +32,11 @@ public final class Game {
     // The event detector is not integral to playing a game, so it is optional.
     private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
 
-    public Game(Team homeTeam, Team visitingTeam, GamePlayParams gamePlayParams, OfficialScorer officialScorer) {
+    public Game(Team homeTeam, Team visitingTeam, GamePlayDriver driver, OfficialScorer officialScorer) {
         requireNonNull(homeTeam);
         requireNonNull(visitingTeam);
         checkArgument(homeTeam != visitingTeam, "A team cannot play a game against itself (%s)", homeTeam);
-        this.gamePlayParams = requireNonNull(gamePlayParams);
+        this.driver = requireNonNull(driver);
         this.officialScorer = requireNonNull(officialScorer);
         this.homeTeam = homeTeam;
         this.homeLineup = homeTeam.getRoster().getLineup();
@@ -62,7 +62,7 @@ public final class Game {
                     innings.current(),
                     batting.getBattingOrder(),
                     fielding.getPitcher(),
-                    gamePlayParams,
+                    driver,
                     playerStats,
                     eventDetector,
                     innings.runsNeededToWalkOf().orElse(0));

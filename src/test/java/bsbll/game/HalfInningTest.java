@@ -29,15 +29,15 @@ public final class HalfInningTest {
     public void threeUpThreeDown() {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.OUT, Outcome.STRIKEOUT, Outcome.OUT);
         HalfInning halfInning = new HalfInning(Inning.startOfGame(), battingOrder, pitcher, 
-                gamePlayParams(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, 0);
+                gamePlayDriver(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, 0);
         
         Stats stats = halfInning.run().getStats();
         
         assertEquals(new Stats(0, 0, 0, 3, 0), stats);
     }
     
-    private static GamePlayParams gamePlayParams(MatchupRunner mr) {
-        return new GamePlayParams(mr, BaseHitAdvanceDistribution.defaultAdvances());
+    private static GamePlayDriver gamePlayDriver(MatchupRunner mr) {
+        return new GamePlayDriver(mr, BaseHitAdvanceDistribution.defaultAdvances());
     }
     
     @Test
@@ -45,7 +45,7 @@ public final class HalfInningTest {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.WALK, 
                 Outcome.STRIKEOUT, Outcome.HOMERUN, Outcome.DOUBLE, Outcome.OUT, Outcome.OUT);
         HalfInning halfInning = new HalfInning(Inning.startOfGame(), battingOrder, pitcher, 
-                gamePlayParams(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, 0);
+                gamePlayDriver(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, 0);
         
         Stats stats = halfInning.run().getStats();
         
@@ -57,7 +57,7 @@ public final class HalfInningTest {
         MatchupRunner mr = new StaticMatchupRunner(Outcome.SINGLE, Outcome.SINGLE, Outcome.WALK, Outcome.WALK);
         int runsNeededToWin = 1;
         HalfInning halfInning = new HalfInning(Inning.startOfGame(), battingOrder, pitcher, 
-                gamePlayParams(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, runsNeededToWin);
+                gamePlayDriver(mr), new PlayerGameStats(), GameEventDetector.NO_EVENTS, runsNeededToWin);
         
         Stats stats = halfInning.run().getStats();
         

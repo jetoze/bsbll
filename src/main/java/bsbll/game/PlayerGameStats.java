@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
-import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
@@ -19,13 +19,13 @@ public final class PlayerGameStats {
     private final Map<PlayerId, BattingStatLine.Builder> battingStats = new HashMap<>();
     private final Map<PlayerId, PitchingStatLine.Builder> pitchingStats = new HashMap<>();
     
-    public void update(Player batter, Player pitcher, Outcome outcome, List<Player> runs) {
+    public void update(Player batter, Player pitcher, PlayOutcome outcome, List<Player> runs) {
         updateBatterStats(batter, outcome, runs.size());
         updateStatsForRunnersThatScored(batter, runs);
         updatePitchingStats(pitcher, outcome, runs.size());
     }
     
-    private void updateBatterStats(Player batter, Outcome outcome, int rbis) {
+    private void updateBatterStats(Player batter, PlayOutcome outcome, int rbis) {
         BattingStatLine.Builder line = battingStats(batter);
         line.add(outcome, rbis);
     }
@@ -41,7 +41,7 @@ public final class PlayerGameStats {
         return battingStats.computeIfAbsent(player.getId(), id -> BattingStatLine.forNewGame());
     }
     
-    private void updatePitchingStats(Player pitcher, Outcome outcome, int numberOfRuns) {
+    private void updatePitchingStats(Player pitcher, PlayOutcome outcome, int numberOfRuns) {
         PitchingStatLine.Builder line = pitchingStats(pitcher);
         line.add(outcome, numberOfRuns);
     }

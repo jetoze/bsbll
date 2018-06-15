@@ -116,11 +116,12 @@ public final class GamePlayDriver {
             // TODO: Simulate errors
             return new PlayOutcome(EventType.OUT, Advances.empty());
         default:
-            throw new RuntimeException("TODO: Implement me");
+            throw new AssertionError("Unexpected outcome: " + basicOutcome);
         }
     }
     
     private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation) {
+        // TODO: Factor in the possibility of errors.
         if (baseHit == BaseHit.HOMERUN) {
             return homerun(baseSituation);
         } else {
