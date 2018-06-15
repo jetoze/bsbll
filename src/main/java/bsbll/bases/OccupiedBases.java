@@ -6,28 +6,19 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import javax.annotation.concurrent.Immutable;
-
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 
-@Immutable
-public final class OccupiedBases implements Iterable<Base> {
-    // TODO: Should this class be an enum?
-    
-    private static final OccupiedBases NONE = new OccupiedBases(ImmutableSet.of());
-    private static final OccupiedBases FIRST = new OccupiedBases(ImmutableSet.of(Base.FIRST));
-    private static final OccupiedBases SECOND = new OccupiedBases(ImmutableSet.of(Base.SECOND));
-    private static final OccupiedBases THIRD = new OccupiedBases(ImmutableSet.of(Base.THIRD));
-    private static final OccupiedBases FIRST_AND_SECOND = new OccupiedBases(ImmutableSet.of(Base.FIRST, Base.SECOND));
-    private static final OccupiedBases FIRST_AND_THIRD = new OccupiedBases(ImmutableSet.of(Base.FIRST, Base.THIRD));
-    private static final OccupiedBases SECOND_AND_THIRD = new OccupiedBases(ImmutableSet.of(Base.SECOND, Base.THIRD));
-    private static final OccupiedBases LOADED = new OccupiedBases(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
-    
-    private static final ImmutableList<OccupiedBases> ALL = ImmutableList.of(
-            NONE, FIRST, SECOND, THIRD, FIRST_AND_SECOND, FIRST_AND_THIRD, SECOND_AND_THIRD, LOADED);
+public enum OccupiedBases implements Iterable<Base> {
+    NONE(ImmutableSet.of()),
+    FIRST(ImmutableSet.of(Base.FIRST)),
+    SECOND(ImmutableSet.of(Base.SECOND)),
+    THIRD(ImmutableSet.of(Base.THIRD)),
+    FIRST_AND_SECOND(ImmutableSet.of(Base.FIRST, Base.SECOND)),
+    FIRST_AND_THIRD(ImmutableSet.of(Base.FIRST, Base.THIRD)),
+    SECOND_AND_THIRD(ImmutableSet.of(Base.SECOND, Base.THIRD)),
+    LOADED(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
     
     private static final ImmutableMap<Base, OccupiedBases> singleOccupancyInstances = ImmutableMap.of(
             Base.FIRST, FIRST,
@@ -67,26 +58,6 @@ public final class OccupiedBases implements Iterable<Base> {
 
     public Stream<Base> stream() {
         return bases.stream();
-    }
-    
-    public static ImmutableList<OccupiedBases> values() {
-        return ALL;
-    }
-    
-    @Override
-    public int hashCode() {
-        return bases.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj instanceof OccupiedBases) {
-            return this.bases.equals(((OccupiedBases) obj).bases);
-        }
-        return false;
     }
 
     @Override
