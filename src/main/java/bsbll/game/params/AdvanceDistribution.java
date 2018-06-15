@@ -90,7 +90,7 @@ public abstract class AdvanceDistribution<E> {
 
     private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {
         int total = possibilities.size();
-        int roll = dieFactory.newDie(total).roll();
+        int roll = dieFactory.getDie(total).roll();
         int sum = 0;
         for (Multiset.Entry<Advances> e : possibilities.entrySet()) {
             sum += e.getCount();

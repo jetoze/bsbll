@@ -48,7 +48,7 @@ public final class ErrorCountDistribution {
             return 0;
         }
         int total = values.size();
-        int roll = dieFactory.newDie(total).roll();
+        int roll = dieFactory.getDie(total).roll();
         int sum = 0;
         for (Multiset.Entry<Integer> e : values.entrySet()) {
             sum += e.getCount();

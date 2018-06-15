@@ -57,7 +57,7 @@ public final class Probability implements Comparable<Probability> {
     }
 
     public boolean test(DieFactory dieFactory) {
-        Die die = dieFactory.newDie(DENOMINATOR);
+        Die die = dieFactory.getDie(DENOMINATOR);
         int roll = die.roll();
         return roll <= this.value;
     }

@@ -2,6 +2,8 @@ package bsbll.die;
 
 /**
  * Represents a die with some number of sides.
+ * <p>
+ * Implementations must be thread safe.
  */
 @FunctionalInterface
 public interface Die {

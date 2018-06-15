@@ -1,22 +1,21 @@
 package bsbll.die;
 
-import java.util.Random;
-
 @FunctionalInterface
 public interface DieFactory {
 
-    Die newDie(int sides);
- 
-    // TODO: Use caching, so that the same die is returned in each request
-    //       with the same number of sides. 
-    //       --> Consider using ThreadLocalRandom.
+    /**
+     * Gets a die with the given number of sides.
+     * <p>
+     * When calling this method several times with the same number of sides, the same Die instance
+     * can be returned in each call.
+     */
+    Die getDie(int sides);
     
     public static DieFactory random() {
-        return sides -> new RandomDie(sides, new Random());
+        return new RandomDieFactory();
     }
     
     public static DieFactory random(long seed) {
-        return sides -> new RandomDie(sides, new Random(seed));
+        return new RandomDieFactory(seed);
     }
-    
 }
