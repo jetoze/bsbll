@@ -1,5 +1,7 @@
 package bsbll.bases;
 
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
+
 import java.util.Comparator;
 
 public enum Base {
@@ -56,9 +58,15 @@ public enum Base {
     }
     
     public Advance defaultAdvance(BaseHit baseHit) {
+        return advance(baseHit.value());
+    }
+    
+    public Advance advance(int numBases) {
+        checkNotNegative(numBases);
+        int max = Math.min(numBases, 4);
         int o = (this == HOME) 
-                ? baseHit.value() - 1
-                : Math.min(ordinal() + baseHit.value(), 3);
+                ? max - 1
+                : Math.min(ordinal() + max, 3);
         Base to = values()[o];
         return Advance.safe(this, to);
     }

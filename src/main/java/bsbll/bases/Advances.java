@@ -95,11 +95,15 @@ public final class Advances implements Iterable<Advance> {
      * Creates an {@code Advances} instance from a previous base situation, with all runners
      * (but not the batter) advancing one base, for example on a balk call.
      */
-    public static Advances runnersAdvancesOneBase(OccupiedBases occupiedBases) {
+    public static Advances runnersAdvanceOneBase(OccupiedBases occupiedBases) {
+        return advanceAllRunners(occupiedBases, 1);
+    }
+    
+    public static Advances advanceAllRunners(OccupiedBases occupiedBases, int numBases) {
         if (occupiedBases.isEmpty()) {
             return EMPTY;
         } else {
-            return create(occupiedBases.stream(), f -> Advance.safe(f, f.next()));
+            return create(occupiedBases.stream(), f -> f.advance(numBases));
         }
     }
     

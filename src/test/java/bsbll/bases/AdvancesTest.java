@@ -224,14 +224,14 @@ public final class AdvancesTest {
 
     @Test
     public void balkWithNoBodyOnBase() { // ...so to speak
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.NONE);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.NONE);
         
         assertTrue(actual.isEmpty());
     }
     
     @Test
     public void balkWithRunnerOnFirst() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.FIRST);
         
         Advances expected = Advances.of(Advance.safe(Base.FIRST, Base.SECOND));
         assertEquals(expected, actual);
@@ -239,7 +239,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnSecond() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.SECOND);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.SECOND);
         
         Advances expected = Advances.of(Advance.safe(Base.SECOND, Base.THIRD));
         assertEquals(expected, actual);
@@ -247,7 +247,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.THIRD);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.THIRD);
         
         Advances expected = Advances.of(Advance.safe(Base.THIRD, Base.HOME));
         assertEquals(expected, actual);
@@ -255,7 +255,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnFirstAndSecond() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST_AND_SECOND);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.FIRST_AND_SECOND);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
@@ -265,7 +265,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnFirstAndThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST_AND_THIRD);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.FIRST_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
@@ -275,7 +275,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnSecondAndThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.SECOND_AND_THIRD);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.SECOND_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.SECOND, Base.THIRD),
@@ -285,7 +285,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithBasesLoaded() {
-        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.LOADED);
+        Advances actual = Advances.runnersAdvanceOneBase(OccupiedBases.LOADED);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
