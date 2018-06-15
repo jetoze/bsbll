@@ -3,14 +3,11 @@ package bsbll.bases;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
@@ -78,15 +75,6 @@ public final class BaseSituation {
                 : EnumSet.copyOf(this.bases.keySet());
     }
     
-    public boolean isEmpty(Base base) {
-        return !isOccupied(base);
-    }
-    
-    public Player getRunner(Base base) {
-        checkArgument(isOccupied(base));
-        return this.bases.get(base);
-    }
-    
     public ResultOfAdvance advanceRunners(Player batter, Advances advances) {
         BaseSituation newSituation = createNewSituation(batter, advances);
         ImmutableList<Player> runs = advances.getRunnersThatScored()
@@ -117,34 +105,6 @@ public final class BaseSituation {
         return new BaseSituation(newSituation);
     }
 
-    public ResultOfAdvance batterAwardedFirstBase(Player batter) {
-        // TODO: Can we use Advances.batterAwardedFirstBase here?
-        // TODO: Is this method going to be needed in the first place?
-        List<Base> forcedToAdvance = new ArrayList<>();
-        if (isOccupied(Base.FIRST)) {
-            forcedToAdvance.add(Base.FIRST);
-            if (isOccupied(Base.SECOND)) {
-                forcedToAdvance.add(Base.SECOND);
-                if (isOccupied(Base.THIRD)) {
-                    forcedToAdvance.add(Base.THIRD);
-                }
-            }
-        }
-        Map<Base, Player> newSituation = new HashMap<>(this.bases);
-        List<Player> runs = new ArrayList<>();
-        Collections.reverse(forcedToAdvance);
-        for (Base base : forcedToAdvance) {
-            Player p = newSituation.remove(base);
-            if (base == Base.THIRD) {
-                runs.add(p);
-            } else {
-                newSituation.put(base.next(), p);
-            }
-        }
-        newSituation.put(Base.FIRST, batter);
-        return new ResultOfAdvance(newSituation, runs);
-    }
-
     private Player getPlayerOnBase(Player batter, Base base) {
         if (base == Base.HOME) {
             return batter;
@@ -154,13 +114,6 @@ public final class BaseSituation {
         } else {
             throw new InvalidBaseSitutationException("No runner on base " + base);
         }
-    }
-    
-    public List<Player> getScoringPlayers(Player batter, Map<Base, Base> advances) {
-        return advances.entrySet().stream()
-                .filter(e -> e.getValue().isHome())
-                .map(e -> getPlayerOnBase(batter, e.getKey()))
-                .collect(Collectors.toList());
     }
     
     public Map<Base, Player> toMap() {

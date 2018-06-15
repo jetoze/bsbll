@@ -48,55 +48,6 @@ public final class BaseSituationTest {
     }
     
     @Test
-    public void basesLoadedWalkScoresRunnerOnThird() {
-        BaseSituation before = basesLoaded();
-        
-        ImmutableList<Player> runs = before.batterAwardedFirstBase(BATTER).getRunnersThatScored();
-        
-        assertEquals(ImmutableList.of(RUNNER_C), runs);
-    }
-    
-    @Test
-    public void basesLoadedWalkKeepsBasesLoaded() {
-        BaseSituation before = basesLoaded();
-        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
-        
-        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
-    }
-    
-    @Test
-    public void walkWithRunnerOnFirst() {
-        BaseSituation before = new BaseSituation(RUNNER_A, null, null);
-        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
-        
-        assertEquals(new BaseSituation(BATTER, RUNNER_A, null), after);
-    }
-    
-    @Test
-    public void walkWithRunnerOnFirstAndSecond() {
-        BaseSituation before = new BaseSituation(RUNNER_A, RUNNER_B, null);
-        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
-        
-        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
-    }
-    
-    @Test
-    public void walkWithRunnerOnFirstAndThird() {
-        BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
-        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
-        
-        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
-    }
-    
-    @Test
-    public void walkWithRunnerOnSecondAndThird() {
-        BaseSituation before = new BaseSituation(null, RUNNER_A, RUNNER_B);
-        BaseSituation after = before.batterAwardedFirstBase(BATTER).getNewSituation();
-        
-        assertEquals(new BaseSituation(BATTER, RUNNER_A, RUNNER_B), after);
-    }
-    
-    @Test
     public void singleWithRunnersOnFirstAndThirdScoresRunnerOnThird() {
         BaseSituation before = new BaseSituation(RUNNER_A, null, RUNNER_B);
         Advances advances = Advances.of(
