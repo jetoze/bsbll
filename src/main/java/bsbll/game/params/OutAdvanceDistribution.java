@@ -36,8 +36,10 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvance
     protected Advances defaultAdvance(OutAdvanceKey key, BaseSituation baseSituation) {
         switch (key.getLocation()) {
         case INFIELD:
+            // TODO: This should be an option
             // Move everyone up one base
-            return Advances.runnersAdvancesOneBase(baseSituation.getOccupiedBases());
+            //return Advances.runnersAdvancesOneBase(baseSituation.getOccupiedBases());
+            return Advances.empty();
         case OUTFIELD:
             // Let everyone stay put
             return Advances.empty();
