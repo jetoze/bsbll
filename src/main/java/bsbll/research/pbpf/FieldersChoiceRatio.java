@@ -2,6 +2,7 @@ package bsbll.research.pbpf;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.google.common.collect.HashMultiset;
@@ -28,10 +29,12 @@ public final class FieldersChoiceRatio extends GameHandler {
     public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
             ImmutableList<PlayOutcome> plays) {
         BaseSituation bases = BaseSituation.empty();
+        Iterator<EventField> itF = fields.iterator();
         for (PlayOutcome p : plays) {
+            EventField field = itF.next();
             if (!bases.isEmpty()) {
                 EnumSet<Base> occupied = bases.getOccupiedBases();
-                if (p.getType() == EventType.OUT) {
+                if (isInfieldOut(p, field)) {
                     outsWithRunnersOnBase.add(occupied);
                 } else if (p.getType() == EventType.FIELDERS_CHOICE) {
                     fieldersChoices.add(occupied);
@@ -39,6 +42,10 @@ public final class FieldersChoiceRatio extends GameHandler {
             }
             bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
         }
+    }
+
+    private boolean isInfieldOut(PlayOutcome p, EventField field) {
+        return p.getType() == EventType.OUT && !field.isOutfieldOut();
     }
 
     /**
@@ -54,11 +61,11 @@ public final class FieldersChoiceRatio extends GameHandler {
     private void report(Year year) {
         int outCount = outsWithRunnersOnBase.size();
         int fcCount = fieldersChoices.size();
-        System.out.println("Fielder's Choices Compared to Outs with Runners on Base for the Year " + year);
+        System.out.println("Fielder's Choices Compared to Infield Outs with Runners on Base for the Year " + year);
         System.out.println();
         System.out.println("TOTALS:");
         System.out.println("Fielders Choices: " + fcCount);
-        System.out.println("Outs with Runners on Base: " + outCount);
+        System.out.println("Infield Outs with Runners on Base: " + outCount);
         System.out.println(String.format("FC / (FC + Outs): %.3f", 
                 (1.0 * fcCount) / (fcCount + outCount)));
         System.out.println();
@@ -66,7 +73,7 @@ public final class FieldersChoiceRatio extends GameHandler {
             System.out.println(p);
             int o = outsWithRunnersOnBase.count(p);
             int f = fieldersChoices.count(p);
-            System.out.println(String.format("  Outs: %d, FCs: %d, %%: %.3f", o, f, (1.0 * f) / o));
+            System.out.println(String.format("  Outs: %d, FCs: %d, %%: %.3f", o, f, (1.0 * f) / (f + o)));
         }
     }
 

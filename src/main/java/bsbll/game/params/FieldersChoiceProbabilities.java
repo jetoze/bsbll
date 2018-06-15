@@ -14,7 +14,7 @@ import bsbll.card.Probability;
 import bsbll.die.DieFactory;
 
 /**
- * Provides the probabilities that a batting out event with a given base
+ * Provides the probabilities that an infield out event with a given base
  * situation results in a fielder's choice,
  * <p>
  * The current implementation is static in the sense that it doesn't take into
@@ -61,7 +61,8 @@ public final class FieldersChoiceProbabilities {
      * @param situation
      *            the bases that are currently occupied
      * @return {@code true} if the out should be converted to a fielder's
-     *         choice, {@code false} if it should remain as a batter out event.
+     *         choice, {@code false} if it should remain as a batter out event. Always returns
+     *         {@code true} if the bases are empty.
      */
     public boolean test(Set<Base> situation) {
         if (situation.isEmpty()) {
@@ -81,7 +82,8 @@ public final class FieldersChoiceProbabilities {
      *            the DieFactory that will be asked to produce the die to use in
      *            the test.
      * @return {@code true} if the out should be converted to a fielder's
-     *         choice, {@code false} if it should remain as a batter out event.
+     *         choice, {@code false} if it should remain as a batter out event. Always returns
+     *         {@code true} if the bases are empty.
      */
     public boolean test(Set<Base> situation, DieFactory dieFactory) {
         requireNonNull(dieFactory);

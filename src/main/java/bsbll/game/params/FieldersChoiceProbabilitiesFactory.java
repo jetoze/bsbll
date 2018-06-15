@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.google.common.collect.HashMultiset;
@@ -86,17 +87,27 @@ public abstract class FieldersChoiceProbabilitiesFactory {
             public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
                     ImmutableList<PlayOutcome> plays) {
                 BaseSituation bases = BaseSituation.empty();
+                Iterator<EventField> itF = fields.iterator();
                 for (PlayOutcome p : plays) {
+                    EventField field = itF.next();
                     if (!bases.isEmpty()) {
-                        EnumSet<Base> occupied = bases.getOccupiedBases();
-                        if (p.getType() == EventType.OUT) {
-                            outsWithRunnersOnBase.add(occupied);
-                        } else if (p.getType() == EventType.FIELDERS_CHOICE) {
-                            fieldersChoices.add(occupied);
-                        }
+                        evaluate(p, field, bases);
                     }
                     bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
                 }
+            }
+
+            private void evaluate(PlayOutcome play, EventField field, BaseSituation bases) {
+                EnumSet<Base> occupied = bases.getOccupiedBases();
+                if (isInfieldOut(play, field)) {
+                    outsWithRunnersOnBase.add(occupied);
+                } else if (play.getType() == EventType.FIELDERS_CHOICE) {
+                    fieldersChoices.add(occupied);
+                }
+            }
+
+            private boolean isInfieldOut(PlayOutcome p, EventField field) {
+                return p.getType() == EventType.OUT && !field.isOutfieldOut();
             }
 
             /**

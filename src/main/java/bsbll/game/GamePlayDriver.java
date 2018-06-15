@@ -162,12 +162,13 @@ public final class GamePlayDriver {
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
         // TODO: Simulate errors.
-        boolean convertToFieldersChoice = fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
+        OutLocation location = getOutLocation();
+        boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
+                fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
         EventType resultingType = convertToFieldersChoice
                 ? EventType.FIELDERS_CHOICE
                 : EventType.OUT;
-        
-        OutLocation location = getOutLocation();
+
         OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
         Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
 //        if (convertToFieldersChoice) {
