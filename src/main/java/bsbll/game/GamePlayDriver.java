@@ -4,7 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.bases.Advance;
 import bsbll.bases.Advances;
+import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
@@ -152,11 +154,31 @@ public final class GamePlayDriver {
         return new PlayOutcome(type, advances);
     }
 
+    private int doublePlays;
+    private int triplePlays;
+    private int fieldersChoices;
+    private int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
         // TODO: Simulate errors.
         OutLocation location = getOutLocation();
         OutAdvanceKey key = OutAdvanceKey.of(location, outs);
         Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
+        if (advances.getNumberOfOuts() == 2) {
+            ++doublePlays;
+            //System.out.println("Double Play " + doublePlays);
+        }
+        if (advances.getNumberOfOuts() == 3) {
+            ++triplePlays;
+            //System.out.println("Triple Play!! " + triplePlays);
+        }
+        if (advances.didRunnerAdvanceSafely(Base.HOME)) {
+            ++fieldersChoices;
+            System.out.println("Fielder's Choice " + fieldersChoices);
+        }
+        if (location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME))) {
+            ++sacrificeFlies;
+            //System.out.println("Sacrifice Fly " + sacrificeFlies);
+        }
         return new PlayOutcome(EventType.OUT, advances);
     }
     

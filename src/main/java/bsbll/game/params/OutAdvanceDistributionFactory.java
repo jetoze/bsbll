@@ -8,7 +8,6 @@ import java.util.Iterator;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
-import bsbll.bases.Advances;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
@@ -85,12 +84,17 @@ public abstract class OutAdvanceDistributionFactory {
                 for (PlayOutcome play : plays) {
                     EventField field = itF.next();
                     Player batter = nextBatter();
-                    if (play.getType() == EventType.OUT && play.getNumberOfErrors() == 0) {
-                        update(field, baseSituation, play.getAdvances(), outs);
+                    if (isOfInterest(play)) {
+                        update(play, field, baseSituation, outs);
                     }
                     baseSituation = play.applyTo(batter, baseSituation);
                     outs += play.getNumberOfOuts();
                 }
+            }
+
+            public boolean isOfInterest(PlayOutcome play) {
+                return (play.getType() == EventType.OUT || play.getType() == EventType.FIELDERS_CHOICE)
+                        && play.getNumberOfErrors() == 0;
             }
             
             /**
@@ -103,13 +107,19 @@ public abstract class OutAdvanceDistributionFactory {
                 return new Player(Integer.toString(playerId), "John Doe");
             }
 
-            private void update(EventField field, BaseSituation situation, Advances advances, int outs) {
-                OutLocation location = getLocation(field);
+            private void update(PlayOutcome play, EventField field, BaseSituation situation, int outs) {
+                OutLocation location = getLocation(play, field);
                 OutAdvanceKey key = OutAdvanceKey.of(location, outs);
-                builder.add(key, situation, advances);
+                builder.add(key, situation, play.getAdvances());
             }
 
-            private static OutLocation getLocation(EventField field) {
+            private static OutLocation getLocation(PlayOutcome play, EventField field) {
+                if (play.getType() == EventType.FIELDERS_CHOICE) {
+                    // Perhaps not technically correct, but the retrosheet play-by-play files only
+                    // contain a handful of FC7, FC8, FC9 events, and some of those could very well
+                    // be plays made in the infield for all I know.
+                    return OutLocation.INFIELD;
+                }
                 return field.isOutfieldOut()
                         ? OutLocation.OUTFIELD
                         : OutLocation.INFIELD;
