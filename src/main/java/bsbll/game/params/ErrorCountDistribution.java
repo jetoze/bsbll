@@ -21,12 +21,18 @@ import bsbll.game.play.EventType;
  */
 @Immutable
 public final class ErrorCountDistribution {
+    private static final ErrorCountDistribution NO_ERRORS = new ErrorCountDistribution(ImmutableTable.of());
+    
     // TODO: Should the number of outs be included as well?
     private final ImmutableTable<EventType, OccupiedBases, ImmutableMultiset<Integer>> data;
     private final DieFactory dieFactory = DieFactory.random();
     
     public ErrorCountDistribution(ImmutableTable<EventType, OccupiedBases, ImmutableMultiset<Integer>> data) {
         this.data = requireNonNull(data);
+    }
+    
+    public static ErrorCountDistribution noErrors() {
+        return NO_ERRORS;
     }
 
     public int getNumberOfErrors(EventType type, OccupiedBases baseSituation) {
@@ -52,6 +58,10 @@ public final class ErrorCountDistribution {
         }
         // We should never get here. But in case we do...
         return 0;
+    }
+    
+    public static Builder builder() {
+        return new Builder();
     }
     
     
