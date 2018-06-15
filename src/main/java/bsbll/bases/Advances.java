@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -47,7 +48,15 @@ public final class Advances implements Iterable<Advance> {
     public static Advances of(Advance... individualAdvances) {
         return new Advances(Arrays.asList(individualAdvances));
     }
-    
+
+    public Advances(Collection<Advance> individualAdvances) {
+        checkLegal(individualAdvances);
+        Map<Base, Advance> map = individualAdvances.stream()
+                .collect(Collectors.toMap(Advance::from, a -> a));
+        Comparator<Base> order = Base.comparingOrigin();
+        this.advances = ImmutableSortedMap.<Base, Advance>orderedBy(order).putAll(map).build();
+    }
+
     public static Advances empty() {
         return EMPTY;
     }
@@ -81,17 +90,26 @@ public final class Advances implements Iterable<Advance> {
         checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
         EnumSet<Base> from = EnumSet.of(Base.HOME);
         from.addAll(occupiedBases);
-        return new Advances(from.stream()
-                .map(f -> Advance.safe(f, Base.HOME))
-                .collect(Collectors.toList()));
+        return create(from, f -> Advance.safe(f, Base.HOME));
     }
     
-    public Advances(Collection<Advance> individualAdvances) {
-        checkLegal(individualAdvances);
-        Map<Base, Advance> map = individualAdvances.stream()
-                .collect(Collectors.toMap(Advance::from, a -> a));
-        Comparator<Base> order = Base.comparingOrigin();
-        this.advances = ImmutableSortedMap.<Base, Advance>orderedBy(order).putAll(map).build();
+    /**
+     * Creates an {@code Advances} instance from a previous base situation, with all runners
+     * (but not the batter) advancing one base, for example on a balk call.
+     */
+    public static Advances runnersAdvancesOneBase(Set<Base> occupiedBases) {
+        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+        if (occupiedBases.isEmpty()) {
+            return EMPTY;
+        } else {
+            return create(occupiedBases, f -> Advance.safe(f, f.next()));
+        }
+    }
+    
+    private static Advances create(Set<Base> from, Function<Base, Advance> f) {
+        return new Advances(from.stream()
+                .map(f)
+                .collect(Collectors.toList()));
     }
     
     private static void checkLegal(Collection<Advance> advances) {
@@ -131,6 +149,10 @@ public final class Advances implements Iterable<Advance> {
     
     public int getNumberOfOuts() {
         return count(Advance::isOut);
+    }
+    
+    public boolean isEmpty() {
+        return this.advances.isEmpty();
     }
     
     public boolean isBatterIncluded() {

@@ -83,6 +83,13 @@ public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pl
                 : pickOneFromSet(dieFactory, possibilities);
     }
     
+    /**
+     * Called for a combination of key and base situation that is not known by
+     * this distribution. This can be used in testing purposes, when spinning up
+     * simple environments that are not based on real data, or to handle rare
+     * corner cases that were not covered by the data (e.g. play-by-play files)
+     * from which a distribution is built.
+     */
     protected abstract Advances defaultAdvance(E key, BaseSituation baseSituation);
     
     private Multiset<Advances> getPossibilities(E key, BaseSituation baseSituation, int numberOfOuts) {

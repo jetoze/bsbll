@@ -1,6 +1,7 @@
 package bsbll.bases;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -223,6 +224,77 @@ public final class AdvancesTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void balkWithNoBodyOnBase() { // ...so to speak
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of());
+        
+        assertTrue(actual.isEmpty());
+    }
+    
+    @Test
+    public void balkWithRunnerOnFirst() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST));
+        
+        Advances expected = Advances.of(Advance.safe(Base.FIRST, Base.SECOND));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithRunnerOnSecond() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.SECOND));
+        
+        Advances expected = Advances.of(Advance.safe(Base.SECOND, Base.THIRD));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithRunnerOnThird() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.THIRD));
+        
+        Advances expected = Advances.of(Advance.safe(Base.THIRD, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithRunnerOnFirstAndSecond() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.FIRST, Base.SECOND),
+                Advance.safe(Base.SECOND, Base.THIRD));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithRunnerOnFirstAndThird() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.FIRST, Base.SECOND),
+                Advance.safe(Base.THIRD, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithRunnerOnSecondAndThird() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.SECOND, Base.THIRD),
+                Advance.safe(Base.THIRD, Base.HOME));
+        assertEquals(expected, actual);
+    }
+    
+    @Test
+    public void balkWithBasesLoaded() {
+        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        
+        Advances expected = Advances.of(
+                Advance.safe(Base.FIRST, Base.SECOND),
+                Advance.safe(Base.SECOND, Base.THIRD),
+                Advance.safe(Base.THIRD, Base.HOME));
+        assertEquals(expected, actual);
+    }
 
     
     private static Advances grandSlam() {
