@@ -3,11 +3,15 @@ package bsbll.game;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import bsbll.game.event.GameEvents;
+import bsbll.game.play.Play;
 import bsbll.player.Player;
 import bsbll.stats.PitchingStatLine;
 import bsbll.team.Lineup;
@@ -23,6 +27,7 @@ public final class BoxScore {
     private final PitcherOfRecord losingPitcher;
     private final RunsScored runsScored;
     private final PlayerGameStats playerStats;
+    private final ImmutableList<Play> plays;
     private final GameEvents gameEvents;
 
     /**
@@ -50,6 +55,7 @@ public final class BoxScore {
                     @Nullable PitcherOfRecord losingPitcher,
                     RunsScored runsScored,
                     PlayerGameStats playerStats, 
+                    List<Play> plays,
                     GameEvents gameEvents) {
         this.lineScore = requireNonNull(lineScore);
         this.homeLineup = requireNonNull(homeLineup);
@@ -62,6 +68,7 @@ public final class BoxScore {
                 winningPitcher, losingPitcher);
         this.runsScored = requireNonNull(runsScored);
         this.playerStats = requireNonNull(playerStats);
+        this.plays = ImmutableList.copyOf(plays);
         this.gameEvents = requireNonNull(gameEvents);
     }
 
@@ -99,6 +106,10 @@ public final class BoxScore {
         return playerStats.getPitchingLine(player);
     }
     
+    public ImmutableList<Play> getPlays() {
+        return plays;
+    }
+
     public GameEvents getGameEvents() {
         return this.gameEvents;
     }

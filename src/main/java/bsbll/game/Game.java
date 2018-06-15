@@ -12,6 +12,7 @@ import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.event.GameEvents;
+import bsbll.game.play.Play;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.collections.LoopingIterator;
@@ -27,7 +28,7 @@ public final class Game {
     
     private final OfficialScorer officialScorer;
 
-    private final Innings innings = new Innings();    
+    private final Innings innings = new Innings();
     private final PlayerGameStats playerStats = new PlayerGameStats();
     // The event detector is not integral to playing a game, so it is optional.
     private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
@@ -52,6 +53,7 @@ public final class Game {
         checkState(innings.isEmpty(), "Game already in progress");
         LoopingIterator<Lineup> battingLineup = LoopingIterator.of(visitingLineup, homeLineup);
         LoopingIterator<Lineup> fieldingLineup = LoopingIterator.of(homeLineup, visitingLineup);
+        List<Play> plays = new ArrayList<>();
         List<Run> runs = new ArrayList<>();
         List<GameEvent> events = new ArrayList<>();
         do {
@@ -68,6 +70,7 @@ public final class Game {
                     innings.runsNeededToWalkOf().orElse(0));
             HalfInning.Summary summary = halfInning.run();
             innings.onHalfInningCompleted(summary.getStats());
+            plays.addAll(summary.getPlays());
             runs.addAll(summary.getRuns());
             events.addAll(summary.getEvents());
         } while (!innings.isGameOver());
@@ -82,7 +85,7 @@ public final class Game {
         PitcherOfRecord lp = officialScorer.getLosingPitcher(runsScored);
         playerStats.updatePitchersOfRecord(wp, lp);
         return new BoxScore(lineScore, homeLineup, visitingLineup, wp, lp, runsScored, 
-                playerStats, GameEvents.of(events));
+                playerStats, plays, GameEvents.of(events));
     }
 
     

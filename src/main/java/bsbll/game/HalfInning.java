@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
@@ -20,6 +21,7 @@ import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
+import bsbll.game.play.Play;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.team.BattingOrder;
@@ -33,7 +35,6 @@ public final class HalfInning {
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
     private final GameEventDetector eventDetector;
     private final int runsNeededToWin;
-    private final Map<Player, Player> runnerToResponsiblePitcher = new HashMap<>();
 
     /**
      * 
@@ -83,8 +84,10 @@ public final class HalfInning {
     private class Loop {
         private Stats stats = new Stats();
         private BaseSituation baseSituation = BaseSituation.empty();
+        private final List<Play> plays = new ArrayList<>();
         private final List<Run> runs = new ArrayList<>();
         private final List<GameEvent> events = new ArrayList<>();
+        private final Map<Player, Player> runnerToResponsiblePitcher = new HashMap<>();
 
         public Summary run() {
             do {
@@ -94,7 +97,7 @@ public final class HalfInning {
                         batter, pitcher, baseSituation, stats.outs);
                 for (PlayOutcome outcome : preMatchupPlays) {
                     checkState(!isDone(stats));
-                    processOutcome(batter, outcome, false);
+                    processPlay(batter, outcome, false);
                     // TODO: Update runner and pitching stats
                 }
                 if (isDone(stats)) {
@@ -108,10 +111,10 @@ public final class HalfInning {
                     break;
                 }
                 PlayOutcome outcome = driver.runMatchup(batter, pitcher, baseSituation, stats.outs);
-                processOutcome(batter, outcome, true);
+                processPlay(batter, outcome, true);
             } while (!isDone(stats));
             int lob = baseSituation.getNumberOfRunners();
-            return new Summary(stats.withLeftOnBase(lob), runs, events);
+            return new Summary(stats.withLeftOnBase(lob), plays, runs, events);
         }
         
         private boolean isDone(Stats stats) {
@@ -127,7 +130,8 @@ public final class HalfInning {
             return false;
         }
         
-        private void processOutcome(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+        private void processPlay(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+            plays.add(new Play(batter, pitcher, outcome));
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             updateState(batter, outcome, updatePlayerStats);
         }
@@ -147,6 +151,7 @@ public final class HalfInning {
     }
     
     
+    @Immutable
     public final static class Stats {
         private final int runs;
         private final int hits;
@@ -227,13 +232,16 @@ public final class HalfInning {
     }
     
     
+    @Immutable
     public static final class Summary {
         private final Stats stats;
+        private final ImmutableList<Play> plays;
         private final ImmutableList<Run> runs;
         private final ImmutableList<GameEvent> events;
         
-        public Summary(Stats stats, List<Run> runs, List<GameEvent> events) {
+        public Summary(Stats stats, List<Play> plays, List<Run> runs, List<GameEvent> events) {
             this.stats = stats;
+            this.plays = ImmutableList.copyOf(plays);
             this.runs = ImmutableList.copyOf(runs);
             this.events = ImmutableList.copyOf(events);
             checkArgument(runs.size() == stats.runs);
@@ -241,6 +249,10 @@ public final class HalfInning {
 
         public Stats getStats() {
             return stats;
+        }
+
+        public ImmutableList<Play> getPlays() {
+            return plays;
         }
 
         public ImmutableList<Run> getRuns() {
