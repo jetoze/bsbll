@@ -9,6 +9,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.ImmutableMap;
 
 import bsbll.bases.Base;
+import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.card.Probability;
 import bsbll.die.DieFactory;
@@ -59,16 +60,16 @@ public final class FieldersChoiceProbabilities {
      * converted to a fielder's choice, using the internal (random) DieFactory.
      * 
      * @param situation
-     *            the bases that are currently occupied
+     *            the current base situation
      * @return {@code true} if the out should be converted to a fielder's
      *         choice, {@code false} if it should remain as a batter out event. Always returns
      *         {@code true} if the bases are empty.
      */
-    public boolean test(OccupiedBases situation) {
+    public boolean test(BaseSituation situation) {
         if (situation.isEmpty()) {
             return false;
         }
-        Probability p = probabilities.getOrDefault(situation, DEFAULT_PROBABILITY);
+        Probability p = probabilities.getOrDefault(situation.getOccupiedBases(), DEFAULT_PROBABILITY);
         return p.test(dieFactory);
     }
 

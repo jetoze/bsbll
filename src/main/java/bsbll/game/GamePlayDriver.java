@@ -177,7 +177,7 @@ public final class GamePlayDriver {
         if (numberOfErrors == 0) {
             OutLocation location = getOutLocation();
             boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                    fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
+                    fieldersChoiceProbabilities.test(baseSituation);
             EventType resultingType = convertToFieldersChoice
                     ? EventType.FIELDERS_CHOICE
                     : EventType.OUT;

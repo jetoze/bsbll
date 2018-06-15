@@ -44,19 +44,11 @@ public final class ErrorCountDistribution {
         return getNumberOfErrors(type, baseSituation, this.dieFactory);
     }
 
-    public int getNumberOfErrors(EventType type, OccupiedBases occupiedBases) {
-        return getNumberOfErrors(type, occupiedBases, this.dieFactory);
-    }
-
     public int getNumberOfErrors(EventType type, BaseSituation baseSituation, DieFactory dieFactory) {
-        return getNumberOfErrors(type, baseSituation.getOccupiedBases(), dieFactory);
-    }
-    
-    public int getNumberOfErrors(EventType type, OccupiedBases occupiedBases, DieFactory dieFactory) {
         requireNonNull(type);
-        requireNonNull(occupiedBases);
+        requireNonNull(baseSituation);
         requireNonNull(dieFactory);
-        ImmutableMultiset<Integer> values = data.get(type, occupiedBases);
+        ImmutableMultiset<Integer> values = data.get(type, baseSituation.getOccupiedBases());
         if (values == null || values.isEmpty()) {
             return 0;
         }
