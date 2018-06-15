@@ -7,7 +7,6 @@ import com.google.common.collect.ImmutableList;
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
-import bsbll.bases.OccupiedBases;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceKey;
@@ -149,7 +148,7 @@ public final class GamePlayDriver {
             return homerun(baseSituation);
         } else {
             EventType eventType = baseHit.toEventType();
-            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation.getOccupiedBases());
+            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation);
             Advances advances = (numberOfErrors == 0)
                     ? baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs)
                     : errorAdvanceDistribution.pickOne(ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs);
@@ -174,12 +173,11 @@ public final class GamePlayDriver {
     //private int fieldersChoices;
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
-        OccupiedBases occupiedBases = baseSituation.getOccupiedBases();
-        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, occupiedBases);
+        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation);
         if (numberOfErrors == 0) {
             OutLocation location = getOutLocation();
             boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                    fieldersChoiceProbabilities.test(occupiedBases);
+                    fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
             EventType resultingType = convertToFieldersChoice
                     ? EventType.FIELDERS_CHOICE
                     : EventType.OUT;

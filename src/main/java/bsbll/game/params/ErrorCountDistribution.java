@@ -12,6 +12,7 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Table;
 import com.google.common.collect.Table.Cell;
 
+import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.die.DieFactory;
 import bsbll.game.play.EventType;
@@ -39,15 +40,23 @@ public final class ErrorCountDistribution {
         return NO_ERRORS;
     }
 
-    public int getNumberOfErrors(EventType type, OccupiedBases baseSituation) {
+    public int getNumberOfErrors(EventType type, BaseSituation baseSituation) {
         return getNumberOfErrors(type, baseSituation, this.dieFactory);
     }
 
-    public int getNumberOfErrors(EventType type, OccupiedBases baseSituation, DieFactory dieFactory) {
+    public int getNumberOfErrors(EventType type, OccupiedBases occupiedBases) {
+        return getNumberOfErrors(type, occupiedBases, this.dieFactory);
+    }
+
+    public int getNumberOfErrors(EventType type, BaseSituation baseSituation, DieFactory dieFactory) {
+        return getNumberOfErrors(type, baseSituation.getOccupiedBases(), dieFactory);
+    }
+    
+    public int getNumberOfErrors(EventType type, OccupiedBases occupiedBases, DieFactory dieFactory) {
         requireNonNull(type);
-        requireNonNull(baseSituation);
+        requireNonNull(occupiedBases);
         requireNonNull(dieFactory);
-        ImmutableMultiset<Integer> values = data.get(type, baseSituation);
+        ImmutableMultiset<Integer> values = data.get(type, occupiedBases);
         if (values == null || values.isEmpty()) {
             return 0;
         }
