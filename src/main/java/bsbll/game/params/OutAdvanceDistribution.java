@@ -3,12 +3,11 @@ package bsbll.game.params;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
 
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 
 /**
  * The distributions of possible base-running advances on an out or fielder's
@@ -25,8 +24,7 @@ import bsbll.bases.BaseSituation;
 public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvanceKey> {
     private static final OutAdvanceDistribution DEFAULT = new OutAdvanceDistribution(ImmutableTable.of());
     
-    public OutAdvanceDistribution(
-            ImmutableTable<OutAdvanceKey, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
+    public OutAdvanceDistribution(ImmutableTable<OutAdvanceKey, OccupiedBases, ImmutableMultiset<Advances>> data) {
         super(data);
     }
 

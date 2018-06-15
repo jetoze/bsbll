@@ -1,18 +1,15 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
-import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import bsbll.Year;
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
@@ -20,8 +17,8 @@ import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public final class FieldersChoiceRatio extends GameHandler {
-    private final Multiset<Set<Base>> outsWithRunnersOnBase = HashMultiset.create();
-    private final Multiset<Set<Base>> fieldersChoices = HashMultiset.create();
+    private final Multiset<OccupiedBases> outsWithRunnersOnBase = HashMultiset.create();
+    private final Multiset<OccupiedBases> fieldersChoices = HashMultiset.create();
     
     private int playerId;
 
@@ -33,7 +30,7 @@ public final class FieldersChoiceRatio extends GameHandler {
         for (PlayOutcome p : plays) {
             EventField field = itF.next();
             if (!bases.isEmpty()) {
-                EnumSet<Base> occupied = bases.getOccupiedBases();
+                OccupiedBases occupied = bases.getOccupiedBases();
                 if (isInfieldOut(p, field)) {
                     outsWithRunnersOnBase.add(occupied);
                 } else if (p.getType() == EventType.FIELDERS_CHOICE) {
@@ -69,7 +66,7 @@ public final class FieldersChoiceRatio extends GameHandler {
         System.out.println(String.format("FC / (FC + Outs): %.3f", 
                 (1.0 * fcCount) / (fcCount + outCount)));
         System.out.println();
-        for (ImmutableSet<Base> p : Base.occupiedBasesPossibilities()) {
+        for (OccupiedBases p : OccupiedBases.values()) {
             System.out.println(p);
             int o = outsWithRunnersOnBase.count(p);
             int f = fieldersChoices.count(p);

@@ -67,8 +67,7 @@ public final class Advances implements Iterable<Advance> {
      * by pitch. The batter advances to first, runners that are forced advance
      * accordingly.
      */
-    public static Advances batterAwardedFirstBase(Set<Base> occupiedBases) {
-        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+    public static Advances batterAwardedFirstBase(OccupiedBases occupiedBases) {
         List<Advance> advances = new ArrayList<>();
         advances.add(Advance.safe(Base.HOME, Base.FIRST));
         for (Base b : Base.occupiable()) {
@@ -86,28 +85,26 @@ public final class Advances implements Iterable<Advance> {
      * the case where the batter hits a homerun. All runners, including the batter,
      * advance safely to home.
      */
-    public static Advances homerun(Set<Base> occupiedBases) {
-        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+    public static Advances homerun(OccupiedBases occupiedBases) {
         EnumSet<Base> from = EnumSet.of(Base.HOME);
-        from.addAll(occupiedBases);
-        return create(from, f -> Advance.safe(f, Base.HOME));
+        occupiedBases.stream().forEach(from::add);
+        return create(from.stream(), f -> Advance.safe(f, Base.HOME));
     }
     
     /**
      * Creates an {@code Advances} instance from a previous base situation, with all runners
      * (but not the batter) advancing one base, for example on a balk call.
      */
-    public static Advances runnersAdvancesOneBase(Set<Base> occupiedBases) {
-        checkArgument(occupiedBases.stream().allMatch(Base::isOccupiable));
+    public static Advances runnersAdvancesOneBase(OccupiedBases occupiedBases) {
         if (occupiedBases.isEmpty()) {
             return EMPTY;
         } else {
-            return create(occupiedBases, f -> Advance.safe(f, f.next()));
+            return create(occupiedBases.stream(), f -> Advance.safe(f, f.next()));
         }
     }
     
-    private static Advances create(Set<Base> from, Function<Base, Advance> f) {
-        return new Advances(from.stream()
+    private static Advances create(Stream<Base> from, Function<Base, Advance> f) {
+        return new Advances(from
                 .map(f)
                 .collect(Collectors.toList()));
     }

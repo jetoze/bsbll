@@ -7,9 +7,9 @@ import java.util.Set;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.ImmutableSet;
 
 import bsbll.bases.Base;
+import bsbll.bases.OccupiedBases;
 import bsbll.card.Probability;
 import bsbll.die.DieFactory;
 
@@ -34,7 +34,7 @@ public final class FieldersChoiceProbabilities {
     
     private static final FieldersChoiceProbabilities DEFAULT = new FieldersChoiceProbabilities(ImmutableMap.of());
     
-    private final ImmutableMap<ImmutableSet<Base>, Probability> probabilities;
+    private final ImmutableMap<OccupiedBases, Probability> probabilities;
     private final DieFactory dieFactory = DieFactory.random();
 
     /**
@@ -42,7 +42,7 @@ public final class FieldersChoiceProbabilities {
      * probabilities. Any base situation not included in the provided data will
      * be treated using a {@link #defaultValues() default} probability.
      */
-    public FieldersChoiceProbabilities(ImmutableMap<ImmutableSet<Base>, Probability> probabilities) {
+    public FieldersChoiceProbabilities(ImmutableMap<OccupiedBases, Probability> probabilities) {
         this.probabilities = requireNonNull(probabilities);
     }
     
@@ -64,7 +64,7 @@ public final class FieldersChoiceProbabilities {
      *         choice, {@code false} if it should remain as a batter out event. Always returns
      *         {@code true} if the bases are empty.
      */
-    public boolean test(Set<Base> situation) {
+    public boolean test(OccupiedBases situation) {
         if (situation.isEmpty()) {
             return false;
         }
@@ -105,10 +105,10 @@ public final class FieldersChoiceProbabilities {
 
     
     public static final class Builder {
-        private final ImmutableMap.Builder<ImmutableSet<Base>, Probability> data = ImmutableMap.builder();
+        private final ImmutableMap.Builder<OccupiedBases, Probability> data = ImmutableMap.builder();
         
-        public Builder add(Set<Base> bases, int outs, int fcs) {
-            data.put(ImmutableSet.copyOf(bases), Probability.of(fcs, fcs + outs));
+        public Builder add(OccupiedBases bases, int outs, int fcs) {
+            data.put(bases, Probability.of(fcs, fcs + outs));
             return this;
         }
         

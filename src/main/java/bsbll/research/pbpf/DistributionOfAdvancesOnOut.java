@@ -1,17 +1,15 @@
 package bsbll.research.pbpf;
 
 import java.util.Comparator;
-import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import bsbll.Year;
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
 import bsbll.game.params.OutAdvanceKey;
@@ -27,10 +25,6 @@ public final class DistributionOfAdvancesOnOut {
         String keySep = Strings.repeat("=", 30);
         String basesSep = "  " + Strings.repeat("-", 26);
         
-        // The order in which we will present the occupied-bases states
-        Comparator<ImmutableSet<Base>> bOrder = Comparator.comparing(Set::size);
-        bOrder = bOrder.thenComparing(s -> s.iterator().next()); // Java won't allow me to do this in one single expression
-        
         // The order in which we will present the individual advances
         Comparator<Multiset.Entry<Advances>> dOrder = presentationOrder();
 
@@ -39,9 +33,9 @@ public final class DistributionOfAdvancesOnOut {
                 OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outs);
                 System.out.println(key);
                 System.out.println(keySep);
-                ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(key);
+                ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(key);
                 distributionForHitType.keySet().stream()
-                    .sorted(bOrder)
+                    .sorted()
                     .forEach(b -> {
                         System.out.println(b);
                         distributionForHitType.get(b).entrySet().stream()

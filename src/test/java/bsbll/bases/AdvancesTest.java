@@ -5,8 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import com.google.common.collect.ImmutableSet;
-
 /**
  * Unit test for {@code Advances}.
  */
@@ -67,7 +65,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithEmptyBases() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of());
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.NONE);
         
         Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
         assertEquals(expected, actual);
@@ -75,7 +73,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnFirst() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.FIRST);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.HOME, Base.FIRST),
@@ -85,7 +83,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnSecond() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.SECOND));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.SECOND);
         
         Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
         assertEquals(expected, actual);
@@ -93,7 +91,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnThird() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.THIRD));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.THIRD);
         
         Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
         assertEquals(expected, actual);
@@ -101,7 +99,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnFirstAndSecond() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.FIRST_AND_SECOND);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.HOME, Base.FIRST),
@@ -112,7 +110,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnFirstAndThird() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.FIRST_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.HOME, Base.FIRST),
@@ -122,7 +120,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithRunnerOnSecondAndThird() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.SECOND_AND_THIRD);
         
         Advances expected = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
         assertEquals(expected, actual);
@@ -130,7 +128,7 @@ public final class AdvancesTest {
     
     @Test
     public void batterAwardedFirstWithBasesLoaded() {
-        Advances actual = Advances.batterAwardedFirstBase(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        Advances actual = Advances.batterAwardedFirstBase(OccupiedBases.LOADED);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.HOME, Base.FIRST),
@@ -142,7 +140,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithBasesEmpty() {
-        Advances actual = Advances.homerun(ImmutableSet.of());
+        Advances actual = Advances.homerun(OccupiedBases.NONE);
         
         Advances expected = Advances.of(Advance.safe(Base.HOME, Base.HOME));
         assertEquals(expected, actual);
@@ -150,7 +148,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnFirst() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST));
+        Advances actual = Advances.homerun(OccupiedBases.FIRST);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.HOME),
@@ -160,7 +158,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnSecond() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.SECOND));
+        Advances actual = Advances.homerun(OccupiedBases.SECOND);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.SECOND, Base.HOME),
@@ -170,7 +168,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnThird() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.THIRD));
+        Advances actual = Advances.homerun(OccupiedBases.THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.THIRD, Base.HOME),
@@ -180,7 +178,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnFirstAndSecond() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        Advances actual = Advances.homerun(OccupiedBases.FIRST_AND_SECOND);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.SECOND, Base.HOME),
@@ -191,7 +189,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnFirstAndThird() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        Advances actual = Advances.homerun(OccupiedBases.FIRST_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.THIRD, Base.HOME),
@@ -202,7 +200,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithRunnerOnSecondAndThird() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        Advances actual = Advances.homerun(OccupiedBases.SECOND_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.THIRD, Base.HOME),
@@ -214,7 +212,7 @@ public final class AdvancesTest {
     
     @Test
     public void homerunWithBasesLoaded() {
-        Advances actual = Advances.homerun(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        Advances actual = Advances.homerun(OccupiedBases.LOADED);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.THIRD, Base.HOME),
@@ -226,14 +224,14 @@ public final class AdvancesTest {
 
     @Test
     public void balkWithNoBodyOnBase() { // ...so to speak
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of());
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.NONE);
         
         assertTrue(actual.isEmpty());
     }
     
     @Test
     public void balkWithRunnerOnFirst() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST);
         
         Advances expected = Advances.of(Advance.safe(Base.FIRST, Base.SECOND));
         assertEquals(expected, actual);
@@ -241,7 +239,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnSecond() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.SECOND));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.SECOND);
         
         Advances expected = Advances.of(Advance.safe(Base.SECOND, Base.THIRD));
         assertEquals(expected, actual);
@@ -249,7 +247,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.THIRD));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.THIRD);
         
         Advances expected = Advances.of(Advance.safe(Base.THIRD, Base.HOME));
         assertEquals(expected, actual);
@@ -257,7 +255,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnFirstAndSecond() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.SECOND));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST_AND_SECOND);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
@@ -267,7 +265,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnFirstAndThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.THIRD));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.FIRST_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
@@ -277,7 +275,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithRunnerOnSecondAndThird() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.SECOND, Base.THIRD));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.SECOND_AND_THIRD);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.SECOND, Base.THIRD),
@@ -287,7 +285,7 @@ public final class AdvancesTest {
     
     @Test
     public void balkWithBasesLoaded() {
-        Advances actual = Advances.runnersAdvancesOneBase(ImmutableSet.of(Base.FIRST, Base.SECOND, Base.THIRD));
+        Advances actual = Advances.runnersAdvancesOneBase(OccupiedBases.LOADED);
         
         Advances expected = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),

@@ -3,18 +3,15 @@ package bsbll.game.params;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
-import java.util.EnumSet;
 import java.util.Iterator;
-import java.util.Set;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multiset;
 
 import bsbll.Year;
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
@@ -78,8 +75,8 @@ public abstract class FieldersChoiceProbabilitiesFactory {
         }
         
         private class Handler extends GameHandler {
-            private final Multiset<Set<Base>> outsWithRunnersOnBase = HashMultiset.create();
-            private final Multiset<Set<Base>> fieldersChoices = HashMultiset.create();
+            private final Multiset<OccupiedBases> outsWithRunnersOnBase = HashMultiset.create();
+            private final Multiset<OccupiedBases> fieldersChoices = HashMultiset.create();
             
             private int playerId;
             
@@ -98,7 +95,7 @@ public abstract class FieldersChoiceProbabilitiesFactory {
             }
 
             private void evaluate(PlayOutcome play, EventField field, BaseSituation bases) {
-                EnumSet<Base> occupied = bases.getOccupiedBases();
+                OccupiedBases occupied = bases.getOccupiedBases();
                 if (isInfieldOut(play, field)) {
                     outsWithRunnersOnBase.add(occupied);
                 } else if (play.getType() == EventType.FIELDERS_CHOICE) {
@@ -122,7 +119,7 @@ public abstract class FieldersChoiceProbabilitiesFactory {
 
             public FieldersChoiceProbabilities getResult() {
                 FieldersChoiceProbabilities.Builder builder = FieldersChoiceProbabilities.builder();
-                for (ImmutableSet<Base> bases : Base.occupiedBasesPossibilities()) {
+                for (OccupiedBases bases : OccupiedBases.values()) {
                     int outs = outsWithRunnersOnBase.count(bases);
                     if (outs > 0) {
                         int fcs = fieldersChoices.count(bases);

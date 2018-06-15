@@ -2,10 +2,6 @@ package bsbll.bases;
 
 import java.util.Comparator;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
-
 public enum Base {
     FIRST,
     SECOND,
@@ -65,28 +61,6 @@ public enum Base {
                 : Math.min(ordinal() + baseHit.value(), 3);
         Base to = values()[o];
         return Advance.safe(this, to);
-    }
-    
-    private static final ImmutableList<ImmutableSet<Base>> OCCUPIED_BASE_POSSIBILITIES = createOccupiedBasesPossibilities();
-    
-    private static ImmutableList<ImmutableSet<Base>> createOccupiedBasesPossibilities() {
-        ImmutableList.Builder<ImmutableSet<Base>> list = ImmutableList.builder();
-        list.add(Sets.immutableEnumSet(FIRST));
-        list.add(Sets.immutableEnumSet(SECOND));
-        list.add(Sets.immutableEnumSet(THIRD));
-        list.add(Sets.immutableEnumSet(FIRST, SECOND));
-        list.add(Sets.immutableEnumSet(FIRST, THIRD));
-        list.add(Sets.immutableEnumSet(SECOND, THIRD));
-        list.add(Sets.immutableEnumSet(FIRST, SECOND, THIRD));
-        return list.build();
-    }
-    
-    /**
-     * Returns a list of all the different ways the bases can be occupied (runner on first, runners on first and second,
-     * etc).
-     */
-    public static ImmutableList<ImmutableSet<Base>> occupiedBasesPossibilities() {
-        return OCCUPIED_BASE_POSSIBILITIES;
     }
     
     public static Comparator<Base> comparingOrigin() {

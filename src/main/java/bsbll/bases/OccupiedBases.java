@@ -1,6 +1,7 @@
 package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -51,6 +52,15 @@ public enum OccupiedBases implements Iterable<Base> {
         }
     }
 
+    public boolean isEmpty() {
+        return this == NONE;
+    }
+    
+    public boolean contains(Base b) {
+        requireNonNull(b);
+        return this.bases.contains(b);
+    }
+    
     @Override
     public Iterator<Base> iterator() {
         return bases.iterator();

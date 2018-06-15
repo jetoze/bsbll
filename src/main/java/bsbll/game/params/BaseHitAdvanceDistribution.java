@@ -7,7 +7,6 @@ import java.util.List;
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMultiset;
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableTable;
 
 import bsbll.bases.Advance;
@@ -15,6 +14,7 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 
 /**
  * The distributions of possible base-running advances on a base-hit, given the
@@ -33,8 +33,7 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
      * Creates a {@code BaseHitAdvanceDistribution} based on the distribution
      * data in the given table.
      */
-    public BaseHitAdvanceDistribution(
-            ImmutableTable<BaseHit, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
+    public BaseHitAdvanceDistribution(ImmutableTable<BaseHit, OccupiedBases, ImmutableMultiset<Advances>> data) {
         super(data);
     }
 

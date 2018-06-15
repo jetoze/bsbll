@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 
-import java.util.EnumSet;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -19,8 +18,8 @@ import com.google.common.collect.Multisets;
 import com.google.common.collect.Table;
 
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 import bsbll.die.DieFactory;
 
 /**
@@ -30,10 +29,10 @@ import bsbll.die.DieFactory;
  * @param <E> the type that defines the key-space (event types).
  */
 public abstract class AdvanceDistribution<E> {
-    private final ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> data;
+    private final ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data;
     private final DieFactory dieFactory = DieFactory.random();
     
-    protected AdvanceDistribution(ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
+    protected AdvanceDistribution(ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data) {
         this.data = requireNonNull(data);
     }
 
@@ -125,18 +124,18 @@ public abstract class AdvanceDistribution<E> {
         return this.data.rowKeySet();
     }
     
-    public final ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> forKey(E key) {
+    public final ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> forKey(E key) {
         requireNonNull(key);
         checkArgument(this.data.containsRow(key), "Unknown key: %s", key);
         return this.data.row(key);
     }
     
     public static abstract class BuilderBase<E, B extends BuilderBase<E, B>> {
-        private final Table<E, EnumSet<Base>, Multiset<Advances>> data = HashBasedTable.create();
+        private final Table<E, OccupiedBases, Multiset<Advances>> data = HashBasedTable.create();
         
         public B add(E key, BaseSituation situation, Advances advances) {
             requireNonNull(key);
-            EnumSet<Base> occupied = situation.getOccupiedBases();
+            OccupiedBases occupied = situation.getOccupiedBases();
             Multiset<Advances> d = data.get(key, occupied);
             if (d == null) {
                 d = HashMultiset.create();
@@ -148,15 +147,15 @@ public abstract class AdvanceDistribution<E> {
         
         protected abstract B self();
         
-        protected final ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> getData() {
-            ImmutableTable.Builder<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> tableBuilder = ImmutableTable.builder();
-            for (Entry<E, Map<EnumSet<Base>, Multiset<Advances>>> rme : data.rowMap().entrySet()) {
+        protected final ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> getData() {
+            ImmutableTable.Builder<E, OccupiedBases, ImmutableMultiset<Advances>> tableBuilder = ImmutableTable.builder();
+            for (Entry<E, Map<OccupiedBases, Multiset<Advances>>> rme : data.rowMap().entrySet()) {
                 E key = rme.getKey();
-                for (Entry<EnumSet<Base>, Multiset<Advances>> re : rme.getValue().entrySet()) {
+                for (Entry<OccupiedBases, Multiset<Advances>> re : rme.getValue().entrySet()) {
                     Multiset<Advances> advances = re.getValue();
                     tableBuilder.put(
                             key,
-                            ImmutableSet.copyOf(re.getKey()),
+                            re.getKey(),
                             ImmutableMultiset.copyOf(advances));
                 }
             }

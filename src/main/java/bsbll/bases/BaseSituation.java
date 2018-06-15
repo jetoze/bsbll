@@ -3,7 +3,6 @@ package bsbll.bases;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,10 +68,10 @@ public final class BaseSituation {
         return this.bases.containsKey(base);
     }
     
-    public EnumSet<Base> getOccupiedBases() {
+    public OccupiedBases getOccupiedBases() {
         return isEmpty()
-                ? EnumSet.noneOf(Base.class)
-                : EnumSet.copyOf(this.bases.keySet());
+                ? OccupiedBases.NONE
+                : OccupiedBases.of(this.bases.keySet());
     }
     
     public ResultOfAdvance advanceRunners(Player batter, Advances advances) {
