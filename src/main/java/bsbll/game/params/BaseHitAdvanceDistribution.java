@@ -14,6 +14,7 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
@@ -104,11 +105,9 @@ public final class BaseHitAdvanceDistribution {
             return defaultAdvance(baseHit, baseSituation);
         }
         Multiset<Advances> possibilities = getPossibilities(baseHit, baseSituation, numberOfOuts);
-        if (possibilities == null || possibilities.isEmpty()) {
-            return defaultAdvance(baseHit, baseSituation);
-        } else {
-            return pickOneFromSet(dieFactory, possibilities);
-        }
+        return possibilities.isEmpty()
+                ? defaultAdvance(baseHit, baseSituation)
+                : pickOneFromSet(dieFactory, possibilities);
     }
     
     private Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
@@ -127,6 +126,9 @@ public final class BaseHitAdvanceDistribution {
         // An Advance where two runners are thrown out is not valid if there are already two outs in the inning.
         // TODO: Add number of outs as an additional lookup dimension?
         Multiset<Advances> all = this.data.get(baseHit, baseSituation.getOccupiedBases());
+        if (all == null) {
+            return ImmutableMultiset.of();
+        }
         Multiset<Advances> valid = Multisets.filter(all, a -> (a.getNumberOfOuts() + numberOfOuts) <= 3);
         return valid;
     }
