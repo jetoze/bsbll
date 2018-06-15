@@ -27,13 +27,30 @@ import bsbll.die.DieFactory;
 public final class FieldersChoiceProbabilities {
     /**
      * The default probability if the real number is not known.
+     * <p>
+     * TODO: More realistic would be to use one default probability for each base situation.
      */
-    private static final Probability DEFAULT = Probability.of(100, 2);
+    private static final Probability DEFAULT_PROBABILITY = Probability.of(100, 2);
+    
+    private static final FieldersChoiceProbabilities DEFAULT = new FieldersChoiceProbabilities(ImmutableMap.of());
     
     private final ImmutableMap<ImmutableSet<Base>, Probability> probabilities;
-    
+
+    /**
+     * Creates a FieldersChoiceProbabilities instance based on the given
+     * probabilities. Any base situation not included in the provided data will
+     * be treated using a {@link #defaultValues() default} probability.
+     */
     public FieldersChoiceProbabilities(ImmutableMap<ImmutableSet<Base>, Probability> probabilities) {
         this.probabilities = requireNonNull(probabilities);
+    }
+    
+    /**
+     * Returns a FieldersChoiceProbabilities instance that uses a static,
+     * default value for all decisions.
+     */
+    public static FieldersChoiceProbabilities defaultValues() {
+        return DEFAULT;
     }
 
     /**
@@ -52,12 +69,30 @@ public final class FieldersChoiceProbabilities {
         if (situation.isEmpty()) {
             return false;
         }
-        Probability p = probabilities.getOrDefault(situation, DEFAULT);
+        Probability p = probabilities.getOrDefault(situation, DEFAULT_PROBABILITY);
         return p.test(dieFactory);
     }
     
     @Override
     public String toString() {
         return probabilities.toString();
+    }
+    
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    
+    public static final class Builder {
+        private final ImmutableMap.Builder<ImmutableSet<Base>, Probability> data = ImmutableMap.builder();
+        
+        public Builder add(Set<Base> bases, int outs, int fcs) {
+            data.put(ImmutableSet.copyOf(bases), Probability.of(outs, fcs));
+            return this;
+        }
+        
+        public FieldersChoiceProbabilities build() {
+            return new FieldersChoiceProbabilities(data.build());
+        }
     }
 }
