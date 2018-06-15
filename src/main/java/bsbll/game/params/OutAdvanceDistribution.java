@@ -10,6 +10,17 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 
+/**
+ * The distributions of possible base-running advances on an out or fielder's
+ * choice, given the base situation at the time. Only applicable for error-less
+ * plays.
+ * <p>
+ * The current implementation is static in the sense that it doesn't take into
+ * account the game context, or the individual speed of the base runners. In
+ * reality, for example, the fielding team would be more interested in throwing
+ * home, trying to get the lead runner, in the bottom of the ninth inning if the
+ * game is tied, compared to if they are up by 10 runs.
+ */
 @Immutable
 public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvanceKey> {
     private static final OutAdvanceDistribution DEFAULT = new OutAdvanceDistribution(ImmutableTable.of());
