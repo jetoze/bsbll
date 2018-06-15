@@ -14,6 +14,7 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
+import bsbll.game.params.OutAdvanceKey;
 import bsbll.game.params.OutLocation;
 
 public final class DistributionOfAdvancesOnOut {
@@ -22,7 +23,7 @@ public final class DistributionOfAdvancesOnOut {
 
     private static void report(Year year, OutAdvanceDistribution distribution) {
         System.out.println("Distribution of Advances on Outs for the Year " + year);
-        String locationtSep = Strings.repeat("=", 30);
+        String keySep = Strings.repeat("=", 30);
         String basesSep = "  " + Strings.repeat("-", 26);
         
         // The order in which we will present the occupied-bases states
@@ -33,23 +34,26 @@ public final class DistributionOfAdvancesOnOut {
         Comparator<Multiset.Entry<Advances>> dOrder = presentationOrder();
 
         for (OutLocation location : OutLocation.values()) {
-            System.out.println(location);
-            System.out.println(locationtSep);
-            ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(location);
-            distributionForHitType.keySet().stream()
-                .sorted(bOrder)
-                .forEach(b -> {
-                    System.out.println(b);
-                    distributionForHitType.get(b).entrySet().stream()
-                        .sorted(dOrder)
-                        .map(as -> String.format("  %-20s%6d", as.getElement(), as.getCount()))
-                        .forEach(System.out::println);
-                    System.out.println(basesSep);
-                    System.out.println(String.format("  %-20s%6d", "Total", distributionForHitType.get(b).size()));
-                    System.out.println(basesSep);
-                });
-            System.out.println(locationtSep);
-            System.out.println();
+            for (int outs : new int[] { 0, 1, 2 }) {
+                OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+                System.out.println(key);
+                System.out.println(keySep);
+                ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(key);
+                distributionForHitType.keySet().stream()
+                    .sorted(bOrder)
+                    .forEach(b -> {
+                        System.out.println(b);
+                        distributionForHitType.get(b).entrySet().stream()
+                            .sorted(dOrder)
+                            .map(as -> String.format("  %-20s%6d", as.getElement(), as.getCount()))
+                            .forEach(System.out::println);
+                        System.out.println(basesSep);
+                        System.out.println(String.format("  %-20s%6d", "Total", distributionForHitType.get(b).size()));
+                        System.out.println(basesSep);
+                    });
+                System.out.println(keySep);
+                System.out.println();
+            }
         }
     }
     

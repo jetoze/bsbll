@@ -8,10 +8,10 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 
-public final class OutAdvanceDistribution extends AdvanceDistribution<OutLocation> {
+public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvanceKey> {
 
     public OutAdvanceDistribution(
-            ImmutableTable<OutLocation, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
+            ImmutableTable<OutAdvanceKey, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
         super(data);
     }
     
@@ -20,8 +20,8 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutLocatio
     }
 
     @Override
-    protected Advances defaultAdvance(OutLocation key, BaseSituation baseSituation) {
-        switch (key) {
+    protected Advances defaultAdvance(OutAdvanceKey key, BaseSituation baseSituation) {
+        switch (key.getLocation()) {
         case INFIELD:
             // Move everyone up one base
             return Advances.runnersAdvancesOneBase(baseSituation.getOccupiedBases());
@@ -38,7 +38,7 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutLocatio
     }
     
     
-    public static final class Builder extends BuilderBase<OutLocation, Builder> {
+    public static final class Builder extends BuilderBase<OutAdvanceKey, Builder> {
 
         @Override
         protected Builder self() {

@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.Advances;
+import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
@@ -80,14 +81,16 @@ public abstract class OutAdvanceDistributionFactory {
                                       ImmutableList<EventField> fields,
                                       ImmutableList<PlayOutcome> plays) {
                 BaseSituation baseSituation = BaseSituation.empty();
+                int outs = 0;
                 Iterator<EventField> itF = fields.iterator();
                 for (PlayOutcome play : plays) {
                     EventField field = itF.next();
                     Player batter = nextBatter();
                     if (play.getType() == EventType.OUT && play.getNumberOfErrors() == 0) {
-                        update(field, baseSituation, play.getAdvances());
+                        update(field, baseSituation, play.getAdvances(), outs);
                     }
                     baseSituation = play.applyTo(batter, baseSituation);
+                    outs += play.getNumberOfOuts();
                 }
             }
             
@@ -101,9 +104,16 @@ public abstract class OutAdvanceDistributionFactory {
                 return new Player(Integer.toString(playerId), "John Doe");
             }
 
-            private void update(EventField field, BaseSituation situation, Advances advances) {
+            private void update(EventField field, BaseSituation situation, Advances advances, int outs) {
                 OutLocation location = getLocation(field);
-                builder.add(location, situation, advances);
+                OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+                builder.add(key, situation, advances);
+                if (location == OutLocation.INFIELD && situation.getNumberOfRunners() == 1 && situation.isOccupied(Base.FIRST)) {
+                    System.out.println(field.getRawString());
+                    if (field.getRawString().equals("43")) {
+                        System.out.println();
+                    }
+                }
             }
 
             private static OutLocation getLocation(EventField field) {

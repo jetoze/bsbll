@@ -38,7 +38,6 @@ public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pl
         this.data = requireNonNull(data);
     }
 
-
     /**
      * Rolls the internal (random) die to select one of the possible advances
      * for the given key and base situation.
@@ -117,6 +116,10 @@ public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pl
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
     }
     
+    public final ImmutableSet<E> keys() {
+        return this.data.rowKeySet();
+    }
+    
     public final ImmutableMap<ImmutableSet<Base>, ImmutableMultiset<Advances>> forKey(E key) {
         requireNonNull(key);
         checkArgument(this.data.containsRow(key), "Unknown key: %s", key);
@@ -155,6 +158,4 @@ public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pl
             return tableBuilder.build();
         }
     }
-    
-    
 }
