@@ -1,6 +1,7 @@
 package bsbll.game;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toList;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
@@ -82,7 +83,26 @@ public final class HalfInning {
         do {
             Player batter = battingOrder.nextBatter();
             runnerToResponsiblePitcher.put(batter, pitcher);
-            // TODO: Call driver.preMatchupCompletionPlays
+            ImmutableList<PlayOutcome> preMatchupPlays = driver.preMatchupCompletionPlays(
+                    batter, pitcher, baseSituation, stats.outs);
+            for (PlayOutcome outcome : preMatchupPlays) {
+                checkState(!isDone(stats));
+                eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
+                StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
+                stats = sam.stats;
+                baseSituation = sam.baseSituation;
+                runs.addAll(sam.runs);
+            }
+            if (isDone(stats)) {
+                // The inning (or game) ended before the batter-pitcher matchup completed. A couple of 
+                // ways this can happen:
+                //   + A runner is caught stealing / picked off for the third out of the inning
+                //   + A wild pitch / passed ball allows the winning run to score (walk-off)
+                // In case this is just the end of the inning, not the game, we reset the Batting Order
+                // so that the same batter comes up again the next time his team is batting.
+                battingOrder.returnBatter(batter);
+                break;
+            }
             PlayOutcome outcome = driver.runMatchup(batter, pitcher, baseSituation, stats.outs);
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
             StateAfterMatchup sam = evaluateOutcome(batter, baseSituation, outcome, stats);
@@ -181,10 +201,6 @@ public final class HalfInning {
 
         public int getLeftOnBase() {
             return leftOnBase;
-        }
-        
-        public Stats addOut() {
-            return new Stats(runs, hits, errors, outs + 1, leftOnBase);
         }
         
         public Stats withLeftOnBase(int lob) {
