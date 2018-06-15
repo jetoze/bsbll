@@ -4,18 +4,13 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 
-import com.google.common.collect.ImmutableList;
-
 import bsbll.Year;
-import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.GameHandler;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
+import bsbll.research.pbpf.DefaultGameHandler;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 /**
@@ -73,41 +68,23 @@ public abstract class BaseHitAdvanceDistributionFactory {
             return handler.getResult();
         }
 
-        private static final class Handler extends GameHandler {
+        private static final class Handler extends DefaultGameHandler {
             private final BaseHitAdvanceDistribution.Builder builder = BaseHitAdvanceDistribution.builder();
-            private int playerId;
+
+            public Handler() {
+                super(p -> p.isBaseHit() && p.getNumberOfErrors() == 0);
+            }
             
             public BaseHitAdvanceDistribution getResult() {
                 return builder.build();
             }
 
             @Override
-            public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-                    ImmutableList<PlayOutcome> plays) {
-                BaseSituation baseSituation = BaseSituation.empty();
-                for (PlayOutcome play : plays) {
-                    Player batter = nextBatter();
-                    if (play.isBaseHit() && play.getNumberOfErrors() == 0) {
-                        update(play.getType(), baseSituation, play.getAdvances());
-                    }
-                    baseSituation = play.applyTo(batter, baseSituation);
-                }
-            }
-            
-            /**
-             * We generate a new Player for each play. This is obviously not realistic,
-             * but that is irrelevant - we just need Players to move around the bases.
-             * See corresponding XXX comment in BaseSituation, about making that class generic.
-             */
-            private Player nextBatter() {
-                ++playerId;
-                return new Player(Integer.toString(playerId), "John Doe");
-            }
-
-            private void update(EventType typeOfHit, BaseSituation situation, Advances advances) {
+            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+                EventType typeOfHit = play.getType();
                 if (typeOfHit != EventType.HOMERUN) {
                     BaseHit hit = eventTypeToBaseHit(typeOfHit);
-                    builder.add(hit, situation, advances);
+                    builder.add(hit, bases, play.getAdvances());
                 }
             }
 
@@ -128,5 +105,4 @@ public abstract class BaseHitAdvanceDistributionFactory {
             }
         }
     }
-
 }

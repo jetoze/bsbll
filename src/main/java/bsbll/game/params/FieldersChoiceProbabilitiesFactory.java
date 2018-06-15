@@ -3,10 +3,8 @@ package bsbll.game.params;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
-import java.util.Iterator;
 
 import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 
 import bsbll.Year;
@@ -14,10 +12,8 @@ import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.GameHandler;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
+import bsbll.research.pbpf.DefaultGameHandler;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 /**
@@ -74,23 +70,14 @@ public abstract class FieldersChoiceProbabilitiesFactory {
             return handler.getResult();
         }
         
-        private class Handler extends GameHandler {
+        private class Handler extends DefaultGameHandler {
             private final Multiset<OccupiedBases> outsWithRunnersOnBase = HashMultiset.create();
             private final Multiset<OccupiedBases> fieldersChoices = HashMultiset.create();
             
-            private int playerId;
-            
             @Override
-            public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-                    ImmutableList<PlayOutcome> plays) {
-                BaseSituation bases = BaseSituation.empty();
-                Iterator<EventField> itF = fields.iterator();
-                for (PlayOutcome p : plays) {
-                    EventField field = itF.next();
-                    if (!bases.isEmpty()) {
-                        evaluate(p, field, bases);
-                    }
-                    bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
+            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+                if (!bases.isEmpty()) {
+                    evaluate(play, field, bases);
                 }
             }
 
@@ -105,16 +92,6 @@ public abstract class FieldersChoiceProbabilitiesFactory {
 
             private boolean isInfieldOut(PlayOutcome p, EventField field) {
                 return p.getType() == EventType.OUT && !field.isOutfieldOut();
-            }
-
-            /**
-             * We generate a new Player for each play. This is obviously not realistic,
-             * but that is irrelevant - we just need Players to move around the bases.
-             * See corresponding XXX comment in BaseSituation, about making that class generic.
-             */
-            private Player nextBatter() {
-                ++playerId;
-                return new Player(Integer.toString(playerId), "John Doe");
             }
 
             public FieldersChoiceProbabilities getResult() {

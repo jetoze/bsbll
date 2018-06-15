@@ -3,18 +3,13 @@ package bsbll.game.params;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
-import java.util.Iterator;
-
-import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.GameHandler;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
+import bsbll.research.pbpf.DefaultGameHandler;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 public abstract class OutAdvanceDistributionFactory {
@@ -66,51 +61,22 @@ public abstract class OutAdvanceDistributionFactory {
             return handler.getResult();
         }
 
-        private static final class Handler extends GameHandler {
+        private static final class Handler extends DefaultGameHandler {
             private final OutAdvanceDistribution.Builder builder = OutAdvanceDistribution.builder();
-            private int playerId;
+            
+            public Handler() {
+                super(Handler::isOfInterest);
+            }
             
             public OutAdvanceDistribution getResult() {
                 return builder.build();
             }
 
             @Override
-            public void onEndOfInning(Inning inning, 
-                                      ImmutableList<EventField> fields,
-                                      ImmutableList<PlayOutcome> plays) {
-                BaseSituation baseSituation = BaseSituation.empty();
-                int outs = 0;
-                Iterator<EventField> itF = fields.iterator();
-                for (PlayOutcome play : plays) {
-                    EventField field = itF.next();
-                    Player batter = nextBatter();
-                    if (isOfInterest(play)) {
-                        update(play, field, baseSituation, outs);
-                    }
-                    baseSituation = play.applyTo(batter, baseSituation);
-                    outs += play.getNumberOfOuts();
-                }
-            }
-
-            public boolean isOfInterest(PlayOutcome play) {
-                return (play.getType() == EventType.OUT || play.getType() == EventType.FIELDERS_CHOICE)
-                        && play.getNumberOfErrors() == 0;
-            }
-            
-            /**
-             * We generate a new Player for each play. This is obviously not realistic,
-             * but that is irrelevant - we just need Players to move around the bases.
-             * See corresponding XXX comment in BaseSituation, about making that class generic.
-             */
-            private Player nextBatter() {
-                ++playerId;
-                return new Player(Integer.toString(playerId), "John Doe");
-            }
-
-            private void update(PlayOutcome play, EventField field, BaseSituation situation, int outs) {
+            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
                 OutLocation location = getLocation(play, field);
                 OutAdvanceKey key = OutAdvanceKey.of(play.getType(), location, outs);
-                builder.add(key, situation, play.getAdvances());
+                builder.add(key, bases, play.getAdvances());
             }
 
             private static OutLocation getLocation(PlayOutcome play, EventField field) {
@@ -123,6 +89,11 @@ public abstract class OutAdvanceDistributionFactory {
                 return field.isOutfieldOut()
                         ? OutLocation.OUTFIELD
                         : OutLocation.INFIELD;
+            }
+
+            private static boolean isOfInterest(PlayOutcome play) {
+                return (play.getType() == EventType.OUT || play.getType() == EventType.FIELDERS_CHOICE)
+                        && play.getNumberOfErrors() == 0;
             }
         }
     }

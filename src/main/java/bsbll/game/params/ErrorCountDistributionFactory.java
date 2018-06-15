@@ -4,16 +4,12 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 
-import com.google.common.collect.ImmutableList;
-
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.EventField;
-import bsbll.research.pbpf.GameHandler;
-import bsbll.research.pbpf.PlayByPlayFile.Inning;
+import bsbll.research.pbpf.DefaultGameHandler;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 public abstract class ErrorCountDistributionFactory {
@@ -43,8 +39,6 @@ public abstract class ErrorCountDistributionFactory {
     private static final class RetrosheetFactory extends ErrorCountDistributionFactory {
         private final Year year;
         
-        private int playerId;
-        
         public RetrosheetFactory(Year year) {
             this.year = year;
         }
@@ -57,43 +51,29 @@ public abstract class ErrorCountDistributionFactory {
             return handler.getResult();
         }
         
-        private class Handler extends GameHandler {
+        private class Handler extends DefaultGameHandler {
             private final ErrorCountDistribution.Builder builder = ErrorCountDistribution.builder();
 
-            @Override
-            public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-                    ImmutableList<PlayOutcome> plays) {
-                BaseSituation bases = BaseSituation.empty();
-                for  (PlayOutcome p : plays) {
-                    if (isApplicable(p)) {
-                        int errors = p.getNumberOfErrors();
-                        builder.add(p.getType(), bases.getOccupiedBases(), errors);
-                    }
-                    bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
-                }
+            public Handler() {
+                super(p -> {
+                    EventType type = p.getType();
+                    return (type == EventType.OUT) ||
+                            (type == EventType.SINGLE) ||
+                            (type == EventType.DOUBLE) ||
+                            (type == EventType.TRIPLE);
+                });
             }
-
-            private boolean isApplicable(PlayOutcome p) {
-                EventType type = p.getType();
-                return (type == EventType.OUT) ||
-                        (type == EventType.SINGLE) ||
-                        (type == EventType.DOUBLE) ||
-                        (type == EventType.TRIPLE);
+            
+            @Override
+            protected void process(PlayOutcome play, BaseSituation bases, int outs,
+                    EventField field) {
+                int errors = play.getNumberOfErrors();
+                builder.add(play.getType(), bases.getOccupiedBases(), errors);
             }
             
             public ErrorCountDistribution getResult() {
                 return builder.build();
             }
-        }
-        
-        /**
-         * We generate a new Player for each play. This is obviously not realistic,
-         * but that is irrelevant - we just need Players to move around the bases.
-         * See corresponding XXX comment in BaseSituation, about making that class generic.
-         */
-        private Player nextBatter() {
-            ++playerId;
-            return new Player(Integer.toString(playerId), "John Doe");
         }
     }
 
