@@ -123,6 +123,18 @@ public final class PlayOutcome {
                 : new PlayOutcome(this.type, this.advances, this.numberOfErrors, ideal);
     }
     
+    /**
+     * Strips this PlayOutcome of its ideal outcome, if it has one.
+     * <p>
+     * The ideal outcome is only used by the official scorer to determine things like
+     * earned runs. Logs of the game should store only the actual outcome.
+     */
+    public PlayOutcome withoutIdealOutcome() {
+        return (this.ideal == null)
+                ? this
+                : new PlayOutcome(this.type, this.advances, this.numberOfErrors);
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.type, this.numberOfErrors, this.advances);

@@ -153,11 +153,19 @@ public final class GamePlayDriver {
         } else {
             EventType eventType = baseHit.toEventType();
             int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
-            Advances advances = (numberOfErrors == 0)
-                    ? baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs, dieFactory)
-                    : errorAdvanceDistribution.pickOne(ErrorAdvanceKey.of(eventType, numberOfErrors), 
-                            baseSituation, outs, dieFactory);
-            return new PlayOutcome(eventType, advances, numberOfErrors);
+            if (numberOfErrors == 0) {
+                Advances advances = baseHitAdvanceDistribution.pickOne(
+                        baseHit, baseSituation, outs, dieFactory);
+                return new PlayOutcome(eventType, advances, numberOfErrors);
+            } else {
+                Advances advances = errorAdvanceDistribution.pickOne(
+                        ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
+                
+                Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
+                PlayOutcome idealOutcome = new PlayOutcome(eventType, idealAdvances, 0);
+                
+                return new PlayOutcome(eventType, advances, numberOfErrors, idealOutcome);
+            }
         }
     }
     
@@ -178,17 +186,24 @@ public final class GamePlayDriver {
     //private int fieldersChoices;
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
+        OutLocation location = getOutLocation();
         int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
         if (numberOfErrors == 0) {
-            OutLocation location = getOutLocation();
-            boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                    fieldersChoiceProbabilities.test(baseSituation, dieFactory);
-            EventType resultingType = convertToFieldersChoice
-                    ? EventType.FIELDERS_CHOICE
-                    : EventType.OUT;
+            return outWithoutError(baseSituation, location, outs);
+        } else {
+            return errorOnOut(baseSituation, location, outs, numberOfErrors);
+        }
+    }
 
-            OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+    private PlayOutcome outWithoutError(BaseSituation baseSituation, OutLocation location, int outs) {
+        boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
+                fieldersChoiceProbabilities.test(baseSituation, dieFactory);
+        EventType resultingType = convertToFieldersChoice
+                ? EventType.FIELDERS_CHOICE
+                : EventType.OUT;
+
+        OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
+        Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
 //            if (convertToFieldersChoice) {
 //                ++fieldersChoices;
 //                System.out.println("Fielder's Choice " + fieldersChoices);
@@ -197,17 +212,23 @@ public final class GamePlayDriver {
 //                ++sacrificeFlies;
 //                //System.out.println("Sacrifice Fly " + sacrificeFlies);
 //            }
-            return new PlayOutcome(resultingType, advances);
-        } else {
-            ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
-            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
-            // TODO: This will give the incorrect type in the case where the batter is thrown
-            // out at some other base than first.
-            EventType actualType = advances.didBatterReachBase()
-                    ? EventType.REACHED_ON_ERROR
-                    : EventType.OUT;
-            return new PlayOutcome(actualType, advances, numberOfErrors);
-        }
+        return new PlayOutcome(resultingType, advances);
+    }
+
+    private PlayOutcome errorOnOut(BaseSituation baseSituation, OutLocation location, int outs, int numberOfErrors) {
+        ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
+        Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+        // TODO: This will give the incorrect type in the case where the batter is thrown
+        // out at some other base than first.
+        EventType actualType = advances.didBatterReachBase()
+                ? EventType.REACHED_ON_ERROR
+                : EventType.OUT;
+        
+        Advances idealAdvances = outAdvanceDistribution.pickMostCommon(
+                OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
+        PlayOutcome idealOutcome = new PlayOutcome(EventType.OUT, idealAdvances, 0);
+        
+        return new PlayOutcome(actualType, advances, numberOfErrors, idealOutcome);
     }
     
     private OutLocation getOutLocation() {
