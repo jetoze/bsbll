@@ -2,18 +2,15 @@ package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
-import java.io.File;
-
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
-import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 public abstract class ErrorCountDistributionFactory {
 
-    protected abstract ErrorCountDistribution createDistribution();
+    public abstract ErrorCountDistribution createDistribution();
 
     public static ErrorCountDistributionFactory retrosheet(Year year) {
         requireNonNull(year);
@@ -29,7 +26,7 @@ public abstract class ErrorCountDistributionFactory {
         private static final NoErrorsFactory INSTANCE = new NoErrorsFactory();
 
         @Override
-        protected ErrorCountDistribution createDistribution() {
+        public ErrorCountDistribution createDistribution() {
             return ErrorCountDistribution.noErrors();
         }
     }
@@ -43,10 +40,9 @@ public abstract class ErrorCountDistributionFactory {
         }
         
         @Override
-        protected ErrorCountDistribution createDistribution() {
+        public ErrorCountDistribution createDistribution() {
             Handler handler = new Handler();
-            File folder = PlayByPlayFileUtils.getFolder(year);
-            handler.parseAll(folder);
+            handler.parseAll(year);
             return handler.getResult();
         }
         
@@ -54,7 +50,7 @@ public abstract class ErrorCountDistributionFactory {
             private final ErrorCountDistribution.Builder builder = ErrorCountDistribution.builder();
 
             public Handler() {
-                super(p -> ErrorSupport.isSupported(p.getType()));
+                super(ErrorSupport.SUPPORTED_TYPES);
             }
             
             @Override

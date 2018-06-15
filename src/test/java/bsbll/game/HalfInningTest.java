@@ -13,6 +13,8 @@ import com.google.common.collect.ImmutableList;
 import bsbll.game.HalfInning.Stats;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.ErrorAdvanceDistribution;
+import bsbll.game.params.ErrorCountDistribution;
 import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.matchup.MatchupRunner;
@@ -43,7 +45,9 @@ public final class HalfInningTest {
                 mr, 
                 BaseHitAdvanceDistribution.defaultAdvances(), 
                 OutAdvanceDistribution.defaultAdvances(),
-                FieldersChoiceProbabilities.defaultValues());
+                FieldersChoiceProbabilities.defaultValues(),
+                ErrorCountDistribution.noErrors(),
+                ErrorAdvanceDistribution.defaultAdvances());
     }
     
     @Test

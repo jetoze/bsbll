@@ -7,7 +7,11 @@ import com.google.common.collect.ImmutableList;
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.ErrorAdvanceDistribution;
+import bsbll.game.params.ErrorAdvanceKey;
+import bsbll.game.params.ErrorCountDistribution;
 import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceKey;
@@ -33,15 +37,21 @@ public final class GamePlayDriver {
     private final BaseHitAdvanceDistribution baseHitAdvanceDistribution;
     private final OutAdvanceDistribution outAdvanceDistribution;
     private final FieldersChoiceProbabilities fieldersChoiceProbabilities;
+    private final ErrorCountDistribution errorCountDistribution;
+    private final ErrorAdvanceDistribution errorAdvanceDistribution;
     
     public GamePlayDriver(MatchupRunner matchupRunner,
                           BaseHitAdvanceDistribution baseHitAdvanceDistribution,
                           OutAdvanceDistribution outAdvanceDistribution,
-                          FieldersChoiceProbabilities fieldersChoiceProbabilities) {
+                          FieldersChoiceProbabilities fieldersChoiceProbabilities,
+                          ErrorCountDistribution errorCountDistribution,
+                          ErrorAdvanceDistribution errorAdvanceDistribution) {
         this.matchupRunner = requireNonNull(matchupRunner);
         this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
         this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
         this.fieldersChoiceProbabilities = requireNonNull(fieldersChoiceProbabilities);
+        this.errorCountDistribution = requireNonNull(errorCountDistribution);
+        this.errorAdvanceDistribution = requireNonNull(errorAdvanceDistribution);
     }
     
     // TODO: Use our own DieFactory in all calls to AdvanceDistribution etc.
@@ -162,24 +172,38 @@ public final class GamePlayDriver {
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
         // TODO: Simulate errors.
-        OutLocation location = getOutLocation();
-        boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                fieldersChoiceProbabilities.test(baseSituation.getOccupiedBases());
-        EventType resultingType = convertToFieldersChoice
-                ? EventType.FIELDERS_CHOICE
-                : EventType.OUT;
+        OccupiedBases occupiedBases = baseSituation.getOccupiedBases();
+        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, occupiedBases);
+        if (numberOfErrors == 0) {
+            OutLocation location = getOutLocation();
+            boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
+                    fieldersChoiceProbabilities.test(occupiedBases);
+            EventType resultingType = convertToFieldersChoice
+                    ? EventType.FIELDERS_CHOICE
+                    : EventType.OUT;
 
-        OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-        Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
-//        if (convertToFieldersChoice) {
-//            ++fieldersChoices;
-//            System.out.println("Fielder's Choice " + fieldersChoices);
-//        }
-//        if (resultingType == EventType.OUT && location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME)) {
-//            ++sacrificeFlies;
-//            //System.out.println("Sacrifice Fly " + sacrificeFlies);
-//        }
-        return new PlayOutcome(resultingType, advances);
+            OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
+            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
+//            if (convertToFieldersChoice) {
+//                ++fieldersChoices;
+//                System.out.println("Fielder's Choice " + fieldersChoices);
+//            }
+//            if (resultingType == EventType.OUT && location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME)) {
+//                ++sacrificeFlies;
+//                //System.out.println("Sacrifice Fly " + sacrificeFlies);
+//            }
+            return new PlayOutcome(resultingType, advances);
+        } else {
+            System.err.println("Number of errors: " + numberOfErrors);
+            ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
+            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs);
+            // TODO: This will give the incorrect type in the case where the batter is thrown
+            // out at some other base than first.
+            EventType actualType = advances.didBatterReachBase()
+                    ? EventType.REACHED_ON_ERROR
+                    : EventType.OUT;
+            return new PlayOutcome(actualType, advances, numberOfErrors);
+        }
     }
     
     private OutLocation getOutLocation() {

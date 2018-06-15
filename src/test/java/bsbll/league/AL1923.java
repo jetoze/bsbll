@@ -23,6 +23,10 @@ import bsbll.game.event.DefaultGameEventDetector;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.BaseHitAdvanceDistributionFactory;
+import bsbll.game.params.ErrorAdvanceDistribution;
+import bsbll.game.params.ErrorAdvanceDistributionFactory;
+import bsbll.game.params.ErrorCountDistribution;
+import bsbll.game.params.ErrorCountDistributionFactory;
 import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.FieldersChoiceProbabilitiesFactory;
 import bsbll.game.params.OutAdvanceDistribution;
@@ -65,20 +69,27 @@ public final class AL1923 {
                 new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
                 DieFactory.random());
         // We don't have play-by-play data for 1923, so use 1925 instead.
+        Year year = Year.of(1925);
         BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
-                .retrosheet(Year.of(1925))
+                .retrosheet(year)
                 .createDistribution();
         OutAdvanceDistribution outAdvanceDistribution = OutAdvanceDistributionFactory
-                .retrosheet(Year.of(1925))
+                .retrosheet(year)
                 .createDistribution();
         FieldersChoiceProbabilities fieldersChoiceProbabilities = FieldersChoiceProbabilitiesFactory
-                .retrosheet(Year.of(1925))
+                .retrosheet(year)
                 .createProbabilities();
+        ErrorCountDistribution errorCountDistribution = ErrorCountDistributionFactory.retrosheet(year)
+                .createDistribution();
+        ErrorAdvanceDistribution errorAdvanceDistribution = ErrorAdvanceDistributionFactory.retrosheet(year)
+                .createDistribution();
         return new GamePlayDriver(
                 matchupRunner,
                 baseHitAdvanceDistribution,
                 outAdvanceDistribution,
-                fieldersChoiceProbabilities);
+                fieldersChoiceProbabilities,
+                errorCountDistribution,
+                errorAdvanceDistribution);
     }
     
     public Standings run() {
@@ -337,8 +348,8 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        //playSeriesAndPrintBoxScores(4, 7, 7);
-        playCompleteLeague(1);
+        playSeriesAndPrintBoxScores(4, 7, 1);
+        //playCompleteLeague(1);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {

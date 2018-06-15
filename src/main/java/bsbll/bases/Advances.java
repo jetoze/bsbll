@@ -184,6 +184,10 @@ public final class Advances implements Iterable<Advance> {
         return (a != null) && a.isAdvancement();
     }
     
+    public boolean didBatterReachBase() {
+        return didRunnerAdvance(Base.HOME);
+    }
+    
     public boolean didRunnerScore(Base base) {
         if (!contains(base)) {
             return false;
