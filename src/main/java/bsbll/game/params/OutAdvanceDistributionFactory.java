@@ -9,7 +9,6 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
@@ -108,12 +107,6 @@ public abstract class OutAdvanceDistributionFactory {
                 OutLocation location = getLocation(field);
                 OutAdvanceKey key = OutAdvanceKey.of(location, outs);
                 builder.add(key, situation, advances);
-                if (location == OutLocation.INFIELD && situation.getNumberOfRunners() == 1 && situation.isOccupied(Base.FIRST)) {
-                    System.out.println(field.getRawString());
-                    if (field.getRawString().equals("43")) {
-                        System.out.println();
-                    }
-                }
             }
 
             private static OutLocation getLocation(EventField field) {
@@ -123,5 +116,4 @@ public abstract class OutAdvanceDistributionFactory {
             }
         }
     }
-
 }

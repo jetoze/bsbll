@@ -32,7 +32,6 @@ import bsbll.die.DieFactory;
 public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pluralized ("Distributions")?
     private final ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> data;
     private final DieFactory dieFactory = DieFactory.random();
-
     
     protected AdvanceDistribution(ImmutableTable<E, ImmutableSet<Base>, ImmutableMultiset<Advances>> data) {
         this.data = requireNonNull(data);
@@ -97,10 +96,16 @@ public abstract class AdvanceDistribution<E> {     // TODO: Should my name be pl
         ImmutableMultiset<Advances> all = this.data.get(key, baseSituation.getOccupiedBases());
         if (all == null) {
             return ImmutableMultiset.of();
+        } else if(isNumberOfOutsIncludedInKey()) {
+            return all;
+        } else {
+            Multiset<Advances> valid = Multisets.filter(all, a -> (a.getNumberOfOuts() + numberOfOuts) <= 3);
+            return valid;
         }
-        Multiset<Advances> valid = Multisets.filter(all, a -> (a.getNumberOfOuts() + numberOfOuts) <= 3);
-        return valid;
     }
+    
+    // TODO: Should we always require that the key is included?
+    protected abstract boolean isNumberOfOutsIncludedInKey();
 
     private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {
         int total = possibilities.size();

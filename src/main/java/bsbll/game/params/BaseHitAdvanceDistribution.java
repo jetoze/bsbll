@@ -27,6 +27,8 @@ import bsbll.bases.BaseSituation;
  */
 @Immutable
 public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHit> {
+    private static final BaseHitAdvanceDistribution DEFAULT = new BaseHitAdvanceDistribution(ImmutableTable.of());
+    
     /**
      * Creates a {@code BaseHitAdvanceDistribution} based on the distribution
      * data in the given table.
@@ -37,11 +39,11 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
     }
 
     /**
-     * Creates a {@code BaseHitAdvanceDistribution} that will always advance each runner
+     * Returns a {@code BaseHitAdvanceDistribution} that will always advance each runner
      * exactly the number of bases given by the base hit.
      */
     public static BaseHitAdvanceDistribution defaultAdvances() {
-        return new BaseHitAdvanceDistribution(ImmutableTable.of());
+        return DEFAULT;
     }
 
     @Override
@@ -57,6 +59,10 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
         return new Advances(advances);
     }
 
+    @Override
+    protected boolean isNumberOfOutsIncludedInKey() {
+        return false;
+    }
 
     public static Builder builder() {
         return new Builder();

@@ -23,6 +23,8 @@ import bsbll.game.event.DefaultGameEventDetector;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.BaseHitAdvanceDistributionFactory;
+import bsbll.game.params.OutAdvanceDistribution;
+import bsbll.game.params.OutAdvanceDistributionFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
@@ -64,9 +66,13 @@ public final class AL1923 {
         BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
                 .retrosheet(Year.of(1925))
                 .createDistribution();
+        OutAdvanceDistribution outAdvanceDistribution = OutAdvanceDistributionFactory
+                .retrosheet(Year.of(1925))
+                .createDistribution();
         return new GamePlayDriver(
                 matchupRunner,
-                baseHitAdvanceDistribution);
+                baseHitAdvanceDistribution,
+                outAdvanceDistribution);
     }
     
     public Standings run() {
@@ -325,8 +331,8 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 7, 7);
-        //playCompleteLeague(1);
+        //playSeriesAndPrintBoxScores(4, 7, 7);
+        playCompleteLeague(1);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {

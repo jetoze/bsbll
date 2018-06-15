@@ -8,6 +8,9 @@ import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.params.BaseHitAdvanceDistribution;
+import bsbll.game.params.OutAdvanceDistribution;
+import bsbll.game.params.OutAdvanceKey;
+import bsbll.game.params.OutLocation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.matchup.MatchupRunner;
@@ -27,11 +30,14 @@ import bsbll.player.Player;
 public final class GamePlayDriver {
     private final MatchupRunner matchupRunner;
     private final BaseHitAdvanceDistribution baseHitAdvanceDistribution;
+    private final OutAdvanceDistribution outAdvanceDistribution;
     
     public GamePlayDriver(MatchupRunner matchupRunner,
-            BaseHitAdvanceDistribution baseHitAdvanceDistribution) {
+                          BaseHitAdvanceDistribution baseHitAdvanceDistribution,
+                          OutAdvanceDistribution outAdvanceDistribution) {
         this.matchupRunner = requireNonNull(matchupRunner);
         this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
+        this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
     }
 
     // TODO: In addition to just the batter and pitcher, a proper driver needs access to 
@@ -116,8 +122,7 @@ public final class GamePlayDriver {
         case HIT_BY_PITCH:
             return batterAwardedFirst(baseSituation, basicOutcome);
         case OUT:
-            // TODO: Simulate errors
-            return new PlayOutcome(EventType.OUT, Advances.empty());
+            return out(baseSituation, outs);
         default:
             throw new AssertionError("Unexpected outcome: " + basicOutcome);
         }
@@ -147,4 +152,19 @@ public final class GamePlayDriver {
         return new PlayOutcome(type, advances);
     }
 
+    private PlayOutcome out(BaseSituation baseSituation, int outs) {
+        // TODO: Simulate errors.
+        OutLocation location = getOutLocation();
+        OutAdvanceKey key = OutAdvanceKey.of(location, outs);
+        Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs);
+        return new PlayOutcome(EventType.OUT, advances);
+    }
+    
+    private OutLocation getOutLocation() {
+        // TODO: Get from play-by-play data. For now we use a 65-35 split.
+        return Math.random() < 0.65
+                ? OutLocation.INFIELD
+                : OutLocation.OUTFIELD;
+        
+    }
 }

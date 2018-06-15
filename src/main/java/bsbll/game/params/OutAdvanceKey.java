@@ -36,6 +36,10 @@ public final class OutAdvanceKey {
         return location;
     }
     
+    public int getOuts() {
+        return outs;
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(location, outs);
