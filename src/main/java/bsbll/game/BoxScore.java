@@ -57,7 +57,7 @@ public final class BoxScore {
         this.winningPitcher = winningPitcher;
         this.losingPitcher = losingPitcher;
         checkArgument((winningPitcher == null && losingPitcher == null) ||
-                (winningPitcher != null || losingPitcher != null), 
+                (winningPitcher != null && losingPitcher != null), 
                 "Must provide both a winning and a losing pitcher, or neither. WP: %s. LP: %s",
                 winningPitcher, losingPitcher);
         this.runsScored = requireNonNull(runsScored);
