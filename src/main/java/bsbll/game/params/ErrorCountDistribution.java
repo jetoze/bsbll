@@ -23,6 +23,10 @@ import bsbll.game.play.EventType;
 public final class ErrorCountDistribution {
     private static final ErrorCountDistribution NO_ERRORS = new ErrorCountDistribution(ImmutableTable.of());
     
+    // TODO: The error count distribution should depend on the team, to simulate some teams
+    // being better than fielding than others. As it stands, we expect all teams to end up
+    // with approximately the same number of errors over the course of a season.
+    
     // TODO: Should the number of outs be included as well?
     private final ImmutableTable<EventType, OccupiedBases, ImmutableMultiset<Integer>> data;
     private final DieFactory dieFactory = DieFactory.random();
@@ -89,5 +93,4 @@ public final class ErrorCountDistribution {
             return new ErrorCountDistribution(tableBuilder.build());
         }
     }
-    
 }

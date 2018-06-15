@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
+import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
@@ -50,14 +51,21 @@ public abstract class ErrorCountDistributionFactory {
             private final ErrorCountDistribution.Builder builder = ErrorCountDistribution.builder();
 
             public Handler() {
-                super(ErrorSupport.SUPPORTED_TYPES);
+                super(p -> {
+                    EventType type = p.getType();
+                    return (type == EventType.REACHED_ON_ERROR) || ErrorSupport.isSupported(type);
+                });
             }
             
             @Override
             protected void process(PlayOutcome play, BaseSituation bases, int outs,
                     EventField field) {
                 int errors = play.getNumberOfErrors();
-                builder.add(play.getType(), bases.getOccupiedBases(), errors);
+                EventType type = play.getType();
+                if (type == EventType.REACHED_ON_ERROR) {
+                    type = EventType.OUT;
+                }
+                builder.add(type, bases.getOccupiedBases(), errors);
             }
             
             public ErrorCountDistribution getResult() {

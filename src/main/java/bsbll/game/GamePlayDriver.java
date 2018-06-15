@@ -171,7 +171,6 @@ public final class GamePlayDriver {
     //private int fieldersChoices;
     // privat int sacrificeFlies;
     private PlayOutcome out(BaseSituation baseSituation, int outs) {
-        // TODO: Simulate errors.
         OccupiedBases occupiedBases = baseSituation.getOccupiedBases();
         int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, occupiedBases);
         if (numberOfErrors == 0) {
@@ -194,7 +193,6 @@ public final class GamePlayDriver {
 //            }
             return new PlayOutcome(resultingType, advances);
         } else {
-            System.err.println("Number of errors: " + numberOfErrors);
             ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
             Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs);
             // TODO: This will give the incorrect type in the case where the batter is thrown

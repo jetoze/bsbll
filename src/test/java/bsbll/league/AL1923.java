@@ -346,12 +346,6 @@ public final class AL1923 {
                 .build();
     }
     
-    
-    public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 7, 1);
-        //playCompleteLeague(1);
-    }
-
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {
         AL1923 league = new AL1923();
         ImmutableList<Team> teams = league.league.getTeams();
@@ -412,5 +406,10 @@ public final class AL1923 {
             System.out.println(namePadding.right(p.getName().getShortForm()) + valuePadding.left(e.getValue()));
         });
         System.out.println();
+    }
+    
+    public static void main(String[] args) {
+        playSeriesAndPrintBoxScores(4, 7, 10);
+        //playCompleteLeague(1);
     }
 }
