@@ -71,6 +71,10 @@ public abstract class AdvanceDistribution<E> {
      */
     protected abstract Advances defaultAdvance(E key, BaseSituation baseSituation);
     
+    /**
+     * Returns the candidates for the given key and base situtation. Candidates that would result in 
+     * more than three outs in the inning are excluded.
+     */
     private Multiset<Advances> getPossibilities(E key, BaseSituation baseSituation, int numberOfOuts) {
         // An Advance where two runners are thrown out is not valid if there are already two outs in the inning.
         // TODO: Add number of outs as an additional lookup dimension?
@@ -99,7 +103,19 @@ public abstract class AdvanceDistribution<E> {
             }
         }
         // We should never get here. But in case we do, we pick the most common one.
+        return mostCommon(possibilities);
+    }
+
+    private Advances mostCommon(Multiset<Advances> possibilities) {
+        assert !possibilities.isEmpty();
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
+    }
+    
+    public final Advances pickMostCommon(E key, BaseSituation baseSituation, int numberOfOuts) {
+        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts);
+        return possibilities.isEmpty()
+                ? defaultAdvance(key, baseSituation)
+                : mostCommon(possibilities);
     }
     
     public final ImmutableSet<E> keys() {
