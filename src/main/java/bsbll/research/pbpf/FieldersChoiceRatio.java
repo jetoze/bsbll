@@ -1,10 +1,16 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
+import java.util.EnumSet;
+import java.util.Set;
 
+import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Multiset;
 
 import bsbll.Year;
+import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
@@ -13,8 +19,8 @@ import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public final class FieldersChoiceRatio extends GameHandler {
-    private int outsWithRunnersOnBase;
-    private int fieldersChoices;
+    private final Multiset<Set<Base>> outsWithRunnersOnBase = HashMultiset.create();
+    private final Multiset<Set<Base>> fieldersChoices = HashMultiset.create();
     
     private int playerId;
 
@@ -23,10 +29,13 @@ public final class FieldersChoiceRatio extends GameHandler {
             ImmutableList<PlayOutcome> plays) {
         BaseSituation bases = BaseSituation.empty();
         for (PlayOutcome p : plays) {
-            if (p.getType() == EventType.OUT && !bases.isEmpty()) {
-                ++outsWithRunnersOnBase;
-            } else if (p.getType() == EventType.FIELDERS_CHOICE) {
-                ++fieldersChoices;
+            if (!bases.isEmpty()) {
+                EnumSet<Base> occupied = bases.getOccupiedBases();
+                if (p.getType() == EventType.OUT) {
+                    outsWithRunnersOnBase.add(occupied);
+                } else if (p.getType() == EventType.FIELDERS_CHOICE) {
+                    fieldersChoices.add(occupied);
+                }
             }
             bases = bases.advanceRunners(nextBatter(), p.getAdvances()).getNewSituation();
         }
@@ -43,11 +52,22 @@ public final class FieldersChoiceRatio extends GameHandler {
     }
     
     private void report(Year year) {
+        int outCount = outsWithRunnersOnBase.size();
+        int fcCount = fieldersChoices.size();
         System.out.println("Fielder's Choices Compared to Outs with Runners on Base for the Year " + year);
-        System.out.println("Fielders Choices: " + fieldersChoices);
-        System.out.println("Outs with Runners on Base: " + outsWithRunnersOnBase);
+        System.out.println();
+        System.out.println("TOTALS:");
+        System.out.println("Fielders Choices: " + fcCount);
+        System.out.println("Outs with Runners on Base: " + outCount);
         System.out.println(String.format("FC / (FC + Outs): %.3f", 
-                (1.0 * fieldersChoices) / (fieldersChoices + outsWithRunnersOnBase)));
+                (1.0 * fcCount) / (fcCount + outCount)));
+        System.out.println();
+        for (ImmutableSet<Base> p : Base.occupiedBasesPossibilities()) {
+            System.out.println(p);
+            int o = outsWithRunnersOnBase.count(p);
+            int f = fieldersChoices.count(p);
+            System.out.println(String.format("  Outs: %d, FCs: %d, %%: %.3f", o, f, (1.0 * f) / o));
+        }
     }
 
     public static void main(String[] args) {
