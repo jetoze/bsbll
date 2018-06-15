@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -135,20 +134,14 @@ public final class HalfInning {
         
         private void updateState(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
             ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome.getAdvances());
-            stats = new Stats(
-                    stats.runs + roa.getNumberOfRuns(),
-                    stats.hits + (outcome.isBaseHit() ? 1 : 0),
-                    stats.errors + outcome.getNumberOfErrors(),
-                    stats.outs + outcome.getNumberOfOuts(),
-                    stats.leftOnBase);
+            stats = stats.plus(roa, outcome);
             ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
                     .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))
                     .collect(ImCollectors.toList());
             this.runs.addAll(runsOnPlay);
             baseSituation = roa.getNewSituation();
             if (updatePlayerStats) {
-                playerStats.update(batter, pitcher, outcome,
-                        runsOnPlay.stream().map(Run::getRunner).collect(Collectors.toList()));
+                playerStats.update(batter, pitcher, outcome, roa.getRunnersThatScored());
             }
         }
     }
@@ -194,9 +187,19 @@ public final class HalfInning {
             return leftOnBase;
         }
         
-        public Stats withLeftOnBase(int lob) {
+        private Stats withLeftOnBase(int lob) {
             return new Stats(runs, hits, errors, outs, lob);
         }
+        
+        private Stats plus(ResultOfAdvance roa, PlayOutcome outcome) {
+            return new Stats(
+                    this.runs + roa.getNumberOfRuns(),
+                    this.hits + (outcome.isBaseHit() ? 1 : 0),
+                    this.errors + outcome.getNumberOfErrors(),
+                    this.outs + outcome.getNumberOfOuts(),
+                    this.leftOnBase);
+        }
+        
         
         @Override
         public boolean equals(@Nullable Object obj) {
