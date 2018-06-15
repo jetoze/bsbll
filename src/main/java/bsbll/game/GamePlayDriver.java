@@ -74,7 +74,10 @@ public final class GamePlayDriver {
      * and {@link #runMatchup(Player, Player, BaseSituation, int) runMatchup} should
      * not be called. Ditto if any of these plays result in a walk-off run.
      */
-    public ImmutableList<PlayOutcome> preMatchupCompletionPlays(Player batter, Player pitcher, BaseSituation baseSituation, int outs) {
+    public ImmutableList<PlayOutcome> preMatchupCompletionPlays(Player batter, 
+                                                                Player pitcher, 
+                                                                BaseSituation baseSituation, 
+                                                                int outs) {
         // TODO: Implement me.
         return ImmutableList.of();
     }
@@ -88,22 +91,22 @@ public final class GamePlayDriver {
         requireNonNull(batter);
         requireNonNull(pitcher);
         Outcome basicOutcome = matchupRunner.run(batter, pitcher);
-        return resultingPlay(baseSituation, basicOutcome);
+        return resultingPlay(baseSituation, basicOutcome, outs);
     }
 
     /**
      * Returns the play that results from the outcome of the matchup.
      */
-    private PlayOutcome resultingPlay(BaseSituation baseSituation, Outcome basicOutcome) {
+    private PlayOutcome resultingPlay(BaseSituation baseSituation, Outcome basicOutcome, int outs) {
         switch (basicOutcome) {
         case SINGLE:
-            return baseHit(BaseHit.SINGLE, baseSituation);
+            return baseHit(BaseHit.SINGLE, baseSituation, outs);
         case DOUBLE:
-            return baseHit(BaseHit.DOUBLE, baseSituation);
+            return baseHit(BaseHit.DOUBLE, baseSituation, outs);
         case TRIPLE:
-            return baseHit(BaseHit.TRIPLE, baseSituation);
+            return baseHit(BaseHit.TRIPLE, baseSituation, outs);
         case HOMERUN:
-            return baseHit(BaseHit.HOMERUN, baseSituation);
+            return baseHit(BaseHit.HOMERUN, baseSituation, outs);
         case STRIKEOUT:
             // TODO: Dropped third strike could result in the batter going to first,
             // without an out being recorded.
@@ -120,12 +123,12 @@ public final class GamePlayDriver {
         }
     }
     
-    private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation) {
+    private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation, int outs) {
         // TODO: Factor in the possibility of errors.
         if (baseHit == BaseHit.HOMERUN) {
             return homerun(baseSituation);
         } else {
-            Advances advances = baseHitAdvanceDistribution.pickOne(baseHit, baseSituation);
+            Advances advances = baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, outs);
             return new PlayOutcome(baseHit.toEventType(), advances);
         }
     }

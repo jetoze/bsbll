@@ -1,6 +1,7 @@
 package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -68,14 +69,13 @@ public final class BaseHitAdvanceDistribution {
      *            the base hit (other than {@code BaseHit.HOMERUN}.
      * @param baseSituation
      *            the {@code BaseSituation} at the time of the hit.
-     * @param dieFactory
-     *            the {@code DieFactory} that will be asked to produce the die
-     *            to roll
+     * @param numberOfOuts
+     *            the number of outs at the time of the hit.
      * @return an {@code Advances} object that describes the resulting base
      *         advances, including the batter.
      */
-    public Advances pickOne(BaseHit baseHit, BaseSituation baseSituation) {
-        return pickOne(baseHit, baseSituation, this.dieFactory);
+    public Advances pickOne(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts) {
+        return pickOne(baseHit, baseSituation, numberOfOuts, this.dieFactory);
     }
     
     /**
@@ -86,28 +86,34 @@ public final class BaseHitAdvanceDistribution {
      *            the base hit (other than {@code BaseHit.HOMERUN}.
      * @param baseSituation
      *            the {@code BaseSituation} at the time of the hit.
+     * @param numberOfOuts
+     *            the number of outs at the time of the hit.
      * @param dieFactory
      *            the {@code DieFactory} that will be asked to produce the die
      *            to roll
      * @return an {@code Advances} object that describes the resulting base
      *         advances, including the batter.
      */
-    public Advances pickOne(BaseHit baseHit, BaseSituation baseSituation, DieFactory dieFactory) {
+    public Advances pickOne(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
         requireNonNull(baseHit);
         requireNonNull(baseSituation);
+        checkInRange(numberOfOuts, 0, 2);
         requireNonNull(dieFactory);
         if (baseHit == BaseHit.HOMERUN) {
             // Everything is fixed for homeruns
             return defaultAdvance(baseHit, baseSituation);
         }
-        Multiset<Advances> possibilities = this.data.get(baseHit, baseSituation.getOccupiedBases());
+        Multiset<Advances> possibilities = getPossibilities(baseHit, baseSituation, numberOfOuts);
         if (possibilities == null || possibilities.isEmpty()) {
             return defaultAdvance(baseHit, baseSituation);
+        } else {
+            return pickOneFromSet(dieFactory, possibilities);
         }
-        return pickOneFromSet(dieFactory, possibilities);
     }
     
     private Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
+        // Note that the default advance will never have any runners out, so
+        // the current number of outs does not matter.
         List<Advance> advances = new ArrayList<>();
         advances.add(Base.HOME.defaultAdvance(baseHit)); // the batter
         Arrays.stream(Base.occupiable())
@@ -115,6 +121,14 @@ public final class BaseHitAdvanceDistribution {
             .map(b -> b.defaultAdvance(baseHit))
             .forEach(advances::add);
         return new Advances(advances);
+    }
+    
+    private Multiset<Advances> getPossibilities(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts) {
+        // An Advance where two runners are thrown out is not valid if there are already two outs in the inning.
+        // TODO: Add number of outs as an additional lookup dimension?
+        Multiset<Advances> all = this.data.get(baseHit, baseSituation.getOccupiedBases());
+        Multiset<Advances> valid = Multisets.filter(all, a -> (a.getNumberOfOuts() + numberOfOuts) <= 3);
+        return valid;
     }
 
     private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {

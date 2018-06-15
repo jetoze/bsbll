@@ -101,7 +101,7 @@ public final class HalfInning {
                 preStats.runs + roa.getNumberOfRuns(),
                 preStats.hits + (outcome.isBaseHit() ? 1 : 0),
                 preStats.errors + outcome.getNumberOfErrors(),
-                preStats.outs + outcome.getNumberOfOuts(), // FIXME: I can add up to > 3 at the moment
+                preStats.outs + outcome.getNumberOfOuts(),
                 preStats.leftOnBase);
         ImmutableList<Run> runs = roa.getRunnersThatScored().stream()
                 .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))

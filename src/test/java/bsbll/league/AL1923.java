@@ -325,8 +325,8 @@ public final class AL1923 {
     
     
     public static void main(String[] args) {
-        //playSeriesAndPrintBoxScores(4, 7, 154);
-        playCompleteLeague(1);
+        playSeriesAndPrintBoxScores(4, 7, 7);
+        //playCompleteLeague(1);
     }
 
     public static void playSeriesAndPrintBoxScores(int homeTeamIndex, int visitingTeamIndex, int numberOfGames) {
