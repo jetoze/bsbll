@@ -21,6 +21,7 @@ import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
+import bsbll.game.play.AtBatResult;
 import bsbll.game.play.Play;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
@@ -97,25 +98,15 @@ public final class HalfInning {
             do {
                 Player batter = battingOrder.nextBatter();
                 runnerToResponsiblePitcher.put(batter, pitcher);
-                ImmutableList<PlayOutcome> preMatchupPlays = driver.preMatchupCompletionPlays(
-                        batter, pitcher, baseSituation, stats.outs);
-                for (PlayOutcome outcome : preMatchupPlays) {
+                AtBatResult result = driver.run(batter, pitcher, baseSituation, stats.outs, runsNeededToWin);
+                for (PlayOutcome outcome : result.getIdealPlays()) {
                     checkState(!isDone(stats));
                     processPlay(batter, outcome, false);
                     // TODO: Update runner and pitching stats
                 }
-                if (isDone(stats)) {
-                    // The inning (or game) ended before the batter-pitcher matchup completed. A couple of 
-                    // ways this can happen:
-                    //   + A runner is caught stealing / picked off for the third out of the inning
-                    //   + A wild pitch / passed ball allows the winning run to score (walk-off)
-                    // In case this is just the end of the inning, not the game, we reset the Batting Order
-                    // so that the same batter comes up again the next time his team is batting.
+                if (!result.didBatterCompleteHisTurn()) {
                     battingOrder.returnBatter(batter);
-                    break;
                 }
-                PlayOutcome outcome = driver.runMatchup(batter, pitcher, baseSituation, stats.outs);
-                processPlay(batter, outcome, true);
             } while (!isDone(stats));
             int lob = baseSituation.getNumberOfRunners();
             return new Summary(stats.withLeftOnBase(lob), plays, runs, events);

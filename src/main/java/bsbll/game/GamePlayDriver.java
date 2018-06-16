@@ -3,8 +3,6 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 
-import com.google.common.collect.ImmutableList;
-
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
@@ -117,7 +115,7 @@ public final class GamePlayDriver {
     private final class AtBatDriver {
         private final Player batter;
         private final Player pitcher;
-        private final BaseSituation baseSituation;
+        private BaseSituation baseSituation;
         private int outs;
         private RunsNeededToWin runsNeededToWin;
         
@@ -132,16 +130,16 @@ public final class GamePlayDriver {
             this.builder = AtBatResult.builder(batter, pitcher);
         }
         
-        private void addOuts(int outs) {
-            this.outs += outs;
-        }
-        
-        private void addRuns(int runs) {
-            this.runsNeededToWin = this.runsNeededToWin.updateWithRunsScored(runs);
-        }
-        
         public AtBatResult run() {
+            runPreMatchupPlays();
+            if (!isDone()) {
+                runMatchup();
+            }
             return builder.build();
+        }
+        
+        private boolean isDone() {
+            return (outs >= 3) || runsNeededToWin.isGameOver();
         }
      
         /**
@@ -155,162 +153,155 @@ public final class GamePlayDriver {
          * any of these plays result in a walk-off run.
          */
         private void runPreMatchupPlays() {
-            
+            // TODO: Implement me
         }
-    }
-    
-    
-    
-    
-    /**
-     * Returns the plays, if any, that take place before the batter-pitcher
-     * matchup completes. This includes things like stolen base attempts, balks,
-     * or wild pitches.
-     * <p>
-     * Note that if any of the plays results in outs, we may reach the end of
-     * the inning (three outs), in which case the matchup should be terminated,
-     * and {@link #runMatchup(Player, Player, BaseSituation, int) runMatchup} should
-     * not be called. Ditto if any of these plays result in a walk-off run.
-     */
-    public ImmutableList<PlayOutcome> preMatchupCompletionPlays(Player batter, 
-                                                                Player pitcher, 
-                                                                BaseSituation baseSituation, 
-                                                                int outs) {
-        // TODO: Implement me.
-        return ImmutableList.of();
-    }
-    
-    /**
-     * Generates the basic outcome of the batter-pitcher matchup itself.
-     */
-    public PlayOutcome runMatchup(Player batter, Player pitcher, BaseSituation baseSituation, int outs) {
-        // TODO: Could there be a case where we need to return more than one play here?
-        // I can't think of any at the moment.
-        requireNonNull(batter);
-        requireNonNull(pitcher);
-        Outcome basicOutcome = matchupRunner.run(batter, pitcher);
-        return resultingPlay(baseSituation, basicOutcome, outs);
-    }
-
-    /**
-     * Returns the play that results from the outcome of the matchup.
-     */
-    private PlayOutcome resultingPlay(BaseSituation baseSituation, Outcome basicOutcome, int outs) {
-        switch (basicOutcome) {
-        case SINGLE:
-            return baseHit(BaseHit.SINGLE, baseSituation, outs);
-        case DOUBLE:
-            return baseHit(BaseHit.DOUBLE, baseSituation, outs);
-        case TRIPLE:
-            return baseHit(BaseHit.TRIPLE, baseSituation, outs);
-        case HOMERUN:
-            return baseHit(BaseHit.HOMERUN, baseSituation, outs);
-        case STRIKEOUT:
-            // TODO: Dropped third strike could result in the batter going to first,
-            // without an out being recorded.
-            return PlayOutcome.builder(EventType.STRIKEOUT).build();
-        case WALK:
-            return batterAwardedFirst(baseSituation, basicOutcome);
-        case HIT_BY_PITCH:
-            return batterAwardedFirst(baseSituation, basicOutcome);
-        case OUT:
-            return out(baseSituation, outs);
-        default:
-            throw new AssertionError("Unexpected outcome: " + basicOutcome);
+        
+        /**
+         * Runs the batter-pitcher matchup itself.
+         */
+        private void runMatchup() {
+            Outcome basicOutcome = matchupRunner.run(batter, pitcher);
+            processBasicMatchupOutcome(basicOutcome);
+            builder.batterCompletedHisTurn();
         }
-    }
-    
-    private PlayOutcome baseHit(BaseHit baseHit, BaseSituation baseSituation, int outs) {
-        if (baseHit == BaseHit.HOMERUN) {
-            return homerun(baseSituation);
-        } else {
-            EventType eventType = baseHit.toEventType();
-            int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
-            if (numberOfErrors == 0) {
-                Advances advances = baseHitAdvanceDistribution.pickOne(
-                        baseHit, baseSituation, outs, dieFactory);
-                return new PlayOutcome(eventType, advances, numberOfErrors);
-            } else {
-                Advances advances = errorAdvanceDistribution.pickOne(
-                        ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
-                
-                Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
-                PlayOutcome idealOutcome = new PlayOutcome(eventType, idealAdvances, 0);
-                // TODO: We need to return the ideal outcome as well
-                
-                return new PlayOutcome(eventType, advances, numberOfErrors);
+        
+        private void processBasicMatchupOutcome(Outcome basicOutcome) {
+            switch (basicOutcome) {
+            case SINGLE:
+                baseHit(BaseHit.SINGLE);
+                break;
+            case DOUBLE:
+                baseHit(BaseHit.DOUBLE);
+                break;
+            case TRIPLE:
+                baseHit(BaseHit.TRIPLE);
+                break;
+            case HOMERUN:
+                baseHit(BaseHit.HOMERUN);
+                break;
+            case STRIKEOUT:
+                // TODO: Dropped third strike could result in the batter going to first,
+                // without an out being recorded.
+                PlayOutcome so = PlayOutcome.builder(EventType.STRIKEOUT).build();
+                addOutcome(so, so);
+                break;
+            case WALK:
+                batterAwardedFirst(basicOutcome);
+                break;
+            case HIT_BY_PITCH:
+                batterAwardedFirst(basicOutcome);
+                break;
+            case OUT:
+                out();
+                break;
+            default:
+                throw new AssertionError("Unexpected outcome: " + basicOutcome);
             }
         }
-    }
-    
-    private PlayOutcome homerun(BaseSituation baseSituation) {
-        Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
-        return new PlayOutcome(EventType.HOMERUN, advances);
-    }
-    
-    private PlayOutcome batterAwardedFirst(BaseSituation baseSituation, Outcome outcome) {
-        assert outcome == Outcome.WALK || outcome == Outcome.HIT_BY_PITCH;
-        Advances advances = Advances.batterAwardedFirstBase(baseSituation.getOccupiedBases());
-        EventType type = (outcome == Outcome.WALK)
-                ? EventType.WALK
-                : EventType.HIT_BY_PITCH;
-        return new PlayOutcome(type, advances);
-    }
-
-    //private int fieldersChoices;
-    // privat int sacrificeFlies;
-    private PlayOutcome out(BaseSituation baseSituation, int outs) {
-        OutLocation location = getOutLocation();
-        int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
-        if (numberOfErrors == 0) {
-            return outWithoutError(baseSituation, location, outs);
-        } else {
-            return errorOnOut(baseSituation, location, outs, numberOfErrors);
+        
+        private void baseHit(BaseHit baseHit) {
+            if (baseHit == BaseHit.HOMERUN) {
+                homerun(baseSituation);
+            } else {
+                EventType eventType = baseHit.toEventType();
+                int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
+                if (numberOfErrors == 0) {
+                    Advances advances = baseHitAdvanceDistribution.pickOne(
+                            baseHit, baseSituation, outs, dieFactory);
+                    PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
+                    addOutcome(p, p);
+                } else {
+                    Advances advances = errorAdvanceDistribution.pickOne(
+                            ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
+                    PlayOutcome actual = new PlayOutcome(eventType, advances, numberOfErrors);
+                    
+                    Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
+                    PlayOutcome ideal = new PlayOutcome(eventType, idealAdvances, 0);
+                    
+                    addOutcome(actual, ideal);
+                }
+            }
         }
-    }
-
-    private PlayOutcome outWithoutError(BaseSituation baseSituation, OutLocation location, int outs) {
-        boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                fieldersChoiceProbabilities.test(baseSituation, dieFactory);
-        EventType resultingType = convertToFieldersChoice
-                ? EventType.FIELDERS_CHOICE
-                : EventType.OUT;
-
-        OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-        Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
-//            if (convertToFieldersChoice) {
-//                ++fieldersChoices;
-//                System.out.println("Fielder's Choice " + fieldersChoices);
-//            }
-//            if (resultingType == EventType.OUT && location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME)) {
-//                ++sacrificeFlies;
-//                //System.out.println("Sacrifice Fly " + sacrificeFlies);
-//            }
-        return new PlayOutcome(resultingType, advances);
-    }
-
-    private PlayOutcome errorOnOut(BaseSituation baseSituation, OutLocation location, int outs, int numberOfErrors) {
-        ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
-        Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
-        // TODO: This will give the incorrect type in the case where the batter is thrown
-        // out at some other base than first.
-        EventType actualType = advances.didBatterReachBase()
-                ? EventType.REACHED_ON_ERROR
-                : EventType.OUT;
         
-        Advances idealAdvances = outAdvanceDistribution.pickMostCommon(
-                OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
-        PlayOutcome idealOutcome = new PlayOutcome(EventType.OUT, idealAdvances, 0);
-        // TODO: We need to return the ideal outcome as well
+        private void homerun(BaseSituation baseSituation) {
+            Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
+            PlayOutcome hr = new PlayOutcome(EventType.HOMERUN, advances);
+            addOutcome(hr, hr);
+        }
         
-        return new PlayOutcome(actualType, advances, numberOfErrors);
-    }
-    
-    private OutLocation getOutLocation() {
-        // TODO: Get from play-by-play data. For now we use a 65-35 split.
-        return Math.random() < 0.65
-                ? OutLocation.INFIELD
-                : OutLocation.OUTFIELD;
+        private void batterAwardedFirst(Outcome outcome) {
+            assert outcome == Outcome.WALK || outcome == Outcome.HIT_BY_PITCH;
+            Advances advances = Advances.batterAwardedFirstBase(baseSituation.getOccupiedBases());
+            EventType type = (outcome == Outcome.WALK)
+                    ? EventType.WALK
+                    : EventType.HIT_BY_PITCH;
+            PlayOutcome p = new PlayOutcome(type, advances);
+            addOutcome(p, p);
+        }
+
+        //private int fieldersChoices;
+        // privat int sacrificeFlies;
+        private void out() {
+            OutLocation location = getOutLocation();
+            int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
+            if (numberOfErrors == 0) {
+                outWithoutError(baseSituation, location, outs);
+            } else {
+                errorOnOut(baseSituation, location, outs, numberOfErrors);
+            }
+        }
+
+        private void outWithoutError(BaseSituation baseSituation, OutLocation location, int outs) {
+            boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
+                    fieldersChoiceProbabilities.test(baseSituation, dieFactory);
+            EventType resultingType = convertToFieldersChoice
+                    ? EventType.FIELDERS_CHOICE
+                    : EventType.OUT;
+
+            OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
+            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+//                if (convertToFieldersChoice) {
+//                    ++fieldersChoices;
+//                    System.out.println("Fielder's Choice " + fieldersChoices);
+//                }
+//                if (resultingType == EventType.OUT && location == OutLocation.OUTFIELD && advances.contains(Advance.safe(Base.THIRD, Base.HOME)) {
+//                    ++sacrificeFlies;
+//                    //System.out.println("Sacrifice Fly " + sacrificeFlies);
+//                }
+            PlayOutcome p = new PlayOutcome(resultingType, advances);
+            addOutcome(p, p);
+        }
+
+        private void errorOnOut(BaseSituation baseSituation, OutLocation location, int outs, int numberOfErrors) {
+            ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
+            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+            // TODO: This will give the incorrect type in the case where the batter is thrown
+            // out at some other base than first.
+            EventType actualType = advances.didBatterReachBase()
+                    ? EventType.REACHED_ON_ERROR
+                    : EventType.OUT;
+            PlayOutcome actual = new PlayOutcome(actualType, advances, numberOfErrors);
+            
+            Advances idealAdvances = outAdvanceDistribution.pickMostCommon(
+                    OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
+            PlayOutcome ideal = new PlayOutcome(EventType.OUT, idealAdvances, 0);
+
+            addOutcome(actual, ideal);
+        }
         
+        private OutLocation getOutLocation() {
+            // TODO: Get from play-by-play data. For now we use a 65-35 split.
+            return Math.random() < 0.65
+                    ? OutLocation.INFIELD
+                    : OutLocation.OUTFIELD;
+            
+        }
+
+        private void addOutcome(PlayOutcome actual, PlayOutcome ideal) {
+            builder.addOutcome(actual, ideal);
+            baseSituation = baseSituation.advanceRunners(batter, actual.getAdvances()).getNewSituation();
+            outs += actual.getNumberOfOuts();
+            runsNeededToWin = runsNeededToWin.updateWithRunsScored(actual.getNumberOfRuns());
+        }
     }
 }

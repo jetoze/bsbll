@@ -75,6 +75,9 @@ public final class BaseSituation {
     }
     
     public ResultOfAdvance advanceRunners(Player batter, Advances advances) {
+        if (advances.isEmpty()) {
+            return new ResultOfAdvance(this, ImmutableList.of());
+        }
         BaseSituation newSituation = createNewSituation(batter, advances);
         ImmutableList<Player> runs = advances.getRunnersThatScored()
                 .map(Advance::from)

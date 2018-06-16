@@ -1,6 +1,5 @@
 package bsbll.game.play;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
@@ -34,7 +33,6 @@ public final class AtBatResult { // TODO: Come up with a better name
         this.pitcher = requireNonNull(pitcher);
         this.actualPlays = ImmutableList.copyOf(actualPlays);
         this.idealPlays = ImmutableList.copyOf(idealPlays);
-        checkArgument(actualPlays.size() >= idealPlays.size());
         this.batterCompletedHisTurn = batterCompletedHisTurn;
     }
 
@@ -54,7 +52,7 @@ public final class AtBatResult { // TODO: Come up with a better name
         return idealPlays;
     }
 
-    public boolean isBatterCompletedHisTurn() {
+    public boolean didBatterCompleteHisTurn() {
         return batterCompletedHisTurn;
     }
     
@@ -81,11 +79,9 @@ public final class AtBatResult { // TODO: Come up with a better name
             return this;
         }
         
-        public Builder addNonIdealOutcome(PlayOutcome actual, PlayOutcome ideal) {
+        public Builder addOutcome(PlayOutcome actual, PlayOutcome ideal) {
             requireNonNull(actual);
             requireNonNull(ideal);
-            checkArgument(actual.isErrorOrPassedBall(), "The actual outcome is already ideal");
-            checkArgument(!ideal.isErrorOrPassedBall(), "The ideal outcome is not ideal"); // How's that for an error message...
             this.actualPlays.add(actual);
             this.idealPlays.add(ideal);
             return this;
