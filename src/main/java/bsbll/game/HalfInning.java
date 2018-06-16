@@ -34,7 +34,7 @@ public final class HalfInning {
     private final GamePlayDriver driver;
     private final PlayerGameStats playerStats; // TODO: do this via an observer instead?
     private final GameEventDetector eventDetector;
-    private final int runsNeededToWin;
+    private RunsNeededToWin runsNeededToWin;
 
     /**
      * 
@@ -57,7 +57,7 @@ public final class HalfInning {
      *            if the bottom of ninth inning or later, the number of runs
      *            needed by the batting team to win the game. This half inning
      *            will come to a stop once this many runs score (or three outs
-     *            are made). {@code 0} if not applicable.
+     *            are made). {@code RunsNeededToWin.notApplicable()} if not applicable.
      */
     public HalfInning(Inning inning,
                       BattingOrder battingOrder, 
@@ -65,7 +65,7 @@ public final class HalfInning {
                       GamePlayDriver driver,
                       PlayerGameStats playerStats,
                       GameEventDetector eventDetector,
-                      int runsNeededToWin) {
+                      RunsNeededToWin runsNeededToWin) {
         this.inning = requireNonNull(inning);
         this.battingOrder = requireNonNull(battingOrder);
         this.pitcher = requireNonNull(pitcher);
@@ -128,7 +128,7 @@ public final class HalfInning {
             if (stats.getOuts() > 3) {
                 throw new RuntimeException("Invalid number of outs: " + stats.getOuts());
             }
-            if ((runsNeededToWin > 0) && (stats.getRuns() >= runsNeededToWin)) {
+            if (runsNeededToWin.isGameOver()) {
                 return true;
             }
             return false;
@@ -152,6 +152,7 @@ public final class HalfInning {
                     .collect(ImCollectors.toList());
             this.runs.addAll(runsOnPlay);
             baseSituation = roa.getNewSituation();
+            runsNeededToWin = runsNeededToWin.updateWithRunsScored(roa.getNumberOfRuns());
             if (updatePlayerStats) {
                 playerStats.update(batter, pitcher, outcome, roa.getRunnersThatScored());
             }

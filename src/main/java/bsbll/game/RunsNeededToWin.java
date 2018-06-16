@@ -1,6 +1,7 @@
 package bsbll.game;
 
 import static com.google.common.base.Preconditions.checkState;
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import javax.annotation.concurrent.Immutable;
@@ -53,14 +54,16 @@ public final class RunsNeededToWin {
     }
     
     /**
-     * Updates the runs needed to win after one or more runs scored in the inning.
-     * <p>
+     * Updates the runs needed to win.
      * 
-     * @param runsScored the number of runs that scored
-     * @return the resulting {@code RunsNeededToWin} ({@code this} instance is not modified).
+     * @param runsScored
+     *            the number of runs that scored, if any. ({@code 0} (zero) is
+     *            OK, in which case {@code this} instance is returned.
+     * @return the resulting {@code RunsNeededToWin} ({@code this} instance is
+     *         not modified).
      */
     public RunsNeededToWin updateWithRunsScored(int runsScored) {
-        checkPositive(runsScored);
+        checkNotNegative(runsScored);
         checkState(this != GAME_WON, "The game has already been won");
         if (this == NOT_APPLICABLE) {
             return NOT_APPLICABLE;

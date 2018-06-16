@@ -107,7 +107,8 @@ public final class GamePlayDriver {
                 requireNonNull(batter),
                 requireNonNull(pitcher),
                 requireNonNull(baseSituation),
-                checkInRange(outs, 0, 2));
+                checkInRange(outs, 0, 2),
+                requireNonNull(runsNeededToWin));
         return abDriver.run();
     }
     
@@ -117,16 +118,26 @@ public final class GamePlayDriver {
         private final Player batter;
         private final Player pitcher;
         private final BaseSituation baseSituation;
-        private final int outs;
+        private int outs;
+        private RunsNeededToWin runsNeededToWin;
         
         private final AtBatResult.Builder builder;
         
-        public AtBatDriver(Player batter, Player pitcher, BaseSituation baseSituation, int outs) {
+        public AtBatDriver(Player batter, Player pitcher, BaseSituation baseSituation, int outs, RunsNeededToWin runsNeededToWin) {
             this.batter = batter;
             this.pitcher = pitcher;
             this.baseSituation = baseSituation;
             this.outs = outs;
+            this.runsNeededToWin = runsNeededToWin;
             this.builder = AtBatResult.builder(batter, pitcher);
+        }
+        
+        private void addOuts(int outs) {
+            this.outs += outs;
+        }
+        
+        private void addRuns(int runs) {
+            this.runsNeededToWin = this.runsNeededToWin.updateWithRunsScored(runs);
         }
         
         public AtBatResult run() {

@@ -6,7 +6,6 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
@@ -67,7 +66,7 @@ public final class Game {
                     driver,
                     playerStats,
                     eventDetector,
-                    innings.runsNeededToWalkOf().orElse(0));
+                    innings.runsNeededToWalkOf());
             HalfInning.Summary summary = halfInning.run();
             innings.onHalfInningCompleted(summary.getStats());
             plays.addAll(summary.getPlays());
@@ -141,12 +140,14 @@ public final class Game {
             return top.size() > bottom.size();
         }
         
-        public Optional<Integer> runsNeededToWalkOf() {
-            Integer o = (top.size() >= 9) && isInMiddleOf()
-                    ? Integer.valueOf(getRoadScore() - getHomeScore() + 1)
-                    : null;
-            checkState(o == null || o.intValue() > 0);
-            return Optional.ofNullable(o);
+        public RunsNeededToWin runsNeededToWalkOf() {
+            if (top.size() >= 9 && isInMiddleOf()) {
+                int value = getRoadScore() - getHomeScore() + 1;
+                checkState(value > 0);
+                return RunsNeededToWin.of(value);
+            } else {
+                return RunsNeededToWin.notApplicable();
+            }
         }
         
         public boolean isEmpty() {
