@@ -363,7 +363,7 @@ public final class AL1923 {
             print(standings);
             System.out.println();
             printBattingLeaders(league.league, BattingStat.BATTING_AVERAGE, BattingStat.HOMERUNS,
-                    BattingStat.RUNS_BATTED_IN, BattingStat.SLUGGING_PERCENTAGE,
+                    BattingStat.RUNS_BATTED_IN, BattingStat.RUNS, BattingStat.SLUGGING_PERCENTAGE,
                     BattingStat.ON_BASE_PERCENTAGE, BattingStat.OPS);
             System.out.println();
             printPitchingLeaders(league.league, PitchingStat.WINS, PitchingStat.ERA,
