@@ -299,7 +299,8 @@ public final class GamePlayDriver {
 
         private void addOutcome(PlayOutcome actual, PlayOutcome ideal) {
             builder.addOutcome(actual, ideal);
-            baseSituation = baseSituation.advanceRunners(batter, actual.getAdvances()).getNewSituation();
+            baseSituation = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), 
+                    actual.getAdvances()).getNewSituation();
             outs += actual.getNumberOfOuts();
             runsNeededToWin = runsNeededToWin.updateWithRunsScored(actual.getNumberOfRuns());
         }

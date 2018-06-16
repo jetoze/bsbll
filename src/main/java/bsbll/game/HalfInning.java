@@ -136,10 +136,10 @@ public final class HalfInning {
         }
         
         private void updateState(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
-            ResultOfAdvance roa = baseSituation.advanceRunners(batter, outcome.getAdvances());
+            ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), outcome.getAdvances());
             stats = stats.plus(roa, outcome);
             ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
-                    .map(p -> new Run(inning, p, runnerToResponsiblePitcher.get(p)))
+                    .map(p -> new Run(inning, p))
                     .collect(ImCollectors.toList());
             this.runs.addAll(runsOnPlay);
             baseSituation = roa.getNewSituation();

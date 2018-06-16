@@ -11,16 +11,18 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
 import bsbll.bases.BaseSituation.ResultOfAdvance;
+import bsbll.game.BaseRunner;
 import bsbll.player.Player;
 
 /**
  * Unit tests for BaseSituation.
  */
 public final class BaseSituationTest {
-    private static final Player BATTER = new Player("Batter", "Bob Doe");
-    private static final Player RUNNER_A = new Player("Runner A", "Adam Doe");
-    private static final Player RUNNER_B = new Player("Runner B", "Bill Doe");
-    private static final Player RUNNER_C = new Player("Runner C", "Charlie Doe");
+    private static final Player PITCHER = new Player("Pitcher", "Walter Johnson");
+    private static final BaseRunner BATTER = new BaseRunner(new Player("Batter", "Bob Doe"), PITCHER);
+    private static final BaseRunner RUNNER_A = new BaseRunner(new Player("Runner A", "Adam Doe"), PITCHER);
+    private static final BaseRunner RUNNER_B = new BaseRunner(new Player("Runner B", "Bill Doe"), PITCHER);
+    private static final BaseRunner RUNNER_C = new BaseRunner(new Player("Runner C", "Charlie Doe"), PITCHER);
 
     
     @Test(expected = InvalidBaseSitutationException.class)
@@ -55,7 +57,7 @@ public final class BaseSituationTest {
                 Advance.safe(Base.FIRST, Base.THIRD),
                 Advance.safe(Base.THIRD, Base.HOME));
         
-        ImmutableList<Player> runs = before.advanceRunners(BATTER, advances).getRunnersThatScored();
+        ImmutableList<BaseRunner> runs = before.advanceRunners(BATTER, advances).getRunnersThatScored();
         
         assertEquals(ImmutableList.of(RUNNER_B), runs);
     }
@@ -116,7 +118,7 @@ public final class BaseSituationTest {
         BaseSituation before = basesLoaded();
         Advances advances = grandSlam();
 
-        ImmutableList<Player> runs = before.advanceRunners(BATTER, advances).getRunnersThatScored();
+        ImmutableList<BaseRunner> runs = before.advanceRunners(BATTER, advances).getRunnersThatScored();
         assertEquals(Arrays.asList(RUNNER_C, RUNNER_B, RUNNER_A, BATTER), runs);
     }
     

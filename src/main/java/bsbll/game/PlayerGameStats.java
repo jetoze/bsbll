@@ -19,7 +19,7 @@ public final class PlayerGameStats {
     private final Map<PlayerId, BattingStatLine.Builder> battingStats = new HashMap<>();
     private final Map<PlayerId, PitchingStatLine.Builder> pitchingStats = new HashMap<>();
     
-    public void update(Player batter, Player pitcher, PlayOutcome outcome, List<Player> runs) {
+    public void update(Player batter, Player pitcher, PlayOutcome outcome, List<BaseRunner> runs) {
         updateBatterStats(batter, outcome, runs.size());
         updateStatsForRunnersThatScored(batter, runs);
         updatePitchingStats(pitcher, outcome, runs.size());
@@ -30,11 +30,13 @@ public final class PlayerGameStats {
         line.add(outcome, rbis);
     }
     
-    private void updateStatsForRunnersThatScored(Player batter, List<Player> runs) {
-        runs.stream().filter(p -> p != batter).forEach(p -> {
-            BattingStatLine.Builder line = battingStats(p);
-            line.add(BattingStat.RUNS, 1);
-        });
+    private void updateStatsForRunnersThatScored(Player batter, List<BaseRunner> runs) {
+        runs.stream()
+            .map(BaseRunner::getRunner)
+            .filter(p -> p != batter).forEach(p -> {
+                BattingStatLine.Builder line = battingStats(p);
+                line.add(BattingStat.RUNS, 1);
+            });
     }
     
     private BattingStatLine.Builder battingStats(Player player) {

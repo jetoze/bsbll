@@ -71,7 +71,7 @@ public final class RunsScored implements Iterable<Run> {
         Player losingPitcher = null;
         for (Run r : runs) {
             if (tie) {
-                losingPitcher = r.responsiblePitcher;
+                losingPitcher = r.getResponsiblePitcher();
             }
             if (r.inning.isTop()) {
                 ++topScore;
@@ -90,13 +90,11 @@ public final class RunsScored implements Iterable<Run> {
     @Immutable
     public static final class Run {
         private final Inning inning;
-        private final Player runner;
-        private final Player responsiblePitcher;
+        private final BaseRunner runner;
 
-        public Run(Inning inning, Player runner, Player responsiblePitcher) {
+        public Run(Inning inning, BaseRunner runner) {
             this.inning = requireNonNull(inning);
             this.runner = requireNonNull(runner);
-            this.responsiblePitcher = requireNonNull(responsiblePitcher);
         }
 
         /**
@@ -110,20 +108,16 @@ public final class RunsScored implements Iterable<Run> {
          * The runner that scored.
          */
         public Player getRunner() {
-            return runner;
+            return runner.getRunner();
         }
-
-        /**
-         * The pitcher that was responsible for putting the runner on base.
-         */
+        
         public Player getResponsiblePitcher() {
-            return responsiblePitcher;
+            return runner.getResponsiblePitcher();
         }
         
         @Override
         public String toString() {
-            return String.format("%s: %s (%s)", inning, runner.getName().getShortForm(), 
-                    responsiblePitcher.getName().getShortForm());
+            return String.format("%s: %s (%s)", inning, runner);
         }
     }
 }

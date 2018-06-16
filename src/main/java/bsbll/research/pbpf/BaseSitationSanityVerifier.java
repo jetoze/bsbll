@@ -11,6 +11,7 @@ import com.google.common.collect.ImmutableList;
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.InvalidBaseSitutationException;
+import bsbll.game.BaseRunner;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.research.EventField;
@@ -24,6 +25,7 @@ import tzeth.strings.Padding;
  * are trying to advance a runner from a base that was not occupied.
  */
 public final class BaseSitationSanityVerifier extends GameHandler {
+    private final Player pitcher = new Player("pitcher", "Christy Mathewson");
     private int playerId;
     
     @Override
@@ -85,9 +87,9 @@ public final class BaseSitationSanityVerifier extends GameHandler {
      * but that is irrelevant - we just need Players to move around the bases.
      * See corresponding XXX comment in BaseSituation, about making that class generic.
      */
-    private Player nextBatter() {
+    private BaseRunner nextBatter() {
         ++playerId;
-        return new Player(Integer.toString(playerId), "John Doe");
+        return new BaseRunner(new Player(Integer.toString(playerId), "John Doe"), pitcher);
     }
 
     

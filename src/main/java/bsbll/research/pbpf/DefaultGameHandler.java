@@ -12,6 +12,7 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
+import bsbll.game.BaseRunner;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
@@ -20,6 +21,7 @@ import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public abstract class DefaultGameHandler extends GameHandler {
     private final Predicate<PlayOutcome> interestingPlayPredicate;
+    private final Player pitcher = new Player("pitcher", "Joe Wood");
     private int playerId;
     
     protected DefaultGameHandler() {
@@ -68,9 +70,9 @@ public abstract class DefaultGameHandler extends GameHandler {
      * but that is irrelevant - we just need Players to move around the bases.
      * See corresponding XXX comment in BaseSituation, about making that class generic.
      */
-    private Player nextBatter() {
+    private BaseRunner nextBatter() {
         ++playerId;
-        return new Player(Integer.toString(playerId), "John Doe");
+        return new BaseRunner(new Player(Integer.toString(playerId), "John Doe"), pitcher);
     }
 
     public final void parseAll(Year year) {

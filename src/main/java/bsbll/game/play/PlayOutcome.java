@@ -16,7 +16,7 @@ import bsbll.bases.Advance;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
-import bsbll.player.Player;
+import bsbll.game.BaseRunner;
 
 @Immutable
 public final class PlayOutcome {
@@ -65,11 +65,11 @@ public final class PlayOutcome {
         return this.advances.getNumberOfRuns();
     }
     
-    public BaseSituation applyTo(Player batter, BaseSituation baseSituation) {
+    public BaseSituation applyTo(BaseRunner batter, BaseSituation baseSituation) {
         return baseSituation.advanceRunners(batter, this.advances).getNewSituation();
     }
     
-    public List<Player> getScoringPlayers(Player batter, BaseSituation baseSituation) {
+    public List<BaseRunner> getScoringPlayers(BaseRunner batter, BaseSituation baseSituation) {
         return baseSituation.advanceRunners(batter, this.advances).getRunnersThatScored();
     }
     

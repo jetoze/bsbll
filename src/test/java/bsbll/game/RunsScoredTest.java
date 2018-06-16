@@ -20,18 +20,18 @@ public final class RunsScoredTest {
         Player visitingPitcher3 = new Player("p4", "P4 Doe");
         List<Run> runs = new ArrayList<>();
         Inning topOfFirst = Inning.startOfGame();
-        runs.add(new Run(topOfFirst, new Player("r1", "R1 Doe"), homePitcher1)); // 1-0
-        runs.add(new Run(topOfFirst, new Player("r2", "R2 Doe"), homePitcher1)); // 2-0
+        runs.add(new Run(topOfFirst, new BaseRunner(new Player("r1", "R1 Doe"), homePitcher1))); // 1-0
+        runs.add(new Run(topOfFirst, new BaseRunner(new Player("r2", "R2 Doe"), homePitcher1))); // 2-0
         Inning bottomOfThird = Inning.bottomOf(3);
-        runs.add(new Run(bottomOfThird, new Player("r3", "R3 Doe"), visitingPitcher1)); // 2-1
-        runs.add(new Run(bottomOfThird, new Player("r4", "R4 Doe"), visitingPitcher1)); // 2-2
+        runs.add(new Run(bottomOfThird, new BaseRunner(new Player("r3", "R3 Doe"), visitingPitcher1))); // 2-1
+        runs.add(new Run(bottomOfThird, new BaseRunner(new Player("r4", "R4 Doe"), visitingPitcher1))); // 2-2
         Inning bottomOfFifth = Inning.bottomOf(5);
-        runs.add(new Run(bottomOfFifth, new Player("r5", "R5 Doe"), visitingPitcher2)); // 2-3
+        runs.add(new Run(bottomOfFifth, new BaseRunner(new Player("r5", "R5 Doe"), visitingPitcher2))); // 2-3
         Inning topOfSixth = Inning.topOf(6);
-        runs.add(new Run(topOfSixth, new Player("r6", "R6 Doe"), homePitcher1)); // 3-3
+        runs.add(new Run(topOfSixth, new BaseRunner(new Player("r6", "R6 Doe"), homePitcher1))); // 3-3
         Inning bottomOfSeventh = Inning.bottomOf(7);
-        runs.add(new Run(bottomOfSeventh, new Player("r7", "R7 Doe"), visitingPitcher2)); // 3-4
-        runs.add(new Run(bottomOfSeventh, new Player("r8", "R8 Doe"), visitingPitcher3)); // 3-5
+        runs.add(new Run(bottomOfSeventh, new BaseRunner(new Player("r7", "R7 Doe"), visitingPitcher2))); // 3-4
+        runs.add(new Run(bottomOfSeventh, new BaseRunner(new Player("r8", "R8 Doe"), visitingPitcher3))); // 3-5
         
         Player lp = RunsScored.of(runs).getLosingPitcher();
         
