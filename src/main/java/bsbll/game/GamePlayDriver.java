@@ -135,7 +135,7 @@ public final class GamePlayDriver {
             if (!isDone()) {
                 runMatchup();
             }
-            return builder.build();
+            return builder.withNewBaseSituation(baseSituation).build();
         }
         
         private boolean isDone() {
@@ -201,7 +201,7 @@ public final class GamePlayDriver {
         
         private void baseHit(BaseHit baseHit) {
             if (baseHit == BaseHit.HOMERUN) {
-                homerun(baseSituation);
+                homerun();
             } else {
                 EventType eventType = baseHit.toEventType();
                 int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
@@ -223,7 +223,7 @@ public final class GamePlayDriver {
             }
         }
         
-        private void homerun(BaseSituation baseSituation) {
+        private void homerun() {
             Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
             PlayOutcome hr = new PlayOutcome(EventType.HOMERUN, advances);
             addOutcome(hr, hr);
@@ -245,13 +245,13 @@ public final class GamePlayDriver {
             OutLocation location = getOutLocation();
             int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
             if (numberOfErrors == 0) {
-                outWithoutError(baseSituation, location, outs);
+                outWithoutError(location);
             } else {
-                errorOnOut(baseSituation, location, outs, numberOfErrors);
+                errorOnOut(location, numberOfErrors);
             }
         }
 
-        private void outWithoutError(BaseSituation baseSituation, OutLocation location, int outs) {
+        private void outWithoutError(OutLocation location) {
             boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
                     fieldersChoiceProbabilities.test(baseSituation, dieFactory);
             EventType resultingType = convertToFieldersChoice
@@ -272,7 +272,7 @@ public final class GamePlayDriver {
             addOutcome(p, p);
         }
 
-        private void errorOnOut(BaseSituation baseSituation, OutLocation location, int outs, int numberOfErrors) {
+        private void errorOnOut(OutLocation location, int numberOfErrors) {
             ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
             Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
             // TODO: This will give the incorrect type in the case where the batter is thrown

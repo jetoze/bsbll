@@ -10,6 +10,7 @@ import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableList;
 
+import bsbll.bases.BaseSituation;
 import bsbll.player.Player;
 
 /**
@@ -22,17 +23,20 @@ public final class AtBatResult { // TODO: Come up with a better name
     private final Player pitcher;
     private final ImmutableList<PlayOutcome> actualPlays;
     private final ImmutableList<PlayOutcome> idealPlays;
+    private final BaseSituation newBaseSituation;
     private final boolean batterCompletedHisTurn;
 
     public AtBatResult(Player batter, 
                        Player pitcher,
                        List<PlayOutcome> actualPlays,
                        List<PlayOutcome> idealPlays,
+                       BaseSituation newBaseSituation,
                        boolean batterCompletedHisTurn) {
         this.batter = requireNonNull(batter);
         this.pitcher = requireNonNull(pitcher);
         this.actualPlays = ImmutableList.copyOf(actualPlays);
         this.idealPlays = ImmutableList.copyOf(idealPlays);
+        this.newBaseSituation = requireNonNull(newBaseSituation);
         this.batterCompletedHisTurn = batterCompletedHisTurn;
     }
 
@@ -52,6 +56,10 @@ public final class AtBatResult { // TODO: Come up with a better name
         return idealPlays;
     }
 
+    public BaseSituation getNewBaseSituation() {
+        return newBaseSituation;
+    }
+
     public boolean didBatterCompleteHisTurn() {
         return batterCompletedHisTurn;
     }
@@ -60,12 +68,36 @@ public final class AtBatResult { // TODO: Come up with a better name
         return new Builder(batter, pitcher);
     }
     
+    public int getNumberOfRuns() {
+        return actualPlays.stream()
+                .mapToInt(PlayOutcome::getNumberOfRuns)
+                .sum();
+    }
+    
+    public int getNumberOfHits() {
+        return (int) actualPlays.stream()
+                .filter(PlayOutcome::isBaseHit)
+                .count();
+    }
+
+    public int getNumberOfErrors() {
+        return actualPlays.stream()
+                .mapToInt(PlayOutcome::getNumberOfErrors)
+                .sum();
+    }
+    
+    public int getNumberOfOutsMade() {
+        return actualPlays.stream()
+                .mapToInt(PlayOutcome::getNumberOfOuts)
+                .sum();
+    }
     
     public static final class Builder {
         private final Player batter;
         private final Player pitcher;
         private final List<PlayOutcome> actualPlays = new ArrayList<>();
         private final List<PlayOutcome> idealPlays = new ArrayList<>();
+        private BaseSituation newBaseSituation;
         private boolean batterCompletedHisTurn;
         
         public Builder(Player batter, Player pitcher) {
@@ -87,6 +119,11 @@ public final class AtBatResult { // TODO: Come up with a better name
             return this;
         }
         
+        public Builder withNewBaseSituation(BaseSituation bs) {
+            this.newBaseSituation = requireNonNull(bs);
+            return this;
+        }
+        
         public Builder batterCompletedHisTurn() {
             this.batterCompletedHisTurn = true;
             return this;
@@ -94,7 +131,8 @@ public final class AtBatResult { // TODO: Come up with a better name
         
         public AtBatResult build() {
             checkState(actualPlays.size() > 0, "Must provide at least one PlayOutcome");
-            return new AtBatResult(batter, pitcher, actualPlays, idealPlays, batterCompletedHisTurn);
+            checkState(newBaseSituation != null, "Must provide the new BaseSituation");
+            return new AtBatResult(batter, pitcher, actualPlays, idealPlays, newBaseSituation, batterCompletedHisTurn);
         }
     }
 }

@@ -100,6 +100,8 @@ public final class HalfInning {
                     processPlay(batter, outcome, false);
                     // TODO: Update runner and pitching stats
                 }
+                stats = stats.plus(result);
+                baseSituation = result.getNewBaseSituation();
                 if (!result.didBatterCompleteHisTurn()) {
                     battingOrder.returnBatter(batter);
                 }
@@ -133,12 +135,10 @@ public final class HalfInning {
         
         private void updateState(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
             ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), outcome.getAdvances());
-            stats = stats.plus(roa, outcome);
             ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
                     .map(p -> new Run(inning, p))
                     .collect(ImCollectors.toList());
             this.runs.addAll(runsOnPlay);
-            baseSituation = roa.getNewSituation();
             runsNeededToWin = runsNeededToWin.updateWithRunsScored(roa.getNumberOfRuns());
             if (updatePlayerStats) {
                 playerStats.update(batter, pitcher, outcome, roa.getRunnersThatScored());
@@ -192,15 +192,14 @@ public final class HalfInning {
             return new Stats(runs, hits, errors, outs, lob);
         }
         
-        private Stats plus(ResultOfAdvance roa, PlayOutcome outcome) {
+        private Stats plus(AtBatResult abr) {
             return new Stats(
-                    this.runs + roa.getNumberOfRuns(),
-                    this.hits + (outcome.isBaseHit() ? 1 : 0),
-                    this.errors + outcome.getNumberOfErrors(),
-                    this.outs + outcome.getNumberOfOuts(),
+                    this.runs + abr.getNumberOfRuns(),
+                    this.hits + abr.getNumberOfHits(),
+                    this.errors + abr.getNumberOfErrors(),
+                    this.outs + abr.getNumberOfOutsMade(),
                     this.leftOnBase);
         }
-        
         
         @Override
         public boolean equals(@Nullable Object obj) {
