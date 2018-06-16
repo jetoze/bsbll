@@ -1,6 +1,7 @@
 package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import com.google.common.collect.ImmutableList;
 
@@ -16,6 +17,7 @@ import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceKey;
 import bsbll.game.params.OutLocation;
+import bsbll.game.play.AtBatResult;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.matchup.MatchupRunner;
@@ -95,6 +97,59 @@ public final class GamePlayDriver {
     // that comes to mind is to add an "idealOutcome" property to PlayOutcome, i.e. ask the
     // PlayOutcome itself what the ideal version of it is. For normal outcomes, this will
     // simply be the PlayOutcome itself.
+    
+    public AtBatResult run(Player batter,
+                           Player pitcher,
+                           BaseSituation baseSituation,
+                           int outs,
+                           RunsNeededToWin runsNeededToWin) {
+        AtBatDriver abDriver = new AtBatDriver(
+                requireNonNull(batter),
+                requireNonNull(pitcher),
+                requireNonNull(baseSituation),
+                checkInRange(outs, 0, 2));
+        return abDriver.run();
+    }
+    
+    
+    
+    private final class AtBatDriver {
+        private final Player batter;
+        private final Player pitcher;
+        private final BaseSituation baseSituation;
+        private final int outs;
+        
+        private final AtBatResult.Builder builder;
+        
+        public AtBatDriver(Player batter, Player pitcher, BaseSituation baseSituation, int outs) {
+            this.batter = batter;
+            this.pitcher = pitcher;
+            this.baseSituation = baseSituation;
+            this.outs = outs;
+            this.builder = AtBatResult.builder(batter, pitcher);
+        }
+        
+        public AtBatResult run() {
+            return builder.build();
+        }
+     
+        /**
+         * Simulates the plays, if any, that take place before the
+         * batter-pitcher matchup completes. This includes things like stolen
+         * base attempts, balks, or wild pitches.
+         * <p>
+         * Note that if any of the plays results in outs, we may reach the end
+         * of the inning (three outs), in which case the batter-pitcher matchup
+         * is terminated before the batter completes his turn at bat. Ditto if
+         * any of these plays result in a walk-off run.
+         */
+        private void runPreMatchupPlays() {
+            
+        }
+    }
+    
+    
+    
     
     /**
      * Returns the plays, if any, that take place before the batter-pitcher

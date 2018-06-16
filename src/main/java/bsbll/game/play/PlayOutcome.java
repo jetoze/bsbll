@@ -77,6 +77,10 @@ public final class PlayOutcome {
         return this.numberOfErrors;
     }
     
+    public boolean isErrorOrPassedBall() { // TODO: Come up with a better name
+        return this.numberOfErrors > 0 || this.type == EventType.PASSED_BALL;
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(this.type, this.numberOfErrors, this.advances);
