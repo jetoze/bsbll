@@ -11,7 +11,7 @@ import javax.annotation.concurrent.Immutable;
  * ninth inning or later.
  */
 @Immutable
-public final class RunsNeededToWin {
+public final class RunsNeededToWin { // TODO: Rename --> WinsNeededToWalkOff?
     /**
      * Used in half-innings that are not subject for walk-offs, such as the top of an inning,
      * or the bottom of the eigth inning or earlier.
@@ -67,6 +67,8 @@ public final class RunsNeededToWin {
         checkState(this != GAME_WON, "The game has already been won");
         if (this == NOT_APPLICABLE) {
             return NOT_APPLICABLE;
+        } else if (runsScored == 0) {
+            return this;
         } else if (runsScored >= this.runsNeeded) {
             return GAME_WON;
         } else {
