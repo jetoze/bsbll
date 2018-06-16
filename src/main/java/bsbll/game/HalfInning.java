@@ -6,9 +6,7 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 import javax.annotation.Nullable;
@@ -92,12 +90,10 @@ public final class HalfInning {
         private final List<Play> plays = new ArrayList<>();
         private final List<Run> runs = new ArrayList<>();
         private final List<GameEvent> events = new ArrayList<>();
-        private final Map<Player, Player> runnerToResponsiblePitcher = new HashMap<>();
 
         public Summary run() {
             do {
                 Player batter = battingOrder.nextBatter();
-                runnerToResponsiblePitcher.put(batter, pitcher);
                 AtBatResult result = driver.run(batter, pitcher, baseSituation, stats.outs, runsNeededToWin);
                 for (PlayOutcome outcome : result.getIdealPlays()) {
                     checkState(!isDone(stats));
