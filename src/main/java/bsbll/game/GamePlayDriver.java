@@ -79,6 +79,13 @@ public final class GamePlayDriver {
     //       turns out anyway; the fielding team will behave differently in the bottom of
     //       the ninth inning of a tie game than in the bottom of the third being down 
     //       10 runs.
+    // Follow-up: Go with the one-method approach, and return a Result object consisting of:
+    //   + The batter
+    //   + The pitcher
+    //   + Flag that tells us if the batter completed his turn at bat
+    //   + List of actual PlayOutcomes
+    //   + List of ideal PlayOutcomes
+    //   + ?
     
     // TODO: We pass in the same four parameters in both calls right now. Add a param class?
     
@@ -163,8 +170,9 @@ public final class GamePlayDriver {
                 
                 Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
                 PlayOutcome idealOutcome = new PlayOutcome(eventType, idealAdvances, 0);
+                // TODO: We need to return the ideal outcome as well
                 
-                return new PlayOutcome(eventType, advances, numberOfErrors, idealOutcome);
+                return new PlayOutcome(eventType, advances, numberOfErrors);
             }
         }
     }
@@ -227,8 +235,9 @@ public final class GamePlayDriver {
         Advances idealAdvances = outAdvanceDistribution.pickMostCommon(
                 OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
         PlayOutcome idealOutcome = new PlayOutcome(EventType.OUT, idealAdvances, 0);
+        // TODO: We need to return the ideal outcome as well
         
-        return new PlayOutcome(actualType, advances, numberOfErrors, idealOutcome);
+        return new PlayOutcome(actualType, advances, numberOfErrors);
     }
     
     private OutLocation getOutLocation() {

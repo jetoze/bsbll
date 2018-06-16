@@ -1,7 +1,5 @@
 package bsbll.game.play;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 import static tzeth.preconds.MorePreconditions.checkPositive;
@@ -25,8 +23,6 @@ public final class PlayOutcome {
     private final EventType type;    
     private final Advances advances;
     private final int numberOfErrors;
-    @Nullable
-    private final PlayOutcome ideal;
 
     public PlayOutcome(EventType type, 
             Advances advances) {
@@ -36,19 +32,9 @@ public final class PlayOutcome {
     public PlayOutcome(EventType type, 
                        Advances advances,
                        int numberOfErrors) {
-        this(type, advances, numberOfErrors, null);
-    }
-    
-    public PlayOutcome(EventType type, 
-                       Advances advances,
-                       int numberOfErrors,
-                       @Nullable PlayOutcome idealOutcome) {
         this.type = requireNonNull(type);
         this.advances = requireNonNull(advances);
         this.numberOfErrors = checkNotNegative(numberOfErrors);
-        this.ideal = idealOutcome;
-        checkArgument(idealOutcome == null || numberOfErrors > 0, 
-                "An ideal outcome should only be provided when there are errors on the play.");
     }
 
     public EventType getType() {
@@ -91,50 +77,6 @@ public final class PlayOutcome {
         return this.numberOfErrors;
     }
     
-    // TODO: I need a better name
-    // TODO: Is this the best way of allowing the official scorer reconstruct the inning without errors?
-    /**
-     * Returns the ideal version of this outcome, i.e. how it would have been
-     * had there not been errors on the play.
-     * <p>
-     * If this outcome did not have any errors, this method simply returns
-     * {@code this}. Otherwise it returns the ideal outcome that was provided in
-     * the {@link #PlayOutcome(EventType, Advances, int, PlayOutcome)
-     * constructor} or via the {@link #withIdealOutcome(PlayOutcome) factory
-     * method}.
-     */
-    public PlayOutcome getIdealOutcome() {
-        if (this.numberOfErrors == 0) {
-            return this;
-        }
-        checkState(this.ideal != null, "The ideal outcome has not been provided");
-        return this.ideal;
-    }
-
-    /**
-     * Returns a version of this PlayOutcome with the given ideal outcome. Should only be used if
-     * this PlayOutcome has errors.
-     */
-    public PlayOutcome withIdealOutcome(PlayOutcome ideal) {
-        checkState(this.numberOfErrors > 0, "An ideal outcome should only be given when there are errors on the play.");
-        requireNonNull(ideal);
-        return (ideal == this.ideal)
-                ? this
-                : new PlayOutcome(this.type, this.advances, this.numberOfErrors, ideal);
-    }
-    
-    /**
-     * Strips this PlayOutcome of its ideal outcome, if it has one.
-     * <p>
-     * The ideal outcome is only used by the official scorer to determine things like
-     * earned runs. Logs of the game should store only the actual outcome.
-     */
-    public PlayOutcome withoutIdealOutcome() {
-        return (this.ideal == null)
-                ? this
-                : new PlayOutcome(this.type, this.advances, this.numberOfErrors);
-    }
-    
     @Override
     public int hashCode() {
         return Objects.hash(this.type, this.numberOfErrors, this.advances);
@@ -169,8 +111,6 @@ public final class PlayOutcome {
         private final EventType type;
         private final ImmutableSet.Builder<Advance> advances = ImmutableSet.builder();
         private int errors;
-        @Nullable
-        private PlayOutcome ideal;
         
         public Builder(EventType type) {
             this.type = requireNonNull(type);
@@ -215,13 +155,8 @@ public final class PlayOutcome {
             return this;
         }
         
-        public Builder withIdealOutcome(PlayOutcome ideal) {
-            this.ideal = requireNonNull(ideal);
-            return this;
-        }
-        
         public PlayOutcome build() {
-            return new PlayOutcome(this.type, new Advances(this.advances.build()), this.errors, this.ideal);
+            return new PlayOutcome(this.type, new Advances(this.advances.build()), this.errors);
         }
     }
     
