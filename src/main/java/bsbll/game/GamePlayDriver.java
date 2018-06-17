@@ -192,7 +192,7 @@ public final class GamePlayDriver {
             case STRIKEOUT:
                 // TODO: Dropped third strike could result in the batter going to first,
                 // without an out being recorded.
-                PlayOutcome so = PlayOutcome.builder(EventType.STRIKEOUT).build();
+                PlayOutcome so = PlayOutcome.strikeout();
                 addOutcome(so, so);
                 break;
             case WALK:
