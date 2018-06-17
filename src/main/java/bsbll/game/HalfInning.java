@@ -76,7 +76,21 @@ public final class HalfInning {
 
     public Summary run() {
         Loop loop = new Loop();
-        return loop.run();
+        Summary summary = loop.run();
+        return summary;
+    }
+    
+    // TODO: Move this to a separate class, or to the OfficialScorer.
+    private void assignEarnedRuns(Summary summary) {
+        if (summary.getRuns().isEmpty()) {
+            // No runs scored --> nothing to do
+            return;
+        }
+        if (summary.isEarnedRunReconstructionNeeded()) {
+            // TODO: Reconstruct the ideal inning and assign earned runs based on that
+        } else {
+            // TODO: All runs are earned
+        }
     }
     
     @Override
@@ -88,6 +102,7 @@ public final class HalfInning {
         private Stats stats = new Stats();
         private BaseSituation baseSituation = BaseSituation.empty();
         private final List<Play> plays = new ArrayList<>();
+        private final List<Play> idealPlays = new ArrayList<>();
         private final List<Run> runs = new ArrayList<>();
         private final List<GameEvent> events = new ArrayList<>();
 
@@ -95,11 +110,14 @@ public final class HalfInning {
             do {
                 Player batter = battingOrder.nextBatter();
                 AtBatResult result = driver.run(batter, pitcher, baseSituation, stats.outs, runsNeededToWin);
-                for (PlayOutcome outcome : result.getIdealPlays()) {
+                for (PlayOutcome outcome : result.getActualPlays()) {
                     checkState(!isDone(stats));
                     processPlay(batter, outcome, false);
                     // TODO: Update runner and pitching stats
                 }
+                result.getIdealPlays().stream()
+                    .map(po -> new Play(batter, pitcher, po))
+                    .forEach(idealPlays::add);
                 stats = stats.plus(result);
                 baseSituation = result.getNewBaseSituation();
                 if (!result.didBatterCompleteHisTurn()) {
@@ -107,7 +125,7 @@ public final class HalfInning {
                 }
             } while (!isDone(stats));
             int lob = baseSituation.getNumberOfRunners();
-            return new Summary(stats.withLeftOnBase(lob), plays, runs, events);
+            return new Summary(stats.withLeftOnBase(lob), plays, idealPlays, runs, events);
         }
         
         private boolean isDone(Stats stats) {
@@ -236,12 +254,14 @@ public final class HalfInning {
     public static final class Summary {
         private final Stats stats;
         private final ImmutableList<Play> plays;
+        private final ImmutableList<Play> idealPlays;
         private final ImmutableList<Run> runs;
         private final ImmutableList<GameEvent> events;
         
-        public Summary(Stats stats, List<Play> plays, List<Run> runs, List<GameEvent> events) {
+        public Summary(Stats stats, List<Play> plays, List<Play> idealPlays, List<Run> runs, List<GameEvent> events) {
             this.stats = stats;
             this.plays = ImmutableList.copyOf(plays);
+            this.idealPlays = ImmutableList.copyOf(idealPlays);
             this.runs = ImmutableList.copyOf(runs);
             this.events = ImmutableList.copyOf(events);
             checkArgument(runs.size() == stats.runs);
@@ -254,6 +274,12 @@ public final class HalfInning {
         public ImmutableList<Play> getPlays() {
             return plays;
         }
+        
+        // TODO: Should not be part of the public API for this class. Once we move the earned run
+        // processing to a new class, this method should be made package-private.
+        private ImmutableList<Play> getIdealPlays() {
+            return idealPlays;
+        }
 
         public ImmutableList<Run> getRuns() {
             return runs;
@@ -261,6 +287,29 @@ public final class HalfInning {
         
         public ImmutableList<GameEvent> getEvents() {
             return events;
+        }
+        
+        /**
+         * Checks if the earned run designation requires an ideal version of this inning to
+         * be reconstructed, due to runs being scored after errors or passed balls.
+         */
+        // TODO: Should not be part of the public API for this class. Once we move the earned run
+        // processing to a new class, this method should be made package-private.
+        private boolean isEarnedRunReconstructionNeeded() {
+            if (runs.isEmpty()) {
+                return false;
+            }
+            // Reconstruction is necessary if at least one run scored *after* an error or passed ball
+            boolean errorOrPassedBallHasHappened = false;
+            for (Play p : plays) {
+                if (p.isErrorOrPassedBall()) {
+                    errorOrPassedBallHasHappened = true;
+                }
+                if (p.getNumberOfRuns() > 0 && errorOrPassedBallHasHappened) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

@@ -30,6 +30,14 @@ public final class Play {
         return outcome;
     }
     
+    public int getNumberOfRuns() {
+        return outcome.getNumberOfRuns();
+    }
+    
+    public boolean isErrorOrPassedBall() {
+        return outcome.isErrorOrPassedBall();
+    }
+    
     @Override
     public String toString() {
         return String.format("%s vs %s -- %s", batter, pitcher, outcome);
