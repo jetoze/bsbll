@@ -193,12 +193,17 @@ public final class HalfInning {
         }
         
         private Stats plus(AtBatResult abr) {
-            return new Stats(
-                    this.runs + abr.getNumberOfRuns(),
-                    this.hits + abr.getNumberOfHits(),
-                    this.errors + abr.getNumberOfErrors(),
-                    this.outs + abr.getNumberOfOutsMade(),
-                    this.leftOnBase);
+            int r = this.runs;
+            int e = this.errors;
+            int o = this.outs;
+            for (PlayOutcome p : abr.getActualPlays()) {
+                r += p.getNumberOfRuns();
+                e += p.getNumberOfErrors();
+                o += p.getNumberOfOuts();
+            }
+            int h = this.hits + (abr.isBaseHit() ? 1 : 0);
+            int lob = 0; // Calculated at the end of the inning, not after individual at bats.
+            return new HalfInning.Stats(r, h, e, o, lob);
         }
         
         @Override

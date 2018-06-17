@@ -52,6 +52,12 @@ public final class AtBatResult { // TODO: Come up with a better name
     public ImmutableList<PlayOutcome> getActualPlays() {
         return actualPlays;
     }
+    
+    public boolean isBaseHit() {
+        // Only the very last play can represent a hit. This is the play that contains the
+        // outcome of the batter-pitcher matchup.
+        return actualPlays.get(actualPlays.size() - 1).isBaseHit();
+    }
 
     public ImmutableList<PlayOutcome> getIdealPlays() {
         return idealPlays;
@@ -92,6 +98,7 @@ public final class AtBatResult { // TODO: Come up with a better name
                 .mapToInt(PlayOutcome::getNumberOfOuts)
                 .sum();
     }
+
     
     public static final class Builder {
         private final Player batter;
