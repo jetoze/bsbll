@@ -119,6 +119,8 @@ public final class GamePlayDriver {
         private int outs;
         private RunsNeededToWin runsNeededToWin;
         
+        private boolean batterShouldHaveBeenOut;
+        
         private final AtBatResult.Builder builder;
         
         public AtBatDriver(Player batter, Player pitcher, BaseSituation baseSituation, int outs, RunsNeededToWin runsNeededToWin) {
@@ -154,6 +156,14 @@ public final class GamePlayDriver {
          */
         private void runPreMatchupPlays() {
             // TODO: Implement me
+            // TODO: Remember to set the flag this.batterShouldHaveBeenOut to true
+            // for events like ERROR_ON_FOUL_FLY.
+            // TODO: Do we need a more general battersTimeAtBatShouldBeOver flag,
+            // for the case where the ideal version of a pre-matchup play should
+            // have resulted in the third out of the inning? For example, a 
+            // CAUGHT_STEALING with an associated error, allowing the runner to 
+            // remain safely on the bases? Can the official scorer assume that
+            // such an event should normally have resulted in the runner being out?
         }
         
         /**
@@ -298,7 +308,10 @@ public final class GamePlayDriver {
         }
 
         private void addOutcome(PlayOutcome actual, PlayOutcome ideal) {
-            builder.addOutcome(actual, ideal);
+            // If the batter should have been out by now, e.g. because his time at bat
+            // was prolonged by an ERROR_ON_FOUL_FLY, any subsequent ideal play is the NO PLAY,
+            // since the play should not have happened at all in an ideal inning.
+            builder.addOutcome(actual, batterShouldHaveBeenOut ? PlayOutcome.noPlay() : ideal);
             baseSituation = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), 
                     actual.getAdvances()).getNewSituation();
             outs += actual.getNumberOfOuts();

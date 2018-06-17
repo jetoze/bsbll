@@ -20,6 +20,9 @@ import bsbll.game.BaseRunner;
 
 @Immutable
 public final class PlayOutcome {
+    private static final PlayOutcome NO_PLAY = new PlayOutcome(EventType.NO_PLAY, Advances.empty());
+    private static final PlayOutcome STRIKE_OUT = new PlayOutcome(EventType.STRIKEOUT, Advances.empty());
+    
     private final EventType type;    
     private final Advances advances;
     private final int numberOfErrors;
@@ -35,6 +38,24 @@ public final class PlayOutcome {
         this.type = requireNonNull(type);
         this.advances = requireNonNull(advances);
         this.numberOfErrors = checkNotNegative(numberOfErrors);
+    }
+    
+    /**
+     * Returns a PlayOutcome representing a No Play. This can be used e.g. to
+     * represent the "ideal" play corresponding to a play like PASSED_BALL or
+     * WILD_PITCH, when the official scorer reconstructs the inning in order to
+     * figure out what runs are earned.
+     */
+    public static PlayOutcome noPlay() {
+        return NO_PLAY;
+    }
+    
+    /**
+     * Returns a PlayOutcome representing a normal strikeout, where the batter
+     * is out and nothing happens on the bases.
+     */
+    public static PlayOutcome strikeout() {
+        return STRIKE_OUT;
     }
 
     public EventType getType() {

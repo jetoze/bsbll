@@ -1,5 +1,6 @@
 package bsbll.game.play;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
@@ -114,6 +115,7 @@ public final class AtBatResult { // TODO: Come up with a better name
         public Builder addOutcome(PlayOutcome actual, PlayOutcome ideal) {
             requireNonNull(actual);
             requireNonNull(ideal);
+            checkArgument(!ideal.isErrorOrPassedBall(), "The ideal play cannot have any errors or passed balls"); // TODO: Or wild pitches
             this.actualPlays.add(actual);
             this.idealPlays.add(ideal);
             return this;
