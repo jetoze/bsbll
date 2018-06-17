@@ -275,9 +275,7 @@ public final class HalfInning {
             return plays;
         }
         
-        // TODO: Should not be part of the public API for this class. Once we move the earned run
-        // processing to a new class, this method should be made package-private.
-        private ImmutableList<Play> getIdealPlays() {
+        ImmutableList<Play> getIdealPlays() {
             return idealPlays;
         }
 
@@ -293,9 +291,7 @@ public final class HalfInning {
          * Checks if the earned run designation requires an ideal version of this inning to
          * be reconstructed, due to runs being scored after errors or passed balls.
          */
-        // TODO: Should not be part of the public API for this class. Once we move the earned run
-        // processing to a new class, this method should be made package-private.
-        private boolean isEarnedRunReconstructionNeeded() {
+        boolean isEarnedRunReconstructionNeeded() {
             if (runs.isEmpty()) {
                 return false;
             }

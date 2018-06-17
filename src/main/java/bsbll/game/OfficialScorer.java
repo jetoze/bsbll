@@ -3,12 +3,16 @@ package bsbll.game;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.collect.ImmutableList;
+
+import bsbll.game.RunsScored.Run;
 import bsbll.player.Player;
 import bsbll.stats.PitchingStat;
 import bsbll.stats.PlayerStatLookup;
 import bsbll.stats.WinLossRecord;
 import bsbll.team.Lineup;
 import bsbll.team.TeamId;
+import tzeth.collections.ImCollectors;
 
 public final class OfficialScorer { // TODO: Is this a good abstraction?
     private final PlayerStatLookup statLookup;
@@ -52,6 +56,20 @@ public final class OfficialScorer { // TODO: Is this a good abstraction?
         int wins = statLookup.getPitchingStat(pitcher, PitchingStat.WINS);
         int losses = statLookup.getPitchingStat(pitcher, PitchingStat.LOSSES) + 1;
         return new PitcherOfRecord(pitcher, Decision.LOSS, new WinLossRecord(wins, losses));
+    }
+
+    public ImmutableList<BaseRunner> getEarnedRuns(HalfInning.Summary inningSummary) {
+        ImmutableList<Run> allRuns = inningSummary.getRuns();
+        if (allRuns.isEmpty()) {
+            return ImmutableList.of();
+        }
+        if (inningSummary.isEarnedRunReconstructionNeeded()) {
+            return ReconstructedInning.of(inningSummary).getEarnedRuns();
+        } else {
+            return allRuns.stream()
+                    .map(r -> new BaseRunner(r.getRunner(), r.getResponsiblePitcher()))
+                    .collect(ImCollectors.toList());
+        }
     }
     
     // TODO: Functionality for earned runs, rbis.
