@@ -33,7 +33,7 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
     public <T> T get(PitchingStat<T> stat) {
         return stat.get(this);
     }
-    
+
     public PitchingStatLine plus(Outcome o, int runs) {
         requireNonNull(o);
         checkNotNegative(runs);
@@ -72,6 +72,15 @@ public final class PitchingStatLine extends StatLine<PrimitivePitchingStat, Pitc
             return this;
         }
         
+        public Builder add(PrimitivePitchingStat stat, int value) {
+            requireNonNull(stat);
+            checkNotNegative(value);
+            if (value > 0) {
+                values.put(stat, get(stat) + value);
+            }
+            return this;
+        }
+
         public Builder add(PlayOutcome o, int runs) {
             requireNonNull(o);
             checkNotNegative(runs);

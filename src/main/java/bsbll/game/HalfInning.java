@@ -112,14 +112,14 @@ public final class HalfInning {
                 AtBatResult result = driver.run(batter, pitcher, baseSituation, stats.outs, runsNeededToWin);
                 for (PlayOutcome outcome : result.getActualPlays()) {
                     checkState(!isDone(stats));
-                    processPlay(batter, outcome, false);
-                    // TODO: Update runner and pitching stats
+                    processPlay(batter, outcome);
                 }
                 result.getIdealPlays().stream()
                     .map(po -> new Play(batter, pitcher, po))
                     .forEach(idealPlays::add);
                 stats = stats.plus(result);
                 baseSituation = result.getNewBaseSituation();
+                result.gatherPlayerStats(playerStats);
                 if (!result.didBatterCompleteHisTurn()) {
                     battingOrder.returnBatter(batter);
                 }
@@ -141,26 +141,23 @@ public final class HalfInning {
             return false;
         }
         
-        private void processPlay(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+        private void processPlay(Player batter, PlayOutcome outcome) {
             // TODO: Once we implement pitcher substitutions, if FIELDERS_CHOICE we need to
             // update who's responsible for the batter on base. (The pitcher who was responsible 
             // for the runner that was out will now become responsible for the batter, even if
             // that pitcher has been taken out of the game by now.)
             plays.add(new Play(batter, pitcher, outcome));
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
-            updateState(batter, outcome, updatePlayerStats);
+            updateState(batter, outcome);
         }
         
-        private void updateState(Player batter, PlayOutcome outcome, boolean updatePlayerStats) {
+        private void updateState(Player batter, PlayOutcome outcome) {
             ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), outcome.getAdvances());
             ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
                     .map(p -> new Run(inning, p))
                     .collect(ImCollectors.toList());
             this.runs.addAll(runsOnPlay);
             runsNeededToWin = runsNeededToWin.updateWithRunsScored(roa.getNumberOfRuns());
-            if (updatePlayerStats) {
-                playerStats.update(batter, pitcher, outcome, roa.getRunnersThatScored());
-            }
         }
     }
     

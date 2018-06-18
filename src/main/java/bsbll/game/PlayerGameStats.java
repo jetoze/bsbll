@@ -11,13 +11,25 @@ import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.player.PlayerId;
 import bsbll.stats.BattingStat;
+import bsbll.stats.BattingStat.PrimitiveBattingStat;
 import bsbll.stats.BattingStatLine;
 import bsbll.stats.PitchingStat;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 import bsbll.stats.PitchingStatLine;
 
 public final class PlayerGameStats {
     private final Map<PlayerId, BattingStatLine.Builder> battingStats = new HashMap<>();
     private final Map<PlayerId, PitchingStatLine.Builder> pitchingStats = new HashMap<>();
+    
+    public void updateBattingStats(PlayerId playerId, Map<PrimitiveBattingStat, Integer> stats) {
+        BattingStatLine.Builder line = battingStats(playerId);
+        stats.entrySet().forEach(e -> line.add(e.getKey(), e.getValue()));
+    }
+    
+    public void updatePitchingStats(PlayerId playerId, Map<PrimitivePitchingStat, Integer> stats) {
+        PitchingStatLine.Builder line = pitchingStats(playerId);
+        stats.entrySet().forEach(e -> line.add(e.getKey(), e.getValue()));
+    }
     
     public void update(Player batter, Player pitcher, PlayOutcome outcome, List<BaseRunner> runs) {
         updateBatterStats(batter, outcome, runs.size());
@@ -40,7 +52,11 @@ public final class PlayerGameStats {
     }
     
     private BattingStatLine.Builder battingStats(Player player) {
-        return battingStats.computeIfAbsent(player.getId(), id -> BattingStatLine.forNewGame());
+        return battingStats(player.getId());
+    }
+
+    private BattingStatLine.Builder battingStats(PlayerId id) {
+        return battingStats.computeIfAbsent(id, i -> BattingStatLine.forNewGame());
     }
     
     private void updatePitchingStats(Player pitcher, PlayOutcome outcome, int numberOfRuns) {
@@ -49,7 +65,11 @@ public final class PlayerGameStats {
     }
     
     private PitchingStatLine.Builder pitchingStats(Player player) {
-        return pitchingStats.computeIfAbsent(player.getId(), id -> PitchingStatLine.forNewGame());
+        return pitchingStats(player.getId());
+    }
+
+    private PitchingStatLine.Builder pitchingStats(PlayerId id) {
+        return pitchingStats.computeIfAbsent(id, i -> PitchingStatLine.forNewGame());
     }
     
     public BattingStatLine getBattingLine(Player player) {
