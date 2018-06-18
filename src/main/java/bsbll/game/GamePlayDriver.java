@@ -3,9 +3,12 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkInRange;
 
+import com.google.common.collect.ImmutableList;
+
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.die.DieFactory;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceDistribution;
@@ -21,6 +24,10 @@ import bsbll.game.play.PlayOutcome;
 import bsbll.matchup.MatchupRunner;
 import bsbll.matchup.MatchupRunner.Outcome;
 import bsbll.player.Player;
+import bsbll.stats.BattingStat;
+import bsbll.stats.BattingStat.PrimitiveBattingStat;
+import bsbll.stats.PitchingStat;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 
 /**
  * Generates the list of plays associated with each batter-pitcher matchup.
@@ -192,8 +199,7 @@ public final class GamePlayDriver {
             case STRIKEOUT:
                 // TODO: Dropped third strike could result in the batter going to first,
                 // without an out being recorded.
-                PlayOutcome so = PlayOutcome.strikeout();
-                addOutcome(so, so);
+                strikeout();
                 break;
             case WALK:
                 batterAwardedFirst(basicOutcome);
@@ -219,26 +225,48 @@ public final class GamePlayDriver {
                     Advances advances = baseHitAdvanceDistribution.pickOne(
                             baseHit, baseSituation, outs, dieFactory);
                     PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
+                    registerBaseHitStats(baseHit, p.getNumberOfRuns());
                     addOutcome(p, p);
                 } else {
                     Advances advances = errorAdvanceDistribution.pickOne(
                             ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
                     PlayOutcome actual = new PlayOutcome(eventType, advances, numberOfErrors);
                     
+                    // TODO: pickMostCommon, or new method that picks one from the distribution, with the
+                    // additional condition that the selected Advances cannot have any errors? For example,
+                    // add method AdvanceDistribution::pickOne(..., Predicate<? super Advances> predicate)
                     Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
                     PlayOutcome ideal = new PlayOutcome(eventType, idealAdvances, 0);
                     
                     addOutcome(actual, ideal);
+                    // TODO: Not sure this is the best way to decide which runs should be awarded as RBIs
+                    // for the batter.
+                    int rbis = ideal.getNumberOfRuns();
+                    registerBaseHitStats(baseHit, rbis);
                 }
             }
+        }
+        
+        private void registerBaseHitStats(BaseHit baseHit, int rbis) {
+            baseHit.getBattingStat().ifPresent(builder::addBattingStat);
+            baseHit.getPitchingStat().ifPresent(builder::addPitchingStat);
+            builder.addStat(BattingStat.HITS, PitchingStat.HITS);
+            builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, rbis);
         }
         
         private void homerun() {
             Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
             PlayOutcome hr = new PlayOutcome(EventType.HOMERUN, advances);
             addOutcome(hr, hr);
+            registerBaseHitStats(BaseHit.HOMERUN, hr.getNumberOfRuns());
         }
-        
+
+        private void strikeout() {
+            PlayOutcome so = PlayOutcome.strikeout();
+            addOutcome(so, so);
+            builder.addStat(BattingStat.STRIKEOUTS, PitchingStat.STRIKEOUTS);
+        }
+
         private void batterAwardedFirst(Outcome outcome) {
             assert outcome == Outcome.WALK || outcome == Outcome.HIT_BY_PITCH;
             Advances advances = Advances.batterAwardedFirstBase(baseSituation.getOccupiedBases());
@@ -246,6 +274,12 @@ public final class GamePlayDriver {
                     ? EventType.WALK
                     : EventType.HIT_BY_PITCH;
             PlayOutcome p = new PlayOutcome(type, advances);
+            if (outcome == Outcome.WALK) {
+                builder.addStat(PrimitiveBattingStat.WALKS, PrimitivePitchingStat.WALKS);
+            } else {
+                builder.addStat(PrimitiveBattingStat.HIT_BY_PITCHES, PrimitivePitchingStat.HIT_BY_PITCHES);
+            }
+            builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, advances.getNumberOfRuns());
             addOutcome(p, p);
         }
 
@@ -312,10 +346,13 @@ public final class GamePlayDriver {
             // was prolonged by an ERROR_ON_FOUL_FLY, any subsequent ideal play is the NO PLAY,
             // since the play should not have happened at all in an ideal inning.
             builder.addOutcome(actual, batterShouldHaveBeenOut ? PlayOutcome.noPlay() : ideal);
-            baseSituation = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), 
-                    actual.getAdvances()).getNewSituation();
+            ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), 
+                    actual.getAdvances());
+            ImmutableList<BaseRunner> runs = roa.getRunnersThatScored();
+            builder.runsScored(runs);
+            baseSituation = roa.getNewSituation();
             outs += actual.getNumberOfOuts();
-            runsNeededToWin = runsNeededToWin.updateWithRunsScored(actual.getNumberOfRuns());
+            runsNeededToWin = runsNeededToWin.updateWithRunsScored(runs.size());
         }
     }
 }

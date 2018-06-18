@@ -3,23 +3,37 @@ package bsbll.bases;
 import static com.google.common.base.Preconditions.checkArgument;
 
 import java.util.EnumSet;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import bsbll.game.play.EventType;
 import bsbll.matchup.MatchupRunner.Outcome;
+import bsbll.stats.BattingStat.PrimitiveBattingStat;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 
 public enum BaseHit {
     // TODO: Should I be in this package?
-    SINGLE(1, EventType.SINGLE),
-    DOUBLE(2, EventType.DOUBLE),
-    TRIPLE(3, EventType.TRIPLE),
-    HOMERUN(4, EventType.HOMERUN);
+    SINGLE(1, EventType.SINGLE, null, null),
+    DOUBLE(2, EventType.DOUBLE, PrimitiveBattingStat.DOUBLES, null),
+    TRIPLE(3, EventType.TRIPLE, PrimitiveBattingStat.TRIPLES, null),
+    HOMERUN(4, EventType.HOMERUN, PrimitiveBattingStat.HOMERUNS, PrimitivePitchingStat.HOMERUNS);
     
     private final int value;
     private final EventType eventType;
+    @Nullable
+    private final PrimitiveBattingStat battingStat;
+    @Nullable
+    private final PrimitivePitchingStat pitchingStat;
     
-    private BaseHit(int value, EventType eventType) {
+    private BaseHit(int value, 
+                    EventType eventType,
+                    @Nullable PrimitiveBattingStat battingStat,
+                    @Nullable PrimitivePitchingStat pitchingStat) {
         this.value = value;
         this.eventType = eventType;
+        this.battingStat = battingStat;
+        this.pitchingStat = pitchingStat;
     }
     
     public int value() {
@@ -28,6 +42,14 @@ public enum BaseHit {
     
     public EventType toEventType() {
         return eventType;
+    }
+    
+    public Optional<PrimitiveBattingStat> getBattingStat() {
+        return Optional.ofNullable(battingStat);
+    }
+    
+    public Optional<PrimitivePitchingStat> getPitchingStat() {
+        return Optional.ofNullable(pitchingStat);
     }
     
     public static EnumSet<BaseHit> otherThanHomerun() {

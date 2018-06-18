@@ -1,7 +1,7 @@
 package bsbll.game.play;
 
 import static java.util.Objects.requireNonNull;
-import static tzeth.preconds.MorePreconditions.checkPositive;
+import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -81,15 +81,19 @@ final class AtBatStats {
         
         public Builder add(PrimitiveBattingStat stat, int value) {
             requireNonNull(stat);
-            checkPositive(value);
-            batterStats.merge(stat, value, (v1, v2) -> v1 + v2);
+            checkNotNegative(value);
+            if (value > 0) {
+                batterStats.merge(stat, value, (v1, v2) -> v1 + v2);
+            }
             return this;
         }
         
         public Builder add(PrimitivePitchingStat stat, int value) {
             requireNonNull(stat);
-            checkPositive(value);
-            pitcherStats.merge(stat, value, (v1, v2) -> v1 + v2);
+            checkNotNegative(value);
+            if (value > 0) {
+                pitcherStats.merge(stat, value, (v1, v2) -> v1 + v2);
+            }
             return this;
         }
         
