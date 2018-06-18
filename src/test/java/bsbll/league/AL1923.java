@@ -48,6 +48,7 @@ import tzeth.strings.Padding;
 
 public final class AL1923 {
     private final League league;
+    private final GamePlayParams gamePlayParams;
     private final GamePlayDriver gamePlayDriver;
     private final Random random = new Random();
     
@@ -61,15 +62,12 @@ public final class AL1923 {
                 buildBrowns(),
                 buildAthletics(),
                 buildWhiteSox());
+        gamePlayParams = createGamePlayParams();
         gamePlayDriver = createGamePlayDriver();
         checkState(league.getNumberOfTeams() % 2 == 0);
     }
-    
-    private static GamePlayDriver createGamePlayDriver() {
-        DieFactory dieFactory = DieFactory.random();
-        Log5BasedMatchupRunner matchupRunner = new Log5BasedMatchupRunner(
-                new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
-                dieFactory);
+
+    private static GamePlayParams createGamePlayParams() {
         // We don't have play-by-play data for 1923, so use 1925 instead.
         Year year = Year.of(1925);
         BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
@@ -91,9 +89,17 @@ public final class AL1923 {
                 fieldersChoiceProbabilities,
                 errorCountDistribution,
                 errorAdvanceDistribution);
-        return new GamePlayDriver(matchupRunner, params, dieFactory);
+        return params;
     }
     
+    private GamePlayDriver createGamePlayDriver() {
+        DieFactory dieFactory = DieFactory.random();
+        Log5BasedMatchupRunner matchupRunner = new Log5BasedMatchupRunner(
+                new LahmanPlayerCardLookup(LeagueId.AL, Year.of(1923)), 
+                dieFactory);
+        return new GamePlayDriver(matchupRunner, gamePlayParams, dieFactory);
+    }
+
     public Standings run() {
         List<BoxScore> scores = new ArrayList<>();
         List<Team> teams = new ArrayList<>(league.getTeams());
@@ -137,7 +143,7 @@ public final class AL1923 {
     }
     
     private BoxScore runGame(Team home, Team visiting) {
-        OfficialScorer officialScorer = new OfficialScorer(league.getPlayerStatLookup());
+        OfficialScorer officialScorer = new OfficialScorer(league.getPlayerStatLookup(), gamePlayParams);
         Game game = new Game(home, visiting, gamePlayDriver, officialScorer);
         GameEventDetector eventDetector = new DefaultGameEventDetector(league.getPlayerStatLookup());
         game.setGameEventDetector(eventDetector);

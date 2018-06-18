@@ -1,10 +1,13 @@
 package bsbll.game;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
+import bsbll.game.params.GamePlayParams;
 import bsbll.game.play.Play;
 
 /**
@@ -13,14 +16,18 @@ import bsbll.game.play.Play;
 final class ReconstructedInning {
     private final Inning inning;
     private final ImmutableList<Play> actualPlays;
+    // XXX: GamePlayParams offers more functionality than what is needed here. Refactor to 
+    // pass in a trimmed down service.
+    private final GamePlayParams gamePlayParams;
     
-    public ReconstructedInning(HalfInning.Summary summary) {
+    public ReconstructedInning(HalfInning.Summary summary, GamePlayParams gamePlayParams) {
         this.inning = summary.getInning();
         this.actualPlays = summary.getPlays();
+        this.gamePlayParams = requireNonNull(gamePlayParams);
     }
 
-    public static ReconstructedInning of(HalfInning.Summary summary) {
-        return new ReconstructedInning(summary);
+    public static ReconstructedInning of(HalfInning.Summary summary, GamePlayParams gamePlayParams) {
+        return new ReconstructedInning(summary, gamePlayParams);
     }
     
     public ImmutableList<Run> getEarnedRuns() {

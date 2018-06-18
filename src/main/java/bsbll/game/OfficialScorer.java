@@ -6,6 +6,7 @@ import static java.util.Objects.requireNonNull;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.game.RunsScored.Run;
+import bsbll.game.params.GamePlayParams;
 import bsbll.player.Player;
 import bsbll.stats.PitchingStat;
 import bsbll.stats.PlayerStatLookup;
@@ -15,13 +16,15 @@ import bsbll.team.TeamId;
 
 public final class OfficialScorer { // TODO: Is this a good abstraction?
     private final PlayerStatLookup statLookup;
+    private final GamePlayParams gamePlayParams;
     
     public OfficialScorer() {
-        this(PlayerStatLookup.EMPTY);
+        this(PlayerStatLookup.EMPTY, GamePlayParams.defaultParams());
     }
     
-    public OfficialScorer(PlayerStatLookup statLookup) {
+    public OfficialScorer(PlayerStatLookup statLookup, GamePlayParams gamePlayParams) {
         this.statLookup = requireNonNull(statLookup);
+        this.gamePlayParams = requireNonNull(gamePlayParams);
     }
     
     /**
@@ -63,7 +66,7 @@ public final class OfficialScorer { // TODO: Is this a good abstraction?
             return ImmutableList.of();
         }
         if (inningSummary.isEarnedRunReconstructionNeeded()) {
-            return ReconstructedInning.of(inningSummary).getEarnedRuns();
+            return ReconstructedInning.of(inningSummary, gamePlayParams).getEarnedRuns();
         } else {
             return allRuns;
         }
