@@ -6,6 +6,7 @@ import static tzeth.preconds.MorePreconditions.checkInRange;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.Advances;
+import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
@@ -312,6 +313,11 @@ public final class GamePlayDriver {
 //                    ++sacrificeFlies;
 //                    //System.out.println("Sacrifice Fly " + sacrificeFlies);
 //                }
+            if (resultingType == EventType.OUT && outs < 2 && location == OutLocation.OUTFIELD
+                    && advances.didRunnerAdvanceSafely(Base.THIRD)) {
+                builder.addBattingStat(PrimitiveBattingStat.SACRIFICE_FLIES);
+            }
+            builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, advances.getNumberOfRuns());
             PlayOutcome p = new PlayOutcome(resultingType, advances);
             addOutcome(p, p);
         }
