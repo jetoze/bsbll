@@ -26,8 +26,7 @@ import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 public final class AtBatResult { // TODO: Come up with a better name
     private final Player batter;
     private final Player pitcher;
-    private final ImmutableList<PlayOutcome> actualPlays;
-    private final ImmutableList<PlayOutcome> idealPlays;
+    private final ImmutableList<PlayOutcome> plays;
     private final ImmutableList<BaseRunner> runs;
     private final BaseSituation newBaseSituation;
     private final boolean batterCompletedHisTurn;
@@ -35,16 +34,14 @@ public final class AtBatResult { // TODO: Come up with a better name
 
     public AtBatResult(Player batter, 
                        Player pitcher,
-                       List<PlayOutcome> actualPlays,
-                       List<PlayOutcome> idealPlays,
+                       List<PlayOutcome> plays,
                        List<BaseRunner> runs,
                        BaseSituation newBaseSituation,
                        boolean batterCompletedHisTurn,
                        AtBatStats stats) {
         this.batter = requireNonNull(batter);
         this.pitcher = requireNonNull(pitcher);
-        this.actualPlays = ImmutableList.copyOf(actualPlays);
-        this.idealPlays = ImmutableList.copyOf(idealPlays);
+        this.plays = ImmutableList.copyOf(plays);
         this.runs = ImmutableList.copyOf(runs);
         this.newBaseSituation = requireNonNull(newBaseSituation);
         this.batterCompletedHisTurn = batterCompletedHisTurn;
@@ -59,8 +56,8 @@ public final class AtBatResult { // TODO: Come up with a better name
         return pitcher;
     }
 
-    public ImmutableList<PlayOutcome> getActualPlays() {
-        return actualPlays;
+    public ImmutableList<PlayOutcome> getPlays() {
+        return plays;
     }
     
     public ImmutableList<BaseRunner> getRuns() {
@@ -74,11 +71,7 @@ public final class AtBatResult { // TODO: Come up with a better name
     public boolean isBaseHit() {
         // Only the very last play can represent a hit. This is the play that contains the
         // outcome of the batter-pitcher matchup.
-        return actualPlays.get(actualPlays.size() - 1).isBaseHit();
-    }
-
-    public ImmutableList<PlayOutcome> getIdealPlays() {
-        return idealPlays;
+        return plays.get(plays.size() - 1).isBaseHit();
     }
 
     public BaseSituation getNewBaseSituation() {
@@ -125,6 +118,12 @@ public final class AtBatResult { // TODO: Come up with a better name
             return this;
         }
         
+        /**
+         * @deprecated Use {@link #addOutcome(PlayOutcome)} instead. Ideal plays
+         *             will be reconstructed after the inning has completed, if
+         *             necessary for earned run assignments.
+         */
+        @Deprecated
         public Builder addOutcome(PlayOutcome actual, PlayOutcome ideal) {
             requireNonNull(actual);
             requireNonNull(ideal);
@@ -191,7 +190,7 @@ public final class AtBatResult { // TODO: Come up with a better name
         public AtBatResult build() {
             checkState(actualPlays.size() > 0, "Must provide at least one PlayOutcome");
             checkState(newBaseSituation != null, "Must provide the new BaseSituation");
-            return new AtBatResult(batter, pitcher, actualPlays, idealPlays, runs, 
+            return new AtBatResult(batter, pitcher, actualPlays, runs, 
                     newBaseSituation, batterCompletedHisTurn, statsBuilder.build());
         }
     }

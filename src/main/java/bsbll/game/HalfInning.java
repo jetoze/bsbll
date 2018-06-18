@@ -87,7 +87,6 @@ public final class HalfInning {
         private Stats stats = new Stats();
         private BaseSituation baseSituation = BaseSituation.empty();
         private final List<Play> plays = new ArrayList<>();
-        private final List<Play> idealPlays = new ArrayList<>();
         private final List<Run> runs = new ArrayList<>();
         private final List<GameEvent> events = new ArrayList<>();
 
@@ -95,13 +94,10 @@ public final class HalfInning {
             do {
                 Player batter = battingOrder.nextBatter();
                 AtBatResult result = driver.run(batter, pitcher, baseSituation, stats.outs, runsNeededToWin);
-                for (PlayOutcome outcome : result.getActualPlays()) {
+                for (PlayOutcome outcome : result.getPlays()) {
                     checkState(!isDone(stats));
                     processPlay(batter, outcome);
                 }
-                result.getIdealPlays().stream()
-                    .map(po -> new Play(batter, pitcher, po))
-                    .forEach(idealPlays::add);
                 result.getRuns().stream()
                     .map(r -> new Run(inning, r))
                     .forEach(this.runs::add);
@@ -116,7 +112,7 @@ public final class HalfInning {
                 }
             } while (!isDone(stats));
             int lob = baseSituation.getNumberOfRunners();
-            return new Summary(inning, stats.withLeftOnBase(lob), plays, idealPlays, runs, events);
+            return new Summary(inning, stats.withLeftOnBase(lob), plays, runs, events);
         }
         
         private boolean isDone(Stats stats) {
@@ -192,7 +188,7 @@ public final class HalfInning {
             int r = this.runs;
             int e = this.errors;
             int o = this.outs;
-            for (PlayOutcome p : abr.getActualPlays()) {
+            for (PlayOutcome p : abr.getPlays()) {
                 r += p.getNumberOfRuns();
                 e += p.getNumberOfErrors();
                 o += p.getNumberOfOuts();
@@ -233,15 +229,13 @@ public final class HalfInning {
         private final Inning inning;
         private final Stats stats;
         private final ImmutableList<Play> plays;
-        private final ImmutableList<Play> idealPlays;
         private final ImmutableList<Run> runs;
         private final ImmutableList<GameEvent> events;
         
-        public Summary(Inning inning, Stats stats, List<Play> plays, List<Play> idealPlays, List<Run> runs, List<GameEvent> events) {
+        public Summary(Inning inning, Stats stats, List<Play> plays, List<Run> runs, List<GameEvent> events) {
             this.inning = requireNonNull(inning);
             this.stats = requireNonNull(stats);
             this.plays = ImmutableList.copyOf(plays);
-            this.idealPlays = ImmutableList.copyOf(idealPlays);
             this.runs = ImmutableList.copyOf(runs);
             this.events = ImmutableList.copyOf(events);
             checkArgument(runs.size() == stats.runs);
@@ -257,10 +251,6 @@ public final class HalfInning {
 
         public ImmutableList<Play> getPlays() {
             return plays;
-        }
-        
-        ImmutableList<Play> getIdealPlays() {
-            return idealPlays;
         }
 
         public ImmutableList<Run> getRuns() {

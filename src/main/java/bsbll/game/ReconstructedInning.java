@@ -12,11 +12,11 @@ import bsbll.game.play.Play;
  */
 final class ReconstructedInning {
     private final Inning inning;
-    private final ImmutableList<Play> idealPlays;
+    private final ImmutableList<Play> actualPlays;
     
     public ReconstructedInning(HalfInning.Summary summary) {
         this.inning = summary.getInning();
-        this.idealPlays = summary.getIdealPlays();
+        this.actualPlays = summary.getPlays();
     }
 
     public static ReconstructedInning of(HalfInning.Summary summary) {
@@ -32,8 +32,10 @@ final class ReconstructedInning {
         ImmutableList.Builder<Run> earnedRuns = ImmutableList.builder();
         BaseSituation bases = BaseSituation.empty();
         int outs = 0;
-        for (Play play : idealPlays) {
-            // FIXME: This is broken. We're getting inconsistent BaseSituations.
+        for (Play play : actualPlays) {
+            if (play.isErrorOrPassedBall()) { // TODO: Or Wild pitch
+                // TODO: Create an ideal version of the play.
+            }
             ResultOfAdvance roa = play.advanceRunners(bases);
             if (outs < 3) {
                 roa.getRunnersThatScored().stream()
