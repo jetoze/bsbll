@@ -15,7 +15,6 @@ import javax.annotation.concurrent.Immutable;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.BaseSituation;
-import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
@@ -24,7 +23,6 @@ import bsbll.game.play.Play;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.team.BattingOrder;
-import tzeth.collections.ImCollectors;
 
 public final class HalfInning {
     private final Inning inning;
@@ -117,6 +115,12 @@ public final class HalfInning {
                 result.getIdealPlays().stream()
                     .map(po -> new Play(batter, pitcher, po))
                     .forEach(idealPlays::add);
+                result.getRuns().stream()
+                    .map(r -> new Run(inning, r))
+                    .forEach(this.runs::add);
+                
+                runsNeededToWin = runsNeededToWin.updateWithRunsScored(result.getNumberOfRuns());
+                
                 stats = stats.plus(result);
                 baseSituation = result.getNewBaseSituation();
                 result.gatherPlayerStats(playerStats);
@@ -148,16 +152,6 @@ public final class HalfInning {
             // that pitcher has been taken out of the game by now.)
             plays.add(new Play(batter, pitcher, outcome));
             eventDetector.examine(outcome, inning, batter, pitcher, stats.outs, baseSituation).ifPresent(events::add);
-            updateState(batter, outcome);
-        }
-        
-        private void updateState(Player batter, PlayOutcome outcome) {
-            ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), outcome.getAdvances());
-            ImmutableList<Run> runsOnPlay = roa.getRunnersThatScored().stream()
-                    .map(p -> new Run(inning, p))
-                    .collect(ImCollectors.toList());
-            this.runs.addAll(runsOnPlay);
-            runsNeededToWin = runsNeededToWin.updateWithRunsScored(roa.getNumberOfRuns());
         }
     }
     

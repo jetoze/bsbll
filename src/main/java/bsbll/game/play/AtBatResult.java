@@ -66,6 +66,10 @@ public final class AtBatResult { // TODO: Come up with a better name
     public ImmutableList<BaseRunner> getRuns() {
         return runs;
     }
+    
+    public int getNumberOfRuns() {
+        return runs.size();
+    }
 
     public boolean isBaseHit() {
         // Only the very last play can represent a hit. This is the play that contains the
