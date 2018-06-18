@@ -7,11 +7,14 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import bsbll.game.RunsScored.Run;
 import bsbll.game.event.GameEvent;
 import bsbll.game.event.GameEventDetector;
 import bsbll.game.event.GameEvents;
 import bsbll.game.play.Play;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.collections.LoopingIterator;
@@ -69,6 +72,7 @@ public final class Game {
                     innings.runsNeededToWalkOf());
             HalfInning.Summary summary = halfInning.run();
             innings.onHalfInningCompleted(summary.getStats());
+            processPitcherRuns(summary);
             plays.addAll(summary.getPlays());
             runs.addAll(summary.getRuns());
             events.addAll(summary.getEvents());
@@ -85,6 +89,13 @@ public final class Game {
         playerStats.updatePitchersOfRecord(wp, lp);
         return new BoxScore(lineScore, homeLineup, visitingLineup, wp, lp, runsScored, 
                 playerStats, plays, GameEvents.of(events));
+    }
+    
+    private void processPitcherRuns(HalfInning.Summary summary) {
+        ImmutableList<Run> allRuns = summary.getRuns();
+        allRuns.forEach(r -> playerStats.add(r.getResponsiblePitcher(), PrimitivePitchingStat.RUNS, 1));
+        ImmutableList<Run> earnedRuns = officialScorer.getEarnedRuns(summary);
+        earnedRuns.forEach(r -> playerStats.add(r.getResponsiblePitcher(), PrimitivePitchingStat.EARNED_RUNS, 1));
     }
     
     @Override

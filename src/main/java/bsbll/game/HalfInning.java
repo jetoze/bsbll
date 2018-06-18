@@ -78,19 +78,6 @@ public final class HalfInning {
         return summary;
     }
     
-    // TODO: Move this to a separate class, or to the OfficialScorer.
-    private void assignEarnedRuns(Summary summary) {
-        if (summary.getRuns().isEmpty()) {
-            // No runs scored --> nothing to do
-            return;
-        }
-        if (summary.isEarnedRunReconstructionNeeded()) {
-            // TODO: Reconstruct the ideal inning and assign earned runs based on that
-        } else {
-            // TODO: All runs are earned
-        }
-    }
-    
     @Override
     public String toString() {
         return inning.toString();
@@ -129,7 +116,7 @@ public final class HalfInning {
                 }
             } while (!isDone(stats));
             int lob = baseSituation.getNumberOfRunners();
-            return new Summary(stats.withLeftOnBase(lob), plays, idealPlays, runs, events);
+            return new Summary(inning, stats.withLeftOnBase(lob), plays, idealPlays, runs, events);
         }
         
         private boolean isDone(Stats stats) {
@@ -243,19 +230,25 @@ public final class HalfInning {
     
     @Immutable
     public static final class Summary {
+        private final Inning inning;
         private final Stats stats;
         private final ImmutableList<Play> plays;
         private final ImmutableList<Play> idealPlays;
         private final ImmutableList<Run> runs;
         private final ImmutableList<GameEvent> events;
         
-        public Summary(Stats stats, List<Play> plays, List<Play> idealPlays, List<Run> runs, List<GameEvent> events) {
-            this.stats = stats;
+        public Summary(Inning inning, Stats stats, List<Play> plays, List<Play> idealPlays, List<Run> runs, List<GameEvent> events) {
+            this.inning = requireNonNull(inning);
+            this.stats = requireNonNull(stats);
             this.plays = ImmutableList.copyOf(plays);
             this.idealPlays = ImmutableList.copyOf(idealPlays);
             this.runs = ImmutableList.copyOf(runs);
             this.events = ImmutableList.copyOf(events);
             checkArgument(runs.size() == stats.runs);
+        }
+        
+        public Inning getInning() {
+            return inning;
         }
 
         public Stats getStats() {

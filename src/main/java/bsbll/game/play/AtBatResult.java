@@ -89,6 +89,12 @@ public final class AtBatResult { // TODO: Come up with a better name
         return batterCompletedHisTurn;
     }
     
+    /**
+     * Updates the PlayerGameStats with the individual stats from this at bat.
+     * This includes stats for the batter and pitcher, as well as base running
+     * events. Pitcher runs and earned runs are <em>not</em> included - they are
+     * processed separately after the inning is over.
+     */
     public void gatherPlayerStats(PlayerGameStats gameStats) {
         this.stats.applyTo(batter, pitcher, gameStats);
     }

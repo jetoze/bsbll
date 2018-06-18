@@ -12,7 +12,6 @@ import bsbll.stats.PlayerStatLookup;
 import bsbll.stats.WinLossRecord;
 import bsbll.team.Lineup;
 import bsbll.team.TeamId;
-import tzeth.collections.ImCollectors;
 
 public final class OfficialScorer { // TODO: Is this a good abstraction?
     private final PlayerStatLookup statLookup;
@@ -58,7 +57,7 @@ public final class OfficialScorer { // TODO: Is this a good abstraction?
         return new PitcherOfRecord(pitcher, Decision.LOSS, new WinLossRecord(wins, losses));
     }
 
-    public ImmutableList<BaseRunner> getEarnedRuns(HalfInning.Summary inningSummary) {
+    public ImmutableList<Run> getEarnedRuns(HalfInning.Summary inningSummary) {
         ImmutableList<Run> allRuns = inningSummary.getRuns();
         if (allRuns.isEmpty()) {
             return ImmutableList.of();
@@ -66,12 +65,7 @@ public final class OfficialScorer { // TODO: Is this a good abstraction?
         if (inningSummary.isEarnedRunReconstructionNeeded()) {
             return ReconstructedInning.of(inningSummary).getEarnedRuns();
         } else {
-            return allRuns.stream()
-                    .map(r -> new BaseRunner(r.getRunner(), r.getResponsiblePitcher()))
-                    .collect(ImCollectors.toList());
+            return allRuns;
         }
-    }
-    
-    // TODO: Functionality for earned runs, rbis.
-    
+    }    
 }
