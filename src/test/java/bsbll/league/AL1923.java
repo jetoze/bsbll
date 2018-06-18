@@ -29,6 +29,7 @@ import bsbll.game.params.ErrorCountDistribution;
 import bsbll.game.params.ErrorCountDistributionFactory;
 import bsbll.game.params.FieldersChoiceProbabilities;
 import bsbll.game.params.FieldersChoiceProbabilitiesFactory;
+import bsbll.game.params.GamePlayParams;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
@@ -84,14 +85,13 @@ public final class AL1923 {
                 .createDistribution();
         ErrorAdvanceDistribution errorAdvanceDistribution = ErrorAdvanceDistributionFactory.retrosheet(year)
                 .createDistribution();
-        return new GamePlayDriver(
-                matchupRunner,
+        GamePlayParams params = new GamePlayParams(
                 baseHitAdvanceDistribution,
                 outAdvanceDistribution,
                 fieldersChoiceProbabilities,
                 errorCountDistribution,
-                errorAdvanceDistribution,
-                dieFactory);
+                errorAdvanceDistribution);
+        return new GamePlayDriver(matchupRunner, params, dieFactory);
     }
     
     public Standings run() {

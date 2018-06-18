@@ -11,12 +11,8 @@ import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.die.DieFactory;
-import bsbll.game.params.BaseHitAdvanceDistribution;
-import bsbll.game.params.ErrorAdvanceDistribution;
 import bsbll.game.params.ErrorAdvanceKey;
-import bsbll.game.params.ErrorCountDistribution;
-import bsbll.game.params.FieldersChoiceProbabilities;
-import bsbll.game.params.OutAdvanceDistribution;
+import bsbll.game.params.GamePlayParams;
 import bsbll.game.params.OutAdvanceKey;
 import bsbll.game.params.OutLocation;
 import bsbll.game.play.AtBatResult;
@@ -42,26 +38,14 @@ import bsbll.stats.PitchingStat.PrimitivePitchingStat;
  */
 public final class GamePlayDriver {
     private final MatchupRunner matchupRunner;
-    private final BaseHitAdvanceDistribution baseHitAdvanceDistribution;
-    private final OutAdvanceDistribution outAdvanceDistribution;
-    private final FieldersChoiceProbabilities fieldersChoiceProbabilities;
-    private final ErrorCountDistribution errorCountDistribution;
-    private final ErrorAdvanceDistribution errorAdvanceDistribution;
+    private final GamePlayParams params;
     private final DieFactory dieFactory;
     
     public GamePlayDriver(MatchupRunner matchupRunner,
-                          BaseHitAdvanceDistribution baseHitAdvanceDistribution,
-                          OutAdvanceDistribution outAdvanceDistribution,
-                          FieldersChoiceProbabilities fieldersChoiceProbabilities,
-                          ErrorCountDistribution errorCountDistribution,
-                          ErrorAdvanceDistribution errorAdvanceDistribution,
+                          GamePlayParams params,
                           DieFactory dieFactory) {
         this.matchupRunner = requireNonNull(matchupRunner);
-        this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
-        this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
-        this.fieldersChoiceProbabilities = requireNonNull(fieldersChoiceProbabilities);
-        this.errorCountDistribution = requireNonNull(errorCountDistribution);
-        this.errorAdvanceDistribution = requireNonNull(errorAdvanceDistribution);
+        this.params = requireNonNull(params);
         this.dieFactory = requireNonNull(dieFactory);
     }
     
@@ -117,7 +101,6 @@ public final class GamePlayDriver {
                 requireNonNull(runsNeededToWin));
         return abDriver.run();
     }
-    
     
     
     private final class AtBatDriver {
@@ -221,22 +204,22 @@ public final class GamePlayDriver {
                 homerun();
             } else {
                 EventType eventType = baseHit.toEventType();
-                int numberOfErrors = errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
+                int numberOfErrors = params.getNumberOfErrors(eventType, baseSituation, dieFactory);
                 if (numberOfErrors == 0) {
-                    Advances advances = baseHitAdvanceDistribution.pickOne(
+                    Advances advances = params.getAdvancesOnBaseHit(
                             baseHit, baseSituation, outs, dieFactory);
                     PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
                     registerBaseHitStats(baseHit, p.getNumberOfRuns());
                     addOutcome(p, p);
                 } else {
-                    Advances advances = errorAdvanceDistribution.pickOne(
+                    Advances advances = params.getAdvancesOnError(
                             ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
                     PlayOutcome actual = new PlayOutcome(eventType, advances, numberOfErrors);
                     
                     // TODO: pickMostCommon, or new method that picks one from the distribution, with the
                     // additional condition that the selected Advances cannot have any errors? For example,
                     // add method AdvanceDistribution::pickOne(..., Predicate<? super Advances> predicate)
-                    Advances idealAdvances = baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, outs);
+                    Advances idealAdvances = params.getMostCommonAdvancesOnBaseHit(baseHit, baseSituation, outs);
                     PlayOutcome ideal = new PlayOutcome(eventType, idealAdvances, 0);
                     
                     addOutcome(actual, ideal);
@@ -288,7 +271,7 @@ public final class GamePlayDriver {
         // privat int sacrificeFlies;
         private void out() {
             OutLocation location = getOutLocation();
-            int numberOfErrors = errorCountDistribution.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
+            int numberOfErrors = params.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
             if (numberOfErrors == 0) {
                 outWithoutError(location);
             } else {
@@ -298,13 +281,13 @@ public final class GamePlayDriver {
 
         private void outWithoutError(OutLocation location) {
             boolean convertToFieldersChoice = (location == OutLocation.INFIELD) && 
-                    fieldersChoiceProbabilities.test(baseSituation, dieFactory);
+                    params.testFieldersChoice(baseSituation, dieFactory);
             EventType resultingType = convertToFieldersChoice
                     ? EventType.FIELDERS_CHOICE
                     : EventType.OUT;
 
             OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-            Advances advances = outAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+            Advances advances = params.getAdvancesOnOut(key, baseSituation, outs, dieFactory);
 //                if (convertToFieldersChoice) {
 //                    ++fieldersChoices;
 //                    System.out.println("Fielder's Choice " + fieldersChoices);
@@ -324,7 +307,7 @@ public final class GamePlayDriver {
 
         private void errorOnOut(OutLocation location, int numberOfErrors) {
             ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors);
-            Advances advances = errorAdvanceDistribution.pickOne(key, baseSituation, outs, dieFactory);
+            Advances advances = params.getAdvancesOnError(key, baseSituation, outs, dieFactory);
             // TODO: This will give the incorrect type in the case where the batter is thrown
             // out at some other base than first.
             EventType actualType = advances.didBatterReachBase()
@@ -332,7 +315,7 @@ public final class GamePlayDriver {
                     : EventType.OUT;
             PlayOutcome actual = new PlayOutcome(actualType, advances, numberOfErrors);
             
-            Advances idealAdvances = outAdvanceDistribution.pickMostCommon(
+            Advances idealAdvances = params.getMostCommonAdvancesOnOut(
                     OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
             PlayOutcome ideal = new PlayOutcome(EventType.OUT, idealAdvances, 0);
 
