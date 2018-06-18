@@ -78,7 +78,7 @@ public final class AtBatResult { // TODO: Come up with a better name
     }
     
     public void gatherPlayerStats(PlayerGameStats gameStats) {
-        this.stats.applyTo(gameStats, pitcher);
+        this.stats.applyTo(batter, pitcher, gameStats);
     }
     
     public static Builder builder(Player batter, Player pitcher) {
@@ -144,8 +144,8 @@ public final class AtBatResult { // TODO: Come up with a better name
             return this;
         }
         
-        public Builder addBattingStat(Player p, PrimitiveBattingStat stat, int value) {
-            statsBuilder.add(p, stat, value);
+        public Builder addBattingStat(PrimitiveBattingStat stat, int value) {
+            statsBuilder.add(stat, value);
             return this;
         }
         
@@ -153,8 +153,25 @@ public final class AtBatResult { // TODO: Come up with a better name
             statsBuilder.add(stat, value);
             return this;
         }
+        
+        public Builder scored(Player player) {
+            statsBuilder.scored(player);
+            return this;
+        }
+        
+        public Builder stoleBase(Player player) {
+            statsBuilder.stoleBase(player);
+            return this;
+        }
+        
+        public Builder caughtStealing(Player player) {
+            statsBuilder.caughtStealing(player);
+            return this;
+        }
 
         public Builder batterCompletedHisTurn() {
+            addBattingStat(PrimitiveBattingStat.PLATE_APPEARANCES, 1);
+            addPitchingStat(PrimitivePitchingStat.BATTERS_FACED, 1);
             this.batterCompletedHisTurn = true;
             return this;
         }

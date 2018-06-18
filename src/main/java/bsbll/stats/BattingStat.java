@@ -20,7 +20,9 @@ public interface BattingStat<T> extends Stat<T> {
         RUNS_BATTED_IN("RBI"),
         HIT_BY_PITCHES("HBP"),
         SACRIFICE_HITS("SH"),
-        SACRIFICE_FLIES("SF");
+        SACRIFICE_FLIES("SF"),
+        STOLEN_BASES("SB"),
+        CAUGHT_STEALING("CS");
         
         private final String abbrev;
         
@@ -57,6 +59,8 @@ public interface BattingStat<T> extends Stat<T> {
     public static final PrimitiveBattingStat HIT_BY_PITCHES = PrimitiveBattingStat.HIT_BY_PITCHES;
     public static final PrimitiveBattingStat SACRIFICE_HITS = PrimitiveBattingStat.SACRIFICE_HITS;
     public static final PrimitiveBattingStat SACRIFICE_FLIES = PrimitiveBattingStat.SACRIFICE_FLIES;
+    public static final PrimitiveBattingStat STOLEN_BASES = PrimitiveBattingStat.STOLEN_BASES;
+    public static final PrimitiveBattingStat CAUGHT_STEALING = PrimitiveBattingStat.CAUGHT_STEALING;
     
     public static final BattingStat<Integer> AT_BATS = new AbstractBattingStat<Integer>("AB", Comparator.reverseOrder()) {
         @Override

@@ -31,6 +31,10 @@ public final class PlayerGameStats {
         stats.entrySet().forEach(e -> line.add(e.getKey(), e.getValue()));
     }
     
+    public void add(PlayerId playerId, PrimitiveBattingStat stat, int value) {
+        battingStats(playerId).add(stat, value);
+    }
+    
     public void update(Player batter, Player pitcher, PlayOutcome outcome, List<BaseRunner> runs) {
         updateBatterStats(batter, outcome, runs.size());
         updateStatsForRunnersThatScored(batter, runs);
