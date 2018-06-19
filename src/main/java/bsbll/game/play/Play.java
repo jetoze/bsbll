@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import javax.annotation.concurrent.Immutable;
 
+import bsbll.bases.Advances;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.BaseRunner;
@@ -33,12 +34,20 @@ public final class Play {
         return outcome;
     }
     
+    public Advances getAdvances() {
+        return outcome.getAdvances();
+    }
+    
     public int getNumberOfRuns() {
         return outcome.getNumberOfRuns();
     }
     
     public int getNumberOfOuts() {
         return outcome.getNumberOfOuts();
+    }
+    
+    public int getNumberOfErrors() {
+        return outcome.getNumberOfErrors();
     }
     
     public boolean isErrorOrPassedBall() {
