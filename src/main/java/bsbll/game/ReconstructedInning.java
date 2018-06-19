@@ -93,8 +93,8 @@ final class ReconstructedInning {
             batterShouldBeOut = true;
             return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), PlayOutcome.noPlay());
         }
-        if (type == EventType.REACHED_ON_ERROR) {
-            batterShouldBeOut = true;
+        if (type == EventType.REACHED_ON_ERROR || type == EventType.OUT) {
+            batterShouldBeOut = (type == EventType.REACHED_ON_ERROR); // If OUT, the batter *is* out.
             // TODO: The OutLocation should be the same that was used when the original OUT
             // was turned into a REACHED_ON_ERROR by the GamePlayParams. How do we accomplish
             // that? Store the OutLocation as an optional parameter in PlayOutcome?
