@@ -39,7 +39,10 @@ import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerFactory;
 import bsbll.stats.BattingStat;
+import bsbll.stats.InningsPitched;
+import bsbll.stats.Per9IPStat;
 import bsbll.stats.PitchingStat;
+import bsbll.stats.PitchingStat.PrimitivePitchingStat;
 import bsbll.stats.StatLeaders;
 import bsbll.team.Team;
 import bsbll.team.TeamBuilder;
@@ -393,6 +396,20 @@ public final class AL1923 {
             .mapToInt(LineScore::getTotalErrors)
             .sum();
         System.out.println("Total Number of Errors: " + errors);
+        int earnedRuns = countTotalLeagueStat(league, PitchingStat.EARNED_RUNS);
+        System.out.println("Total Number of Earned Runs: " + earnedRuns);
+        int outs = countTotalLeagueStat(league, PrimitivePitchingStat.OUTS);
+        InningsPitched ip = InningsPitched.fromOuts(outs);
+        System.out.println("Total Innings Pitched: " + ip);
+        Per9IPStat era = new Per9IPStat(earnedRuns, ip);
+        System.out.println("Total ERA: " + era);
+    }
+    
+    private static int countTotalLeagueStat(AL1923 league, PrimitivePitchingStat stat) {
+        StatLeaders<Integer, PrimitivePitchingStat> all = league.league.getPitchingLeaders(stat, Integer.MAX_VALUE);
+        return all.getEntries().stream()
+                .mapToInt(StatLeaders.Entry::getValue)
+                .sum();
     }
     
     private static void printBattingLeaders(League league, BattingStat<?>... categories) {
@@ -433,7 +450,7 @@ public final class AL1923 {
     }
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 6, 7);
-        //playCompleteLeague(1);
+        //playSeriesAndPrintBoxScores(4, 6, 7);
+        playCompleteLeague(1);
     }
 }
