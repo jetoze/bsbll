@@ -433,7 +433,7 @@ public final class AL1923 {
     }
     
     public static void main(String[] args) {
-        playSeriesAndPrintBoxScores(4, 7, 1);
+        playSeriesAndPrintBoxScores(4, 6, 1);
         //playCompleteLeague(1);
     }
 }

@@ -113,6 +113,7 @@ public final class AtBatResult { // TODO: Come up with a better name
         public Builder addOutcome(PlayOutcome outcome) {
             requireNonNull(outcome);
             this.actualPlays.add(outcome);
+            addPitchingStat(PrimitivePitchingStat.OUTS, outcome.getNumberOfOuts());
             return this;
         }
         
