@@ -2,6 +2,8 @@ package bsbll.bases;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toSet;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -131,6 +133,20 @@ public final class Advances implements Iterable<Advance> {
                 throw new InvalidBaseSitutationException("More than one runner cannot advance from " + a.from());
             }
         }
+    }
+    
+    // TODO: Unit test me
+    // TODO: Document me
+    public Advances keep(Predicate<? super Base> predicate) {
+        Set<Base> matchingKeys = this.advances.keySet().stream()
+                .filter(predicate)
+                .collect(toSet());
+        if (matchingKeys.equals(this.advances.keySet())) {
+            return this;
+        }
+        return new Advances(matchingKeys.stream()
+            .map(this.advances::get)
+            .collect(toList()));
     }
     
     @Override
