@@ -223,9 +223,10 @@ public final class GamePlayDriver {
                     PlayOutcome ideal = new PlayOutcome(eventType, idealAdvances, 0);
                     
                     addOutcome(actual, ideal);
-                    // TODO: Not sure this is the best way to decide which runs should be awarded as RBIs
+                    // TODO: Not sure this is the best way to "decide" which runs should be awarded as RBIs
                     // for the batter.
-                    int rbis = ideal.getNumberOfRuns();
+                    // TODO: Move this decision to OfficialScorer?
+                    int rbis = Math.min(advances.getNumberOfRuns(), idealAdvances.getNumberOfOuts());
                     registerBaseHitStats(baseHit, rbis);
                 }
             }
