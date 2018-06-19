@@ -6,10 +6,13 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
+import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.params.GamePlayParams;
+import bsbll.game.params.OutAdvanceKey;
+import bsbll.game.params.OutLocation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.Play;
 import bsbll.game.play.PlayOutcome;
@@ -47,32 +50,39 @@ final class ReconstructedInning {
         ImmutableList.Builder<Run> earnedRuns = ImmutableList.builder();
         Player previousBatter = null;
         
-        for (Play play : actualPlays) {
-            if (play.getBatter() != previousBatter) {
-                previousBatter = play.getBatter();
-                batterShouldBeOut = true;
+        for (Play actualPlay : actualPlays) {
+            if (actualPlay.getBatter() != previousBatter) {
+                previousBatter = actualPlay.getBatter();
+                batterShouldBeOut = false;
             } else if (batterShouldBeOut) {
                 continue;
             }
-            if (play.isErrorOrPassedBall()) {
-                play = getIdealPlay(play);
-            }
-            Advances applicableAdvances = play.getAdvances().keep(b -> b == Base.HOME || baseSituation.isOccupied(b));
-            ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(play.getBatter(), play.getPitcher()), applicableAdvances);
-            if (outs < 3) {
-                roa.getRunnersThatScored().stream()
+            
+            Play idealPlay = getIdealPlay(actualPlay);
+            if (!idealPlay.isNoPlay()) {
+                Advances applicableAdvances = idealPlay.getAdvances().keep(b -> b == Base.HOME || baseSituation.isOccupied(b));
+                ResultOfAdvance roa = baseSituation.advanceRunners(
+                        new BaseRunner(idealPlay.getBatter(), idealPlay.getPitcher()), 
+                        applicableAdvances);
+                if (outs < 3) {
+                    roa.getRunnersThatScored().stream()
                     .map(br -> new Run(inning, br))
                     .forEach(earnedRuns::add);
+                }
+                baseSituation = roa.getNewSituation();
+                outs += actualPlay.getNumberOfOuts();
             }
-            baseSituation = roa.getNewSituation();
-            outs += play.getNumberOfOuts();
+            previousBatter = idealPlay.getBatter();
         }
         return earnedRuns.build();
     }
     
     private Play getIdealPlay(Play actualPlay) {
+        if (!actualPlay.isErrorOrPassedBall()) {
+            return actualPlay;
+        }
         EventType type = actualPlay.getOutcome().getType();
-        if (type == EventType.PASSED_BALL || type == EventType.ERROR_ON_FOUL_FLY) {
+        if (type == EventType.PASSED_BALL) {
             return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), PlayOutcome.noPlay());
         }
         assert actualPlay.getNumberOfErrors() > 0;
@@ -81,9 +91,26 @@ final class ReconstructedInning {
             return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), PlayOutcome.noPlay());
         }
         if (type == EventType.REACHED_ON_ERROR) {
-            throw new RuntimeException("TODO: Implement me");
+            batterShouldBeOut = true;
+            // TODO: The OutLocation should be the same that was used when the original OUT
+            // was turned into a REACHED_ON_ERROR by the GamePlayParams. How do we accomplish
+            // that? Store the OutLocation as an optional parameter in PlayOutcome?
+            OutLocation location = gamePlayParams.getOutLocation();
+            OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outs);
+            // TODO: What if the most common advance is a double play? Can the official scorer assume
+            // a double-play as the ideal play when reconstructing the inning? I don't think so. On the
+            // other hand, I don't think the most common advance will ever be a double-play. On the third
+            // hand, we should arguably not be using the most common advances, but rather just pick one.
+            // That will require us to add an overloaded advances picker that takes an additional
+            // Predicate as input.
+            Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, baseSituation, outs);
+            return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(EventType.OUT, advances));
         } else if (type.isHit()) {
-            throw new RuntimeException("TODO: Implement me");
+            BaseHit hit = BaseHit.fromEventType(type);
+            // TODO: We should probably not be using the most common advances here, but rather pick one.
+            // (cf. the case of REACHED_ON_ERROR)
+            Advances advances = gamePlayParams.getMostCommonAdvancesOnBaseHit(hit, baseSituation, outs);
+            return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(type, advances));
         } else {
             throw new RuntimeException("TODO: Implement me");
         }

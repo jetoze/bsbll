@@ -102,6 +102,10 @@ public final class PlayOutcome {
         return this.numberOfErrors > 0 || this.type == EventType.PASSED_BALL;
     }
     
+    public boolean isNoPlay() {
+        return this.type == EventType.NO_PLAY;
+    }
+
     @Override
     public int hashCode() {
         return Objects.hash(this.type, this.numberOfErrors, this.advances);

@@ -271,7 +271,7 @@ public final class GamePlayDriver {
         //private int fieldersChoices;
         // privat int sacrificeFlies;
         private void out() {
-            OutLocation location = getOutLocation();
+            OutLocation location = params.getOutLocation();
             int numberOfErrors = params.getNumberOfErrors(EventType.OUT, baseSituation, dieFactory);
             if (numberOfErrors == 0) {
                 outWithoutError(location);
@@ -321,14 +321,6 @@ public final class GamePlayDriver {
             PlayOutcome ideal = new PlayOutcome(EventType.OUT, idealAdvances, 0);
 
             addOutcome(actual, ideal);
-        }
-        
-        private OutLocation getOutLocation() {
-            // TODO: Get from play-by-play data. For now we use a 65-35 split.
-            return Math.random() < 0.65
-                    ? OutLocation.INFIELD
-                    : OutLocation.OUTFIELD;
-            
         }
 
         private void addOutcome(PlayOutcome actual, PlayOutcome ideal) {

@@ -34,6 +34,10 @@ public final class Play {
         return outcome;
     }
     
+    public boolean isNoPlay() {
+        return outcome.isNoPlay();
+    }
+    
     public Advances getAdvances() {
         return outcome.getAdvances();
     }

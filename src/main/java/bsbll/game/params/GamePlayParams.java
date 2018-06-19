@@ -67,4 +67,12 @@ public final class GamePlayParams {
     public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation, int numberOfOuts) {
         return outAdvanceDistribution.pickMostCommon(key, baseSituation, numberOfOuts);
     }
+    
+    public OutLocation getOutLocation() {
+        // TODO: Get from play-by-play data. For now we use a 65-35 split.
+        return Math.random() < 0.65
+                ? OutLocation.INFIELD
+                : OutLocation.OUTFIELD;
+        
+    }
 }
