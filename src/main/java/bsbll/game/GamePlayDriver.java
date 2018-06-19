@@ -110,8 +110,6 @@ public final class GamePlayDriver {
         private int outs;
         private RunsNeededToWin runsNeededToWin;
         
-        private boolean batterShouldHaveBeenOut;
-        
         private final AtBatResult.Builder builder;
         
         public AtBatDriver(Player batter, Player pitcher, BaseSituation baseSituation, int outs, RunsNeededToWin runsNeededToWin) {
@@ -210,22 +208,19 @@ public final class GamePlayDriver {
                             baseHit, baseSituation, outs, dieFactory);
                     PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
                     registerBaseHitStats(baseHit, p.getNumberOfRuns());
-                    addOutcome(p, p);
+                    addOutcome(p);
                 } else {
                     Advances advances = params.getAdvancesOnError(
                             ErrorAdvanceKey.of(eventType, numberOfErrors), baseSituation, outs, dieFactory);
-                    PlayOutcome actual = new PlayOutcome(eventType, advances, numberOfErrors);
-                    
+                    PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
+                    addOutcome(p);
+                    // TODO: Not sure this is the best way to "decide" which runs should be awarded as RBIs
+                    // for the batter.
                     // TODO: pickMostCommon, or new method that picks one from the distribution, with the
                     // additional condition that the selected Advances cannot have any errors? For example,
                     // add method AdvanceDistribution::pickOne(..., Predicate<? super Advances> predicate)
-                    Advances idealAdvances = params.getMostCommonAdvancesOnBaseHit(baseHit, baseSituation, outs);
-                    PlayOutcome ideal = new PlayOutcome(eventType, idealAdvances, 0);
-                    
-                    addOutcome(actual, ideal);
-                    // TODO: Not sure this is the best way to "decide" which runs should be awarded as RBIs
-                    // for the batter.
                     // TODO: Move this decision to OfficialScorer?
+                    Advances idealAdvances = params.getMostCommonAdvancesOnBaseHit(baseHit, baseSituation, outs);
                     int rbis = Math.min(advances.getNumberOfRuns(), idealAdvances.getNumberOfOuts());
                     registerBaseHitStats(baseHit, rbis);
                 }
@@ -242,13 +237,12 @@ public final class GamePlayDriver {
         private void homerun() {
             Advances advances = Advances.homerun(baseSituation.getOccupiedBases());
             PlayOutcome hr = new PlayOutcome(EventType.HOMERUN, advances);
-            addOutcome(hr, hr);
+            addOutcome(hr);
             registerBaseHitStats(BaseHit.HOMERUN, hr.getNumberOfRuns());
         }
 
         private void strikeout() {
-            PlayOutcome so = PlayOutcome.strikeout();
-            addOutcome(so, so);
+            addOutcome(PlayOutcome.strikeout());
             builder.addStat(BattingStat.STRIKEOUTS, PitchingStat.STRIKEOUTS);
         }
 
@@ -265,7 +259,7 @@ public final class GamePlayDriver {
                 builder.addStat(PrimitiveBattingStat.HIT_BY_PITCHES, PrimitivePitchingStat.HIT_BY_PITCHES);
             }
             builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, advances.getNumberOfRuns());
-            addOutcome(p, p);
+            addOutcome(p);
         }
 
         //private int fieldersChoices;
@@ -303,7 +297,7 @@ public final class GamePlayDriver {
             }
             builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, advances.getNumberOfRuns());
             PlayOutcome p = new PlayOutcome(resultingType, advances);
-            addOutcome(p, p);
+            addOutcome(p);
         }
 
         private void errorOnOut(OutLocation location, int numberOfErrors) {
@@ -314,26 +308,18 @@ public final class GamePlayDriver {
             EventType actualType = advances.didBatterReachBase()
                     ? EventType.REACHED_ON_ERROR
                     : EventType.OUT;
-            PlayOutcome actual = new PlayOutcome(actualType, advances, numberOfErrors);
-            
-            Advances idealAdvances = params.getMostCommonAdvancesOnOut(
-                    OutAdvanceKey.of(EventType.OUT, location, outs), baseSituation, outs);
-            PlayOutcome ideal = new PlayOutcome(EventType.OUT, idealAdvances, 0);
-
-            addOutcome(actual, ideal);
+            PlayOutcome p = new PlayOutcome(actualType, advances, numberOfErrors);
+            addOutcome(p);
         }
 
-        private void addOutcome(PlayOutcome actual, PlayOutcome ideal) {
-            // If the batter should have been out by now, e.g. because his time at bat
-            // was prolonged by an ERROR_ON_FOUL_FLY, any subsequent ideal play is the NO PLAY,
-            // since the play should not have happened at all in an ideal inning.
-            builder.addOutcome(actual, batterShouldHaveBeenOut ? PlayOutcome.noPlay() : ideal);
+        private void addOutcome(PlayOutcome play) {
+            builder.addOutcome(play);
             ResultOfAdvance roa = baseSituation.advanceRunners(new BaseRunner(batter, pitcher), 
-                    actual.getAdvances());
+                    play.getAdvances());
             ImmutableList<BaseRunner> runs = roa.getRunnersThatScored();
             builder.runsScored(runs);
             baseSituation = roa.getNewSituation();
-            outs += actual.getNumberOfOuts();
+            outs += play.getNumberOfOuts();
             runsNeededToWin = runsNeededToWin.updateWithRunsScored(runs.size());
         }
     }

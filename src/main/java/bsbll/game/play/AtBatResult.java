@@ -1,6 +1,5 @@
 package bsbll.game.play;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
@@ -101,7 +100,6 @@ public final class AtBatResult { // TODO: Come up with a better name
         private final Player batter;
         private final Player pitcher;
         private final List<PlayOutcome> actualPlays = new ArrayList<>();
-        private final List<PlayOutcome> idealPlays = new ArrayList<>();
         private final List<BaseRunner> runs = new ArrayList<>();
         private BaseSituation newBaseSituation;
         private boolean batterCompletedHisTurn;
@@ -115,21 +113,6 @@ public final class AtBatResult { // TODO: Come up with a better name
         public Builder addOutcome(PlayOutcome outcome) {
             requireNonNull(outcome);
             this.actualPlays.add(outcome);
-            return this;
-        }
-        
-        /**
-         * @deprecated Use {@link #addOutcome(PlayOutcome)} instead. Ideal plays
-         *             will be reconstructed after the inning has completed, if
-         *             necessary for earned run assignments.
-         */
-        @Deprecated
-        public Builder addOutcome(PlayOutcome actual, PlayOutcome ideal) {
-            requireNonNull(actual);
-            requireNonNull(ideal);
-            checkArgument(!ideal.isErrorOrPassedBall(), "The ideal play cannot have any errors or passed balls"); // TODO: Or wild pitches
-            this.actualPlays.add(actual);
-            this.idealPlays.add(ideal);
             return this;
         }
         

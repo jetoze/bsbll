@@ -65,6 +65,9 @@ final class ReconstructedInning {
                         new BaseRunner(idealPlay.getBatter(), idealPlay.getPitcher()), 
                         applicableAdvances);
                 if (outs < 3) {
+                    // TODO: Once we implement pitcher substitutions this will have to be treated 
+                    // differently. The run will be unearned for the team, but could still be earned
+                    // for the pitcher.
                     roa.getRunnersThatScored().stream()
                     .map(br -> new Run(inning, br))
                     .forEach(earnedRuns::add);
@@ -102,7 +105,7 @@ final class ReconstructedInning {
             // other hand, I don't think the most common advance will ever be a double-play. On the third
             // hand, we should arguably not be using the most common advances, but rather just pick one.
             // That will require us to add an overloaded advances picker that takes an additional
-            // Predicate as input.
+            // Predicate as input. The predicate would also filter out advances with errors.
             Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, baseSituation, outs);
             return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(EventType.OUT, advances));
         } else if (type.isHit()) {
