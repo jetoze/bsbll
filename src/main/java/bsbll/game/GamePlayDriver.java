@@ -295,6 +295,7 @@ public final class GamePlayDriver {
                     && advances.didRunnerAdvanceSafely(Base.THIRD)) {
                 builder.addBattingStat(PrimitiveBattingStat.SACRIFICE_FLIES);
             }
+            // TODO: Don't award an RBI on a force double play or a reverse-force double play.
             builder.addBattingStat(PrimitiveBattingStat.RUNS_BATTED_IN, advances.getNumberOfRuns());
             PlayOutcome p = new PlayOutcome(resultingType, advances);
             addOutcome(p);

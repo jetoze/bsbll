@@ -39,6 +39,7 @@ import bsbll.matchup.Log5BasedMatchupRunner;
 import bsbll.player.Player;
 import bsbll.player.PlayerFactory;
 import bsbll.stats.BattingStat;
+import bsbll.stats.BattingStat.PrimitiveBattingStat;
 import bsbll.stats.InningsPitched;
 import bsbll.stats.Per9IPStat;
 import bsbll.stats.PitchingStat;
@@ -403,10 +404,19 @@ public final class AL1923 {
         System.out.println("Total Innings Pitched: " + ip);
         Per9IPStat era = new Per9IPStat(earnedRuns, ip);
         System.out.println("Total ERA: " + era);
+        int rbis = countTotalLeagueStat(league, BattingStat.RUNS_BATTED_IN);
+        System.out.println("Total RBIs: " + rbis);
     }
     
     private static int countTotalLeagueStat(AL1923 league, PrimitivePitchingStat stat) {
         StatLeaders<Integer, PrimitivePitchingStat> all = league.league.getPitchingLeaders(stat, Integer.MAX_VALUE);
+        return all.getEntries().stream()
+                .mapToInt(StatLeaders.Entry::getValue)
+                .sum();
+    }
+    
+    private static int countTotalLeagueStat(AL1923 league, PrimitiveBattingStat stat) {
+        StatLeaders<Integer, PrimitiveBattingStat> all = league.league.getBattingLeaders(stat, Integer.MAX_VALUE);
         return all.getEntries().stream()
                 .mapToInt(StatLeaders.Entry::getValue)
                 .sum();
