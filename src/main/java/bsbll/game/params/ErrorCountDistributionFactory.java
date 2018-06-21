@@ -62,10 +62,17 @@ public abstract class ErrorCountDistributionFactory {
                     EventField field) {
                 int errors = play.getNumberOfErrors();
                 EventType type = play.getType();
-                if (type == EventType.REACHED_ON_ERROR) {
+                if (isCategorizedAsOut(type)) {
                     type = EventType.OUT;
                 }
                 builder.add(type, bases.getOccupiedBases(), errors);
+            }
+            
+            private boolean isCategorizedAsOut(EventType type) {
+                return type == EventType.OUT ||
+                        type == EventType.REACHED_ON_ERROR ||
+                        type == EventType.FIELDERS_CHOICE ||
+                        type == EventType.FORCE_OUT;
             }
             
             public ErrorCountDistribution getResult() {

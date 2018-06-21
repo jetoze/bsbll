@@ -53,6 +53,10 @@ public final class PlayByPlayFile {
     public Path getPath() {
         return path;
     }
+    
+    public String getName() {
+        return path.getFileName().toString();
+    }
 
     public void parse(Callback callback) {
         requireNonNull(callback);
@@ -64,6 +68,12 @@ public final class PlayByPlayFile {
             throw new RuntimeException(e);
         }
     }
+    
+    @Override
+    public String toString() {
+        return path.toString();
+    }
+    
     
     private static class LineParser implements Consumer<String> {
         private final Callback callback;

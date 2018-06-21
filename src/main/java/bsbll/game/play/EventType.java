@@ -93,18 +93,6 @@ public enum EventType { // TODO: Rename me now that I'm used in non-retrosheet c
         return (this == EventType.REACHED_ON_ERROR) || (this == ERROR_ON_FOUL_FLY) || (this == INTERFERENCE);
     }
     
-    public boolean isOut() {
-        switch (this) {
-        case OUT:
-        case STRIKEOUT:
-        case PICKED_OFF:
-        case CAUGHT_STEALING:
-            return true;
-        default:
-            return false;
-        }
-    }
-    
     public boolean isBatterOut() {
         return (this == OUT) || (this == STRIKEOUT);
     }

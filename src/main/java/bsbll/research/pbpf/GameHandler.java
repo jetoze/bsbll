@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.io.File;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
@@ -16,6 +17,15 @@ public abstract class GameHandler {
     private PlayByPlayFile currentFile;
     private String currentGameId;
     private Inning currentInning;
+    private final Predicate<String> gameIdPredicate;
+    
+    protected GameHandler() {
+        this(id -> true);
+    }
+    
+    protected GameHandler(Predicate<String> gameIdPredicate) {
+        this.gameIdPredicate = requireNonNull(gameIdPredicate);
+    }
     
     public void onStartGame(String id) {
         /**/
@@ -75,13 +85,17 @@ public abstract class GameHandler {
                 endPreviousGame();
             }
             currentGameId = id;
-            GameHandler.this.onStartGame(id);
+            if (gameIdPredicate.test(id)) {
+                GameHandler.this.onStartGame(id);
+            }
             plays = null;
         }
         
         public void endPreviousGame() {
             endPreviousInning();
-            GameHandler.this.onEndGame(currentGameId);
+            if (gameIdPredicate.test(currentGameId)) {
+                GameHandler.this.onEndGame(currentGameId);
+            }
             currentGameId = null;
         }
 
@@ -89,7 +103,9 @@ public abstract class GameHandler {
             assert currentInning != null;
             assert fields != null;
             assert plays != null;
-            GameHandler.this.onEndOfInning(currentInning, fields.build(), plays.build());
+            if (gameIdPredicate.test(currentGameId)) {
+                GameHandler.this.onEndOfInning(currentInning, fields.build(), plays.build());
+            }
             currentInning = null;
             fields = null;
             plays = null;
