@@ -97,12 +97,16 @@ public final class BaseSituation {
             } else {
                 p = newSituation.remove(a.from());
                 if (p == null) {
-                    throw new InvalidBaseSitutationException("No player on base " + a.from());
+                    throw new InvalidBaseSitutationException("No runner on base " + a.from());
                 }
             }
-            if (!a.isOut() && a.to().isOccupiable()) {
-                newSituation.put(a.to(), p);
+            if (a.isOut() || !a.to().isOccupiable()) {
+                continue;
             }
+            if (newSituation.containsKey(a.to())) {
+                throw new InvalidBaseSitutationException("Two runners on base " + a.to());
+            }
+            newSituation.put(a.to(), p);
         }
         return new BaseSituation(newSituation);
     }

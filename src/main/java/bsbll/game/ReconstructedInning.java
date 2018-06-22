@@ -2,6 +2,8 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.List;
+
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.Advances;
@@ -31,14 +33,14 @@ final class ReconstructedInning {
     private int outs;
     private boolean batterShouldBeOut;
     
-    public ReconstructedInning(HalfInning.Summary summary, GamePlayParams gamePlayParams) {
-        this.inning = summary.getInning();
-        this.actualPlays = summary.getPlays();
+    public ReconstructedInning(Inning inning, List<Play> actualPlays, GamePlayParams gamePlayParams) {
+        this.inning = requireNonNull(inning);
+        this.actualPlays = ImmutableList.copyOf(actualPlays);
         this.gamePlayParams = requireNonNull(gamePlayParams);
     }
 
     public static ReconstructedInning of(HalfInning.Summary summary, GamePlayParams gamePlayParams) {
-        return new ReconstructedInning(summary, gamePlayParams);
+        return new ReconstructedInning(summary.getInning(), summary.getPlays(), gamePlayParams);
     }
     
     public ImmutableList<Run> getEarnedRuns() {

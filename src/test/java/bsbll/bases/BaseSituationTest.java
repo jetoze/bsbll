@@ -27,11 +27,23 @@ public final class BaseSituationTest {
     
     @Test(expected = InvalidBaseSitutationException.class)
     public void cannotApplyAdvancesToIncompatibleBaseSituation() {
-        BaseSituation before = new BaseSituation(RUNNER_A, null, null);
+        BaseSituation before = runnerOnFirst();
         Advances advances = Advances.of(
                 Advance.safe(Base.FIRST, Base.SECOND),
                 Advance.out(Base.SECOND, Base.HOME)
         );
+        
+        before.advanceRunners(BATTER, advances);
+    }
+
+    private static BaseSituation runnerOnFirst() {
+        return new BaseSituation(RUNNER_A, null, null);
+    }
+    
+    @Test(expected = InvalidBaseSitutationException.class)
+    public void twoRunnersCannotOccupyTheSameBase() {
+        BaseSituation before = runnerOnFirst();
+        Advances advances = Advances.of(Advance.safe(Base.HOME, Base.FIRST));
         
         before.advanceRunners(BATTER, advances);
     }
