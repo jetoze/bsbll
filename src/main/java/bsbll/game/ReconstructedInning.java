@@ -68,6 +68,16 @@ final class ReconstructedInning {
         if (idealPlay.isNoPlay()) {
             return;
         }
+        // FIXME: This logic is broken. Take the following example:
+        //   1. Single
+        //   2. Passed Ball - runner advances to second
+        //   3. Single - runner scores
+        // The ideal version of the above, as reconstructed here, is:
+        //   1. Single
+        //   2. No Play - runner stays on first
+        //   3. Single. The original advances are [B-1][2-H]. After applying the
+        //      filter here, we end up with [B-1], and we get two runners on first base.
+        // TODO: Verify this in a unit test.
         Advances applicableAdvances = idealPlay.getAdvances().keep(b -> b == Base.HOME || baseSituation.isOccupied(b));
         ResultOfAdvance roa = baseSituation.advanceRunners(
                 new BaseRunner(idealPlay.getBatter(), idealPlay.getPitcher()), 
