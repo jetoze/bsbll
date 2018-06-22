@@ -36,7 +36,7 @@ public final class EventTypeParser {
             if (matchWithOptionalFielderSuffix(basic, "S")) {
                 return SINGLE;
             } else if (matchWithOptionalSuffix(basic, "SB", EventTypeParser::isStealableBase)) {
-                return EventType.STOLEN_BASE;
+                return STOLEN_BASE;
             }
             break;
         case 'D':
@@ -133,7 +133,7 @@ public final class EventTypeParser {
         String basic = field.getBasicPlay();
         Matcher roeMatcher = REACHED_ON_ERROR_PATTERN.matcher(basic);
         if (roeMatcher.matches()) {
-            return EventType.REACHED_ON_ERROR;
+            return REACHED_ON_ERROR;
         }
         if (field.hasModifier(m -> m.startsWith("FO"))) {
             // We treat a force out as a fielder's choice.
