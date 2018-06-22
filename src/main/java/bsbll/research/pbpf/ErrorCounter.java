@@ -27,7 +27,11 @@ public final class ErrorCounter extends GameHandler {
     public static Predicate<PlayOutcome> hitsAndOutsOnly() {
         return p -> {
             EventType t = p.getType();
-            return t.isHit() || (t == EventType.OUT) || (t == EventType.REACHED_ON_ERROR);
+            return t.isHit() || 
+                    (t == EventType.OUT) || 
+                    (t == EventType.REACHED_ON_ERROR) ||
+                    (t == EventType.FIELDERS_CHOICE) ||
+                    (t == EventType.FORCE_OUT);
         };
     }
     
