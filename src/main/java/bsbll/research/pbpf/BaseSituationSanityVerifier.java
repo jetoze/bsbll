@@ -24,7 +24,7 @@ import tzeth.strings.Padding;
  * a situation where we would have two or more runners on the same base, or that we
  * are trying to advance a runner from a base that was not occupied.
  */
-public final class BaseSitationSanityVerifier extends GameHandler {
+public final class BaseSituationSanityVerifier extends GameHandler {
     private final Player pitcher = new Player("pitcher", "Christy Mathewson");
     private int playerId;
     
@@ -96,7 +96,7 @@ public final class BaseSitationSanityVerifier extends GameHandler {
     public static void main(String[] args) {
         Year year = Year.of(1931);
         File folder = PlayByPlayFileUtils.getFolder(year);
-        BaseSitationSanityVerifier v = new BaseSitationSanityVerifier();
+        BaseSituationSanityVerifier v = new BaseSituationSanityVerifier();
         v.parseAll(folder);
     }
 }
