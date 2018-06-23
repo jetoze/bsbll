@@ -2,12 +2,12 @@ package bsbll.game;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
 import bsbll.bases.Advances;
-import bsbll.bases.Base;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.BaseSituation.ResultOfAdvance;
@@ -34,6 +34,10 @@ final class ReconstructedInning {
     private int outs;
     private boolean batterShouldBeOut;
     
+    // For error reporting
+    private final List<Play> reconstructedPlays = new ArrayList<>();
+    private Play currentPlay;
+    
     public ReconstructedInning(Inning inning, List<Play> actualPlays, GamePlayParams gamePlayParams) {
         this.inning = requireNonNull(inning);
         this.actualPlays = ImmutableList.copyOf(actualPlays);
@@ -54,6 +58,7 @@ final class ReconstructedInning {
         Player previousBatter = null;
         
         for (Play actualPlay : actualPlays) {
+            currentPlay = actualPlay;
             actualBaseSituation = actualPlay.advanceRunners(actualBaseSituation).getNewSituation();
             if (actualPlay.getBatter() != previousBatter) {
                 previousBatter = actualPlay.getBatter();
@@ -61,21 +66,29 @@ final class ReconstructedInning {
             } else if (batterShouldBeOut) {
                 continue;
             }
-            Play idealPlay = getIdealPlay(actualPlay);
-            handleIdealPlay(idealPlay, earnedRuns);
+            Play idealPlay = processPlay(actualPlay, earnedRuns);
             previousBatter = idealPlay.getBatter();
         }
         return earnedRuns.build();
+    }
+
+    private Play processPlay(Play actualPlay, ImmutableList.Builder<Run> earnedRuns) {
+        try {
+            Play idealPlay = getIdealPlay(actualPlay);
+            reconstructedPlays.add(idealPlay);
+            handleIdealPlay(idealPlay, earnedRuns);
+            return idealPlay;
+        } catch (RuntimeException e) {
+            reportError(e);
+            throw e;
+        }
     }
 
     private void handleIdealPlay(Play idealPlay, ImmutableList.Builder<Run> earnedRuns) {
         if (idealPlay.isNoPlay()) {
             return;
         }
-        Advances applicableAdvances = idealPlay.getAdvances().keep(b -> b == Base.HOME || reconstructedBaseSituation.isOccupied(b));
-        ResultOfAdvance roa = reconstructedBaseSituation.advanceRunners(
-                new BaseRunner(idealPlay.getBatter(), idealPlay.getPitcher()), 
-                applicableAdvances);
+        ResultOfAdvance roa = idealPlay.advanceRunners(reconstructedBaseSituation);
         if (outs < 3) {
             // TODO: Once we implement pitcher substitutions this will have to be treated 
             // differently. The run will be unearned for the team, but could still be earned
@@ -182,13 +195,16 @@ final class ReconstructedInning {
     }
     
     private Advances advancesThatMatchReconstructedSituation(PlayOutcome o) {
-        if (o.isBaseHit()) {
+        switch (o.getType()) {
+        case HOMERUN:
+            return Advances.homerun(reconstructedBaseSituation.getOccupiedBases());
+        case SINGLE: /*fall-through*/
+        case DOUBLE: /*fall-through*/
+        case TRIPLE:
             return gamePlayParams.getMostCommonAdvancesOnBaseHit(
                     BaseHit.fromEventType(o.getType()), 
                     reconstructedBaseSituation, 
                     Math.min(2, outs));
-        }
-        switch (o.getType()) {
         case OUT: /*fall-through*/
         case FIELDERS_CHOICE:
             return gamePlayParams.getMostCommonAdvancesOnOut(
@@ -209,5 +225,24 @@ final class ReconstructedInning {
         default:
             throw new RuntimeException("TODO: Implement me for " + o.getType());
         }
+    }
+    
+    private void reportError(RuntimeException e) {
+        System.out.println(e.getMessage());
+        System.out.println();
+        System.out.println("Actual plays:");
+        actualPlays.forEach(System.out::println);
+        System.out.println("Actual base situation:");
+        System.out.println(actualBaseSituation);
+        System.out.println("Current play:");
+        System.out.println(currentPlay);
+        System.out.println();
+        System.out.println("Reconstructed plays:");
+        reconstructedPlays.forEach(System.out::println);
+        System.out.println("Reconstructed base situation:");
+        System.out.println(reconstructedBaseSituation);
+        System.out.println();
+        System.out.println("Stacktrace:");
+        e.printStackTrace(System.out);
     }
 }
