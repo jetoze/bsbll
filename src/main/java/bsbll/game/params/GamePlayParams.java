@@ -2,6 +2,8 @@ package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.function.Predicate;
+
 import bsbll.bases.Advances;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
@@ -66,6 +68,13 @@ public final class GamePlayParams {
     
     public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation, int numberOfOuts) {
         return outAdvanceDistribution.pickMostCommon(key, baseSituation, numberOfOuts);
+    }
+    
+    public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, 
+                                               BaseSituation baseSituation, 
+                                               int numberOfOuts,
+                                               Predicate<? super Advances> predicate) {
+        return outAdvanceDistribution.pickMostCommon(key, baseSituation, numberOfOuts, predicate);
     }
     
     public OutLocation getOutLocation() {

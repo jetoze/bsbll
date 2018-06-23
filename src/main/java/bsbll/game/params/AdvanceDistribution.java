@@ -6,6 +6,7 @@ import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
@@ -29,6 +30,8 @@ import bsbll.die.DieFactory;
  * @param <E> the type that defines the key-space (event types).
  */
 public abstract class AdvanceDistribution<E> {
+    private static final Predicate<? super Advances> ALL = a -> true;
+    
     private final ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data;
     
     protected AdvanceDistribution(ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data) {
@@ -56,7 +59,7 @@ public abstract class AdvanceDistribution<E> {
         requireNonNull(baseSituation);
         checkInRange(numberOfOuts, 0, 2);
         requireNonNull(dieFactory);
-        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts);
+        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts, ALL);
         return possibilities.isEmpty()
                 ? defaultAdvance(key, baseSituation)
                 : pickOneFromSet(dieFactory, possibilities);
@@ -75,17 +78,21 @@ public abstract class AdvanceDistribution<E> {
      * Returns the candidates for the given key and base situtation. Candidates that would result in 
      * more than three outs in the inning are excluded.
      */
-    private Multiset<Advances> getPossibilities(E key, BaseSituation baseSituation, int numberOfOuts) {
+    private Multiset<Advances> getPossibilities(E key, 
+                                                BaseSituation baseSituation, 
+                                                int numberOfOuts,
+                                                Predicate<? super Advances> predicate) {
         // An Advance where two runners are thrown out is not valid if there are already two outs in the inning.
         // TODO: Add number of outs as an additional lookup dimension?
         ImmutableMultiset<Advances> all = this.data.get(key, baseSituation.getOccupiedBases());
         if (all == null) {
             return ImmutableMultiset.of();
-        } else if(isNumberOfOutsIncludedInKey()) {
-            return all;
+        } else if (isNumberOfOutsIncludedInKey()) {
+            return (predicate == ALL)
+                    ? all
+                    : Multisets.filter(all, a -> predicate.test(a));
         } else {
-            Multiset<Advances> valid = Multisets.filter(all, a -> (a.getNumberOfOuts() + numberOfOuts) <= 3);
-            return valid;
+            return Multisets.filter(all, a -> ((a.getNumberOfOuts() + numberOfOuts) <= 3) && predicate.test(a));
         }
     }
     
@@ -112,7 +119,15 @@ public abstract class AdvanceDistribution<E> {
     }
     
     public final Advances pickMostCommon(E key, BaseSituation baseSituation, int numberOfOuts) {
-        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts);
+        return pickMostCommon(key, baseSituation, numberOfOuts, ALL);
+    }
+    
+    public final Advances pickMostCommon(E key, 
+                                         BaseSituation baseSituation, 
+                                         int numberOfOuts,
+                                         Predicate<? super Advances> predicate) {
+        requireNonNull(predicate);
+        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts, predicate);
         return possibilities.isEmpty()
                 ? defaultAdvance(key, baseSituation)
                 : mostCommon(possibilities);

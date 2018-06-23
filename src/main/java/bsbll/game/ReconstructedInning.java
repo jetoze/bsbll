@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
@@ -24,6 +25,9 @@ import bsbll.player.Player;
  * The official scorer's reconstruction of an inning that contains potentially unearned runs.
  */
 final class ReconstructedInning {
+    // TODO: The current implementation uses getMostCommonXXX to get the reconstructed 
+    // base advances. Should we be using pickOne instead?
+    
     private final Inning inning;
     private final ImmutableList<Play> actualPlays;
     // XXX: GamePlayParams offers more functionality than what is needed here. Refactor to 
@@ -143,13 +147,8 @@ final class ReconstructedInning {
         // < 3, so if we end up in that situation we use 2.
         int outsToUse = Math.min(2, outs);
         OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outsToUse);
-        // TODO: What if the most common advance is a double play? Can the official scorer assume
-        // a double-play as the ideal play when reconstructing the inning? I don't think so. On the
-        // other hand, I don't think the most common advance will ever be a double-play. On the third
-        // hand, we should arguably not be using the most common advances, but rather just pick one.
-        // That will require us to add an overloaded advances picker that takes an additional
-        // Predicate as input. The predicate would also filter out advances with errors.
-        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, reconstructedBaseSituation, outsToUse);
+        Predicate<? super Advances> predicate = a -> a.getNumberOfOuts() < 2;
+        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, reconstructedBaseSituation, outsToUse, predicate);
         return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(EventType.OUT, advances));
     }
 
@@ -195,6 +194,7 @@ final class ReconstructedInning {
     }
     
     private Advances advancesThatMatchReconstructedSituation(PlayOutcome o) {
+        int outsToUse = Math.min(2, outs);
         switch (o.getType()) {
         case HOMERUN:
             return Advances.homerun(reconstructedBaseSituation.getOccupiedBases());
@@ -204,17 +204,20 @@ final class ReconstructedInning {
             return gamePlayParams.getMostCommonAdvancesOnBaseHit(
                     BaseHit.fromEventType(o.getType()), 
                     reconstructedBaseSituation, 
-                    Math.min(2, outs));
+                    outsToUse);
         case OUT: /*fall-through*/
         case FIELDERS_CHOICE:
+            // Never assume a double (or triple) play.
+            Predicate<? super Advances> predicate = a -> a.getNumberOfOuts() < 2;
             return gamePlayParams.getMostCommonAdvancesOnOut(
                     OutAdvanceKey.of(
                             EventType.OUT,
                             // TODO: Same situation as in idealPlayOnOut() - we should use the same OutLocation as the original play
                             gamePlayParams.getOutLocation(), 
-                            Math.min(2, outs)), 
+                            outsToUse), 
                     reconstructedBaseSituation, 
-                    Math.min(2, outs));
+                    outsToUse, 
+                    predicate);
         case WALK: /*fall-through*/
         case HIT_BY_PITCH:
             return Advances.batterAwardedFirstBase(reconstructedBaseSituation.getOccupiedBases());
