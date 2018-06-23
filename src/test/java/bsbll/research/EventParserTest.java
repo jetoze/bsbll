@@ -760,5 +760,41 @@ public final class EventParserTest {
         
         assertEquals(expected, outcome);
     }
+
+    @Test
+    public void advanceFromFirstIsImpliedOnForceOutAtThird() {
+        PlayOutcome outcome = EventParser.parse("5(2)/FO");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
+                .withOut(Base.SECOND, Base.THIRD)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
+
+    @Test
+    public void forceOutAtHomeImpliesAllOtherRunnersAdvance() {
+        PlayOutcome outcome = EventParser.parse("12(3)/FO");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
+                .withOut(Base.THIRD, Base.HOME)
+                .withSafeAdvance(Base.SECOND, Base.THIRD)
+                .withSafeAdvance(Base.FIRST, Base.SECOND)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
     
+    @Test
+    public void forceOutMania() {
+        PlayOutcome outcome = EventParser.parse("16(1)/FO/DP.3XH(62)");
+        PlayOutcome expected = PlayOutcome.builder(EventType.FORCE_OUT)
+                .withOut(Base.FIRST, Base.SECOND)
+                .withOut(Base.THIRD, Base.HOME)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build();
+        
+        assertEquals(expected, outcome);
+    }
 }

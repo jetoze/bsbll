@@ -3,16 +3,18 @@ package bsbll.research;
 import static com.google.common.base.Preconditions.checkState;
 import static java.util.Objects.requireNonNull;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.EnumSet;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import bsbll.bases.Advance;
+import bsbll.bases.Advance.Outcome;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
-import bsbll.bases.Advance.Outcome;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 
@@ -230,7 +232,8 @@ public final class EventParser {
     private void handleDoublePlay() {
         Set<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
         recordOutsAtNextBase(indicatedOuts);
-        this.advances.stream(Advance::isOut)
+        this.advances.stream()
+            .filter(Advance::isOut)
             .map(Advance::from)
             .forEach(indicatedOuts::add);
         if (!advances.contains(Base.HOME)) {
@@ -269,7 +272,25 @@ public final class EventParser {
     
     private void handleForceOut() {
         // The batter is expected to reach first on a force out.
-        processOutsIndicatedInBasicPlay(this.field.getBasicPlay());
+        EnumSet<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
+        assert !indicatedOuts.isEmpty();
+        recordOutsAtNextBase(indicatedOuts);
+        // A force out at third implies that there was a runner on first, and this
+        // runner is now safe at second, etc. We must handle this here, since retrosheet 
+        // often doesn't give the advances explicitly. For example, "12(3)/FO"
+        List<Base> impliedAdvances = new ArrayList<>();
+        if (indicatedOuts.contains(Base.THIRD)) {
+            impliedAdvances.add(Base.SECOND);
+            impliedAdvances.add(Base.FIRST);
+        } else if (indicatedOuts.contains(Base.SECOND)) {
+            impliedAdvances.add(Base.FIRST);
+        }
+        // The batter is always assumed to advance, and this is handled through
+        // EventType.FORCE_OUT.getImpliedAdvance().
+        impliedAdvances.stream()
+            .filter(b -> !advances.contains(b))
+            .map(b -> Advance.safe(b, b.next()))
+            .forEach(this::addAdvance);
     }
     
     /**
@@ -277,7 +298,7 @@ public final class EventParser {
      * 3(B)6(1) -> Base.HOME (batter) out at FIRST, Base.FIRST out at SECOND
      */
     private void processOutsIndicatedInBasicPlay(String basicPlay) {
-        Set<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
+        EnumSet<Base> indicatedOuts = getIndicatedOutsFromBasicPlay(this.field.getBasicPlay());
         recordOutsAtNextBase(indicatedOuts);
 
     }
@@ -292,8 +313,8 @@ public final class EventParser {
      * 54(1) -> Base.FIRST
      * 3(B)6(1) -> Base.HOME (batter), Base.FIRST
      */
-    private static Set<Base> getIndicatedOutsFromBasicPlay(String basicPlay) {
-        Set<Base> bases = new HashSet<>();
+    private static EnumSet<Base> getIndicatedOutsFromBasicPlay(String basicPlay) {
+        EnumSet<Base> bases = EnumSet.noneOf(Base.class);
         int start = basicPlay.indexOf('(');
         while (start != -1) {
             int end = basicPlay.indexOf(')', start + 1);

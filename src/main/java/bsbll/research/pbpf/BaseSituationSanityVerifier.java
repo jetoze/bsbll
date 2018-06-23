@@ -94,7 +94,7 @@ public final class BaseSituationSanityVerifier extends GameHandler {
 
     
     public static void main(String[] args) {
-        Year year = Year.of(1931);
+        Year year = Year.of(1925);
         File folder = PlayByPlayFileUtils.getFolder(year);
         BaseSituationSanityVerifier v = new BaseSituationSanityVerifier();
         v.parseAll(folder);

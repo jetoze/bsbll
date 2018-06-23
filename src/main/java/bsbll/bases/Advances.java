@@ -231,12 +231,12 @@ public final class Advances implements Iterable<Advance> {
         return new Advances(list);
     }
     
-    public Stream<Advance> stream(Predicate<Advance> filter) {
-        return this.advances.values().stream().filter(filter);
+    public Stream<Advance> stream() {
+        return this.advances.values().stream();
     }
     
-    public ImmutableList<Advance> collect(Predicate<Advance> filter) {
-        return stream(filter).collect(ImCollectors.toList());
+    public ImmutableList<Advance> collect(Predicate<Advance> predicate) {
+        return stream().filter(predicate).collect(ImCollectors.toList());
     }
 
     public Advances replace(Advance a) {
