@@ -29,7 +29,8 @@ final class ReconstructedInning {
     // XXX: GamePlayParams offers more functionality than what is needed here. Refactor to 
     // pass in a trimmed down service.
     private final GamePlayParams gamePlayParams;
-    private BaseSituation baseSituation = BaseSituation.empty();
+    private BaseSituation reconstructedBaseSituation = BaseSituation.empty();
+    private BaseSituation actualBaseSituation = BaseSituation.empty();
     private int outs;
     private boolean batterShouldBeOut;
     
@@ -53,6 +54,7 @@ final class ReconstructedInning {
         Player previousBatter = null;
         
         for (Play actualPlay : actualPlays) {
+            actualBaseSituation = actualPlay.advanceRunners(actualBaseSituation).getNewSituation();
             if (actualPlay.getBatter() != previousBatter) {
                 previousBatter = actualPlay.getBatter();
                 batterShouldBeOut = false;
@@ -70,18 +72,8 @@ final class ReconstructedInning {
         if (idealPlay.isNoPlay()) {
             return;
         }
-        // FIXME: This logic is broken. Take the following example:
-        //   1. Single
-        //   2. Passed Ball - runner advances to second
-        //   3. Single - runner scores
-        // The ideal version of the above, as reconstructed here, is:
-        //   1. Single
-        //   2. No Play - runner stays on first
-        //   3. Single. The original advances are [B-1][2-H]. After applying the
-        //      filter here, we end up with [B-1], and we get two runners on first base.
-        // TODO: Verify this in a unit test.
-        Advances applicableAdvances = idealPlay.getAdvances().keep(b -> b == Base.HOME || baseSituation.isOccupied(b));
-        ResultOfAdvance roa = baseSituation.advanceRunners(
+        Advances applicableAdvances = idealPlay.getAdvances().keep(b -> b == Base.HOME || reconstructedBaseSituation.isOccupied(b));
+        ResultOfAdvance roa = reconstructedBaseSituation.advanceRunners(
                 new BaseRunner(idealPlay.getBatter(), idealPlay.getPitcher()), 
                 applicableAdvances);
         if (outs < 3) {
@@ -92,14 +84,23 @@ final class ReconstructedInning {
                 .map(br -> new Run(inning, br))
                 .forEach(earnedRuns::add);
         }
-        baseSituation = roa.getNewSituation();
+        reconstructedBaseSituation = roa.getNewSituation();
         outs += idealPlay.getNumberOfOuts();
     }
     
     private Play getIdealPlay(Play actualPlay) {
-        if (!actualPlay.isErrorOrPassedBall()) {
-            return actualPlay;
+        if (actualPlay.isErrorOrPassedBall()) {
+            return createIdealVersionOfNonIdealPlay(actualPlay);
+        } else {
+            return tweakAdvancesOfIdealPlayIfNecessary(actualPlay);
         }
+    }
+
+    /**
+     * Reconstructs an original play that had errors or a passed balls.
+     */
+    private Play createIdealVersionOfNonIdealPlay(Play actualPlay) {
+        assert actualPlay.isErrorOrPassedBall();
         EventType type = actualPlay.getOutcome().getType();
         if (type == EventType.PASSED_BALL) {
             return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), PlayOutcome.noPlay());
@@ -135,7 +136,7 @@ final class ReconstructedInning {
         // hand, we should arguably not be using the most common advances, but rather just pick one.
         // That will require us to add an overloaded advances picker that takes an additional
         // Predicate as input. The predicate would also filter out advances with errors.
-        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, baseSituation, outsToUse);
+        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, reconstructedBaseSituation, outsToUse);
         return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(EventType.OUT, advances));
     }
 
@@ -143,7 +144,68 @@ final class ReconstructedInning {
         BaseHit hit = BaseHit.fromEventType(type);
         // TODO: We should probably not be using the most common advances here, but rather pick one.
         // (cf. the case of REACHED_ON_ERROR)
-        Advances advances = gamePlayParams.getMostCommonAdvancesOnBaseHit(hit, baseSituation, Math.min(2, outs));
+        Advances advances = gamePlayParams.getMostCommonAdvancesOnBaseHit(hit, reconstructedBaseSituation, Math.min(2, outs));
         return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(type, advances));
+    }
+    
+    /**
+     * Returns a new version of an actual play that did not have any errors or passed balls,
+     * with the advances updated, if necessary, to match the reconstructed base situation.
+     * <p>
+     * Take the following example:
+     * <ol>
+     * <li>Single;</li>
+     * <li>Passed Ball - runner advances to second;</li>
+     * <li>Single - runner on second scores;</li>
+     * </ol>
+     * The reconstructed version of the above becomes:
+     * <ol>
+     * <li>Single;</li>
+     * <li>No play - runner stays on first;</li>
+     * <li>Single</li>
+     * </ol>
+     * The third play is already ideal, but we cannot apply its original advances ([2-H], [H-1]) to the
+     * reconstructed base situation, because the runner is still on first, not on second.
+     * <p>
+     * The best way of handling this situation is still up for discussion. For now, we simply pick
+     * the most common advance, given the type of play and situation. 
+     */
+    private Play tweakAdvancesOfIdealPlayIfNecessary(Play play) {
+        assert !play.isErrorOrPassedBall();
+        if (reconstructedBaseSituation.equals(actualBaseSituation)) {
+            return play;
+        }
+        PlayOutcome actualOutcome = play.getOutcome();
+        Advances advances = advancesThatMatchReconstructedSituation(actualOutcome);
+        PlayOutcome reconstructedOutcome = new PlayOutcome(actualOutcome.getType(), advances);
+        return new Play(play.getBatter(), play.getPitcher(), reconstructedOutcome);
+    }
+    
+    private Advances advancesThatMatchReconstructedSituation(PlayOutcome o) {
+        if (o.isBaseHit()) {
+            return gamePlayParams.getMostCommonAdvancesOnBaseHit(
+                    BaseHit.fromEventType(o.getType()), 
+                    reconstructedBaseSituation, 
+                    Math.min(2, outs));
+        }
+        switch (o.getType()) {
+        case OUT:
+            return gamePlayParams.getMostCommonAdvancesOnOut(
+                    OutAdvanceKey.of(
+                            EventType.OUT,
+                            // TODO: Same situation as in idealPlayOnOut() - we should use the same OutLocation as the original play
+                            gamePlayParams.getOutLocation(), outs), 
+                    reconstructedBaseSituation, 
+                    Math.min(2, outs));
+        case WALK: /*fall-through*/
+        case HIT_BY_PITCH:
+            return Advances.batterAwardedFirstBase(reconstructedBaseSituation.getOccupiedBases());
+        case STRIKEOUT:
+            // TODO: Once we've implemented the possibility of advances on strikeouts, this 
+            // must change accordingly (?)
+            return Advances.empty();
+        default:
+            throw new RuntimeException("TODO: Implement me for " + o.getType());
+        }
     }
 }
