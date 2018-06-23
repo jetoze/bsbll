@@ -189,12 +189,14 @@ final class ReconstructedInning {
                     Math.min(2, outs));
         }
         switch (o.getType()) {
-        case OUT:
+        case OUT: /*fall-through*/
+        case FIELDERS_CHOICE:
             return gamePlayParams.getMostCommonAdvancesOnOut(
                     OutAdvanceKey.of(
                             EventType.OUT,
                             // TODO: Same situation as in idealPlayOnOut() - we should use the same OutLocation as the original play
-                            gamePlayParams.getOutLocation(), outs), 
+                            gamePlayParams.getOutLocation(), 
+                            Math.min(2, outs)), 
                     reconstructedBaseSituation, 
                     Math.min(2, outs));
         case WALK: /*fall-through*/
