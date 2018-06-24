@@ -16,6 +16,7 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import bsbll.game.play.PlayOutcome;
+import bsbll.player.PlayerId;
 import bsbll.research.EventField;
 import bsbll.research.EventParser;
 
@@ -78,6 +79,8 @@ public final class PlayByPlayFile {
     private static class LineParser implements Consumer<String> {
         private final Callback callback;
         private Inning inning;
+        private PlayerId homePitcher;
+        private PlayerId visitingPitcher;
         
         public LineParser(Callback callback) {
             this.callback = callback;
@@ -89,8 +92,22 @@ public final class PlayByPlayFile {
                 inning = new Inning(1, Inning.TOP);
                 callback.onStartGame(line.split(",")[1]);
                 callback.onStartInning(inning);
+            } else if (line.startsWith("start,") || line.startsWith("sub,")) {
+                extractPitcherInfo(line);
             } else if (line.startsWith("play,")) {
                 parsePlay(line);
+            }
+        }
+        
+        private void extractPitcherInfo(String line) {
+            String[] parts = line.split(",");
+            if (parts[5].equals("1")) {
+                PlayerId id = PlayerId.of(parts[1]);
+                if (parts[2].equals("0")) {
+                    visitingPitcher = id;
+                } else {
+                    homePitcher = id;
+                }
             }
         }
         
@@ -121,8 +138,19 @@ public final class PlayByPlayFile {
             EventField field = EventField.fromString(rawEventField);
             PlayOutcome outcome = EventParser.parse(field);
             if (callback.outcomeFilter().test(outcome)) {
-                callback.onEvent(field, outcome);
+                PlayerId batter = PlayerId.of(parts[3]);
+                PlayerId pitcher = getPitcher();
+                ParsedPlay parsedPlay = new ParsedPlay(batter, pitcher, field, outcome); 
+                callback.onEvent(parsedPlay);
             }
+        }
+        
+        private PlayerId getPitcher() {
+            // TODO: This may not be correct in some games from the 1800s, where the 
+            // home team batted first.
+            return inning.isTop()
+                    ? visitingPitcher
+                    : homePitcher;
         }
     }
     
@@ -141,7 +169,7 @@ public final class PlayByPlayFile {
             return o -> true;
         }
         
-        default void onEvent(EventField field, PlayOutcome outcome) {/**/}
+        default void onEvent(ParsedPlay parsedPlay) {/**/}
     }
     
     
