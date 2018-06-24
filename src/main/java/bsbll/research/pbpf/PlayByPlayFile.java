@@ -63,7 +63,7 @@ public final class PlayByPlayFile {
         requireNonNull(callback);
         try {
             try (Stream<String> lines = Files.lines(path)) {
-                lines.forEach(new LineParser(callback));
+                lines.forEach(new LineParser(this, callback));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -77,18 +77,22 @@ public final class PlayByPlayFile {
     
     
     private static class LineParser implements Consumer<String> {
+        private final PlayByPlayFile file;
         private final Callback callback;
+        private String gameId;
         private Inning inning;
         private PlayerId homePitcher;
         private PlayerId visitingPitcher;
         
-        public LineParser(Callback callback) {
+        public LineParser(PlayByPlayFile file, Callback callback) {
+            this.file = file;
             this.callback = callback;
         }
         
         @Override
         public void accept(String line) {
             if (line.startsWith("id,")) {
+                gameId = line.split(",")[1];
                 inning = new Inning(1, Inning.TOP);
                 callback.onStartGame(line.split(",")[1]);
                 callback.onStartInning(inning);
@@ -103,7 +107,7 @@ public final class PlayByPlayFile {
             String[] parts = line.split(",");
             if (parts[5].equals("1")) {
                 PlayerId id = PlayerId.of(parts[1]);
-                if (parts[2].equals("0")) {
+                if (parts[3].equals("0")) {
                     visitingPitcher = id;
                 } else {
                     homePitcher = id;
@@ -138,11 +142,29 @@ public final class PlayByPlayFile {
             EventField field = EventField.fromString(rawEventField);
             PlayOutcome outcome = EventParser.parse(field);
             if (callback.outcomeFilter().test(outcome)) {
-                PlayerId batter = PlayerId.of(parts[3]);
-                PlayerId pitcher = getPitcher();
-                ParsedPlay parsedPlay = new ParsedPlay(batter, pitcher, field, outcome); 
+                ParsedPlay parsedPlay = createPlay(parts, field, outcome); 
                 callback.onEvent(parsedPlay);
             }
+        }
+
+        private ParsedPlay createPlay(String[] parts, EventField field, PlayOutcome outcome) {
+            try {
+                PlayerId batter = PlayerId.of(parts[3]);
+                PlayerId pitcher = getPitcher();
+                return new ParsedPlay(batter, pitcher, field, outcome);
+            } catch (RuntimeException e) {
+                reportError(e, parts);
+                throw e;
+            }
+        }
+        
+        private void reportError(RuntimeException e, String[] line) {
+            System.out.println(e.getMessage());
+            System.out.println("File: " + file.getName());
+            System.out.println("Game ID: " + gameId);
+            System.out.println("Line: " + Arrays.toString(line));
+            System.out.println("Stacktrace:");
+            e.printStackTrace(System.out);
         }
         
         private PlayerId getPitcher() {
