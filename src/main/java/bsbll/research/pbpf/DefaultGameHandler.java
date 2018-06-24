@@ -55,6 +55,16 @@ public abstract class DefaultGameHandler extends GameHandler {
         }
     }
     
+    /**
+     * Processes the given play.
+     * 
+     * @param play
+     *            the ParsedPlay
+     * @param bases
+     *            the base situation at the time of the play
+     * @param outs
+     *            the number of outs at the time of the play
+     */
     protected abstract void process(ParsedPlay play, BaseSituation bases, int outs);
     
     /**

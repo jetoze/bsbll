@@ -65,7 +65,7 @@ public abstract class ErrorAdvanceDistributionFactory {
             
             @Override
             protected void process(ParsedPlay play, BaseSituation bases, int outs) {
-                ErrorAdvanceKey key = ErrorAdvanceKey.of(play.getType(), play.getNumberOfErrors());
+                ErrorAdvanceKey key = ErrorAdvanceKey.of(play.getType(), play.getNumberOfErrors(), outs);
                 builder.add(key, bases, play.getAdvances());
             }
 

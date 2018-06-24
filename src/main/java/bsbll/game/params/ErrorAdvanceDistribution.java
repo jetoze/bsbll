@@ -31,7 +31,7 @@ public final class ErrorAdvanceDistribution extends AdvanceDistribution<ErrorAdv
 
     @Override
     protected boolean isNumberOfOutsIncludedInKey() {
-        return false;
+        return true;
     }
 
     public static Builder builder() {

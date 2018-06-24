@@ -133,7 +133,7 @@ public abstract class AdvanceDistribution<E> {
                 : mostCommon(possibilities);
     }
     
-    public final ImmutableSet<E> keys() {
+    public final ImmutableSet<E> keysSet() {
         return this.data.rowKeySet();
     }
     
