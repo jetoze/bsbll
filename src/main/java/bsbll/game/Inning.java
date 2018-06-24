@@ -40,9 +40,11 @@ public final class Inning implements Comparable<Inning> {
     private final int number;
     private final Half half;
 
-    public Inning(int num, Half half) {
-        this.number = checkPositive(num);
-        this.half = requireNonNull(half);
+    private Inning(int num, Half half) {
+        assert num > 0;
+        assert half != null;
+        this.number = num;
+        this.half = half;
     }
     
     public static Inning startOfGame() {
