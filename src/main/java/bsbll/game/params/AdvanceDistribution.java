@@ -96,7 +96,7 @@ public abstract class AdvanceDistribution<E> {
         }
     }
     
-    // TODO: Should we always require that the key is included?
+    // TODO: Should we always require that the number of outs is included?
     protected abstract boolean isNumberOfOutsIncludedInKey();
 
     private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {
