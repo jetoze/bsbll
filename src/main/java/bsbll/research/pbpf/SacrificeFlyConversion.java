@@ -7,8 +7,6 @@ import bsbll.Year;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import tzeth.strings.Padding;
 
 public final class SacrificeFlyConversion extends DefaultGameHandler {
@@ -29,14 +27,14 @@ public final class SacrificeFlyConversion extends DefaultGameHandler {
     }
 
     @Override
-    protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
-        boolean isOpportunity = (outs < 2) && bases.isOccupied(Base.THIRD) && field.isOutfieldOut();
+    protected void process(ParsedPlay play, BaseSituation bases, int outs) {
+        boolean isOpportunity = (outs < 2) && bases.isOccupied(Base.THIRD) && play.isOutfieldOut();
         if (isOpportunity) {
             ++opportunities;
-            if (field.isSacrificeFly()) {
+            if (play.isSacrificeFly()) {
                 ++conversions;
             }
-        } else if (field.isSacrificeFly()) {
+        } else if (play.isSacrificeFly()) {
             // Two ways this can happen:
             //   1. The out was actually made by an infielder, e.g. "5/P5DF/FL/SF.3-H"
             //   2. There was an error on the play, allowing other runners to advance, e.g. "E8/F8D/SF.3-H(RBI);1-2"

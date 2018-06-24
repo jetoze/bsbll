@@ -7,8 +7,6 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import bsbll.Year;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Callback;
 
 public final class PlayByPlayFileUtils {
@@ -29,8 +27,8 @@ public final class PlayByPlayFileUtils {
             }
 
             @Override
-            public void onEvent(EventField field, PlayOutcome outcome) {
-                consumer.accept(field.getRawString());
+            public void onEvent(ParsedPlay play) {
+                consumer.accept(play.getEventField().getRawString());
             }
         });
     }

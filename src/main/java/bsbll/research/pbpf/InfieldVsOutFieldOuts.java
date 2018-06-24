@@ -7,7 +7,6 @@ import java.util.function.Predicate;
 import bsbll.Year;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import tzeth.strings.Padding;
 
 public final class InfieldVsOutFieldOuts implements PlayByPlayFile.Callback {
@@ -25,18 +24,18 @@ public final class InfieldVsOutFieldOuts implements PlayByPlayFile.Callback {
     }
 
     @Override
-    public void onEvent(EventField field, PlayOutcome outcome) {
-        String basicPlay = field.getBasicPlay();
+    public void onEvent(ParsedPlay play) {
+        String basicPlay = play.getEventField().getBasicPlay();
         char c = basicPlay.charAt(0);
         if (Character.isDigit(c)) {
-            if (field.isOutfieldOut()) {
+            if (play.isOutfieldOut()) {
                 ++outfieldOuts;
             } else {
                 ++infieldOuts;
             }
         } else {
             // ??
-            System.out.println(field.getRawString());
+            System.out.println(play.getEventField().getRawString());
         }
     }
 

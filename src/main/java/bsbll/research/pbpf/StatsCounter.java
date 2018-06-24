@@ -5,8 +5,6 @@ import java.io.File;
 import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.strings.Padding;
 
@@ -28,11 +26,10 @@ public final class StatsCounter extends GameHandler {
     }
 
     @Override
-    public void onEndOfInning(Inning inning, ImmutableList<EventField> fields,
-            ImmutableList<PlayOutcome> plays) {
+    public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
         ++innings;
         this.plays += plays.size();
-        for (PlayOutcome p : plays) {
+        for (ParsedPlay p : plays) {
             if (p.getType().isHit()) {
                 ++hits;
             }

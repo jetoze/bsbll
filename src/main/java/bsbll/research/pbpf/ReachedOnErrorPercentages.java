@@ -12,7 +12,6 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import tzeth.strings.Padding;
 
 public final class ReachedOnErrorPercentages implements PlayByPlayFile.Callback {
@@ -34,13 +33,13 @@ public final class ReachedOnErrorPercentages implements PlayByPlayFile.Callback 
     }
 
     @Override
-    public void onEvent(EventField field, PlayOutcome outcome) {
+    public void onEvent(ParsedPlay play) {
         ++outsPlusErrors;
-        if (outcome.getType() == EventType.OUT) {
+        if (play.getType() == EventType.OUT) {
             return;
         }
-        assert outcome.getType() == EventType.REACHED_ON_ERROR;
-        Advances advances = outcome.getAdvances();
+        assert play.getType() == EventType.REACHED_ON_ERROR;
+        Advances advances = play.getAdvances();
         if (advances.contains(Base.HOME)) {
             Advance a = advances.getAdvanceFrom(Base.HOME);
             if (a.isAdvancement()) {

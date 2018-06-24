@@ -9,7 +9,6 @@ import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 
 public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
     private final Year year;
@@ -26,10 +25,10 @@ public final class ScoredOnTriplesPlusError implements PlayByPlayFile.Callback {
     }
 
     @Override
-    public void onEvent(EventField field, PlayOutcome outcome) {
-        assert outcome.getType() == EventType.TRIPLE;
+    public void onEvent(ParsedPlay play) {
+        assert play.getType() == EventType.TRIPLE;
         ++triples;
-        Advances advances = outcome.getAdvances();
+        Advances advances = play.getAdvances();
         if (advances.didRunnerScore(Base.HOME)) {
             ++runs;
         }

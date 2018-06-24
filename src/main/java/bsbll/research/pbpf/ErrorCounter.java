@@ -1,7 +1,6 @@
 package bsbll.research.pbpf;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.function.Predicate;
 
 import com.google.common.collect.HashMultiset;
@@ -12,7 +11,6 @@ import com.google.common.collect.Multisets;
 import bsbll.Year;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public final class ErrorCounter extends GameHandler {
@@ -36,22 +34,17 @@ public final class ErrorCounter extends GameHandler {
     }
     
     @Override
-    public void onEndOfInning(Inning inning, 
-                              ImmutableList<EventField> fields,
-                              ImmutableList<PlayOutcome> plays) {
-        Iterator<EventField> itF = fields.iterator();
-        Iterator<PlayOutcome> itP = plays.iterator();
-        while (itF.hasNext() && itP.hasNext()) {
-            PlayOutcome p = itP.next();
-            EventField f = itF.next();
-            if (p.getNumberOfErrors() > 0 && filter.test(p)) {
-                distribution.add(p.getType());
+    public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
+        for (ParsedPlay play : plays) {
+            if (play.getNumberOfErrors() > 0 && filter.test(play.getOutcome())) {
+                distribution.add(play.getType());
                 System.out.println(String.format("%s -- %s: %s - [%s]", 
-                        getCurrentFile().getName(), getCurrentGameId(), p, f));
+                        getCurrentFile().getName(), getCurrentGameId(), play.getOutcome(), play.getEventField()));
             }
         }
         
         errors += plays.stream()
+                .map(ParsedPlay::getOutcome)
                 .filter(filter.negate())
                 .mapToInt(PlayOutcome::getNumberOfErrors)
                 .sum();

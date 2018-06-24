@@ -4,7 +4,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
 
 import java.io.File;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.function.Predicate;
 
@@ -16,7 +15,6 @@ import bsbll.game.BaseRunner;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public abstract class DefaultGameHandler extends GameHandler {
@@ -45,25 +43,19 @@ public abstract class DefaultGameHandler extends GameHandler {
     }
     
     @Override
-    public final void onEndOfInning(Inning inning,
-                                    ImmutableList<EventField> fields,
-                                    ImmutableList<PlayOutcome> plays) {
+    public final void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
         BaseSituation bases = BaseSituation.empty();
         int outs = 0;
-        Iterator<EventField> itF = fields.iterator();
-        Iterator<PlayOutcome> itP = plays.iterator();
-        while (itF.hasNext() && itP.hasNext()) {
-            EventField field = itF.next();
-            PlayOutcome play = itP.next();
-            if (interestingPlayPredicate.test(play)) {
-                process(play, bases, outs, field);
+        for (ParsedPlay play : plays) {
+            if (interestingPlayPredicate.test(play.getOutcome())) {
+                process(play, bases, outs);
             }
             outs += play.getNumberOfOuts();
             bases = bases.advanceRunners(nextBatter(), play.getAdvances()).getNewSituation();
         }
     }
     
-    protected abstract void process(PlayOutcome play, BaseSituation bases, int outs, EventField field);
+    protected abstract void process(ParsedPlay play, BaseSituation bases, int outs);
     
     /**
      * We generate a new Player for each play. This is obviously not realistic,

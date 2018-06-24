@@ -9,8 +9,6 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public abstract class GameHandler {
@@ -31,9 +29,7 @@ public abstract class GameHandler {
         /**/
     }
     
-    public void onEndOfInning(Inning inning,
-                              ImmutableList<EventField> fields,
-                              ImmutableList<PlayOutcome> plays) {
+    public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
         /**/
     }
     
@@ -76,8 +72,7 @@ public abstract class GameHandler {
     }
     
     private class EventRouter implements PlayByPlayFile.Callback {
-        private ImmutableList.Builder<EventField> fields;
-        private ImmutableList.Builder<PlayOutcome> plays;
+        private ImmutableList.Builder<ParsedPlay> plays;
         
         @Override
         public void onStartGame(String id) {
@@ -101,13 +96,11 @@ public abstract class GameHandler {
 
         public void endPreviousInning() {
             assert currentInning != null;
-            assert fields != null;
             assert plays != null;
             if (gameIdPredicate.test(currentGameId)) {
-                GameHandler.this.onEndOfInning(currentInning, fields.build(), plays.build());
+                GameHandler.this.onEndOfInning(currentInning, plays.build());
             }
             currentInning = null;
-            fields = null;
             plays = null;
         }
 
@@ -117,14 +110,12 @@ public abstract class GameHandler {
                 endPreviousInning();
             }
             currentInning = inning;
-            fields = ImmutableList.builder();
             plays = ImmutableList.builder();
         }
 
         @Override
-        public void onEvent(EventField field, PlayOutcome outcome) {
-            fields.add(field);
-            plays.add(outcome);
+        public void onEvent(ParsedPlay play) {
+            plays.add(play);
         }
     }
 }

@@ -9,7 +9,6 @@ import bsbll.bases.Advance;
 import bsbll.bases.Base;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import tzeth.strings.Padding;
 
 public final class RunnerOnFirstThrownOutAtHomeOnTriple implements PlayByPlayFile.Callback {
@@ -28,14 +27,14 @@ public final class RunnerOnFirstThrownOutAtHomeOnTriple implements PlayByPlayFil
     }
 
     @Override
-    public void onEvent(EventField field, PlayOutcome outcome) {
+    public void onEvent(ParsedPlay play) {
         ++sampleSize;
-        if (outcome.getAdvances().contains(Advance.out(Base.FIRST, Base.HOME))) {
-            System.out.println(field.getRawString());
+        if (play.getAdvances().contains(Advance.out(Base.FIRST, Base.HOME))) {
+            System.out.println(play.getEventField().getRawString());
             ++occurrences;
-        } else if (!outcome.getAdvances().contains(Advance.safe(Base.FIRST, Base.HOME))) {
+        } else if (!play.getAdvances().contains(Advance.safe(Base.FIRST, Base.HOME))) {
             // huh?
-            System.err.println(outcome.getAdvances());
+            System.err.println(play.getAdvances());
         }
     }
 

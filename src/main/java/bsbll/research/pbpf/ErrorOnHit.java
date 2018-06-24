@@ -13,7 +13,6 @@ import com.google.common.base.Strings;
 import bsbll.Year;
 import bsbll.bases.BaseHit;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 
 public final class ErrorOnHit implements PlayByPlayFile.Callback {
     private final EnumMap<BaseHit, ErrorCount> countsByHitType = new EnumMap<>(BaseHit.class);
@@ -24,13 +23,13 @@ public final class ErrorOnHit implements PlayByPlayFile.Callback {
     }
 
     @Override
-    public void onEvent(EventField field, PlayOutcome outcome) {
-        if (outcome.isHomerun()) {
+    public void onEvent(ParsedPlay play) {
+        if (play.isHomerun()) {
             return;
         }
-        ErrorCount count = countsByHitType.computeIfAbsent(BaseHit.fromEventType(outcome.getType()), 
+        ErrorCount count = countsByHitType.computeIfAbsent(BaseHit.fromEventType(play.getType()), 
                 k -> new ErrorCount());
-        count.update(outcome.getNumberOfErrors());
+        count.update(play.getNumberOfErrors());
     }
     
     private void report(Year year) {

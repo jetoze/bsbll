@@ -4,6 +4,10 @@ import static java.util.Objects.requireNonNull;
 
 import javax.annotation.concurrent.Immutable;
 
+import bsbll.bases.Advances;
+import bsbll.bases.BaseSituation;
+import bsbll.game.BaseRunner;
+import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
 import bsbll.player.PlayerId;
 import bsbll.research.EventField;
@@ -42,5 +46,45 @@ public final class ParsedPlay {
 
     public PlayOutcome getOutcome() {
         return outcome;
+    }
+    
+    public EventType getType() {
+        return outcome.getType();
+    }
+    
+    public boolean isHomerun() {
+        return outcome.isHomerun();
+    }
+
+    public boolean isInfieldOut() {
+        return getType() == EventType.OUT && !isOutfieldOut();
+    }
+    
+    public boolean isOutfieldOut() {
+        return eventField.isOutfieldOut();
+    }
+    
+    public boolean isSacrificeFly() {
+        return eventField.isSacrificeFly();
+    }
+    
+    public int getNumberOfRuns() {
+        return outcome.getNumberOfRuns();
+    }
+    
+    public int getNumberOfOuts() {
+        return outcome.getNumberOfOuts();
+    }
+    
+    public int getNumberOfErrors() {
+        return outcome.getNumberOfErrors();
+    }
+    
+    public Advances getAdvances() {
+        return outcome.getAdvances();
+    }
+
+    public BaseSituation applyTo(BaseRunner batter, BaseSituation baseSituation) {
+        return outcome.applyTo(batter, baseSituation);
     }
 }

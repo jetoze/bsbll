@@ -12,7 +12,6 @@ import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.InvalidBaseSitutationException;
 import bsbll.game.BaseRunner;
-import bsbll.game.play.PlayOutcome;
 import bsbll.player.Player;
 import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
@@ -29,48 +28,42 @@ public final class BaseSituationSanityVerifier extends GameHandler {
     private int playerId;
     
     @Override
-    public void onEndOfInning(Inning inning, 
-                              ImmutableList<EventField> fields,
-                              ImmutableList<PlayOutcome> plays) {
+    public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
         List<BaseSituation> progression = new ArrayList<>();
         BaseSituation bases = BaseSituation.empty();
-        Iterator<EventField> itF = fields.iterator();
-        Iterator<PlayOutcome> itP = plays.iterator();
-        while(itF.hasNext() && itP.hasNext()) {
-            EventField field = itF.next();
-            PlayOutcome play = itP.next();
+        for (ParsedPlay play : plays) {
             try {
                 bases = play.applyTo(nextBatter(), bases);
                 progression.add(bases);
             } catch (InvalidBaseSitutationException e) {
-                reportProblem(inning, field, play, fields, plays, progression, e);
+                reportProblem(inning, play, plays, progression, e);
                 return;
             }
         }
     }
     
     private void reportProblem(Inning inning, 
-                               EventField field,
-                               PlayOutcome play,
-                               List<EventField> fields,
-                               List<PlayOutcome> allPlays,
+                               ParsedPlay play,
+                               List<ParsedPlay> allPlays,
                                List<BaseSituation> progression,
                                InvalidBaseSitutationException e) {
         Padding labelPadding = Padding.of(9);
         System.err.println(labelPadding.right("File:") + getCurrentFile().getPath());
         System.err.println(labelPadding.right("Game ID:") + getCurrentGameId());
         System.err.println(labelPadding.right("Inning:") + inning);
-        System.err.println(labelPadding.right("Field:") + field);
-        System.err.println(labelPadding.right("Outcome:") + play);
+        System.err.println(labelPadding.right("Field:") + play.getEventField());
+        System.err.println(labelPadding.right("Outcome:") + play.getOutcome());
         System.err.println(labelPadding.right("Error:") + e.getMessage());
         System.err.println("Progression:");
-        int widthOfLongestField = fields.stream()
+        int widthOfLongestField = allPlays.stream()
+                .map(ParsedPlay::getEventField)
                 .map(EventField::toString)
                 .mapToInt(String::length)
                 .max()
                 .orElse(10);
         Padding fieldPadding = Padding.of(Math.max(widthOfLongestField, 9));
-        Iterator<String> fieldStrings = fields.stream()
+        Iterator<String> fieldStrings = allPlays.stream()
+                .map(ParsedPlay::getEventField)
                 .map(EventField::toString)
                 .map(fieldPadding::right)
                 .iterator();

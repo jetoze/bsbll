@@ -10,8 +10,6 @@ import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 
 public final class FieldersChoiceRatio extends DefaultGameHandler {
     private final Multiset<OccupiedBases> outsWithRunnersOnBase = HashMultiset.create();
@@ -22,20 +20,16 @@ public final class FieldersChoiceRatio extends DefaultGameHandler {
     }
 
     @Override
-    protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+    protected void process(ParsedPlay play, BaseSituation bases, int outs) {
         if (bases.isEmpty()) {
             return;
         }
         OccupiedBases occupied = bases.getOccupiedBases();
-        if (isInfieldOut(play, field)) {
+        if (play.isInfieldOut()) {
             outsWithRunnersOnBase.add(occupied);
         } else if (play.getType() == EventType.FIELDERS_CHOICE) {
             fieldersChoices.add(occupied);
         }
-    }
-
-    private boolean isInfieldOut(PlayOutcome p, EventField field) {
-        return p.getType() == EventType.OUT && !field.isOutfieldOut();
     }
     
     private void report(Year year) {
