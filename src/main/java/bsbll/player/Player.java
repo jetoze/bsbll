@@ -28,6 +28,17 @@ public final class Player {
     }
     
     @Override
+    public boolean equals(Object obj) {
+        return (obj == this) || 
+                ((obj instanceof Player) && this.id.equals(((Player) obj).id));
+    }
+    
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+    
+    @Override
     public String toString() {
         return String.format("%s [%s]", name.getFullName(), id);
     }

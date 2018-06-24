@@ -16,6 +16,7 @@ import bsbll.bases.Advance;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
 import bsbll.bases.BaseSituation;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.BaseRunner;
 
 @Immutable
@@ -56,6 +57,17 @@ public final class PlayOutcome {
      */
     public static PlayOutcome strikeout() {
         return STRIKE_OUT;
+    }
+    
+    /**
+     * Returns a PlayOutcome representing a homerun with the given base situation.
+     * @return
+     */
+    public static PlayOutcome homerun(OccupiedBases bases) {
+        PlayOutcome.Builder builder = PlayOutcome.builder(EventType.HOMERUN)
+                .withSafeAdvance(Base.HOME, Base.HOME);
+        bases.forEach(b -> builder.withSafeAdvance(b, Base.HOME));
+        return builder.build();
     }
 
     public EventType getType() {

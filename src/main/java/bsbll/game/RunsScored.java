@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 import javax.annotation.concurrent.Immutable;
@@ -116,8 +117,25 @@ public final class RunsScored implements Iterable<Run> {
         }
         
         @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj instanceof Run) {
+                Run that = (Run) obj;
+                return this.inning.equals(that.inning) && this.runner.equals(that.runner);
+            }
+            return false;
+        }
+        
+        @Override
+        public int hashCode() {
+            return Objects.hash(inning, runner);
+        }
+        
+        @Override
         public String toString() {
-            return String.format("%s: %s (%s)", inning, runner);
+            return inning + ": " + runner;
         }
     }
 }

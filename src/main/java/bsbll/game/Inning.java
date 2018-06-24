@@ -3,10 +3,12 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import java.util.Objects;
+
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class Inning {
+public final class Inning { // TODO: Implement Comparable<Inning>
     
     public static enum Half { TOP, BOTTOM }
     
@@ -23,10 +25,12 @@ public final class Inning {
     }
     
     public static Inning topOf(int num) {
+        // TODO: Cache common instances, or use pre-defined constants.
         return new Inning(num, Half.TOP);
     }
     
     public static Inning bottomOf(int num) {
+        // TODO: See topOf.
         return new Inning(num, Half.BOTTOM);
     }
 
@@ -64,6 +68,23 @@ public final class Inning {
         default:
             return number + "th";
         }
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof Inning) {
+            Inning that = (Inning) obj;
+            return this.number == that.number && this.half == that.half;
+        }
+        return false;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, half);
     }
 
     @Override

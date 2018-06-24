@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import com.google.common.collect.ImmutableMap;
@@ -68,6 +69,12 @@ public enum OccupiedBases implements Iterable<Base> {
 
     public Stream<Base> stream() {
         return bases.stream();
+    }
+    
+    @Override
+    public void forEach(Consumer<? super Base> action) {
+        requireNonNull(action);
+        bases.forEach(action);
     }
 
     @Override

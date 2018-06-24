@@ -1,5 +1,6 @@
 package bsbll.game;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -9,9 +10,8 @@ import org.junit.Test;
 
 import com.google.common.collect.ImmutableList;
 
-import bsbll.bases.Advance;
-import bsbll.bases.Advances;
 import bsbll.bases.Base;
+import bsbll.bases.OccupiedBases;
 import bsbll.game.RunsScored.Run;
 import bsbll.game.params.GamePlayParams;
 import bsbll.game.play.EventType;
@@ -35,13 +35,16 @@ public final class ReconstructedInningTest {
     @Test
     public void singlePassedBallSingleThreeStrikeouts() {
         List<Play> plays = new ArrayList<>();
-        plays.add(new Play(batters.nextBatter(), pitcher, 
-                new PlayOutcome(EventType.SINGLE, Advances.of(Advance.safe(Base.HOME, Base.FIRST)))));
+        plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.builder(EventType.SINGLE)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .build()));
         Player secondBatter = batters.nextBatter();
-        plays.add(new Play(secondBatter, pitcher, 
-                new PlayOutcome(EventType.PASSED_BALL, Advances.of(Advance.safe(Base.FIRST, Base.SECOND)))));
-        plays.add(new Play(secondBatter, pitcher, 
-                new PlayOutcome(EventType.SINGLE, Advances.of(Advance.safe(Base.HOME, Base.FIRST), Advance.safe(Base.SECOND, Base.HOME)))));
+        plays.add(new Play(secondBatter, pitcher, PlayOutcome.builder(EventType.PASSED_BALL)
+                .withSafeAdvance(Base.FIRST, Base.SECOND).build()));
+        plays.add(new Play(secondBatter, pitcher, PlayOutcome.builder(EventType.SINGLE)
+                .withSafeAdvance(Base.HOME, Base.FIRST)
+                .withSafeAdvance(Base.SECOND, Base.HOME)
+                .build()));
         plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
         plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
         plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
@@ -50,5 +53,26 @@ public final class ReconstructedInningTest {
         ImmutableList<Run> earnedRuns = reconstructed.getEarnedRuns();
         
         assertTrue(earnedRuns.isEmpty());
+    }
+    
+    @Test
+    public void errorHomerunThreeStrikeouts() {
+        Inning inning = Inning.startOfGame();
+        List<Play> plays = new ArrayList<>();
+        plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.builder(EventType.OUT)
+                .withSafeOnError(Base.HOME, Base.FIRST)
+                .withErrors(1)
+                .build()));
+        Player homerunHitter = batters.nextBatter();
+        plays.add(new Play(homerunHitter, pitcher, PlayOutcome.homerun(OccupiedBases.FIRST)));
+        plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
+        plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
+        plays.add(new Play(batters.nextBatter(), pitcher, PlayOutcome.strikeout()));
+        ReconstructedInning reconstructed = new ReconstructedInning(inning, plays, GamePlayParams.defaultParams());
+        
+        ImmutableList<Run> earnedRuns = reconstructed.getEarnedRuns();
+        
+        Run expectedEarnedRun = new Run(inning, new BaseRunner(homerunHitter, pitcher));
+        assertEquals(ImmutableList.of(expectedEarnedRun), earnedRuns);
     }
 }

@@ -63,7 +63,6 @@ final class ReconstructedInning {
         
         for (Play actualPlay : actualPlays) {
             currentPlay = actualPlay;
-            actualBaseSituation = actualPlay.advanceRunners(actualBaseSituation).getNewSituation();
             if (actualPlay.getBatter() != previousBatter) {
                 previousBatter = actualPlay.getBatter();
                 batterShouldBeOut = false;
@@ -71,6 +70,7 @@ final class ReconstructedInning {
                 continue;
             }
             Play idealPlay = processPlay(actualPlay, earnedRuns);
+            actualBaseSituation = actualPlay.advanceRunners(actualBaseSituation).getNewSituation();
             previousBatter = idealPlay.getBatter();
         }
         return earnedRuns.build();
