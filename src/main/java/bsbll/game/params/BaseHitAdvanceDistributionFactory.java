@@ -8,9 +8,8 @@ import bsbll.Year;
 import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
+import bsbll.research.pbpf.ParsedPlay;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 /**
@@ -80,7 +79,7 @@ public abstract class BaseHitAdvanceDistributionFactory {
             }
 
             @Override
-            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+            protected void process(ParsedPlay play, BaseSituation bases, int outs) {
                 EventType typeOfHit = play.getType();
                 if (typeOfHit != EventType.HOMERUN) {
                     BaseHit hit = eventTypeToBaseHit(typeOfHit);

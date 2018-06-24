@@ -5,9 +5,8 @@ import static java.util.Objects.requireNonNull;
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
+import bsbll.research.pbpf.ParsedPlay;
 
 public abstract class ErrorCountDistributionFactory {
 
@@ -58,8 +57,7 @@ public abstract class ErrorCountDistributionFactory {
             }
             
             @Override
-            protected void process(PlayOutcome play, BaseSituation bases, int outs,
-                    EventField field) {
+            protected void process(ParsedPlay play, BaseSituation bases, int outs) {
                 int errors = play.getNumberOfErrors();
                 EventType type = play.getType();
                 if (isCategorizedAsOut(type)) {

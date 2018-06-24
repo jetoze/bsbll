@@ -11,9 +11,8 @@ import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.game.play.EventType;
-import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
+import bsbll.research.pbpf.ParsedPlay;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 /**
@@ -75,23 +74,19 @@ public abstract class FieldersChoiceProbabilitiesFactory {
             private final Multiset<OccupiedBases> fieldersChoices = HashMultiset.create();
             
             @Override
-            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
+            protected void process(ParsedPlay play, BaseSituation bases, int outs) {
                 if (!bases.isEmpty()) {
-                    evaluate(play, field, bases);
+                    evaluate(play, bases);
                 }
             }
 
-            private void evaluate(PlayOutcome play, EventField field, BaseSituation bases) {
+            private void evaluate(ParsedPlay play, BaseSituation bases) {
                 OccupiedBases occupied = bases.getOccupiedBases();
-                if (isInfieldOut(play, field)) {
+                if (play.isInfieldOut()) {
                     outsWithRunnersOnBase.add(occupied);
                 } else if (play.getType() == EventType.FIELDERS_CHOICE) {
                     fieldersChoices.add(occupied);
                 }
-            }
-
-            private boolean isInfieldOut(PlayOutcome p, EventField field) {
-                return p.getType() == EventType.OUT && !field.isOutfieldOut();
             }
 
             public FieldersChoiceProbabilities getResult() {

@@ -8,8 +8,8 @@ import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.research.EventField;
 import bsbll.research.pbpf.DefaultGameHandler;
+import bsbll.research.pbpf.ParsedPlay;
 import bsbll.research.pbpf.PlayByPlayFileUtils;
 
 public abstract class OutAdvanceDistributionFactory {
@@ -73,20 +73,20 @@ public abstract class OutAdvanceDistributionFactory {
             }
 
             @Override
-            protected void process(PlayOutcome play, BaseSituation bases, int outs, EventField field) {
-                OutLocation location = getLocation(play, field);
+            protected void process(ParsedPlay play, BaseSituation bases, int outs) {
+                OutLocation location = getLocation(play);
                 OutAdvanceKey key = OutAdvanceKey.of(play.getType(), location, outs);
                 builder.add(key, bases, play.getAdvances());
             }
 
-            private static OutLocation getLocation(PlayOutcome play, EventField field) {
+            private static OutLocation getLocation(ParsedPlay play) {
                 if (play.getType() == EventType.FIELDERS_CHOICE) {
                     // Perhaps not technically correct, but the retrosheet play-by-play files only
                     // contain a handful of FC7, FC8, FC9 events, and some of those could very well
                     // be plays made in the infield for all I know.
                     return OutLocation.INFIELD;
                 }
-                return field.isOutfieldOut()
+                return play.isOutfieldOut()
                         ? OutLocation.OUTFIELD
                         : OutLocation.INFIELD;
             }
