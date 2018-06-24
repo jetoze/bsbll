@@ -3,13 +3,19 @@ package bsbll.game;
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
+import java.util.Comparator;
 import java.util.Objects;
 
 import javax.annotation.concurrent.Immutable;
 
 @Immutable
-public final class Inning { // TODO: Implement Comparable<Inning>
-    
+public final class Inning implements Comparable<Inning> {
+    /**
+     * Defines the natural sort order of innings.
+     */
+    private static final Comparator<Inning> NATURAL_ORDER = 
+            Comparator.comparingInt(Inning::getNumber).thenComparing(Inning::getHalf);
+
     public static enum Half { TOP, BOTTOM }
     
     private final int number;
@@ -70,6 +76,11 @@ public final class Inning { // TODO: Implement Comparable<Inning>
         }
     }
     
+    @Override
+    public int compareTo(Inning o) {
+        return NATURAL_ORDER.compare(this, o);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
