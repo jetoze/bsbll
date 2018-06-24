@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Comparator;
+import java.util.EnumMap;
 import java.util.Objects;
 
 import javax.annotation.concurrent.Immutable;
@@ -16,6 +17,24 @@ public final class Inning implements Comparable<Inning> {
     private static final Comparator<Inning> NATURAL_ORDER = 
             Comparator.comparingInt(Inning::getNumber).thenComparing(Inning::getHalf);
 
+    private static final int NUMBER_OF_INNINGS_TO_CACHE = 9;
+    private static final EnumMap<Half, Inning[]> CACHE = loadCache(NUMBER_OF_INNINGS_TO_CACHE);
+    
+    private static EnumMap<Half, Inning[]> loadCache(int numOfInningsToCache) {
+        EnumMap<Half, Inning[]> cache = new EnumMap<>(Half.class);
+        cache.put(Half.TOP, loadCachedInnings(numOfInningsToCache, Half.TOP));
+        cache.put(Half.BOTTOM, loadCachedInnings(numOfInningsToCache, Half.BOTTOM));
+        return cache;
+    }
+    
+    private static Inning[] loadCachedInnings(int numOfInningsToCache, Half half) {
+        Inning[] cache = new Inning[numOfInningsToCache];
+        for (int n = 0; n < numOfInningsToCache; ++n) {
+            cache[n] = new Inning(n + 1, half);
+        }
+        return cache;
+    }
+    
     public static enum Half { TOP, BOTTOM }
     
     private final int number;
@@ -27,17 +46,23 @@ public final class Inning implements Comparable<Inning> {
     }
     
     public static Inning startOfGame() {
-        return new Inning(1, Half.TOP);
+        return topOf(1);
+    }
+    
+    public static Inning of(int num, Half half) {
+        checkPositive(num);
+        requireNonNull(half);
+        return (num <= NUMBER_OF_INNINGS_TO_CACHE)
+                ? CACHE.get(half)[num - 1]
+                : new Inning(num, half);
     }
     
     public static Inning topOf(int num) {
-        // TODO: Cache common instances, or use pre-defined constants.
-        return new Inning(num, Half.TOP);
+        return of(num, Half.TOP);
     }
     
     public static Inning bottomOf(int num) {
-        // TODO: See topOf.
-        return new Inning(num, Half.BOTTOM);
+        return of(num, Half.BOTTOM);
     }
 
     public int getNumber() {
