@@ -11,16 +11,13 @@ import com.google.common.collect.ImmutableList;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
-import bsbll.game.BaseRunner;
 import bsbll.game.play.EventType;
 import bsbll.game.play.PlayOutcome;
-import bsbll.player.Player;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
 public abstract class DefaultGameHandler extends GameHandler {
     private final Predicate<PlayOutcome> interestingPlayPredicate;
-    private final Player pitcher = new Player("pitcher", "Joe Wood");
-    private int playerId;
+    private final BaseRunnerFactory baseRunnerFactory = new BaseRunnerFactory();
     
     protected DefaultGameHandler() {
         this(p -> true);
@@ -51,7 +48,7 @@ public abstract class DefaultGameHandler extends GameHandler {
                 process(play, bases, outs);
             }
             outs += play.getNumberOfOuts();
-            bases = bases.advanceRunners(nextBatter(), play.getAdvances()).getNewSituation();
+            bases = bases.advanceRunners(baseRunnerFactory.getBaseRunner(play), play.getAdvances()).getNewSituation();
         }
     }
     
@@ -66,16 +63,6 @@ public abstract class DefaultGameHandler extends GameHandler {
      *            the number of outs at the time of the play
      */
     protected abstract void process(ParsedPlay play, BaseSituation bases, int outs);
-    
-    /**
-     * We generate a new Player for each play. This is obviously not realistic,
-     * but that is irrelevant - we just need Players to move around the bases.
-     * See corresponding XXX comment in BaseSituation, about making that class generic.
-     */
-    private BaseRunner nextBatter() {
-        ++playerId;
-        return new BaseRunner(new Player(Integer.toString(playerId), "John Doe"), pitcher);
-    }
 
     public final void parseAll(Year year) {
         File folder = PlayByPlayFileUtils.getFolder(year);

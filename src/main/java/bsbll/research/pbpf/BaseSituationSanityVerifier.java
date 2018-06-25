@@ -11,8 +11,6 @@ import com.google.common.collect.ImmutableList;
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.InvalidBaseSitutationException;
-import bsbll.game.BaseRunner;
-import bsbll.player.Player;
 import bsbll.research.EventField;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 import tzeth.collections.Zip;
@@ -24,8 +22,7 @@ import tzeth.strings.Padding;
  * are trying to advance a runner from a base that was not occupied.
  */
 public final class BaseSituationSanityVerifier extends GameHandler {
-    private final Player pitcher = new Player("pitcher", "Christy Mathewson");
-    private int playerId;
+    private final BaseRunnerFactory baseRunnerFactory = new BaseRunnerFactory();
     
     @Override
     public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
@@ -33,7 +30,7 @@ public final class BaseSituationSanityVerifier extends GameHandler {
         BaseSituation bases = BaseSituation.empty();
         for (ParsedPlay play : plays) {
             try {
-                bases = play.applyTo(nextBatter(), bases);
+                bases = play.applyTo(baseRunnerFactory.getBaseRunner(play), bases);
                 progression.add(bases);
             } catch (InvalidBaseSitutationException e) {
                 reportProblem(inning, play, plays, progression, e);
@@ -73,16 +70,6 @@ public final class BaseSituationSanityVerifier extends GameHandler {
     
     private void printFieldAndBaseSituation(String field, BaseSituation bases) {
         System.err.println(field + " -> [" + bases + "]");
-    }
-
-    /**
-     * We generate a new Player for each play. This is obviously not realistic,
-     * but that is irrelevant - we just need Players to move around the bases.
-     * See corresponding XXX comment in BaseSituation, about making that class generic.
-     */
-    private BaseRunner nextBatter() {
-        ++playerId;
-        return new BaseRunner(new Player(Integer.toString(playerId), "John Doe"), pitcher);
     }
 
     

@@ -171,8 +171,8 @@ public final class PlayByPlayFile {
             // TODO: This may not be correct in some games from the 1800s, where the 
             // home team batted first.
             return inning.isTop()
-                    ? visitingPitcher
-                    : homePitcher;
+                    ? homePitcher
+                    : visitingPitcher;
         }
     }
     
