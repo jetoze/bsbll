@@ -1,5 +1,7 @@
 package bsbll.research.pbpf;
 
+import static java.util.Objects.requireNonNull;
+
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
@@ -10,16 +12,14 @@ import bsbll.game.play.EventType;
 import bsbll.player.PlayerId;
 import bsbll.research.pbpf.PlayByPlayFile.Inning;
 
-public final class ErrorOnFoulFlyCounter extends GameHandler {
-    // TODO: Generalize me, by taking the type of event as input. Also, the output
-    // should be a distribution, since the event can happen more than once per AT BAT.
-    // So, output should be:
-    //    + Number of plate appearances;
-    //    + Number of times the event happened once during a plate appearance;
-    //    + Number of times the event happened twice during a plate appearance;
-    //    + Etc
+public final class PerPlateAppearanceDistribution extends GameHandler {
+    private final EventType type;
     private int plateAppearances;
     private final Multiset<Integer> distribution = HashMultiset.create();
+    
+    public PerPlateAppearanceDistribution(EventType type) {
+        this.type = requireNonNull(type);
+    }
     
     @Override
     public void onEndOfInning(Inning inning, ImmutableList<ParsedPlay> plays) {
@@ -36,7 +36,7 @@ public final class ErrorOnFoulFlyCounter extends GameHandler {
                 lastBatter = play.getBatterId();
                 eventsDuringPA = 0;
             }
-            if (play.getType() == EventType.ERROR_ON_FOUL_FLY) {
+            if (play.getType() == type) {
                 ++eventsDuringPA;
             }
         }
@@ -46,7 +46,7 @@ public final class ErrorOnFoulFlyCounter extends GameHandler {
     }
     
     public void report(Year year) {
-        System.out.println("Error on Foul Fly Distribution in " + year);
+        System.out.println(type + " in " + year);
         System.out.println("Plate Appearances: " + plateAppearances);
         for (Multiset.Entry<Integer> e : Multisets.copyHighestCountFirst(distribution).entrySet()) {
             System.out.println(String.format("%s: %s time(s)", e.getElement(), e.getCount()));
@@ -55,7 +55,7 @@ public final class ErrorOnFoulFlyCounter extends GameHandler {
     
     public static void main(String[] args) {
         Year year = Year.of(1925);
-        ErrorOnFoulFlyCounter counter = new ErrorOnFoulFlyCounter();
+        PerPlateAppearanceDistribution counter = new PerPlateAppearanceDistribution(EventType.WILD_PITCH);
         counter.parseAll(PlayByPlayFileUtils.getFolder(year));
         counter.report(year);
     }
