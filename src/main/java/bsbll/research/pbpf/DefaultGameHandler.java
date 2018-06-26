@@ -50,6 +50,7 @@ public abstract class DefaultGameHandler extends GameHandler {
             outs += play.getNumberOfOuts();
             bases = bases.advanceRunners(baseRunnerFactory.getBaseRunner(play), play.getAdvances()).getNewSituation();
         }
+        afterInning();
     }
     
     /**
@@ -64,6 +65,15 @@ public abstract class DefaultGameHandler extends GameHandler {
      */
     protected abstract void process(ParsedPlay play, BaseSituation bases, int outs);
 
+    /**
+     * Called after all the plays of an inning have been
+     * {@link #process(ParsedPlay, BaseSituation, int) processed}. The default
+     * implementation does nothing.
+     */
+    protected void afterInning() {
+        // default does nothign
+    }
+    
     public final void parseAll(Year year) {
         File folder = PlayByPlayFileUtils.getFolder(year);
         parseAll(folder);
