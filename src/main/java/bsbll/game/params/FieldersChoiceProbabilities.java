@@ -62,7 +62,7 @@ public final class FieldersChoiceProbabilities {
      *         {@code true} if the bases are empty.
      */
     public boolean test(BaseSituation situation, DieFactory dieFactory) {
-        if (situation.isEmpty()) {
+        if (situation.areEmpty()) {
             return false;
         }
         Probability p = probabilities.getOrDefault(situation.getOccupiedBases(), DEFAULT_PROBABILITY);

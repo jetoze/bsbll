@@ -141,7 +141,7 @@ public final class BaseSituationTest {
         
         BaseSituation after = before.advanceRunners(BATTER, advances).getNewSituation();
         
-        assertTrue(after.isEmpty());
+        assertTrue(after.areEmpty());
     }
     
     private static Advances grandSlam() {

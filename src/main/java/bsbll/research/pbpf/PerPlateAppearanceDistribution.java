@@ -32,7 +32,7 @@ public final class PerPlateAppearanceDistribution extends DefaultGameHandler {
         if (previousBatter == null || !play.getBatterId().equals(previousBatter)) {
             // This logic is not correct, since a plate appearance can span over
             // multiple innings (e.g. the last out is made on a caught stealing).
-            if (!(requiresRunnersOn && bases.isEmpty())) {
+            if (!(requiresRunnersOn && bases.areEmpty())) {
                 ++plateAppearances;
             }
             if (count > 0) {

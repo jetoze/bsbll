@@ -21,7 +21,7 @@ public final class FieldersChoiceRatio extends DefaultGameHandler {
 
     @Override
     protected void process(ParsedPlay play, BaseSituation bases, int outs) {
-        if (bases.isEmpty()) {
+        if (bases.areEmpty()) {
             return;
         }
         OccupiedBases occupied = bases.getOccupiedBases();

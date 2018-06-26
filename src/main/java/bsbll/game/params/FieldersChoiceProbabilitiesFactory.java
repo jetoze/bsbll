@@ -75,7 +75,7 @@ public abstract class FieldersChoiceProbabilitiesFactory {
             
             @Override
             protected void process(ParsedPlay play, BaseSituation bases, int outs) {
-                if (!bases.isEmpty()) {
+                if (!bases.areEmpty()) {
                     evaluate(play, bases);
                 }
             }

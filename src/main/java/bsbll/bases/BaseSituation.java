@@ -51,7 +51,7 @@ public final class BaseSituation {
         this.bases = ImmutableSortedMap.copyOf(bases);
     }
 
-    public boolean isEmpty() {
+    public boolean areEmpty() {
         return this.bases.isEmpty();
     }
     
@@ -69,7 +69,7 @@ public final class BaseSituation {
     }
     
     public OccupiedBases getOccupiedBases() {
-        return isEmpty()
+        return areEmpty()
                 ? OccupiedBases.NONE
                 : OccupiedBases.of(this.bases.keySet());
     }
