@@ -32,6 +32,8 @@ import bsbll.game.params.FieldersChoiceProbabilitiesFactory;
 import bsbll.game.params.GamePlayParams;
 import bsbll.game.params.OutAdvanceDistribution;
 import bsbll.game.params.OutAdvanceDistributionFactory;
+import bsbll.game.params.PitchingEventProbabilities;
+import bsbll.game.params.PitchingEventProbabilitiesFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
@@ -87,12 +89,15 @@ public final class AL1923 {
                 .createDistribution();
         ErrorAdvanceDistribution errorAdvanceDistribution = ErrorAdvanceDistributionFactory.retrosheet(year)
                 .createDistribution();
+        PitchingEventProbabilities pitchingEventProbabilities = PitchingEventProbabilitiesFactory.retrosheet(year)
+                .getProbabilities();
         GamePlayParams params = new GamePlayParams(
                 baseHitAdvanceDistribution,
                 outAdvanceDistribution,
                 fieldersChoiceProbabilities,
                 errorCountDistribution,
-                errorAdvanceDistribution);
+                errorAdvanceDistribution,
+                pitchingEventProbabilities);
         return params;
     }
     

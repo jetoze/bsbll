@@ -16,13 +16,15 @@ public final class GamePlayParams {
             OutAdvanceDistribution.defaultAdvances(),
             FieldersChoiceProbabilities.defaultValues(),
             ErrorCountDistribution.noErrors(),
-            ErrorAdvanceDistribution.defaultAdvances());
+            ErrorAdvanceDistribution.defaultAdvances(),
+            PitchingEventProbabilities.defaultProbabilities());
     
     private final BaseHitAdvanceDistribution baseHitAdvanceDistribution;
     private final OutAdvanceDistribution outAdvanceDistribution;
     private final FieldersChoiceProbabilities fieldersChoiceProbabilities;
     private final ErrorCountDistribution errorCountDistribution;
     private final ErrorAdvanceDistribution errorAdvanceDistribution;
+    private final PitchingEventProbabilities pitchingEventProbabilities;
     // TODO: Pass in the DieFactory in the constructor instead? Slight downside is that we have to 
     // pass in the same DieFactory to the GamePlayDriver constructor as well.
     
@@ -30,12 +32,14 @@ public final class GamePlayParams {
                           OutAdvanceDistribution outAdvanceDistribution,
                           FieldersChoiceProbabilities fieldersChoiceProbabilities,
                           ErrorCountDistribution errorCountDistribution,
-                          ErrorAdvanceDistribution errorAdvanceDistribution) {
+                          ErrorAdvanceDistribution errorAdvanceDistribution,
+                          PitchingEventProbabilities pitchingEventProbabilities) {
         this.baseHitAdvanceDistribution = requireNonNull(baseHitAdvanceDistribution);
         this.outAdvanceDistribution = requireNonNull(outAdvanceDistribution);
         this.fieldersChoiceProbabilities = requireNonNull(fieldersChoiceProbabilities);
         this.errorCountDistribution = requireNonNull(errorCountDistribution);
         this.errorAdvanceDistribution = requireNonNull(errorAdvanceDistribution);
+        this.pitchingEventProbabilities = requireNonNull(pitchingEventProbabilities);
     }
 
     public static GamePlayParams defaultParams() {
@@ -83,5 +87,17 @@ public final class GamePlayParams {
                 ? OutLocation.INFIELD
                 : OutLocation.OUTFIELD;
         
+    }
+
+    public boolean testWildPitch(DieFactory dieFactory) {
+        return pitchingEventProbabilities.testWildPitch(dieFactory);
+    }
+    
+    public boolean testPassedBall(DieFactory dieFactory) {
+        return pitchingEventProbabilities.testPassedBall(dieFactory);
+    }
+    
+    public boolean testBalk(DieFactory dieFactory) {
+        return pitchingEventProbabilities.testBalk(dieFactory);
     }
 }
