@@ -55,6 +55,10 @@ public final class Probability implements Comparable<Probability> {
         int value = (int) Math.round((((1.0 * events) / total) * DENOMINATOR));
         return new Probability(value);
     }
+    
+    public static Probability of(double value) {
+        return new Probability(value);
+    }
 
     public boolean test(DieFactory dieFactory) {
         Die die = dieFactory.getDie(DENOMINATOR);

@@ -1,6 +1,7 @@
 package bsbll.research.pbpf;
 
 import static java.util.Objects.requireNonNull;
+import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
@@ -8,6 +9,7 @@ import com.google.common.collect.Multisets;
 
 import bsbll.Year;
 import bsbll.bases.BaseSituation;
+import bsbll.card.Probability;
 import bsbll.game.play.EventType;
 import bsbll.player.PlayerId;
 
@@ -27,6 +29,12 @@ public final class PerPlateAppearanceDistribution extends DefaultGameHandler {
         this.requiresRunnersOn = requiresRunnersOn;
     }
 
+    public Probability getProbability(int count) {
+        checkPositive(count);
+        int events = distribution.count(count);
+        return Probability.of(events, plateAppearances);
+    }
+    
     @Override
     protected void process(ParsedPlay play, BaseSituation bases, int outs) {
         if (previousBatter == null || !play.getBatterId().equals(previousBatter)) {
@@ -59,11 +67,12 @@ public final class PerPlateAppearanceDistribution extends DefaultGameHandler {
         for (Multiset.Entry<Integer> e : Multisets.copyHighestCountFirst(distribution).entrySet()) {
             System.out.println(String.format("%s: %s time(s)", e.getElement(), e.getCount()));
         }
+        System.out.println(getProbability(1));
     }
     
     public static void main(String[] args) {
         Year year = Year.of(1925);
-        PerPlateAppearanceDistribution counter = new PerPlateAppearanceDistribution(EventType.PASSED_BALL, true);
+        PerPlateAppearanceDistribution counter = new PerPlateAppearanceDistribution(EventType.BALK, true);
         counter.parseAll(PlayByPlayFileUtils.getFolder(year));
         counter.report(year);
     }
