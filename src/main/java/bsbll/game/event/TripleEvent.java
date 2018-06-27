@@ -2,7 +2,6 @@ package bsbll.game.event;
 
 import javax.annotation.concurrent.Immutable;
 
-import bsbll.game.BattingEvent;
 import bsbll.game.Inning;
 import bsbll.player.Player;
 

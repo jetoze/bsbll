@@ -1,9 +1,9 @@
-package bsbll.game;
+package bsbll.game.event;
 
 import static java.util.Objects.requireNonNull;
 import static tzeth.preconds.MorePreconditions.checkNotNegative;
 
-import bsbll.game.event.GameEvent;
+import bsbll.game.Inning;
 import bsbll.player.Player;
 
 public abstract class BattingEvent implements GameEvent {

@@ -15,11 +15,11 @@ import com.google.common.collect.Multimaps;
 import com.google.common.collect.Streams;
 
 import bsbll.NameMode;
-import bsbll.game.BattingEvent;
 import bsbll.game.BoxScore;
 import bsbll.game.Inning;
 import bsbll.game.PitcherOfRecord;
 import bsbll.game.PlayerGameStats;
+import bsbll.game.event.BattingEvent;
 import bsbll.game.event.DoubleEvent;
 import bsbll.game.event.GameEvents;
 import bsbll.game.event.HitByPitchEvent;
