@@ -73,6 +73,12 @@ public final class DefaultGameEventDetector implements GameEventDetector {
             int seasonTotalHBP = updateSeasonTotal(batter, BattingStat.HIT_BY_PITCHES, totalsLookup::getBattingStat);
             int pitcherSeasonTotalHBP = updateSeasonTotal(pitcher, PitchingStat.HIT_BY_PITCHES, totalsLookup::getPitchingStat);
             return new HitByPitchEvent(inning, batter, pitcher, seasonTotalHBP, pitcherSeasonTotalHBP);
+        case WILD_PITCH:
+            throw new RuntimeException("TODO: Implement Wild Pitch Events");
+        case PASSED_BALL:
+            throw new RuntimeException("TODO: Implement Passed Ball Events");
+        case BALK:
+            throw new RuntimeException("TODO: Implement Balk Events");
         default:
             // Not of interest.
             return null;

@@ -225,6 +225,11 @@ final class ReconstructedInning {
             // TODO: Once we've implemented the possibility of advances on strikeouts, this 
             // must change accordingly (?)
             return Advances.empty();
+        case WILD_PITCH:
+            // TODO: Use a proper distribution here?
+            return Advances.runnersAdvanceOneBase(reconstructedBaseSituation.getOccupiedBases());
+        case BALK:
+            return Advances.runnersAdvanceOneBase(reconstructedBaseSituation.getOccupiedBases());
         default:
             throw new RuntimeException("TODO: Implement me for " + o.getType());
         }

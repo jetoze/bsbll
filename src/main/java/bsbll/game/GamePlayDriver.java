@@ -153,6 +153,42 @@ public final class GamePlayDriver {
             // CAUGHT_STEALING with an associated error, allowing the runner to 
             // remain safely on the bases? Can the official scorer assume that
             // such an event should normally have resulted in the runner being out?
+            if (baseSituation.areEmpty()) {
+                // For now
+                return;
+            }
+            // TODO: There could of course be more than one WP/PB/BK per at bat. The odds
+            // for that are miniscule, however, so let's ignore that, at least for now.
+            if (params.testWildPitch(dieFactory)) {
+                wildPitch();
+            } else if (params.testPassedBall(dieFactory)) {
+                passedBall();
+            } else if (params.testBalk(dieFactory)) {
+                balk();
+            }
+        }
+        
+        private void wildPitch() {
+            // TODO: Use a proper Advances distribution here
+            Advances advances = Advances.runnersAdvanceOneBase(baseSituation.getOccupiedBases());
+            PlayOutcome outcome = new PlayOutcome(EventType.WILD_PITCH, advances);
+            builder.addPitchingStat(PitchingStat.WILD_PITCHES);
+            addOutcome(outcome);
+        }
+        
+        private void passedBall() {
+            // TODO: Use a proper Advances distribution here
+            // TODO: Add to catcher's stats
+            Advances advances = Advances.runnersAdvanceOneBase(baseSituation.getOccupiedBases());
+            PlayOutcome outcome = new PlayOutcome(EventType.PASSED_BALL, advances);
+            addOutcome(outcome);
+        }
+        
+        private void balk() {
+            Advances advances = Advances.runnersAdvanceOneBase(baseSituation.getOccupiedBases());
+            PlayOutcome outcome = new PlayOutcome(EventType.BALK, advances);
+            builder.addPitchingStat(PitchingStat.WILD_PITCHES);
+            addOutcome(outcome);
         }
         
         /**

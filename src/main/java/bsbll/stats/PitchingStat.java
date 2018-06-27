@@ -23,7 +23,9 @@ public interface PitchingStat<T> extends Stat<T> {
         LOSSES("L"),
         SAVES("SV"),
         SHUTOUTS("SHO"),
-        HIT_BY_PITCHES("HBP");
+        HIT_BY_PITCHES("HBP"),
+        WILD_PITCHES("WP"),
+        BALKS("BK");
         
         private final String abbrev;
         
@@ -67,6 +69,8 @@ public interface PitchingStat<T> extends Stat<T> {
     public static final PrimitivePitchingStat SAVES = PrimitivePitchingStat.SAVES;
     public static final PrimitivePitchingStat SHUTOUTS = PrimitivePitchingStat.SHUTOUTS;
     public static final PrimitivePitchingStat HIT_BY_PITCHES = PrimitivePitchingStat.HIT_BY_PITCHES;
+    public static final PrimitivePitchingStat WILD_PITCHES = PrimitivePitchingStat.WILD_PITCHES;
+    public static final PrimitivePitchingStat BALKS = PrimitivePitchingStat.BALKS;
     
     public static final PitchingStat<InningsPitched> INNINGS_PITCHED = new AbstractPitchingStat<InningsPitched>("IP",
             Comparator.reverseOrder()) {
