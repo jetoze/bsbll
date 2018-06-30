@@ -19,6 +19,7 @@ import bsbll.game.BoxScore;
 import bsbll.game.Inning;
 import bsbll.game.PitcherOfRecord;
 import bsbll.game.PlayerGameStats;
+import bsbll.game.event.BalkEvent;
 import bsbll.game.event.BattingEvent;
 import bsbll.game.event.DoubleEvent;
 import bsbll.game.event.GameEventCollator;
@@ -234,6 +235,7 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             // XXX: HBP is reported for both batter and pitcher. We use the getSpecific*Batting*EventLines
             // here as a consequence, which looks and feels a bit odd.
             lines.addAll(getWildPitchEventLines(events.getEvents(WildPitchEvent.class)));
+            lines.addAll(getBalkEventLines(events.getEvents(BalkEvent.class)));
             lines.addAll(getSpecificBattingEventLines(events.getEvents(HitByPitchEvent.class), 
                     BattingStat.HIT_BY_PITCHES, this::hbpToStringForPitcher));
             return lines;
@@ -242,6 +244,11 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
         private List<String> getWildPitchEventLines(ImmutableList<WildPitchEvent> wps) {
             ImmutableList<CollatedEvent> collatedEvents = GameEventCollator.collate(wps, WildPitchEvent::getPitcher);
             return splitIntoLines("WP", collatedEvents, this::collatedEventsToString);
+        }
+        
+        private List<String> getBalkEventLines(ImmutableList<BalkEvent> wps) {
+            ImmutableList<CollatedEvent> collatedEvents = GameEventCollator.collate(wps, BalkEvent::getPitcher);
+            return splitIntoLines("Bk", collatedEvents, this::collatedEventsToString);
         }
         
         private <T> List<String> splitIntoLines(String caption, Collection<T> values, Function<T, String> toStringFunction) {
