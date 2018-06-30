@@ -26,6 +26,7 @@ public abstract class PitchingEvent implements GameEvent {
         return pitcher;
     }
 
+    @Override
     public final int getSeasonTotal() {
         return seasonTotal;
     }

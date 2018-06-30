@@ -8,4 +8,5 @@ import bsbll.game.Inning;
  */
 public interface GameEvent {
     Inning getInning();
+    int getSeasonTotal();
 }

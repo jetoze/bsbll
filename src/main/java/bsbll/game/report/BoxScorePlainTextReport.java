@@ -21,10 +21,13 @@ import bsbll.game.PitcherOfRecord;
 import bsbll.game.PlayerGameStats;
 import bsbll.game.event.BattingEvent;
 import bsbll.game.event.DoubleEvent;
+import bsbll.game.event.GameEventCollator;
+import bsbll.game.event.GameEventCollator.CollatedEvent;
 import bsbll.game.event.GameEvents;
 import bsbll.game.event.HitByPitchEvent;
 import bsbll.game.event.HomerunEvent;
 import bsbll.game.event.TripleEvent;
+import bsbll.game.event.WildPitchEvent;
 import bsbll.player.Player;
 import bsbll.report.AbstractPlainTextReport;
 import bsbll.stats.BattingStat;
@@ -230,9 +233,39 @@ public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
             List<String> lines = new ArrayList<>();
             // XXX: HBP is reported for both batter and pitcher. We use the getSpecific*Batting*EventLines
             // here as a consequence, which looks and feels a bit odd.
+            lines.addAll(getWildPitchEventLines(events.getEvents(WildPitchEvent.class)));
             lines.addAll(getSpecificBattingEventLines(events.getEvents(HitByPitchEvent.class), 
                     BattingStat.HIT_BY_PITCHES, this::hbpToStringForPitcher));
             return lines;
+        }
+        
+        private List<String> getWildPitchEventLines(ImmutableList<WildPitchEvent> wps) {
+            ImmutableList<CollatedEvent> collatedEvents = GameEventCollator.collate(wps, WildPitchEvent::getPitcher);
+            return splitIntoLines("WP", collatedEvents, this::collatedEventsToString);
+        }
+        
+        private <T> List<String> splitIntoLines(String caption, Collection<T> values, Function<T, String> toStringFunction) {
+            if (values.isEmpty()) {
+                return Collections.emptyList();
+            }
+            List<String> lines = new ArrayList<>();
+            StringBuilder line = new StringBuilder(caption).append(": ");
+            for (T value : values) {
+                String s = toStringFunction.apply(value);
+                if (line.length() + s.length() > MAX_WIDTH) {
+                    lines.add(line.toString());
+                    line = new StringBuilder();
+                }
+                line.append(s);
+            }
+            lines.add(line.toString());
+            return lines;
+        }
+
+        private String collatedEventsToString(CollatedEvent e) {
+            return (e.getCount() == 1)
+                    ? String.format("%s (%d)", nameOf(e.getPlayer()), e.getSeasonTotal())
+                    : String.format("%s %d (%d)", nameOf(e.getPlayer()), e.getCount(), e.getSeasonTotal());
         }
 
         /**
