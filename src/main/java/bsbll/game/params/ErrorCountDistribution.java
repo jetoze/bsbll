@@ -65,36 +65,13 @@ public final class ErrorCountDistribution {
     }
     
     public void store(Persister p) {
-        for (EventType et : data.rowKeySet()) {
-            Persister typePersister = p.newChild("EventType");
-            typePersister.putString("Type", et.name());
-            ImmutableMap<OccupiedBases, ImmutableMultiset<Integer>> row = data.row(et);
-            for (Map.Entry<OccupiedBases, ImmutableMultiset<Integer>> er : row.entrySet()) {
-                Persister entryPersister = typePersister.newChild("Entry");
-                entryPersister.putString("Bases", er.getKey().name());
-                er.getValue().entrySet().forEach(e -> {
-                    Persister valuePersister = entryPersister.newChild("Values");
-                    valuePersister.putInt("Errors", e.getElement()).putInt("Count", e.getCount());
-                });
-            }
-        }
+        Storage.store(this, p);
     }
     
     public static ErrorCountDistribution restoreFrom(Persister p) {
-        Builder builder = builder();
-        for (Persister typePersister : p.getChildren("EventType")) {
-            EventType type = EventType.valueOf(typePersister.getString("Type"));
-            for (Persister entryPersister : typePersister.getChildren("Entry")) {
-                OccupiedBases bases = OccupiedBases.valueOf(entryPersister.getString("Bases"));
-                for (Persister valuePersister : entryPersister.getChildren("Values")) {
-                    int errorCount = valuePersister.getInt("Errors");
-                    int occurrences = valuePersister.getInt("Count");
-                    builder.setCount(type, bases, errorCount, occurrences);
-                }
-            }
-        }
-        return builder.build();
+        return Storage.restoreFrom(p);
     }
+    
     
     @Override
     public boolean equals(Object obj) {
@@ -147,6 +124,49 @@ public final class ErrorCountDistribution {
                 tableBuilder.put(c.getRowKey(), c.getColumnKey(), ImmutableMultiset.copyOf(c.getValue()));
             }
             return new ErrorCountDistribution(tableBuilder.build());
+        }
+    }
+    
+    
+    private static class Storage {
+        private static final String EVENT_TYPE = "EventType";
+        private static final String TYPE = "Type";
+        private static final String ENTRY = "Entry";
+        private static final String BASES = "Bases";
+        private static final String VALUES = "Values";
+        private static final String ERRORS = "Errors";
+        private static final String COUNT = "Count";
+        
+        public static void store(ErrorCountDistribution d, Persister p) {
+            for (EventType et : d.data.rowKeySet()) {
+                Persister typePersister = p.newChild(EVENT_TYPE);
+                typePersister.putString(TYPE, et.name());
+                ImmutableMap<OccupiedBases, ImmutableMultiset<Integer>> row = d.data.row(et);
+                for (Map.Entry<OccupiedBases, ImmutableMultiset<Integer>> er : row.entrySet()) {
+                    Persister entryPersister = typePersister.newChild(ENTRY);
+                    entryPersister.putString(BASES, er.getKey().name());
+                    er.getValue().entrySet().forEach(e -> {
+                        Persister valuePersister = entryPersister.newChild(VALUES);
+                        valuePersister.putInt(ERRORS, e.getElement()).putInt(COUNT, e.getCount());
+                    });
+                }
+            }
+        }
+        
+        public static ErrorCountDistribution restoreFrom(Persister p) {
+            Builder builder = builder();
+            for (Persister typePersister : p.getChildren(EVENT_TYPE)) {
+                EventType type = EventType.valueOf(typePersister.getString(TYPE));
+                for (Persister entryPersister : typePersister.getChildren(ENTRY)) {
+                    OccupiedBases bases = OccupiedBases.valueOf(entryPersister.getString(BASES));
+                    for (Persister valuePersister : entryPersister.getChildren(VALUES)) {
+                        int errorCount = valuePersister.getInt(ERRORS);
+                        int occurrences = valuePersister.getInt(COUNT);
+                        builder.setCount(type, bases, errorCount, occurrences);
+                    }
+                }
+            }
+            return builder.build();
         }
     }
 }
