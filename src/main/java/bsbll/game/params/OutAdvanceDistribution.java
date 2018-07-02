@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableTable;
 import bsbll.bases.Advances;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
+import p3.Persister;
 
 /**
  * The distributions of possible base-running advances on an out or fielder's
@@ -51,6 +52,23 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvance
     @Override
     protected boolean isNumberOfOutsIncludedInKey() {
         return true;
+    }
+
+    public void store(Persister p) {
+        for (OutAdvanceKey key : keySet()) {
+            Persister keyPersister = p.newChild("Key");
+            key.store(keyPersister);
+            storeRow(key, keyPersister);
+        }
+    }
+    
+    public static OutAdvanceDistribution restoreFrom(Persister p) {
+        Builder builder = builder();
+        for (Persister keyPersister : p.getChildren("Key")) {
+            OutAdvanceKey key = OutAdvanceKey.restore(keyPersister);
+            restoreRows(key, keyPersister, builder);
+        }
+        return builder.build();
     }
 
     public static Builder builder() {

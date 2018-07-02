@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.annotation.concurrent.Immutable;
 
 import bsbll.game.play.EventType;
+import p3.Persister;
 
 /**
  * The key to the OutAdvanceDistribution data. The key consists on the location
@@ -41,6 +42,14 @@ public final class OutAdvanceKey {
         return location;
     }
     
+    void store(Persister p) {
+        Storage.store(this, p);
+    }
+    
+    static OutAdvanceKey restore(Persister p) {
+        return Storage.restore(p);
+    }
+    
     @Override
     public int hashCode() {
         return Objects.hash(type, location, outs);
@@ -61,5 +70,24 @@ public final class OutAdvanceKey {
     @Override
     public String toString() {
         return String.format("%s, %s, %d %s", type, location, outs, (outs == 1 ? "out" : "outs"));
+    }
+    
+    private static class Storage {
+        private static final String TYPE = "Type";
+        private static final String LOCATION = "Location";
+        private static final String OUTS = "Outs";
+        
+        public static void store(OutAdvanceKey key, Persister p) {
+            p.putString(TYPE, key.type.name())
+                .putString(LOCATION, key.location.name())
+                .putInt(OUTS, key.outs);
+        }
+        
+        public static OutAdvanceKey restore(Persister p) {
+            return new OutAdvanceKey(
+                    EventType.valueOf(p.getString(TYPE)), 
+                    OutLocation.valueOf(p.getString(LOCATION)), 
+                    p.getInt(OUTS));
+        }
     }
 }
