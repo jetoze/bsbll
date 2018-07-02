@@ -2,6 +2,8 @@ package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Map;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.ImmutableMap;
@@ -10,6 +12,7 @@ import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.card.Probability;
 import bsbll.die.DieFactory;
+import p3.Persister;
 
 /**
  * Provides the probabilities that an infield out event with a given base
@@ -72,6 +75,22 @@ public final class FieldersChoiceProbabilities {
     @Override
     public String toString() {
         return probabilities.toString();
+    }
+    
+    public void store(Persister p) {
+        for (Map.Entry<OccupiedBases, Probability> e : probabilities.entrySet()) {
+            p.newChild("Entry")
+                .putString("Bases", e.getKey().name())
+                .putDouble("Value", e.getValue().asDouble());
+        }
+    }
+    
+    public static FieldersChoiceProbabilities restoreFrom(Persister p) {
+        ImmutableMap.Builder<OccupiedBases, Probability> builder = ImmutableMap.builder();
+        for (Persister c : p.getChildren("Entry")) {
+            builder.put(OccupiedBases.valueOf(c.getString("Bases")), Probability.of(p.getDouble("Value")));
+        }
+        return new FieldersChoiceProbabilities(builder.build());
     }
     
     public static Builder builder() {

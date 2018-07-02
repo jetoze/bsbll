@@ -52,6 +52,11 @@
       <artifactId>samling</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
+    <dependency>
+      <groupId>jetoze</groupId>
+      <artifactId>p3</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
   </dependencies>
       
   <build>

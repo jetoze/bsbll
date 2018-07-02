@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import bsbll.card.Probability;
 import bsbll.die.DieFactory;
+import p3.Persister;
 
 public final class PitchingEventProbabilities {
     private static final PitchingEventProbabilities ZERO = new PitchingEventProbabilities(
@@ -50,5 +51,18 @@ public final class PitchingEventProbabilities {
     public String toString() {
         return String.format("Wild Pitch: %s. Passed Ball: %s. Balk: %s", 
                 wildPitchProbability, passedBallProbability, balkProbability);
+    }
+    
+    public void store(Persister p) {
+        p.putDouble("wp", wildPitchProbability.asDouble());
+        p.putDouble("pb", passedBallProbability.asDouble());
+        p.putDouble("bk", balkProbability.asDouble());
+    }
+    
+    public static PitchingEventProbabilities restoreFrom(Persister p) {
+        return new PitchingEventProbabilities(
+                Probability.of(p.getDouble("wp")),
+                Probability.of(p.getDouble("pb")),
+                Probability.of(p.getDouble("bk")));
     }
 }

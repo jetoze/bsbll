@@ -150,7 +150,7 @@ public final class Probability implements Comparable<Probability> {
         return new Probability(result);
     }
     
-    private double asDouble() {
+    public double asDouble() {
         return 1.0 * value / DENOMINATOR;
     }
 
@@ -174,5 +174,4 @@ public final class Probability implements Comparable<Probability> {
     public String toString() {
         return value + " / " + DENOMINATOR;
     }
-    
 }

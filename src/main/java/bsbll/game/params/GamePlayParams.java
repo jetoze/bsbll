@@ -9,6 +9,7 @@ import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.die.DieFactory;
 import bsbll.game.play.EventType;
+import p3.Persister;
 
 public final class GamePlayParams {
     private static final GamePlayParams DEFAULT_PARAMS = new GamePlayParams(
@@ -99,5 +100,17 @@ public final class GamePlayParams {
     
     public boolean testBalk(DieFactory dieFactory) {
         return pitchingEventProbabilities.testBalk(dieFactory);
+    }
+    
+    public void store(Persister p) {
+        fieldersChoiceProbabilities.store(p.newChild("FieldersChoice"));
+        pitchingEventProbabilities.store(p.newChild("PitchingEvents"));
+        throw new RuntimeException("TODO: Complete me");
+    }
+    
+    public static GamePlayParams restoreFrom(Persister p) {
+        FieldersChoiceProbabilities fcProbs = FieldersChoiceProbabilities.restoreFrom(p.getChild("FieldersChoice"));
+        PitchingEventProbabilities pitchingEvtProbs = PitchingEventProbabilities.restoreFrom(p.getChild("PitchingEvents"));
+        throw new RuntimeException("TODO: Complete me");
     }
 }

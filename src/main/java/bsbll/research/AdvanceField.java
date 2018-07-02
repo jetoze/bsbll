@@ -16,8 +16,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSortedMap;
 
 import bsbll.bases.Advance;
-import bsbll.bases.Base;
 import bsbll.bases.Advance.Outcome;
+import bsbll.bases.Base;
 
 @Immutable
 final class AdvanceField {
