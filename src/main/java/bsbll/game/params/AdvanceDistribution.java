@@ -22,6 +22,7 @@ import bsbll.bases.Advances;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.die.DieFactory;
+import p3.Persister;
 
 /**
  * The distributions of possible base-running advances for a set of event types,
@@ -156,6 +157,14 @@ public abstract class AdvanceDistribution<E> {
         // XXX: See equals
         return data.hashCode();
     }
+
+    protected final void storeRow(E key, Persister p) {
+        Storage.store(forKey(key), p);
+    }
+
+    protected static final <E, B extends BuilderBase<E, B>> void restoreRows(E key, Persister p, B builder) {
+        Storage.restoreRows(key, p, builder);
+    }
     
     public static abstract class BuilderBase<E, B extends BuilderBase<E, B>> {
         private final Table<E, OccupiedBases, Multiset<Advances>> data = HashBasedTable.create();
@@ -199,6 +208,36 @@ public abstract class AdvanceDistribution<E> {
                 }
             }
             return tableBuilder.build();
+        }
+    }
+    
+    
+    private static class Storage {
+        private static final String ENTRY = "Entry";
+        private static final String BASES = "Bases";
+        private static final String ADVANCES = "Advances";
+        private static final String COUNT = "Count";
+        
+        public static void store(ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> row, Persister p) {
+            for (Map.Entry<OccupiedBases, ImmutableMultiset<Advances>> e : row.entrySet()) {
+                Persister entryPersister = p.newChild(ENTRY).putString(BASES, e.getKey().name());
+                for (Multiset.Entry<Advances> advances : e.getValue().entrySet()) {
+                    Persister advancesPersister = entryPersister.newChild(ADVANCES)
+                            .putInt(COUNT, advances.getCount());
+                    advances.getElement().store(advancesPersister);
+                }
+            }
+        }
+
+        public static <E, B extends BuilderBase<E, B>> void restoreRows(E key, Persister p, B builder) {
+            for (Persister entryPersister : p.getChildren(ENTRY)) {
+                OccupiedBases occupiedBases = OccupiedBases.valueOf(entryPersister.getString(BASES));
+                for (Persister advancesPersister : entryPersister.getChildren(ADVANCES)) {
+                    int count = advancesPersister.getInt(COUNT);
+                    Advances advances = Advances.restoreFrom(advancesPersister);
+                    builder.set(key, occupiedBases, advances, count);
+                }
+            }
         }
     }
 }

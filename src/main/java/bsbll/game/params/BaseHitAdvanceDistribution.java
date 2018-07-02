@@ -3,14 +3,11 @@ package bsbll.game.params;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.concurrent.Immutable;
 
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Multiset;
 
 import bsbll.bases.Advance;
 import bsbll.bases.Advances;
@@ -69,17 +66,8 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
 
     public void store(Persister p) {
         for (BaseHit key : keySet()) {
-            Persister keyPersister = p.newChild("Key")
-                    .putString("BaseHit", key.name());
-            ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> row = forKey(key);
-            for (Map.Entry<OccupiedBases, ImmutableMultiset<Advances>> e : row.entrySet()) {
-                Persister entryPersister = keyPersister.newChild("Entry").putString("Bases", e.getKey().name());
-                for (Multiset.Entry<Advances> advances : e.getValue().entrySet()) {
-                    Persister advancesPersister = entryPersister.newChild("Advances")
-                            .putInt("Count", advances.getCount());
-                    advances.getElement().store(advancesPersister);
-                }
-            }
+            Persister keyPersister = p.newChild("Key").putString("BaseHit", key.name());
+            storeRow(key, keyPersister);
         }
     }
     
@@ -87,14 +75,7 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
         Builder builder = builder();
         for (Persister keyPersister : p.getChildren("Key")) {
             BaseHit key = BaseHit.valueOf(keyPersister.getString("BaseHit"));
-            for (Persister entryPersister : keyPersister.getChildren("Entry")) {
-                OccupiedBases occupiedBases = OccupiedBases.valueOf(entryPersister.getString("Bases"));
-                for (Persister advancesPersister : entryPersister.getChildren("Advances")) {
-                    int count = advancesPersister.getInt("Count");
-                    Advances advances = Advances.restoreFrom(advancesPersister);
-                    builder.set(key, occupiedBases, advances, count);
-                }
-            }
+            restoreRows(key, keyPersister, builder);
         }
         return builder.build();
     }
