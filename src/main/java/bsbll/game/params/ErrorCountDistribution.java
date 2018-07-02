@@ -2,10 +2,13 @@ package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.Map;
+
 import javax.annotation.concurrent.Immutable;
 
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Multiset;
@@ -16,6 +19,7 @@ import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import bsbll.die.DieFactory;
 import bsbll.game.play.EventType;
+import p3.Persister;
 
 /**
  * The distribution of number of errors on plays of a given type, with a given base situation.
@@ -60,6 +64,51 @@ public final class ErrorCountDistribution {
         return 0;
     }
     
+    public void store(Persister p) {
+        for (EventType et : data.rowKeySet()) {
+            Persister typePersister = p.newChild("EventType");
+            typePersister.putString("Type", et.name());
+            ImmutableMap<OccupiedBases, ImmutableMultiset<Integer>> row = data.row(et);
+            for (Map.Entry<OccupiedBases, ImmutableMultiset<Integer>> er : row.entrySet()) {
+                Persister entryPersister = typePersister.newChild("Entry");
+                entryPersister.putString("Bases", er.getKey().name());
+                er.getValue().entrySet().forEach(e -> {
+                    Persister valuePersister = entryPersister.newChild("Values");
+                    valuePersister.putInt("Errors", e.getElement()).putInt("Count", e.getCount());
+                });
+            }
+        }
+    }
+    
+    public static ErrorCountDistribution restoreFrom(Persister p) {
+        Builder builder = builder();
+        for (Persister typePersister : p.getChildren("EventType")) {
+            EventType type = EventType.valueOf(typePersister.getString("Type"));
+            for (Persister entryPersister : typePersister.getChildren("Entry")) {
+                OccupiedBases bases = OccupiedBases.valueOf(entryPersister.getString("Bases"));
+                for (Persister valuePersister : entryPersister.getChildren("Values")) {
+                    int errorCount = valuePersister.getInt("Errors");
+                    int occurrences = valuePersister.getInt("Count");
+                    builder.setCount(type, bases, errorCount, occurrences);
+                }
+            }
+        }
+        return builder.build();
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        return (obj instanceof ErrorCountDistribution) && this.data.equals(((ErrorCountDistribution) obj).data);
+    }
+    
+    @Override
+    public int hashCode() {
+        return data.hashCode();
+    }
+    
     public static Builder builder() {
         return new Builder();
     }
@@ -69,6 +118,12 @@ public final class ErrorCountDistribution {
         private final Table<EventType, OccupiedBases, Multiset<Integer>> data = HashBasedTable.create();
         
         public Builder add(EventType type, OccupiedBases bases, int errorCount) {
+            Multiset<Integer> values = getValueElement(type, bases);
+            values.add(errorCount);
+            return this;
+        }
+
+        private Multiset<Integer> getValueElement(EventType type, OccupiedBases bases) {
             requireNonNull(type);
             requireNonNull(bases);
             Multiset<Integer> values = data.get(type, bases);
@@ -76,7 +131,12 @@ public final class ErrorCountDistribution {
                 values = HashMultiset.create();
                 data.put(type, bases, values);
             }
-            values.add(errorCount);
+            return values;
+        }
+        
+        public Builder setCount(EventType type, OccupiedBases bases, int errorCount, int occurrences) {
+            Multiset<Integer> values = getValueElement(type, bases);
+            values.setCount(errorCount, occurrences);
             return this;
         }
         

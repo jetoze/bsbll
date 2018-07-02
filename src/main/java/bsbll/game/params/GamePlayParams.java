@@ -104,12 +104,14 @@ public final class GamePlayParams {
     
     public void store(Persister p) {
         fieldersChoiceProbabilities.store(p.newChild("FieldersChoice"));
+        errorCountDistribution.store(p.newChild("ErrorCounts"));
         pitchingEventProbabilities.store(p.newChild("PitchingEvents"));
         throw new RuntimeException("TODO: Complete me");
     }
     
     public static GamePlayParams restoreFrom(Persister p) {
         FieldersChoiceProbabilities fcProbs = FieldersChoiceProbabilities.restoreFrom(p.getChild("FieldersChoice"));
+        ErrorCountDistribution errorCounts = ErrorCountDistribution.restoreFrom(p.getChild("ErrorCounts"));
         PitchingEventProbabilities pitchingEvtProbs = PitchingEventProbabilities.restoreFrom(p.getChild("PitchingEvents"));
         throw new RuntimeException("TODO: Complete me");
     }
