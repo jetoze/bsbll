@@ -13,7 +13,7 @@ public final class DistributionOfAdvancesOnError {
     public static void main(String[] args) {
         Year year = Year.of(1925);
         ErrorAdvanceDistribution ds = ErrorAdvanceDistributionFactory.retrosheet(year).createDistribution();
-        ds.keysSet().stream()
+        ds.keySet().stream()
             .map(Object::toString)
             .sorted()
             .forEach(System.out::println);

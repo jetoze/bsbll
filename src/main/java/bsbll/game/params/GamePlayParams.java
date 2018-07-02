@@ -103,6 +103,7 @@ public final class GamePlayParams {
     }
     
     public void store(Persister p) {
+        baseHitAdvanceDistribution.store(p.newChild("BaseHitAdvances"));
         fieldersChoiceProbabilities.store(p.newChild("FieldersChoice"));
         errorCountDistribution.store(p.newChild("ErrorCounts"));
         pitchingEventProbabilities.store(p.newChild("PitchingEvents"));
@@ -110,6 +111,7 @@ public final class GamePlayParams {
     }
     
     public static GamePlayParams restoreFrom(Persister p) {
+        BaseHitAdvanceDistribution hitAdvances = BaseHitAdvanceDistribution.restoreFrom(p.getChild("BaseHitAdvances"));
         FieldersChoiceProbabilities fcProbs = FieldersChoiceProbabilities.restoreFrom(p.getChild("FieldersChoice"));
         ErrorCountDistribution errorCounts = ErrorCountDistribution.restoreFrom(p.getChild("ErrorCounts"));
         PitchingEventProbabilities pitchingEvtProbs = PitchingEventProbabilities.restoreFrom(p.getChild("PitchingEvents"));

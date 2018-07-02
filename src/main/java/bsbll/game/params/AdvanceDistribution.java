@@ -133,7 +133,7 @@ public abstract class AdvanceDistribution<E> {
                 : mostCommon(possibilities);
     }
     
-    public final ImmutableSet<E> keysSet() {
+    public final ImmutableSet<E> keySet() {
         return this.data.rowKeySet();
     }
     
@@ -143,18 +143,44 @@ public abstract class AdvanceDistribution<E> {
         return this.data.row(key);
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        // XXX: This feels a bit icky, but should be safe. It would break once we have a subclass that
+        // adds additional properties, but I don't see why we would ever have such a subclass.
+        return (obj == this) ||
+                ((obj instanceof AdvanceDistribution) && this.data.equals(((AdvanceDistribution<?>) obj).data));
+    }
+    
+    @Override
+    public int hashCode() {
+        // XXX: See equals
+        return data.hashCode();
+    }
+    
     public static abstract class BuilderBase<E, B extends BuilderBase<E, B>> {
         private final Table<E, OccupiedBases, Multiset<Advances>> data = HashBasedTable.create();
         
         public B add(E key, BaseSituation situation, Advances advances) {
+            return add(key, situation.getOccupiedBases(), advances);
+        }
+        
+        public B add(E key, OccupiedBases occupiedBases, Advances advances) {
+            getMultiset(key, occupiedBases).add(advances);
+            return self();
+        }
+
+        private Multiset<Advances> getMultiset(E key, OccupiedBases occupied) {
             requireNonNull(key);
-            OccupiedBases occupied = situation.getOccupiedBases();
             Multiset<Advances> d = data.get(key, occupied);
             if (d == null) {
                 d = HashMultiset.create();
                 data.put(key, occupied, d);
             }
-            d.add(advances);
+            return d;
+        }
+        
+        public B set(E key, OccupiedBases occupiedBases, Advances advances, int count) {
+            getMultiset(key, occupiedBases).setCount(advances, count);
             return self();
         }
         
