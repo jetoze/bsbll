@@ -9,6 +9,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 
+import p3.Persister;
+
 @Immutable
 public final class Advance {
     private final Base from;
@@ -69,6 +71,19 @@ public final class Advance {
     
     public boolean isAdvancement() {
         return isSafe() && (this.to != this.from);
+    }
+    
+    void store(Persister p) {
+        p.putString("From", from.name())
+            .putString("To", to.name())
+            .putString("Type", outcome.name());
+    }
+    
+    static Advance restoreFrom(Persister p) {
+        return new Advance(
+                Base.valueOf(p.getString("From")), 
+                Base.valueOf(p.getString("To")), 
+                Outcome.valueOf(p.getString("Type")));
     }
 
     @Override

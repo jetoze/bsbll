@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import p3.Persister;
+
 /**
  * Unit test for {@code Advances}.
  */
@@ -294,6 +296,23 @@ public final class AdvancesTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void storeAndRestoreEmptyAdvances() {
+        verifyStoreAndRestore(Advances.empty());
+    }
+    
+    @Test
+    public void storeAndRestoreWalkWithBasesLoaded() {
+        verifyStoreAndRestore(Advances.batterAwardedFirstBase(OccupiedBases.LOADED));
+    }
+    
+    private void verifyStoreAndRestore(Advances original) {
+        Persister p = new Persister();
+        original.store(p);
+        Advances restored = Advances.restoreFrom(p);
+        
+        assertEquals(original, restored);
+    }
     
     private static Advances grandSlam() {
         return Advances.of(

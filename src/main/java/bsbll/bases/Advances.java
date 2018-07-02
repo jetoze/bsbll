@@ -28,6 +28,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSortedMap;
 
+import p3.Persister;
 import tzeth.collections.ImCollectors;
 
 /**
@@ -250,6 +251,18 @@ public final class Advances implements Iterable<Advance> {
         return this.advances.values().stream()
                 .collect(ImCollectors.toMap(Advance::from, Advance::to));
     }
+
+    public void store(Persister p) {
+        for (Advance a : advances.values()) {
+            a.store(p.newChild("Advance"));
+        }
+    }
+    
+    public static Advances restoreFrom(Persister p) {
+        return new Advances(p.getChildren("Advance").stream()
+                .map(Advance::restoreFrom)
+                .collect(toList()));
+    }
     
     @Override
     public int hashCode() {
@@ -266,5 +279,4 @@ public final class Advances implements Iterable<Advance> {
     public String toString() {
         return this.advances.values().toString();
     }
-    
 }
