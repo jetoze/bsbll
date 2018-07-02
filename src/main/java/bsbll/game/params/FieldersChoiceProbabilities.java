@@ -78,19 +78,11 @@ public final class FieldersChoiceProbabilities {
     }
     
     public void store(Persister p) {
-        for (Map.Entry<OccupiedBases, Probability> e : probabilities.entrySet()) {
-            p.newChild("Entry")
-                .putString("Bases", e.getKey().name())
-                .putDouble("Value", e.getValue().asDouble());
-        }
+        Storage.store(this, p);
     }
     
     public static FieldersChoiceProbabilities restoreFrom(Persister p) {
-        ImmutableMap.Builder<OccupiedBases, Probability> builder = ImmutableMap.builder();
-        for (Persister c : p.getChildren("Entry")) {
-            builder.put(OccupiedBases.valueOf(c.getString("Bases")), Probability.of(p.getDouble("Value")));
-        }
-        return new FieldersChoiceProbabilities(builder.build());
+        return Storage.restoreFrom(p);
     }
     
     public static Builder builder() {
@@ -108,6 +100,28 @@ public final class FieldersChoiceProbabilities {
         
         public FieldersChoiceProbabilities build() {
             return new FieldersChoiceProbabilities(data.build());
+        }
+    }
+    
+    private static class Storage {
+        private static final String ENTRY = "Entry";
+        private static final String BASES = "Bases";
+        private static final String VALUE = "Value";
+        
+        public static void store(FieldersChoiceProbabilities fcp, Persister p) {
+            for (Map.Entry<OccupiedBases, Probability> e : fcp.probabilities.entrySet()) {
+                p.newChild(ENTRY)
+                    .putString(BASES, e.getKey().name())
+                    .putDouble(VALUE, e.getValue().asDouble());
+            }
+        }
+        
+        public static FieldersChoiceProbabilities restoreFrom(Persister p) {
+            ImmutableMap.Builder<OccupiedBases, Probability> builder = ImmutableMap.builder();
+            for (Persister c : p.getChildren(ENTRY)) {
+                builder.put(OccupiedBases.valueOf(c.getString(BASES)), Probability.of(p.getDouble(VALUE)));
+            }
+            return new FieldersChoiceProbabilities(builder.build());
         }
     }
 }

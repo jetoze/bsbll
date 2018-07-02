@@ -54,15 +54,29 @@ public final class PitchingEventProbabilities {
     }
     
     public void store(Persister p) {
-        p.putDouble("wp", wildPitchProbability.asDouble());
-        p.putDouble("pb", passedBallProbability.asDouble());
-        p.putDouble("bk", balkProbability.asDouble());
+        Storage.store(this, p);
     }
     
     public static PitchingEventProbabilities restoreFrom(Persister p) {
-        return new PitchingEventProbabilities(
-                Probability.of(p.getDouble("wp")),
-                Probability.of(p.getDouble("pb")),
-                Probability.of(p.getDouble("bk")));
+        return Storage.restoreFrom(p);
+    }
+    
+    private static class Storage {
+        private static final String WILD_PITCH = "WP";
+        private static final String PASSED_BALL = "PB";
+        private static final String BALK = "BK";
+        
+        public static void store(PitchingEventProbabilities peb, Persister p) {
+            p.putDouble(WILD_PITCH, peb.wildPitchProbability.asDouble());
+            p.putDouble(PASSED_BALL, peb.passedBallProbability.asDouble());
+            p.putDouble(BALK, peb.balkProbability.asDouble());
+        }
+        
+        public static PitchingEventProbabilities restoreFrom(Persister p) {
+            return new PitchingEventProbabilities(
+                    Probability.of(p.getDouble(WILD_PITCH)),
+                    Probability.of(p.getDouble(PASSED_BALL)),
+                    Probability.of(p.getDouble(BALK)));
+        }
     }
 }
