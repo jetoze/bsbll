@@ -119,7 +119,7 @@ public final class FieldersChoiceProbabilities {
         public static FieldersChoiceProbabilities restoreFrom(Persister p) {
             ImmutableMap.Builder<OccupiedBases, Probability> builder = ImmutableMap.builder();
             for (Persister c : p.getChildren(ENTRY)) {
-                builder.put(OccupiedBases.valueOf(c.getString(BASES)), Probability.of(p.getDouble(VALUE)));
+                builder.put(OccupiedBases.valueOf(c.getString(BASES)), Probability.of(c.getDouble(VALUE)));
             }
             return new FieldersChoiceProbabilities(builder.build());
         }
