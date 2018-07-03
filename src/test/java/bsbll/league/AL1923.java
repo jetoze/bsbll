@@ -63,9 +63,7 @@ public final class AL1923 {
     }
 
     private static GamePlayParams createGamePlayParams() {
-        // We don't have play-by-play data for 1923, so use 1925 instead.
-        Year year = Year.of(1925);
-        return GamePlayParamsFactory.retrosheet(year).createParams();
+        return GamePlayParamsFactory.configBased(Year.of(1923)).createParams();
     }
     
     private GamePlayDriver createGamePlayDriver() {

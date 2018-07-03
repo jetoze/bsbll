@@ -3,6 +3,7 @@ package bsbll.game.params;
 import static java.util.Objects.requireNonNull;
 
 import bsbll.Year;
+import bsbll.config.GamePlayParamsConfig;
 
 public abstract class GamePlayParamsFactory {
 
@@ -14,6 +15,10 @@ public abstract class GamePlayParamsFactory {
     
     public static GamePlayParamsFactory retrosheet(Year year) {
         return new RetrosheetFactory(requireNonNull(year));
+    }
+    
+    public static GamePlayParamsFactory configBased(Year year) {
+        return new ConfigBasedFactory(requireNonNull(year));
     }
     
     
@@ -58,6 +63,20 @@ public abstract class GamePlayParamsFactory {
                     errorCountDistribution,
                     errorAdvanceDistribution,
                     pitchingEventProbabilities);
+        }
+    }
+    
+    
+    private static class ConfigBasedFactory extends GamePlayParamsFactory {
+        private final Year year;
+        
+        public ConfigBasedFactory(Year year) {
+            this.year = year;
+        }
+        
+        @Override
+        public GamePlayParams createParams() {
+            return GamePlayParamsConfig.readParams(year);
         }
     }
 }
