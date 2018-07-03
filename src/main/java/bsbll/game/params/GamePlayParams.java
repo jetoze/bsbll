@@ -106,9 +106,9 @@ public final class GamePlayParams {
         baseHitAdvanceDistribution.store(p.newChild("BaseHitAdvances"));
         outAdvanceDistribution.store(p.newChild("OutAdvances"));
         fieldersChoiceProbabilities.store(p.newChild("FieldersChoice"));
+        errorAdvanceDistribution.store(p.newChild("ErrorAdvances"));
         errorCountDistribution.store(p.newChild("ErrorCounts"));
         pitchingEventProbabilities.store(p.newChild("PitchingEvents"));
-        throw new RuntimeException("TODO: Complete me");
     }
     
     public static GamePlayParams restoreFrom(Persister p) {
@@ -116,7 +116,14 @@ public final class GamePlayParams {
         OutAdvanceDistribution outAdvances = OutAdvanceDistribution.restoreFrom(p.getChild("OutAdvances"));
         FieldersChoiceProbabilities fcProbs = FieldersChoiceProbabilities.restoreFrom(p.getChild("FieldersChoice"));
         ErrorCountDistribution errorCounts = ErrorCountDistribution.restoreFrom(p.getChild("ErrorCounts"));
+        ErrorAdvanceDistribution errorAdvances = ErrorAdvanceDistribution.restoreFrom(p.getChild("ErrorAdvances"));
         PitchingEventProbabilities pitchingEvtProbs = PitchingEventProbabilities.restoreFrom(p.getChild("PitchingEvents"));
-        throw new RuntimeException("TODO: Complete me");
+        return new GamePlayParams(
+                hitAdvances, 
+                outAdvances, 
+                fcProbs,
+                errorCounts,
+                errorAdvances,
+                pitchingEvtProbs);
     }
 }

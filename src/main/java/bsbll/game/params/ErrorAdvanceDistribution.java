@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableTable;
 import bsbll.bases.Advances;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
+import p3.Persister;
 
 /**
  * The distributions of possible base-running advances on an out or fielder's
@@ -32,6 +33,16 @@ public final class ErrorAdvanceDistribution extends AdvanceDistribution<ErrorAdv
     @Override
     protected boolean isNumberOfOutsIncludedInKey() {
         return true;
+    }
+
+    public void store(Persister p) {
+        store(p, ErrorAdvanceKey::store);
+    }
+    
+    public static ErrorAdvanceDistribution restoreFrom(Persister p) {
+        Builder builder = builder();
+        restore(p, builder, ErrorAdvanceKey::restore);
+        return builder.build();
     }
 
     public static Builder builder() {
