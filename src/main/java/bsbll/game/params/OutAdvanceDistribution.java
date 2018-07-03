@@ -55,19 +55,12 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvance
     }
 
     public void store(Persister p) {
-        for (OutAdvanceKey key : keySet()) {
-            Persister keyPersister = p.newChild("Key");
-            key.store(keyPersister);
-            storeRow(key, keyPersister);
-        }
+        store(p, OutAdvanceKey::store);
     }
     
     public static OutAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();
-        for (Persister keyPersister : p.getChildren("Key")) {
-            OutAdvanceKey key = OutAdvanceKey.restore(keyPersister);
-            restoreRows(key, keyPersister, builder);
-        }
+        restore(p, builder, OutAdvanceKey::restore);
         return builder.build();
     }
 

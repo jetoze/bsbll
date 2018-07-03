@@ -6,6 +6,8 @@ import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import com.google.common.collect.HashBasedTable;
@@ -158,12 +160,12 @@ public abstract class AdvanceDistribution<E> {
         return data.hashCode();
     }
 
-    protected final void storeRow(E key, Persister p) {
-        Storage.store(forKey(key), p);
+    protected final void store(Persister p, BiConsumer<E, Persister> keyWriter) {
+        Storage.store(this, p, keyWriter);
     }
 
-    protected static final <E, B extends BuilderBase<E, B>> void restoreRows(E key, Persister p, B builder) {
-        Storage.restoreRows(key, p, builder);
+    protected static final <E, B extends BuilderBase<E, B>> void restore(Persister p, B builder, Function<Persister, E> keyReader) {
+        Storage.restore(p, builder, keyReader);
     }
     
     public static abstract class BuilderBase<E, B extends BuilderBase<E, B>> {
@@ -213,12 +215,21 @@ public abstract class AdvanceDistribution<E> {
     
     
     private static class Storage {
+        private static final String KEY = "Key";
         private static final String ENTRY = "Entry";
         private static final String BASES = "Bases";
         private static final String ADVANCES = "Advances";
         private static final String COUNT = "Count";
         
-        public static void store(ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> row, Persister p) {
+        public static <E> void store(AdvanceDistribution<E> d, Persister p, BiConsumer<E, Persister> keyWriter) {
+            for (E key : d.keySet()) {
+                Persister keyPersister = p.newChild(KEY);
+                keyWriter.accept(key, keyPersister);
+                storeRow(d.forKey(key), keyPersister);
+            }
+        }
+        
+        private static void storeRow(ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> row, Persister p) {
             for (Map.Entry<OccupiedBases, ImmutableMultiset<Advances>> e : row.entrySet()) {
                 Persister entryPersister = p.newChild(ENTRY).putString(BASES, e.getKey().name());
                 for (Multiset.Entry<Advances> advances : e.getValue().entrySet()) {
@@ -228,8 +239,15 @@ public abstract class AdvanceDistribution<E> {
                 }
             }
         }
+        
+        public static <E, B extends BuilderBase<E, B>> void restore(Persister p, B builder, Function<Persister, E> keyReader) {
+            for (Persister keyPersister : p.getChildren(KEY)) {
+                E key = keyReader.apply(keyPersister);
+                restoreRows(key, keyPersister, builder);
+            }
+        }
 
-        public static <E, B extends BuilderBase<E, B>> void restoreRows(E key, Persister p, B builder) {
+        private static <E, B extends BuilderBase<E, B>> void restoreRows(E key, Persister p, B builder) {
             for (Persister entryPersister : p.getChildren(ENTRY)) {
                 OccupiedBases occupiedBases = OccupiedBases.valueOf(entryPersister.getString(BASES));
                 for (Persister advancesPersister : entryPersister.getChildren(ADVANCES)) {

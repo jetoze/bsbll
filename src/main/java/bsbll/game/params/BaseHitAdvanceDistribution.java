@@ -65,18 +65,12 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
     }
 
     public void store(Persister p) {
-        for (BaseHit key : keySet()) {
-            Persister keyPersister = p.newChild("Key").putString("BaseHit", key.name());
-            storeRow(key, keyPersister);
-        }
+        store(p, (h, kp) -> kp.putString("BaseHit", h.name()));
     }
     
     public static BaseHitAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();
-        for (Persister keyPersister : p.getChildren("Key")) {
-            BaseHit key = BaseHit.valueOf(keyPersister.getString("BaseHit"));
-            restoreRows(key, keyPersister, builder);
-        }
+        restore(p, builder, kp -> BaseHit.valueOf(kp.getString("BaseHit")));
         return builder.build();
     }
     
