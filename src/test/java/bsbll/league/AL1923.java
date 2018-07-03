@@ -21,19 +21,8 @@ import bsbll.game.LineScore;
 import bsbll.game.OfficialScorer;
 import bsbll.game.event.DefaultGameEventDetector;
 import bsbll.game.event.GameEventDetector;
-import bsbll.game.params.BaseHitAdvanceDistribution;
-import bsbll.game.params.BaseHitAdvanceDistributionFactory;
-import bsbll.game.params.ErrorAdvanceDistribution;
-import bsbll.game.params.ErrorAdvanceDistributionFactory;
-import bsbll.game.params.ErrorCountDistribution;
-import bsbll.game.params.ErrorCountDistributionFactory;
-import bsbll.game.params.FieldersChoiceProbabilities;
-import bsbll.game.params.FieldersChoiceProbabilitiesFactory;
 import bsbll.game.params.GamePlayParams;
-import bsbll.game.params.OutAdvanceDistribution;
-import bsbll.game.params.OutAdvanceDistributionFactory;
-import bsbll.game.params.PitchingEventProbabilities;
-import bsbll.game.params.PitchingEventProbabilitiesFactory;
+import bsbll.game.params.GamePlayParamsFactory;
 import bsbll.game.report.BoxScorePlainTextReport;
 import bsbll.game.report.LineScorePlainTextReport;
 import bsbll.league.report.StandingsPlainTextReport;
@@ -76,29 +65,7 @@ public final class AL1923 {
     private static GamePlayParams createGamePlayParams() {
         // We don't have play-by-play data for 1923, so use 1925 instead.
         Year year = Year.of(1925);
-        BaseHitAdvanceDistribution baseHitAdvanceDistribution = BaseHitAdvanceDistributionFactory
-                .retrosheet(year)
-                .createDistribution();
-        OutAdvanceDistribution outAdvanceDistribution = OutAdvanceDistributionFactory
-                .retrosheet(year)
-                .createDistribution();
-        FieldersChoiceProbabilities fieldersChoiceProbabilities = FieldersChoiceProbabilitiesFactory
-                .retrosheet(year)
-                .createProbabilities();
-        ErrorCountDistribution errorCountDistribution = ErrorCountDistributionFactory.retrosheet(year)
-                .createDistribution();
-        ErrorAdvanceDistribution errorAdvanceDistribution = ErrorAdvanceDistributionFactory.retrosheet(year)
-                .createDistribution();
-        PitchingEventProbabilities pitchingEventProbabilities = PitchingEventProbabilitiesFactory.retrosheet(year)
-                .getProbabilities();
-        GamePlayParams params = new GamePlayParams(
-                baseHitAdvanceDistribution,
-                outAdvanceDistribution,
-                fieldersChoiceProbabilities,
-                errorCountDistribution,
-                errorAdvanceDistribution,
-                pitchingEventProbabilities);
-        return params;
+        return GamePlayParamsFactory.retrosheet(year).createParams();
     }
     
     private GamePlayDriver createGamePlayDriver() {
