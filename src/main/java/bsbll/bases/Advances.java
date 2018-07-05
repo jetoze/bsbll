@@ -254,13 +254,14 @@ public final class Advances implements Iterable<Advance> {
 
     public void store(Persister p) {
         for (Advance a : advances.values()) {
-            a.store(p.newChild("Advance"));
+            p.newChild("Advance").putString("Value", a.toString());
         }
     }
     
     public static Advances restoreFrom(Persister p) {
         return new Advances(p.getChildren("Advance").stream()
-                .map(Advance::restoreFrom)
+                .map(c -> c.getString("Value"))
+                .map(Advance::fromString)
                 .collect(toList()));
     }
     
