@@ -10,9 +10,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>18</Count>
-          </ints>
+          <ints Count="18"/>
           <node name="Advance">
             <strings>
               <Value>BX3</Value>
@@ -20,9 +18,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1798</Count>
-          </ints>
+          <ints Count="1798"/>
           <node name="Advance">
             <strings>
               <Value>B-2</Value>
@@ -35,9 +31,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1XH</Value>
@@ -50,9 +44,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>225</Count>
-          </ints>
+          <ints Count="225"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -65,9 +57,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -80,9 +70,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -95,9 +83,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>26</Count>
-          </ints>
+          <ints Count="26"/>
           <node name="Advance">
             <strings>
               <Value>1XH</Value>
@@ -110,9 +96,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>394</Count>
-          </ints>
+          <ints Count="394"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -130,9 +114,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>86</Count>
-          </ints>
+          <ints Count="86"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -150,9 +132,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>38</Count>
-          </ints>
+          <ints Count="38"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -170,9 +150,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -190,9 +168,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -210,9 +186,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -230,9 +204,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -255,9 +227,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>131</Count>
-          </ints>
+          <ints Count="131"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -270,9 +240,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -290,9 +258,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -310,9 +276,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -330,9 +294,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>117</Count>
-          </ints>
+          <ints Count="117"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -350,9 +312,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -370,9 +330,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -390,9 +348,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>86</Count>
-          </ints>
+          <ints Count="86"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -410,9 +366,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -435,9 +389,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -455,9 +407,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>77</Count>
-          </ints>
+          <ints Count="77"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -475,9 +425,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -495,9 +443,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -520,9 +466,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>273</Count>
-          </ints>
+          <ints Count="273"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -535,9 +479,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -550,9 +492,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -565,9 +505,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -585,9 +523,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>48</Count>
-          </ints>
+          <ints Count="48"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -610,9 +546,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>27</Count>
-          </ints>
+          <ints Count="27"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -635,9 +569,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -660,9 +592,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -685,9 +615,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -710,9 +638,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -745,9 +671,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>80</Count>
-          </ints>
+          <ints Count="80"/>
           <node name="Advance">
             <strings>
               <Value>BX2</Value>
@@ -755,9 +679,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>BX3</Value>
@@ -765,9 +687,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-2</Value>
@@ -775,9 +695,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7257</Count>
-          </ints>
+          <ints Count="7257"/>
           <node name="Advance">
             <strings>
               <Value>B-1</Value>
@@ -790,9 +708,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1768</Count>
-          </ints>
+          <ints Count="1768"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -805,9 +721,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>34</Count>
-          </ints>
+          <ints Count="34"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -820,9 +734,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14"/>
           <node name="Advance">
             <strings>
               <Value>1X3</Value>
@@ -835,9 +747,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -850,9 +760,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -865,9 +773,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>BX2</Value>
@@ -875,9 +781,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>54</Count>
-          </ints>
+          <ints Count="54"/>
           <node name="Advance">
             <strings>
               <Value>1X3</Value>
@@ -890,9 +794,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1054</Count>
-          </ints>
+          <ints Count="1054"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -905,9 +807,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -920,9 +820,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -935,9 +833,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>1XH</Value>
@@ -950,9 +846,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1XH</Value>
@@ -965,9 +859,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>90</Count>
-          </ints>
+          <ints Count="90"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -985,9 +877,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1005,9 +895,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1025,9 +913,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1040,9 +926,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1060,9 +944,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1080,9 +962,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1100,9 +980,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>188</Count>
-          </ints>
+          <ints Count="188"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1120,9 +998,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1140,9 +1016,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -1160,9 +1034,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>10</Count>
-          </ints>
+          <ints Count="10"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -1180,9 +1052,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>333</Count>
-          </ints>
+          <ints Count="333"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1200,9 +1070,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1225,9 +1093,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1240,9 +1106,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1255,9 +1119,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -1270,9 +1132,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>575</Count>
-          </ints>
+          <ints Count="575"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1290,9 +1150,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>311</Count>
-          </ints>
+          <ints Count="311"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1310,9 +1168,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1330,9 +1186,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -1350,9 +1204,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>48</Count>
-          </ints>
+          <ints Count="48"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1370,9 +1222,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1390,9 +1240,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1410,9 +1258,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1430,9 +1276,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -1450,9 +1294,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -1470,9 +1312,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -1490,9 +1330,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>280</Count>
-          </ints>
+          <ints Count="280"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -1510,9 +1348,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1530,9 +1366,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>258</Count>
-          </ints>
+          <ints Count="258"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1550,9 +1384,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -1570,9 +1402,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>21</Count>
-          </ints>
+          <ints Count="21"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1590,9 +1420,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -1610,9 +1438,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -1630,9 +1456,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>19</Count>
-          </ints>
+          <ints Count="19"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -1655,9 +1479,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1675,9 +1497,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1695,9 +1515,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>92</Count>
-          </ints>
+          <ints Count="92"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1715,9 +1533,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1735,9 +1551,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -1755,9 +1569,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>28</Count>
-          </ints>
+          <ints Count="28"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1775,9 +1587,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1795,9 +1605,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1815,9 +1623,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -1835,9 +1641,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1855,9 +1659,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>207</Count>
-          </ints>
+          <ints Count="207"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1875,9 +1677,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -1900,9 +1700,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -1915,9 +1713,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -1930,9 +1726,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>88</Count>
-          </ints>
+          <ints Count="88"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1945,9 +1739,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1960,9 +1752,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>29</Count>
-          </ints>
+          <ints Count="29"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -1975,9 +1765,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -1990,9 +1778,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -2005,9 +1791,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>340</Count>
-          </ints>
+          <ints Count="340"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -2020,9 +1804,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -2035,9 +1817,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>685</Count>
-          </ints>
+          <ints Count="685"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -2050,9 +1830,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>29</Count>
-          </ints>
+          <ints Count="29"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -2070,9 +1848,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2095,9 +1871,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>93</Count>
-          </ints>
+          <ints Count="93"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2120,9 +1894,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>78</Count>
-          </ints>
+          <ints Count="78"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2145,9 +1917,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2170,9 +1940,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2195,9 +1963,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2220,9 +1986,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>79</Count>
-          </ints>
+          <ints Count="79"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2245,9 +2009,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2270,9 +2032,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2295,9 +2055,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2320,9 +2078,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2345,9 +2101,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2370,9 +2124,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -2390,9 +2142,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2425,9 +2175,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>460</Count>
-          </ints>
+          <ints Count="460"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -2435,9 +2183,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>BXH</Value>
@@ -2450,9 +2196,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>173</Count>
-          </ints>
+          <ints Count="173"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -2465,9 +2209,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -2485,9 +2227,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>38</Count>
-          </ints>
+          <ints Count="38"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2505,9 +2245,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2530,9 +2268,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>41</Count>
-          </ints>
+          <ints Count="41"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2545,9 +2281,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2565,9 +2299,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>60</Count>
-          </ints>
+          <ints Count="60"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -2590,9 +2322,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>32</Count>
-          </ints>
+          <ints Count="32"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2610,9 +2340,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2635,9 +2363,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>78</Count>
-          </ints>
+          <ints Count="78"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -2650,9 +2376,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -2670,9 +2394,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>25</Count>
-          </ints>
+          <ints Count="25"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2702,57 +2424,43 @@
       <strings>
         <Bases>FIRST</Bases>
       </strings>
-      <doubles>
-        <Value>0.0229</Value>
-      </doubles>
+      <doubles Value="0.0229"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>SECOND</Bases>
       </strings>
-      <doubles>
-        <Value>0.0845</Value>
-      </doubles>
+      <doubles Value="0.0845"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>THIRD</Bases>
       </strings>
-      <doubles>
-        <Value>0.0893</Value>
-      </doubles>
+      <doubles Value="0.0893"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>FIRST_AND_SECOND</Bases>
       </strings>
-      <doubles>
-        <Value>0.0323</Value>
-      </doubles>
+      <doubles Value="0.0323"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>FIRST_AND_THIRD</Bases>
       </strings>
-      <doubles>
-        <Value>0.1393</Value>
-      </doubles>
+      <doubles Value="0.1393"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>SECOND_AND_THIRD</Bases>
       </strings>
-      <doubles>
-        <Value>0.1761</Value>
-      </doubles>
+      <doubles Value="0.1761"/>
     </node>
     <node name="Entry">
       <strings>
         <Bases>LOADED</Bases>
       </strings>
-      <doubles>
-        <Value>0.0446</Value>
-      </doubles>
+      <doubles Value="0.0446"/>
     </node>
   </node>
   <node name="OutAdvances">
@@ -2761,17 +2469,13 @@
         <Type>OUT</Type>
         <Location>OUTFIELD</Location>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-      </ints>
+      <ints Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3473</Count>
-          </ints>
+          <ints Count="3473"/>
         </node>
       </node>
       <node name="Entry">
@@ -2779,14 +2483,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>24</Count>
-          </ints>
+          <ints Count="24"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -2799,9 +2499,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>52</Count>
-          </ints>
+          <ints Count="52"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2814,14 +2512,10 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>713</Count>
-          </ints>
+          <ints Count="713"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -2834,9 +2528,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>20</Count>
-          </ints>
+          <ints Count="20"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -2849,9 +2541,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>20</Count>
-          </ints>
+          <ints Count="20"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -2864,14 +2554,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>119</Count>
-          </ints>
+          <ints Count="119"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -2889,9 +2575,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -2904,9 +2588,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>36</Count>
-          </ints>
+          <ints Count="36"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -2914,9 +2596,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -2929,9 +2609,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -2949,9 +2627,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2964,14 +2640,10 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -2989,9 +2661,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>30</Count>
-          </ints>
+          <ints Count="30"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3004,14 +2674,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>24</Count>
-          </ints>
+          <ints Count="24"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3029,9 +2695,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -3039,9 +2703,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>80</Count>
-          </ints>
+          <ints Count="80"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3049,9 +2711,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>12</Count>
-          </ints>
+          <ints Count="12"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3069,14 +2729,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>121</Count>
-          </ints>
+          <ints Count="121"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>54</Count>
-          </ints>
+          <ints Count="54"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -3084,9 +2740,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -3099,9 +2753,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -3119,9 +2771,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3134,14 +2784,10 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>10</Count>
-          </ints>
+          <ints Count="10"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3154,9 +2800,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3179,9 +2823,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3204,9 +2846,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3224,9 +2864,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>18</Count>
-          </ints>
+          <ints Count="18"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3234,9 +2872,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3254,9 +2890,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3285,17 +2919,13 @@
         <Type>OUT</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-      </ints>
+      <ints Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4587</Count>
-          </ints>
+          <ints Count="4587"/>
         </node>
       </node>
       <node name="Entry">
@@ -3303,14 +2933,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>181</Count>
-          </ints>
+          <ints Count="181"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3323,9 +2949,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -3338,9 +2962,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -3348,9 +2970,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>76</Count>
-          </ints>
+          <ints Count="76"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3363,14 +2983,10 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>495</Count>
-          </ints>
+          <ints Count="495"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>529</Count>
-          </ints>
+          <ints Count="529"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -3383,9 +2999,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -3393,9 +3007,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>72</Count>
-          </ints>
+          <ints Count="72"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -3408,9 +3020,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>481</Count>
-          </ints>
+          <ints Count="481"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -3418,9 +3028,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
           <node name="Advance">
             <strings>
               <Value>1X3</Value>
@@ -3438,14 +3046,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>176</Count>
-          </ints>
+          <ints Count="176"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>157</Count>
-          </ints>
+          <ints Count="157"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -3458,9 +3062,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -3473,9 +3075,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -3493,9 +3093,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -3503,9 +3101,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>159</Count>
-          </ints>
+          <ints Count="159"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -3518,9 +3114,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>30</Count>
-          </ints>
+          <ints Count="30"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -3533,9 +3127,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -3548,9 +3140,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -3563,9 +3153,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -3583,9 +3171,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -3603,14 +3189,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>83</Count>
-          </ints>
+          <ints Count="83"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>73</Count>
-          </ints>
+          <ints Count="73"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3623,9 +3205,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3643,9 +3223,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -3658,9 +3236,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3673,9 +3249,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -3688,9 +3262,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -3703,9 +3275,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3713,9 +3283,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3738,14 +3306,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>92</Count>
-          </ints>
+          <ints Count="92"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -3758,9 +3322,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>95</Count>
-          </ints>
+          <ints Count="95"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -3773,9 +3335,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3788,9 +3348,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3803,9 +3361,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -3823,9 +3379,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -3838,9 +3392,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>12</Count>
-          </ints>
+          <ints Count="12"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -3853,9 +3405,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3873,9 +3423,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>22</Count>
-          </ints>
+          <ints Count="22"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -3883,9 +3431,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3893,9 +3439,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>56</Count>
-          </ints>
+          <ints Count="56"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -3913,14 +3457,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>342</Count>
-          </ints>
+          <ints Count="342"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -3928,9 +3468,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -3943,9 +3481,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>460</Count>
-          </ints>
+          <ints Count="460"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -3953,9 +3489,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>30</Count>
-          </ints>
+          <ints Count="30"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -3968,9 +3502,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -3983,9 +3515,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -3998,14 +3528,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>59</Count>
-          </ints>
+          <ints Count="59"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -4018,9 +3544,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>60</Count>
-          </ints>
+          <ints Count="60"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -4033,9 +3557,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>19</Count>
-          </ints>
+          <ints Count="19"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4048,9 +3570,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -4063,9 +3583,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -4078,9 +3596,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -4093,9 +3609,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>31</Count>
-          </ints>
+          <ints Count="31"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4113,9 +3627,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4139,17 +3651,13 @@
         <Type>OUT</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-      </ints>
+      <ints Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3388</Count>
-          </ints>
+          <ints Count="3388"/>
         </node>
       </node>
       <node name="Entry">
@@ -4157,9 +3665,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>585</Count>
-          </ints>
+          <ints Count="585"/>
         </node>
       </node>
       <node name="Entry">
@@ -4167,9 +3673,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1471</Count>
-          </ints>
+          <ints Count="1471"/>
         </node>
       </node>
       <node name="Entry">
@@ -4177,9 +3681,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>657</Count>
-          </ints>
+          <ints Count="657"/>
         </node>
       </node>
       <node name="Entry">
@@ -4187,9 +3689,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>314</Count>
-          </ints>
+          <ints Count="314"/>
         </node>
       </node>
       <node name="Entry">
@@ -4197,9 +3697,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>386</Count>
-          </ints>
+          <ints Count="386"/>
         </node>
       </node>
       <node name="Entry">
@@ -4207,14 +3705,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1061</Count>
-          </ints>
+          <ints Count="1061"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -4227,9 +3721,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>203</Count>
-          </ints>
+          <ints Count="203"/>
         </node>
       </node>
     </node>
@@ -4238,17 +3730,13 @@
         <Type>OUT</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-      </ints>
+      <ints Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>6725</Count>
-          </ints>
+          <ints Count="6725"/>
         </node>
       </node>
       <node name="Entry">
@@ -4256,14 +3744,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>101</Count>
-          </ints>
+          <ints Count="101"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -4271,9 +3755,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>23</Count>
-          </ints>
+          <ints Count="23"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4286,14 +3768,10 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>405</Count>
-          </ints>
+          <ints Count="405"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>388</Count>
-          </ints>
+          <ints Count="388"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -4306,9 +3784,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -4316,9 +3792,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>62</Count>
-          </ints>
+          <ints Count="62"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -4331,9 +3805,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>930</Count>
-          </ints>
+          <ints Count="930"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -4341,9 +3813,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>1X3</Value>
@@ -4356,9 +3826,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-1</Value>
@@ -4371,14 +3839,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>91</Count>
-          </ints>
+          <ints Count="91"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>10</Count>
-          </ints>
+          <ints Count="10"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -4396,9 +3860,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>235</Count>
-          </ints>
+          <ints Count="235"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -4411,9 +3873,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -4421,9 +3881,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -4436,9 +3894,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -4451,9 +3907,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -4466,9 +3920,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>63</Count>
-          </ints>
+          <ints Count="63"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -4491,14 +3943,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>61</Count>
-          </ints>
+          <ints Count="61"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>25</Count>
-          </ints>
+          <ints Count="25"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4511,9 +3959,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4531,9 +3977,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -4546,9 +3990,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4561,9 +4003,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -4576,9 +4016,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4591,9 +4029,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4601,9 +4037,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4626,14 +4060,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>48</Count>
-          </ints>
+          <ints Count="48"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -4651,9 +4081,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -4666,9 +4094,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4686,9 +4112,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -4701,9 +4125,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>33</Count>
-          </ints>
+          <ints Count="33"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4721,9 +4143,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>24</Count>
-          </ints>
+          <ints Count="24"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -4731,9 +4151,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4751,9 +4169,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4761,9 +4177,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>18</Count>
-          </ints>
+          <ints Count="18"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4781,14 +4195,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>141</Count>
-          </ints>
+          <ints Count="141"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>329</Count>
-          </ints>
+          <ints Count="329"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -4796,9 +4206,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -4811,9 +4219,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -4826,9 +4232,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -4841,14 +4245,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>23</Count>
-          </ints>
+          <ints Count="23"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4871,9 +4271,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -4896,9 +4294,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -4911,9 +4307,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4931,9 +4325,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>18</Count>
-          </ints>
+          <ints Count="18"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -4962,17 +4354,13 @@
         <Type>OUT</Type>
         <Location>OUTFIELD</Location>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-      </ints>
+      <ints Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1686</Count>
-          </ints>
+          <ints Count="1686"/>
         </node>
       </node>
       <node name="Entry">
@@ -4980,9 +4368,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>253</Count>
-          </ints>
+          <ints Count="253"/>
         </node>
       </node>
       <node name="Entry">
@@ -4990,9 +4376,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1007</Count>
-          </ints>
+          <ints Count="1007"/>
         </node>
       </node>
       <node name="Entry">
@@ -5000,9 +4384,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>432</Count>
-          </ints>
+          <ints Count="432"/>
         </node>
       </node>
       <node name="Entry">
@@ -5010,9 +4392,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>139</Count>
-          </ints>
+          <ints Count="139"/>
         </node>
       </node>
       <node name="Entry">
@@ -5020,9 +4400,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>216</Count>
-          </ints>
+          <ints Count="216"/>
         </node>
       </node>
       <node name="Entry">
@@ -5030,9 +4408,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>539</Count>
-          </ints>
+          <ints Count="539"/>
         </node>
       </node>
       <node name="Entry">
@@ -5040,9 +4416,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>120</Count>
-          </ints>
+          <ints Count="120"/>
         </node>
       </node>
     </node>
@@ -5051,17 +4425,13 @@
         <Type>OUT</Type>
         <Location>OUTFIELD</Location>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-      </ints>
+      <ints Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2300</Count>
-          </ints>
+          <ints Count="2300"/>
         </node>
       </node>
       <node name="Entry">
@@ -5069,14 +4439,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>29</Count>
-          </ints>
+          <ints Count="29"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5089,9 +4455,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>151</Count>
-          </ints>
+          <ints Count="151"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5104,14 +4468,10 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1023</Count>
-          </ints>
+          <ints Count="1023"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -5124,9 +4484,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>30</Count>
-          </ints>
+          <ints Count="30"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -5139,9 +4497,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -5154,14 +4510,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>285</Count>
-          </ints>
+          <ints Count="285"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -5174,9 +4526,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -5189,9 +4539,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>78</Count>
-          </ints>
+          <ints Count="78"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -5199,9 +4547,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5219,9 +4565,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -5234,9 +4578,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -5249,9 +4591,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5264,9 +4604,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1X1</Value>
@@ -5279,9 +4617,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5304,14 +4640,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>16</Count>
-          </ints>
+          <ints Count="16"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>48</Count>
-          </ints>
+          <ints Count="48"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5324,9 +4656,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5344,9 +4674,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5364,9 +4692,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5379,9 +4705,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -5394,9 +4718,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5409,9 +4731,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5429,9 +4749,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>65</Count>
-          </ints>
+          <ints Count="65"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5444,14 +4762,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>29</Count>
-          </ints>
+          <ints Count="29"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5469,9 +4783,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5484,9 +4796,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -5499,9 +4809,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5519,9 +4827,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -5529,9 +4835,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>133</Count>
-          </ints>
+          <ints Count="133"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5539,9 +4843,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>32</Count>
-          </ints>
+          <ints Count="32"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5559,14 +4861,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>366</Count>
-          </ints>
+          <ints Count="366"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -5574,9 +4872,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -5589,9 +4885,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>88</Count>
-          </ints>
+          <ints Count="88"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -5599,9 +4893,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -5614,9 +4906,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5634,14 +4924,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>16</Count>
-          </ints>
+          <ints Count="16"/>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>27</Count>
-          </ints>
+          <ints Count="27"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5654,9 +4940,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5674,9 +4958,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5694,9 +4976,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5709,9 +4989,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -5724,9 +5002,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -5739,9 +5015,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5759,9 +5033,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>61</Count>
-          </ints>
+          <ints Count="61"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5775,17 +5047,13 @@
         <Type>FIELDERS_CHOICE</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-      </ints>
+      <ints Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>39</Count>
-          </ints>
+          <ints Count="39"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5798,9 +5066,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -5813,9 +5079,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5828,9 +5092,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>21</Count>
-          </ints>
+          <ints Count="21"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5843,9 +5105,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5858,9 +5118,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -5878,9 +5136,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -5893,9 +5149,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -5913,9 +5167,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -5933,9 +5185,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -5953,9 +5203,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2XH</Value>
@@ -5978,9 +5226,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>20</Count>
-          </ints>
+          <ints Count="20"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -5998,9 +5244,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6013,9 +5257,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6033,9 +5275,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6048,9 +5288,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6068,9 +5306,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6088,9 +5324,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -6108,9 +5342,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6128,9 +5360,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -6148,9 +5378,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6168,9 +5396,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6188,9 +5414,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>39</Count>
-          </ints>
+          <ints Count="39"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6208,9 +5432,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -6228,9 +5450,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6248,9 +5468,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6268,9 +5486,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6288,9 +5504,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -6303,9 +5517,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6323,9 +5535,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6343,9 +5553,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -6363,9 +5571,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>38</Count>
-          </ints>
+          <ints Count="38"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6383,9 +5589,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6403,9 +5607,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6423,9 +5625,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6443,9 +5643,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -6463,9 +5661,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6488,9 +5684,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -6503,9 +5697,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>67</Count>
-          </ints>
+          <ints Count="67"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6518,9 +5710,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>BX2</Value>
@@ -6528,9 +5718,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -6543,9 +5731,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6558,9 +5744,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>24</Count>
-          </ints>
+          <ints Count="24"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6573,9 +5757,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6588,9 +5770,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -6603,9 +5783,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -6623,9 +5801,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6654,17 +5830,13 @@
         <Type>FIELDERS_CHOICE</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-      </ints>
+      <ints Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6682,9 +5854,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -6697,9 +5867,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X3</Value>
@@ -6717,9 +5885,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -6742,9 +5908,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -6762,9 +5926,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6782,9 +5944,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6807,9 +5967,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>25</Count>
-          </ints>
+          <ints Count="25"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6822,9 +5980,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -6837,9 +5993,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -6852,9 +6006,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -6873,17 +6025,13 @@
         <Type>FIELDERS_CHOICE</Type>
         <Location>INFIELD</Location>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-      </ints>
+      <ints Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -6901,9 +6049,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>17</Count>
-          </ints>
+          <ints Count="17"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -6916,9 +6062,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1X2</Value>
@@ -6936,9 +6080,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -6956,9 +6098,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -6981,9 +6121,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3X3</Value>
@@ -7001,9 +6139,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7021,9 +6157,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7041,9 +6175,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7061,9 +6193,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7081,9 +6211,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -7101,9 +6229,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7121,9 +6247,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7141,9 +6265,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7161,9 +6283,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -7186,9 +6306,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7206,9 +6324,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -7226,9 +6342,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -7246,9 +6360,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7266,9 +6378,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7286,9 +6396,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3XH</Value>
@@ -7306,9 +6414,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-3</Value>
@@ -7326,9 +6432,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7351,9 +6455,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -7366,9 +6468,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>49</Count>
-          </ints>
+          <ints Count="49"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -7381,9 +6481,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -7396,9 +6494,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -7411,9 +6507,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -7426,9 +6520,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -7441,9 +6533,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X3</Value>
@@ -7461,9 +6551,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7493,18 +6581,13 @@
       <strings>
         <Type>SINGLE</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7522,9 +6605,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7542,9 +6623,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7562,9 +6641,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7582,9 +6659,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7602,9 +6677,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7622,9 +6695,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7647,9 +6718,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -7662,9 +6731,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -7677,9 +6744,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -7692,9 +6757,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -7707,9 +6770,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~H</Value>
@@ -7722,9 +6783,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~3</Value>
@@ -7737,9 +6796,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1~3</Value>
@@ -7752,9 +6809,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -7767,9 +6822,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>15</Count>
-          </ints>
+          <ints Count="15"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -7787,9 +6840,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7802,9 +6853,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7817,9 +6866,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7832,9 +6879,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -7847,9 +6892,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -7867,9 +6910,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>BX3</Value>
@@ -7877,9 +6918,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>32</Count>
-          </ints>
+          <ints Count="32"/>
           <node name="Advance">
             <strings>
               <Value>B-2</Value>
@@ -7887,9 +6926,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -7897,9 +6934,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B~2</Value>
@@ -7912,9 +6947,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7937,9 +6970,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7962,9 +6993,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -7987,9 +7016,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8012,9 +7039,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8042,9 +7067,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8062,9 +7085,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8082,9 +7103,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8102,9 +7121,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8122,9 +7139,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8142,9 +7157,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8167,9 +7180,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8187,9 +7198,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8207,9 +7216,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8232,9 +7239,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8247,9 +7252,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8267,18 +7270,13 @@
       <strings>
         <Type>SINGLE</Type>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8296,9 +7294,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8316,9 +7312,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8336,9 +7330,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8356,9 +7348,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8381,9 +7371,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~H</Value>
@@ -8396,9 +7384,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -8411,9 +7397,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -8426,9 +7410,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -8441,9 +7423,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -8456,9 +7436,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -8471,9 +7449,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>20</Count>
-          </ints>
+          <ints Count="20"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -8491,9 +7467,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2~H</Value>
@@ -8506,9 +7480,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8521,9 +7493,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8536,9 +7506,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -8556,9 +7524,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>68</Count>
-          </ints>
+          <ints Count="68"/>
           <node name="Advance">
             <strings>
               <Value>B-2</Value>
@@ -8566,9 +7532,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -8576,9 +7540,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-H</Value>
@@ -8591,9 +7553,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8616,9 +7576,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8646,9 +7604,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8666,9 +7622,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8686,9 +7640,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8706,9 +7658,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8726,9 +7676,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8751,9 +7699,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8771,9 +7717,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8796,9 +7740,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8811,9 +7753,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -8831,18 +7771,13 @@
       <strings>
         <Type>SINGLE</Type>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8860,9 +7795,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8880,9 +7813,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8900,9 +7831,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8920,9 +7849,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8940,9 +7867,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2~H</Value>
@@ -8960,9 +7885,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>12</Count>
-          </ints>
+          <ints Count="12"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -8980,9 +7903,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9000,9 +7921,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2~H</Value>
@@ -9025,9 +7944,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -9040,9 +7957,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9055,9 +7970,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>13</Count>
-          </ints>
+          <ints Count="13"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9070,9 +7983,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9085,9 +7996,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9100,9 +8009,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~3</Value>
@@ -9115,9 +8022,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~3</Value>
@@ -9130,9 +8035,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -9150,9 +8053,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>19</Count>
-          </ints>
+          <ints Count="19"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9165,9 +8066,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>12</Count>
-          </ints>
+          <ints Count="12"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9180,9 +8079,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9200,9 +8097,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>BX3</Value>
@@ -9210,9 +8105,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>9</Count>
-          </ints>
+          <ints Count="9"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -9220,9 +8113,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>34</Count>
-          </ints>
+          <ints Count="34"/>
           <node name="Advance">
             <strings>
               <Value>B-2</Value>
@@ -9235,9 +8126,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9260,9 +8149,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9285,9 +8172,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9310,9 +8195,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9335,9 +8218,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9365,9 +8246,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9385,9 +8264,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9405,9 +8282,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9430,9 +8305,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9450,9 +8323,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9470,9 +8341,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9490,9 +8359,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9515,9 +8382,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9530,9 +8395,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9545,9 +8408,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9565,18 +8426,13 @@
       <strings>
         <Type>DOUBLE</Type>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9599,9 +8455,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9614,9 +8468,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9634,9 +8486,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9654,9 +8504,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -9669,9 +8517,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9694,18 +8540,13 @@
       <strings>
         <Type>DOUBLE</Type>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9723,9 +8564,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9743,9 +8582,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9768,9 +8605,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>7</Count>
-          </ints>
+          <ints Count="7"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9783,9 +8618,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9798,9 +8631,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~H</Value>
@@ -9813,9 +8644,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -9833,9 +8662,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -9853,9 +8680,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -9868,9 +8693,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9893,9 +8716,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9923,9 +8744,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9948,9 +8767,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9973,9 +8790,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -9993,18 +8808,13 @@
       <strings>
         <Type>DOUBLE</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10027,9 +8837,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10047,9 +8855,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10067,9 +8873,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -10082,9 +8886,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10107,9 +8909,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10137,9 +8937,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10157,9 +8955,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10182,9 +8978,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10207,18 +9001,13 @@
       <strings>
         <Type>OUT</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10231,9 +9020,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2~3</Value>
@@ -10246,9 +9033,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~2</Value>
@@ -10256,9 +9041,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -10266,9 +9049,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~1</Value>
@@ -10276,9 +9057,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -10291,9 +9070,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10301,9 +9078,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -10311,9 +9086,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-2</Value>
@@ -10326,9 +9099,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3~H</Value>
@@ -10351,9 +9122,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10366,9 +9135,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10386,9 +9153,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10401,9 +9166,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10421,18 +9184,13 @@
       <strings>
         <Type>TRIPLE</Type>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10450,9 +9208,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10470,9 +9226,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>B-H</Value>
@@ -10485,18 +9239,13 @@
       <strings>
         <Type>OUT</Type>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10509,9 +9258,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2~3</Value>
@@ -10519,9 +9266,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2X2</Value>
@@ -10544,9 +9289,7 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1~3</Value>
@@ -10554,9 +9297,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>3</Count>
-          </ints>
+          <ints Count="3"/>
           <node name="Advance">
             <strings>
               <Value>1-3</Value>
@@ -10564,9 +9305,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-2</Value>
@@ -10579,9 +9318,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4"/>
           <node name="Advance">
             <strings>
               <Value>2-3</Value>
@@ -10594,9 +9331,7 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10614,9 +9349,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10634,9 +9367,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10659,9 +9390,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10669,9 +9398,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10689,9 +9416,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10709,9 +9434,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>3-H</Value>
@@ -10724,18 +9447,13 @@
       <strings>
         <Type>TRIPLE</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B~H</Value>
@@ -10743,9 +9461,7 @@
           </node>
         </node>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-H</Value>
@@ -10758,18 +9474,13 @@
       <strings>
         <Type>TRIPLE</Type>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-        <Errors>1</Errors>
-      </ints>
+      <ints Errors="1" Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10787,9 +9498,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-H</Value>
@@ -10802,18 +9511,13 @@
       <strings>
         <Type>SINGLE</Type>
       </strings>
-      <ints>
-        <Outs>0</Outs>
-        <Errors>2</Errors>
-      </ints>
+      <ints Errors="2" Outs="0"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10831,18 +9535,13 @@
       <strings>
         <Type>DOUBLE</Type>
       </strings>
-      <ints>
-        <Outs>2</Outs>
-        <Errors>2</Errors>
-      </ints>
+      <ints Errors="2" Outs="2"/>
       <node name="Entry">
         <strings>
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-H</Value>
@@ -10855,18 +9554,13 @@
       <strings>
         <Type>DOUBLE</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>2</Errors>
-      </ints>
+      <ints Errors="2" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10884,18 +9578,13 @@
       <strings>
         <Type>SINGLE</Type>
       </strings>
-      <ints>
-        <Outs>1</Outs>
-        <Errors>2</Errors>
-      </ints>
+      <ints Errors="2" Outs="1"/>
       <node name="Entry">
         <strings>
           <Bases>FIRST</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>1-H</Value>
@@ -10913,9 +9602,7 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>2-H</Value>
@@ -10933,9 +9620,7 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Advances">
-          <ints>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1"/>
           <node name="Advance">
             <strings>
               <Value>B-3</Value>
@@ -10955,22 +9640,13 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>22159</Count>
-          </ints>
+          <ints Count="22159" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>783</Count>
-          </ints>
+          <ints Count="783" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>11</Count>
-          </ints>
+          <ints Count="11" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -10978,22 +9654,13 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>3577</Count>
-          </ints>
+          <ints Count="3577" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>153</Count>
-          </ints>
+          <ints Count="153" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11001,22 +9668,13 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>7684</Count>
-          </ints>
+          <ints Count="7684" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>264</Count>
-          </ints>
+          <ints Count="264" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>6</Count>
-          </ints>
+          <ints Count="6" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11024,16 +9682,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>929</Count>
-          </ints>
+          <ints Count="929" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>45</Count>
-          </ints>
+          <ints Count="45" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11041,22 +9693,13 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>2602</Count>
-          </ints>
+          <ints Count="2602" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>99</Count>
-          </ints>
+          <ints Count="99" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11064,16 +9707,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>1377</Count>
-          </ints>
+          <ints Count="1377" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>66</Count>
-          </ints>
+          <ints Count="66" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11081,16 +9718,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>1505</Count>
-          </ints>
+          <ints Count="1505" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>49</Count>
-          </ints>
+          <ints Count="49" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11098,16 +9729,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>747</Count>
-          </ints>
+          <ints Count="747" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>35</Count>
-          </ints>
+          <ints Count="35" Errors="1"/>
         </node>
       </node>
     </node>
@@ -11120,22 +9745,13 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>1816</Count>
-          </ints>
+          <ints Count="1816" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>10</Count>
-          </ints>
+          <ints Count="10" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11143,16 +9759,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>289</Count>
-          </ints>
+          <ints Count="289" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11160,22 +9770,13 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>666</Count>
-          </ints>
+          <ints Count="666" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>14</Count>
-          </ints>
+          <ints Count="14" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11183,16 +9784,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>90</Count>
-          </ints>
+          <ints Count="90" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11200,16 +9795,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>220</Count>
-          </ints>
+          <ints Count="220" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>8</Count>
-          </ints>
+          <ints Count="8" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11217,16 +9806,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>135</Count>
-          </ints>
+          <ints Count="135" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11234,16 +9817,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>132</Count>
-          </ints>
+          <ints Count="132" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11251,16 +9828,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>81</Count>
-          </ints>
+          <ints Count="81" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4" Errors="1"/>
         </node>
       </node>
     </node>
@@ -11273,22 +9844,13 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>7339</Count>
-          </ints>
+          <ints Count="7339" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>166</Count>
-          </ints>
+          <ints Count="166" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11296,22 +9858,13 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>1205</Count>
-          </ints>
+          <ints Count="1205" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>67</Count>
-          </ints>
+          <ints Count="67" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11319,22 +9872,13 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>3039</Count>
-          </ints>
+          <ints Count="3039" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>126</Count>
-          </ints>
+          <ints Count="126" Errors="1"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>2</Errors>
-            <Count>2</Count>
-          </ints>
+          <ints Count="2" Errors="2"/>
         </node>
       </node>
       <node name="Entry">
@@ -11342,16 +9886,10 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>363</Count>
-          </ints>
+          <ints Count="363" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>23</Count>
-          </ints>
+          <ints Count="23" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11359,16 +9897,10 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>966</Count>
-          </ints>
+          <ints Count="966" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>73</Count>
-          </ints>
+          <ints Count="73" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11376,16 +9908,10 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>568</Count>
-          </ints>
+          <ints Count="568" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>29</Count>
-          </ints>
+          <ints Count="29" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11393,16 +9919,10 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>595</Count>
-          </ints>
+          <ints Count="595" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>20</Count>
-          </ints>
+          <ints Count="20" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11410,16 +9930,10 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>289</Count>
-          </ints>
+          <ints Count="289" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>23</Count>
-          </ints>
+          <ints Count="23" Errors="1"/>
         </node>
       </node>
     </node>
@@ -11432,16 +9946,10 @@
           <Bases>NONE</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>464</Count>
-          </ints>
+          <ints Count="464" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>5</Count>
-          </ints>
+          <ints Count="5" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11449,16 +9957,10 @@
           <Bases>SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>79</Count>
-          </ints>
+          <ints Count="79" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>1</Count>
-          </ints>
+          <ints Count="1" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11466,16 +9968,10 @@
           <Bases>FIRST</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>174</Count>
-          </ints>
+          <ints Count="174" Errors="0"/>
         </node>
         <node name="Values">
-          <ints>
-            <Errors>1</Errors>
-            <Count>4</Count>
-          </ints>
+          <ints Count="4" Errors="1"/>
         </node>
       </node>
       <node name="Entry">
@@ -11483,10 +9979,7 @@
           <Bases>SECOND_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>33</Count>
-          </ints>
+          <ints Count="33" Errors="0"/>
         </node>
       </node>
       <node name="Entry">
@@ -11494,10 +9987,7 @@
           <Bases>FIRST_AND_SECOND</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>60</Count>
-          </ints>
+          <ints Count="60" Errors="0"/>
         </node>
       </node>
       <node name="Entry">
@@ -11505,10 +9995,7 @@
           <Bases>FIRST_AND_THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>39</Count>
-          </ints>
+          <ints Count="39" Errors="0"/>
         </node>
       </node>
       <node name="Entry">
@@ -11516,10 +10003,7 @@
           <Bases>THIRD</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>42</Count>
-          </ints>
+          <ints Count="42" Errors="0"/>
         </node>
       </node>
       <node name="Entry">
@@ -11527,19 +10011,12 @@
           <Bases>LOADED</Bases>
         </strings>
         <node name="Values">
-          <ints>
-            <Errors>0</Errors>
-            <Count>25</Count>
-          </ints>
+          <ints Count="25" Errors="0"/>
         </node>
       </node>
     </node>
   </node>
   <node name="PitchingEvents">
-    <doubles>
-      <PB>0.0026</PB>
-      <WP>0.0066</WP>
-      <BK>8.0E-4</BK>
-    </doubles>
+    <doubles BK="8.0E-4" PB="0.0026" WP="0.0066"/>
   </node>
 </node>
