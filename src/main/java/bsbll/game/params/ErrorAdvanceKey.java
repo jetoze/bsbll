@@ -1,6 +1,5 @@
 package bsbll.game.params;
 
-import static tzeth.preconds.MorePreconditions.checkInRange;
 import static tzeth.preconds.MorePreconditions.checkPositive;
 
 import java.util.Objects;
@@ -11,15 +10,14 @@ import bsbll.game.play.EventType;
 import p3.Persister;
 
 @Immutable
-public final class ErrorAdvanceKey {
+public final class ErrorAdvanceKey extends AdvanceDistributionKey {
     private final EventType type;
     private final int numberOfErrors;
-    private final int outs;
 
     public ErrorAdvanceKey(EventType type, int numberOfErrors, int outs) {
+        super(outs);
         this.type = ErrorSupport.requireSupported(type);
         this.numberOfErrors = checkPositive(numberOfErrors);
-        this.outs = checkInRange(outs, 0, 2);
     }
     
     public static ErrorAdvanceKey of(EventType type, int numberOfErrors, int outs) {
@@ -30,7 +28,8 @@ public final class ErrorAdvanceKey {
         return numberOfErrors;
     }
     
-    void store(Persister p) {
+    @Override
+    protected void store(Persister p) {
         Storage.store(this, p);
     }
     
@@ -40,7 +39,7 @@ public final class ErrorAdvanceKey {
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, numberOfErrors, outs);
+        return Objects.hash(type, numberOfErrors, getNumberOfOuts());
     }
 
     @Override
@@ -51,14 +50,14 @@ public final class ErrorAdvanceKey {
         if (obj instanceof ErrorAdvanceKey) {
             ErrorAdvanceKey that = (ErrorAdvanceKey) obj;
             return (this.type == that.type) && (this.numberOfErrors == that.numberOfErrors) &&
-                    (this.outs == that.outs);
+                    (this.getNumberOfOuts() == that.getNumberOfOuts());
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return String.format("%s [%d error(s)] [%d out(s)]", type, numberOfErrors, outs);
+        return String.format("%s [%d error(s)] [%d out(s)]", type, numberOfErrors, getNumberOfOuts());
     }
     
     
@@ -70,7 +69,7 @@ public final class ErrorAdvanceKey {
         public static void store(ErrorAdvanceKey key, Persister p) {
             p.putString(TYPE, key.type.name())
                 .putInt(ERRORS, key.numberOfErrors)
-                .putInt(OUTS, key.outs);
+                .putInt(OUTS, key.getNumberOfOuts());
         }
         
         public static ErrorAdvanceKey restore(Persister p) {

@@ -1,7 +1,6 @@
 package bsbll.game.params;
 
 import static java.util.Objects.requireNonNull;
-import static tzeth.preconds.MorePreconditions.checkInRange;
 import static tzeth.preconds.MorePreconditions.checkOneOf;
 
 import java.util.Objects;
@@ -23,15 +22,14 @@ import p3.Persister;
  * the inning was made on an infield out.
  */
 @Immutable
-public final class OutAdvanceKey {
+public final class OutAdvanceKey extends AdvanceDistributionKey {
     private final EventType type;
     private final OutLocation location;
-    private final int outs;
     
     public OutAdvanceKey(EventType type, OutLocation location, int outs) {
+        super(outs);
         this.type = checkOneOf(type, EventType.OUT, EventType.FIELDERS_CHOICE);
         this.location = requireNonNull(location);
-        this.outs = checkInRange(outs, 0, 2);
     }
 
     public static OutAdvanceKey of(EventType type, OutLocation location, int outs) {
@@ -42,7 +40,8 @@ public final class OutAdvanceKey {
         return location;
     }
     
-    void store(Persister p) {
+    @Override
+    protected void store(Persister p) {
         Storage.store(this, p);
     }
     
@@ -52,7 +51,7 @@ public final class OutAdvanceKey {
     
     @Override
     public int hashCode() {
-        return Objects.hash(type, location, outs);
+        return Objects.hash(type, location, getNumberOfOuts());
     }
 
     @Override
@@ -62,14 +61,16 @@ public final class OutAdvanceKey {
         }
         if (obj instanceof OutAdvanceKey) {
             OutAdvanceKey that = (OutAdvanceKey) obj;
-            return this.type == that.type && this.location == that.location && this.outs == that.outs;
+            return this.type == that.type && this.location == that.location && 
+                    this.getNumberOfOuts() == that.getNumberOfOuts();
         }
         return false;
     }
 
     @Override
     public String toString() {
-        return String.format("%s, %s, %d %s", type, location, outs, (outs == 1 ? "out" : "outs"));
+        return String.format("%s, %s, %d %s", type, location, getNumberOfOuts(), 
+                (getNumberOfOuts() == 1 ? "out" : "outs"));
     }
     
     private static class Storage {
@@ -80,7 +81,7 @@ public final class OutAdvanceKey {
         public static void store(OutAdvanceKey key, Persister p) {
             p.putString(TYPE, key.type.name())
                 .putString(LOCATION, key.location.name())
-                .putInt(OUTS, key.outs);
+                .putInt(OUTS, key.getNumberOfOuts());
         }
         
         public static OutAdvanceKey restore(Persister p) {
