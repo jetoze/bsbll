@@ -12,7 +12,6 @@ import com.google.common.collect.ImmutableTable;
 import bsbll.bases.Advance;
 import bsbll.bases.Advances;
 import bsbll.bases.Base;
-import bsbll.bases.BaseHit;
 import bsbll.bases.BaseSituation;
 import bsbll.bases.OccupiedBases;
 import p3.Persister;
@@ -27,14 +26,14 @@ import p3.Persister;
  * the 2017 Bartolo Colon.
  */
 @Immutable
-public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHit> {
+public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHitAdvanceKey> {
     private static final BaseHitAdvanceDistribution DEFAULT = new BaseHitAdvanceDistribution(ImmutableTable.of());
     
     /**
      * Creates a {@code BaseHitAdvanceDistribution} based on the distribution
      * data in the given table.
      */
-    public BaseHitAdvanceDistribution(ImmutableTable<BaseHit, OccupiedBases, ImmutableMultiset<Advances>> data) {
+    public BaseHitAdvanceDistribution(ImmutableTable<BaseHitAdvanceKey, OccupiedBases, ImmutableMultiset<Advances>> data) {
         super(data);
     }
 
@@ -47,14 +46,14 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
     }
 
     @Override
-    protected Advances defaultAdvance(BaseHit baseHit, BaseSituation baseSituation) {
+    protected Advances defaultAdvance(BaseHitAdvanceKey key, BaseSituation baseSituation) {
         // Note that the default advance will never have any runners out, so
         // the current number of outs does not matter.
         List<Advance> advances = new ArrayList<>();
-        advances.add(Base.HOME.defaultAdvance(baseHit)); // the batter
+        advances.add(Base.HOME.defaultAdvance(key.getType())); // the batter
         Arrays.stream(Base.occupiable())
             .filter(baseSituation::isOccupied)
-            .map(b -> b.defaultAdvance(baseHit))
+            .map(b -> b.defaultAdvance(key.getType()))
             .forEach(advances::add);
         return new Advances(advances);
     }
@@ -63,14 +62,10 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
     protected boolean isNumberOfOutsIncludedInKey() {
         return false;
     }
-
-    public void store(Persister p) {
-        store(p, (h, kp) -> kp.putString("BaseHit", h.name()));
-    }
     
     public static BaseHitAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();
-        restore(p, builder, kp -> BaseHit.valueOf(kp.getString("BaseHit")));
+        restore(p, builder, BaseHitAdvanceKey::restore);
         return builder.build();
     }
     
@@ -79,7 +74,7 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
     }
     
     
-    public static final class Builder extends BuilderBase<BaseHit, Builder> {
+    public static final class Builder extends BuilderBase<BaseHitAdvanceKey, Builder> {
         
         @Override
         protected Builder self() {

@@ -48,11 +48,13 @@ public final class GamePlayParams {
     }
 
     public Advances getAdvancesOnBaseHit(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
-        return baseHitAdvanceDistribution.pickOne(baseHit, baseSituation, numberOfOuts, dieFactory);
+        return baseHitAdvanceDistribution.pickOne(
+                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation, numberOfOuts, dieFactory);
     }
     
     public Advances getMostCommonAdvancesOnBaseHit(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts) {
-        return baseHitAdvanceDistribution.pickMostCommon(baseHit, baseSituation, numberOfOuts);
+        return baseHitAdvanceDistribution.pickMostCommon(
+                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation, numberOfOuts);
     }
     
     public int getNumberOfErrors(EventType eventType, BaseSituation baseSituation, DieFactory dieFactory) {

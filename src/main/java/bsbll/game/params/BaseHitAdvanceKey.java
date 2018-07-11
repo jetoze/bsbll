@@ -15,6 +15,10 @@ public final class BaseHitAdvanceKey extends AdvanceDistributionKey {
         this.baseHit = requireNonNull(baseHit);
     }
 
+    BaseHit getType() {
+        return baseHit;
+    }
+    
     @Override
     protected void store(Persister p) {
         Storage.store(this, p);

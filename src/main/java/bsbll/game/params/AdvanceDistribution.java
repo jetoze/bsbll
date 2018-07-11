@@ -2,11 +2,9 @@ package bsbll.game.params;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Objects.requireNonNull;
-import static tzeth.preconds.MorePreconditions.checkInRange;
 
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -32,7 +30,7 @@ import p3.Persister;
  * 
  * @param <E> the type that defines the key-space (event types).
  */
-public abstract class AdvanceDistribution<E> {
+public abstract class AdvanceDistribution<E extends AdvanceDistributionKey> {
     private static final Predicate<? super Advances> ALL = a -> true;
     
     private final ImmutableTable<E, OccupiedBases, ImmutableMultiset<Advances>> data;
@@ -49,20 +47,17 @@ public abstract class AdvanceDistribution<E> {
      *            the key
      * @param baseSituation
      *            the {@code BaseSituation} at the time of the event.
-     * @param numberOfOuts
-     *            the number of outs at the time of the event.
      * @param dieFactory
      *            the {@code DieFactory} that will be asked to produce the die
      *            to roll
      * @return an {@code Advances} object that describes the resulting base
      *         advances, including the batter.
      */
-    public final Advances pickOne(E key, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
+    public final Advances pickOne(E key, BaseSituation baseSituation, DieFactory dieFactory) {
         requireNonNull(key);
         requireNonNull(baseSituation);
-        checkInRange(numberOfOuts, 0, 2);
         requireNonNull(dieFactory);
-        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts, ALL);
+        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, ALL);
         return possibilities.isEmpty()
                 ? defaultAdvance(key, baseSituation)
                 : pickOneFromSet(dieFactory, possibilities);
@@ -83,24 +78,18 @@ public abstract class AdvanceDistribution<E> {
      */
     private Multiset<Advances> getPossibilities(E key, 
                                                 BaseSituation baseSituation, 
-                                                int numberOfOuts,
                                                 Predicate<? super Advances> predicate) {
         // An Advance where two runners are thrown out is not valid if there are already two outs in the inning.
         // TODO: Add number of outs as an additional lookup dimension?
         ImmutableMultiset<Advances> all = this.data.get(key, baseSituation.getOccupiedBases());
         if (all == null) {
             return ImmutableMultiset.of();
-        } else if (isNumberOfOutsIncludedInKey()) {
+        } else {
             return (predicate == ALL)
                     ? all
                     : Multisets.filter(all, a -> predicate.test(a));
-        } else {
-            return Multisets.filter(all, a -> ((a.getNumberOfOuts() + numberOfOuts) <= 3) && predicate.test(a));
         }
     }
-    
-    // TODO: Should we always require that the number of outs is included?
-    protected abstract boolean isNumberOfOutsIncludedInKey();
 
     private Advances pickOneFromSet(DieFactory dieFactory, Multiset<Advances> possibilities) {
         int total = possibilities.size();
@@ -121,16 +110,15 @@ public abstract class AdvanceDistribution<E> {
         return Multisets.copyHighestCountFirst(possibilities).elementSet().iterator().next();
     }
     
-    public final Advances pickMostCommon(E key, BaseSituation baseSituation, int numberOfOuts) {
-        return pickMostCommon(key, baseSituation, numberOfOuts, ALL);
+    public final Advances pickMostCommon(E key, BaseSituation baseSituation) {
+        return pickMostCommon(key, baseSituation, ALL);
     }
     
     public final Advances pickMostCommon(E key, 
                                          BaseSituation baseSituation, 
-                                         int numberOfOuts,
                                          Predicate<? super Advances> predicate) {
         requireNonNull(predicate);
-        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, numberOfOuts, predicate);
+        Multiset<Advances> possibilities = getPossibilities(key, baseSituation, predicate);
         return possibilities.isEmpty()
                 ? defaultAdvance(key, baseSituation)
                 : mostCommon(possibilities);
@@ -160,8 +148,8 @@ public abstract class AdvanceDistribution<E> {
         return data.hashCode();
     }
 
-    protected final void store(Persister p, BiConsumer<E, Persister> keyWriter) {
-        Storage.store(this, p, keyWriter);
+    public final void store(Persister p) {
+        Storage.store(this, p);
     }
 
     protected static final <E, B extends BuilderBase<E, B>> void restore(Persister p, B builder, Function<Persister, E> keyReader) {
@@ -221,10 +209,10 @@ public abstract class AdvanceDistribution<E> {
         private static final String ADVANCES = "Advances";
         private static final String COUNT = "Count";
         
-        public static <E> void store(AdvanceDistribution<E> d, Persister p, BiConsumer<E, Persister> keyWriter) {
+        public static <E extends AdvanceDistributionKey> void store(AdvanceDistribution<E> d, Persister p) {
             for (E key : d.keySet()) {
                 Persister keyPersister = p.newChild(KEY);
-                keyWriter.accept(key, keyPersister);
+                key.store(keyPersister);
                 storeRow(d.forKey(key), keyPersister);
             }
         }

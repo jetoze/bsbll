@@ -34,10 +34,6 @@ public final class ErrorAdvanceDistribution extends AdvanceDistribution<ErrorAdv
     protected boolean isNumberOfOutsIncludedInKey() {
         return true;
     }
-
-    public void store(Persister p) {
-        store(p, ErrorAdvanceKey::store);
-    }
     
     public static ErrorAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();

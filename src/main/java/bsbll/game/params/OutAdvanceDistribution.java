@@ -53,10 +53,6 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvance
     protected boolean isNumberOfOutsIncludedInKey() {
         return true;
     }
-
-    public void store(Persister p) {
-        store(p, OutAdvanceKey::store);
-    }
     
     public static OutAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();
