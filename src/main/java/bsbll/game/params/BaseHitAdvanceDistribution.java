@@ -57,11 +57,6 @@ public final class BaseHitAdvanceDistribution extends AdvanceDistribution<BaseHi
             .forEach(advances::add);
         return new Advances(advances);
     }
-
-    @Override
-    protected boolean isNumberOfOutsIncludedInKey() {
-        return false;
-    }
     
     public static BaseHitAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();

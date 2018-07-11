@@ -48,11 +48,6 @@ public final class OutAdvanceDistribution extends AdvanceDistribution<OutAdvance
             throw new AssertionError("Unexpected OutLocation: " + key);
         }
     }
-
-    @Override
-    protected boolean isNumberOfOutsIncludedInKey() {
-        return true;
-    }
     
     public static OutAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();

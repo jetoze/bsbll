@@ -247,7 +247,7 @@ public final class GamePlayDriver {
                     addOutcome(p);
                 } else {
                     Advances advances = params.getAdvancesOnError(
-                            ErrorAdvanceKey.of(eventType, numberOfErrors, outs), baseSituation, outs, dieFactory);
+                            ErrorAdvanceKey.of(eventType, numberOfErrors, outs), baseSituation, dieFactory);
                     PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
                     addOutcome(p);
                     // TODO: Not sure this is the best way to "decide" which runs should be awarded as RBIs
@@ -318,7 +318,7 @@ public final class GamePlayDriver {
                     : EventType.OUT;
 
             OutAdvanceKey key = OutAdvanceKey.of(resultingType, location, outs);
-            Advances advances = params.getAdvancesOnOut(key, baseSituation, outs, dieFactory);
+            Advances advances = params.getAdvancesOnOut(key, baseSituation, dieFactory);
 //                if (convertToFieldersChoice) {
 //                    ++fieldersChoices;
 //                    System.out.println("Fielder's Choice " + fieldersChoices);
@@ -339,7 +339,7 @@ public final class GamePlayDriver {
 
         private void errorOnOut(OutLocation location, int numberOfErrors) {
             ErrorAdvanceKey key = ErrorAdvanceKey.of(EventType.OUT, numberOfErrors, outs);
-            Advances advances = params.getAdvancesOnError(key, baseSituation, outs, dieFactory);
+            Advances advances = params.getAdvancesOnError(key, baseSituation, dieFactory);
             // TODO: This will give the incorrect type in the case where the batter is thrown
             // out at some other base than first.
             EventType actualType = advances.didBatterReachBase()

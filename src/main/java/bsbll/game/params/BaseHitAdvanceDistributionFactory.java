@@ -83,7 +83,7 @@ public abstract class BaseHitAdvanceDistributionFactory {
                 EventType typeOfHit = play.getType();
                 if (typeOfHit != EventType.HOMERUN) {
                     BaseHit hit = eventTypeToBaseHit(typeOfHit);
-                    builder.add(hit, bases, play.getAdvances());
+                    builder.add(new BaseHitAdvanceKey(hit, play.getNumberOfOuts()), bases, play.getAdvances());
                 }
             }
 

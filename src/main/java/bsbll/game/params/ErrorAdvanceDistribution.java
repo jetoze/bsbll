@@ -29,11 +29,6 @@ public final class ErrorAdvanceDistribution extends AdvanceDistribution<ErrorAdv
         // Advance each runner one base per error.
         return Advances.advanceAllRunners(baseSituation.getOccupiedBases(), key.getNumberOfErrors());
     }
-
-    @Override
-    protected boolean isNumberOfOutsIncludedInKey() {
-        return true;
-    }
     
     public static ErrorAdvanceDistribution restoreFrom(Persister p) {
         Builder builder = builder();

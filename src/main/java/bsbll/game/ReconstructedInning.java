@@ -148,7 +148,7 @@ final class ReconstructedInning {
         int outsToUse = Math.min(2, outs);
         OutAdvanceKey key = OutAdvanceKey.of(EventType.OUT, location, outsToUse);
         Predicate<? super Advances> predicate = a -> a.getNumberOfOuts() < 2;
-        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, reconstructedBaseSituation, outsToUse, predicate);
+        Advances advances = gamePlayParams.getMostCommonAdvancesOnOut(key, reconstructedBaseSituation, predicate);
         return new Play(actualPlay.getBatter(), actualPlay.getPitcher(), new PlayOutcome(EventType.OUT, advances));
     }
 
@@ -216,7 +216,6 @@ final class ReconstructedInning {
                             gamePlayParams.getOutLocation(), 
                             outsToUse), 
                     reconstructedBaseSituation, 
-                    outsToUse, 
                     predicate);
         case WALK: /*fall-through*/
         case HIT_BY_PITCH:

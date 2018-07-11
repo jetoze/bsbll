@@ -49,39 +49,38 @@ public final class GamePlayParams {
 
     public Advances getAdvancesOnBaseHit(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
         return baseHitAdvanceDistribution.pickOne(
-                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation, numberOfOuts, dieFactory);
+                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation, dieFactory);
     }
     
     public Advances getMostCommonAdvancesOnBaseHit(BaseHit baseHit, BaseSituation baseSituation, int numberOfOuts) {
         return baseHitAdvanceDistribution.pickMostCommon(
-                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation, numberOfOuts);
+                new BaseHitAdvanceKey(baseHit, numberOfOuts), baseSituation);
     }
     
     public int getNumberOfErrors(EventType eventType, BaseSituation baseSituation, DieFactory dieFactory) {
         return errorCountDistribution.getNumberOfErrors(eventType, baseSituation, dieFactory);
     }
     
-    public Advances getAdvancesOnError(ErrorAdvanceKey key, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
-        return errorAdvanceDistribution.pickOne(key, baseSituation, numberOfOuts, dieFactory);
+    public Advances getAdvancesOnError(ErrorAdvanceKey key, BaseSituation baseSituation, DieFactory dieFactory) {
+        return errorAdvanceDistribution.pickOne(key, baseSituation, dieFactory);
     }
     
     public boolean testFieldersChoice(BaseSituation baseSituation, DieFactory dieFactory) {
         return fieldersChoiceProbabilities.test(baseSituation, dieFactory);
     }
     
-    public Advances getAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation, int numberOfOuts, DieFactory dieFactory) {
-        return outAdvanceDistribution.pickOne(key, baseSituation, numberOfOuts, dieFactory);
+    public Advances getAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation, DieFactory dieFactory) {
+        return outAdvanceDistribution.pickOne(key, baseSituation, dieFactory);
     }
     
-    public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation, int numberOfOuts) {
-        return outAdvanceDistribution.pickMostCommon(key, baseSituation, numberOfOuts);
+    public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, BaseSituation baseSituation) {
+        return outAdvanceDistribution.pickMostCommon(key, baseSituation);
     }
     
     public Advances getMostCommonAdvancesOnOut(OutAdvanceKey key, 
                                                BaseSituation baseSituation, 
-                                               int numberOfOuts,
                                                Predicate<? super Advances> predicate) {
-        return outAdvanceDistribution.pickMostCommon(key, baseSituation, numberOfOuts, predicate);
+        return outAdvanceDistribution.pickMostCommon(key, baseSituation, predicate);
     }
     
     public OutLocation getOutLocation() {

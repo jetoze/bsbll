@@ -14,6 +14,7 @@ import bsbll.bases.BaseHit;
 import bsbll.bases.OccupiedBases;
 import bsbll.game.params.BaseHitAdvanceDistribution;
 import bsbll.game.params.BaseHitAdvanceDistributionFactory;
+import bsbll.game.params.BaseHitAdvanceKey;
 
 public final class DistributionOfAdvancesOnBaseHit {
 
@@ -30,21 +31,24 @@ public final class DistributionOfAdvancesOnBaseHit {
         for (BaseHit typeOfHit : Arrays.asList(BaseHit.SINGLE, BaseHit.DOUBLE, BaseHit.TRIPLE)) {
             System.out.println(typeOfHit);
             System.out.println(typeOfHitSep);
-            ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> distributionForHitType = distribution.forKey(typeOfHit);
-            distributionForHitType.keySet().stream()
-                .sorted()
-                .forEach(b -> {
+            for (int outs : new int[] { 0, 1, 2 }) {
+                System.out.println("Number of outs: " + outs);
+                System.out.println(typeOfHitSep);
+                ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> distributionForHitType = 
+                        distribution.forKey(new BaseHitAdvanceKey(typeOfHit, outs));
+                distributionForHitType.keySet().stream().sorted().forEach(b -> {
                     System.out.println(b);
-                    distributionForHitType.get(b).entrySet().stream()
-                        .sorted(dOrder)
-                        .map(as -> String.format("  %-20s%6d", as.getElement(), as.getCount()))
-                        .forEach(System.out::println);
+                    distributionForHitType.get(b).entrySet().stream().sorted(dOrder)
+                            .map(as -> String.format("  %-20s%6d", as.getElement(), as.getCount()))
+                            .forEach(System.out::println);
                     System.out.println(basesSep);
-                    System.out.println(String.format("  %-20s%6d", "Total", distributionForHitType.get(b).size()));
+                    System.out.println(String.format("  %-20s%6d", "Total",
+                            distributionForHitType.get(b).size()));
                     System.out.println(basesSep);
                 });
-            System.out.println(typeOfHitSep);
-            System.out.println();
+                System.out.println(typeOfHitSep);
+                System.out.println();
+            }
         }
     }
     
