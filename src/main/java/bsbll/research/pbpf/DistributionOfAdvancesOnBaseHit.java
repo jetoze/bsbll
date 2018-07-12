@@ -23,6 +23,7 @@ public final class DistributionOfAdvancesOnBaseHit {
     private static void report(Year year, BaseHitAdvanceDistribution distribution) {
         System.out.println("Distribution of Advances on Base Hits for the Year " + year);
         String typeOfHitSep = Strings.repeat("=", 30);
+        String numberOfOutsSep = Strings.repeat("-", 30);
         String basesSep = "  " + Strings.repeat("-", 26);
         
         // The order in which we will present the individual advances
@@ -33,11 +34,11 @@ public final class DistributionOfAdvancesOnBaseHit {
             System.out.println(typeOfHitSep);
             for (int outs : new int[] { 0, 1, 2 }) {
                 System.out.println("Number of outs: " + outs);
-                System.out.println(typeOfHitSep);
+                System.out.println(numberOfOutsSep);
                 ImmutableMap<OccupiedBases, ImmutableMultiset<Advances>> distributionForHitType = 
                         distribution.forKey(new BaseHitAdvanceKey(typeOfHit, outs));
                 distributionForHitType.keySet().stream().sorted().forEach(b -> {
-                    System.out.println(b);
+                    System.out.println("Occupied bases: " + b);
                     distributionForHitType.get(b).entrySet().stream().sorted(dOrder)
                             .map(as -> String.format("  %-20s%6d", as.getElement(), as.getCount()))
                             .forEach(System.out::println);

@@ -69,6 +69,7 @@ public abstract class BaseHitAdvanceDistributionFactory {
 
         private static final class Handler extends DefaultGameHandler {
             private final BaseHitAdvanceDistribution.Builder builder = BaseHitAdvanceDistribution.builder();
+            private int outs;
 
             public Handler() {
                 super(p -> p.isBaseHit() && p.getNumberOfErrors() == 0);
@@ -83,8 +84,9 @@ public abstract class BaseHitAdvanceDistributionFactory {
                 EventType typeOfHit = play.getType();
                 if (typeOfHit != EventType.HOMERUN) {
                     BaseHit hit = eventTypeToBaseHit(typeOfHit);
-                    builder.add(new BaseHitAdvanceKey(hit, play.getNumberOfOuts()), bases, play.getAdvances());
+                    builder.add(new BaseHitAdvanceKey(hit, outs), bases, play.getAdvances());
                 }
+                outs += play.getNumberOfOuts();
             }
 
             private static BaseHit eventTypeToBaseHit(EventType type) {
@@ -101,6 +103,11 @@ public abstract class BaseHitAdvanceDistributionFactory {
                 default:
                     throw new AssertionError("Unexpected event type: " + type);
                 }
+            }
+
+            @Override
+            protected void afterInning() {
+                outs = 0;
             }
         }
     }

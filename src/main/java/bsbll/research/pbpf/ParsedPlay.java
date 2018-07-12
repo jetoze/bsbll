@@ -68,18 +68,30 @@ public final class ParsedPlay {
         return eventField.isSacrificeFly();
     }
     
+    /**
+     * Returns the number of runs that scored in the play.
+     */
     public int getNumberOfRuns() {
         return outcome.getNumberOfRuns();
     }
-    
+
+    /**
+     * Returns the number of outs that were recorded in the play.
+     */
     public int getNumberOfOuts() {
         return outcome.getNumberOfOuts();
     }
-    
+
+    /**
+     * Returns the number of errors that were made in the play.
+     */
     public int getNumberOfErrors() {
         return outcome.getNumberOfErrors();
     }
-    
+
+    /**
+     * Returns the advances that resulted from the play.
+     */
     public Advances getAdvances() {
         return outcome.getAdvances();
     }
