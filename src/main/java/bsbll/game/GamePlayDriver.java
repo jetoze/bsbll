@@ -246,6 +246,10 @@ public final class GamePlayDriver {
                     registerBaseHitStats(baseHit, p.getNumberOfRuns());
                     addOutcome(p);
                 } else {
+                    // Outs can be recorded in the processing of the outcome of the error.
+                    // We store away the number of outs at the time of the base hit, for use
+                    // in the calculation of the "ideal" advances below.
+                    int numberOfOutsBeforeHit = outs;
                     Advances advances = params.getAdvancesOnError(
                             ErrorAdvanceKey.of(eventType, numberOfErrors, outs), baseSituation, dieFactory);
                     PlayOutcome p = new PlayOutcome(eventType, advances, numberOfErrors);
@@ -256,7 +260,7 @@ public final class GamePlayDriver {
                     // additional condition that the selected Advances cannot have any errors? For example,
                     // add method AdvanceDistribution::pickOne(..., Predicate<? super Advances> predicate)
                     // TODO: Move this decision to OfficialScorer?
-                    Advances idealAdvances = params.getMostCommonAdvancesOnBaseHit(baseHit, baseSituation, outs);
+                    Advances idealAdvances = params.getMostCommonAdvancesOnBaseHit(baseHit, baseSituation, numberOfOutsBeforeHit);
                     int rbis = Math.min(advances.getNumberOfRuns(), idealAdvances.getNumberOfOuts());
                     registerBaseHitStats(baseHit, rbis);
                 }
