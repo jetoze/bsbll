@@ -13,6 +13,7 @@ import bsbll.game.HalfInning.Stats;
 import bsbll.team.RunDifferential;
 import bsbll.team.Team;
 
+@Immutable
 public final class LineScore {
     private final Line homeLine;
     private final Line visitingLine;
@@ -69,6 +70,7 @@ public final class LineScore {
     }
 
     
+    @Immutable
     public static final class Line {
         private final Team team;
         private final ImmutableList<HalfInning.Stats> innings;

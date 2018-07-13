@@ -35,16 +35,19 @@ public final class Game {
     // The event detector is not integral to playing a game, so it is optional.
     private GameEventDetector eventDetector = GameEventDetector.NO_EVENTS;
 
-    public Game(Team homeTeam, Team visitingTeam, GamePlayDriver driver, OfficialScorer officialScorer) {
-        requireNonNull(homeTeam);
-        requireNonNull(visitingTeam);
+    public Game(Team homeTeam, 
+                Lineup homeLineup, 
+                Team visitingTeam,
+                Lineup visitingLineup,
+                GamePlayDriver driver, 
+                OfficialScorer officialScorer) {
+        this.homeTeam = requireNonNull(homeTeam);
+        this.visitingTeam = requireNonNull(visitingTeam);
         checkArgument(homeTeam != visitingTeam, "A team cannot play a game against itself (%s)", homeTeam);
+        this.homeLineup = requireNonNull(homeLineup);
+        this.visitingLineup = requireNonNull(visitingLineup);
         this.driver = requireNonNull(driver);
         this.officialScorer = requireNonNull(officialScorer);
-        this.homeTeam = homeTeam;
-        this.homeLineup = homeTeam.getRoster().getLineup();
-        this.visitingTeam = visitingTeam;
-        this.visitingLineup = visitingTeam.getRoster().getLineup();
     }
     
     public void setGameEventDetector(GameEventDetector eventDetector) {

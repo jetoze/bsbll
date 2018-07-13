@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Multimap;
@@ -40,12 +42,10 @@ import bsbll.team.Lineup;
 import bsbll.team.Team;
 import tzeth.strings.Padding;
 
+@Immutable
 public class BoxScorePlainTextReport extends AbstractPlainTextReport<BoxScore> {
     
     // TODO: Support horizontal layout, with the two teams next to each other.
-    
-    public BoxScorePlainTextReport() {
-    }
     
     @Override
     public ImmutableList<String> format(BoxScore boxScore) {

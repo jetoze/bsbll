@@ -7,6 +7,8 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
@@ -17,6 +19,7 @@ import bsbll.team.Team;
 import bsbll.team.WLT;
 import tzeth.collections.ImCollectors;
 
+@Immutable
 public final class Standings {
     private final ImmutableMap<Team, Entry> entries;
     
@@ -71,7 +74,7 @@ public final class Standings {
                 .collect(ImCollectors.toList());
     }
     
-    
+    @Immutable
     public static final class Entry {
         private final Team team;
         private final Record record;

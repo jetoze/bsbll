@@ -3,20 +3,16 @@ package bsbll.team;
 import static java.util.Objects.requireNonNull;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
 
+@Immutable
 public final class Team {
     private final TeamId id;
     private final TeamName name;
-    private final Roster roster;
     
-    // TODO: Is a "Team" tied to a given year? If so it needs a Roster.
-    // If not tied to a given year, we need some abstraction that associates a 
-    // Team with its Roster. What would that abstraction be called?
-    
-    public Team(TeamId id, TeamName name, Roster roster) {
+    public Team(TeamId id, TeamName name) {
         this.id = requireNonNull(id);
         this.name = requireNonNull(name);
-        this.roster = requireNonNull(roster);
     }
 
     public TeamId getId() {
@@ -29,10 +25,6 @@ public final class Team {
     
     public String getAbbreviation() {
         return name.getAbbreviation();
-    }
-    
-    public Roster getRoster() {
-        return roster;
     }
 
     @Override
@@ -50,5 +42,4 @@ public final class Team {
         return (obj == this) ||
                 ((obj instanceof Team) && this.id.equals(((Team) obj).id));
     }
-    
 }

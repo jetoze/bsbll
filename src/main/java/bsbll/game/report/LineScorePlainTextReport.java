@@ -2,6 +2,8 @@ package bsbll.game.report;
 
 import static java.util.Objects.requireNonNull;
 
+import javax.annotation.concurrent.Immutable;
+
 import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 
@@ -15,6 +17,7 @@ import tzeth.strings.Padding;
 /**
  * Writes a line score as plain text.
  */
+@Immutable
 public final class LineScorePlainTextReport extends AbstractPlainTextReport<LineScore> {
     private final NameMode mode;
     private final Padding namePad;
